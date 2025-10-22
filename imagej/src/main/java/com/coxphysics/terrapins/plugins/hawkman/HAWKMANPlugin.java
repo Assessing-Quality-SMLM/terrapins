@@ -35,11 +35,6 @@ public class HAWKMANPlugin implements PlugIn
         // start ImageJ
         new ImageJ();
 
-        ImagePlus reference = IJ.openImage("C:\\Users\\k1651658\\Documents\\support\\images\\LMC-MT-ME-Raw16.tif");
-        ImagePlus test = IJ.openImage("C:\\Users\\k1651658\\Documents\\support\\images\\LMC-MT-ME-HAWK16.tif");
-        reference.show();
-        test.show();
-
         // run the plugin
         IJ.runPlugIn(clazz.getName(), "");
     }
