@@ -8,7 +8,7 @@ public class NativeHAWK
 {
     private static Path get_dll_path()
     {
-        String name = ffi.os_dll_name("rust_ffi");
+        String name = ffi.os_dll_name("rust_jni");
         return ffi.extract_resource_to_temp(NativeHAWK.class, name, false, true);
     }
 

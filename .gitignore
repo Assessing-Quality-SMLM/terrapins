@@ -12,5 +12,5 @@ imagej/src/main/resources/nix/*
 imagej/src/main/resources/mac/*
 imagej/target/*
 
-imagej/rust_ffi/Cargo.lock
-imagej/rust_ffi/target/*
+imagej/rust_jni/Cargo.lock
+imagej/rust_jni/target/*
