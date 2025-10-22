@@ -2,8 +2,6 @@ package com.coxphysics.terrapins.models.renderer;
 
 import com.coxphysics.terrapins.models.localisations.ParseMethod;
 import com.coxphysics.terrapins.models.process.FakeRunner;
-import com.coxphysics.terrapins.models.renderer.RenderSettings;
-import com.coxphysics.terrapins.models.renderer.Renderer;
 import ij.ImagePlus;
 import org.junit.jupiter.api.Test;
 
