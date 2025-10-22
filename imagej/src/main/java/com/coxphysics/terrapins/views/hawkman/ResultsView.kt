@@ -95,10 +95,7 @@ class ResultsView private constructor(private val results_: Results )
 
     fun show_core()
     {
-        val image = resolution_image()
-        val something = image?.image
-        image?.show()
-        val something_else = image?.image
+        resolution_image()?.show()
         scale_map()?.show()
     }
 
