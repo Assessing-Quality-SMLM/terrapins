@@ -7,10 +7,21 @@
 
 *.iml
 
+__pycache__/*
+
 imagej/src/main/resources/windows/*
 imagej/src/main/resources/nix/*
 imagej/src/main/resources/mac/*
 imagej/target/*
 
-imagej/rust_jni/Cargo.lock
-imagej/rust_jni/target/*
+rust_jni/Cargo.lock
+rust_jni/target/*
+
+rust_ffi/Cargo.lock
+rust_ffi/target/*
+
+assessment_artifacts/*
+frc_artifacts/*
+hawkman_and_squirrel_artifacts/*
+renderer_artifacts/*
+splitter_artifacts/*
