@@ -4,7 +4,6 @@ import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
 import ij.ImageStack;
-import ij.gui.GenericDialog;
 import ij.gui.Plot;
 import ij.plugin.ImageCalculator;
 import ij.plugin.PlugIn;
