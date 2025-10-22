@@ -2,7 +2,7 @@ package com.coxphysics.terrapins.models.hawkman;
 
 public class BinariseParameters
 {
-     private double fwhm_threshold_; //FWHMthr = GryphonGD.FWHMthreshold;
+    private double fwhm_threshold_; //FWHMthr = GryphonGD.FWHMthreshold;
     private double fwhm_smoothing_; //FWHMsmo = GryphonGD.FWHMsmooth;
     private double fwhm_offset_; //FWHMoff = GryphonGD.FWHMoffset;
 
