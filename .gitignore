@@ -1,0 +1,16 @@
+/.classpath
+/.project
+/.settings/
+*/.idea/*
+.idea/
+*.class
+
+*.iml
+
+image_j/src/main/resources/windows/*
+image_j/src/main/resources/nix/*
+image_j/src/main/resources/mac/*
+imagej/target/*
+
+imagej/rust_ffi/Cargo.lock
+imagej/rust_ffi/target/*
