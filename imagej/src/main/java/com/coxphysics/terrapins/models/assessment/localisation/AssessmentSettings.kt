@@ -1,0 +1,116 @@
+package com.coxphysics.terrapins.models.assessment.localisation
+
+import com.coxphysics.terrapins.models.assessment.CoreSettings
+import com.coxphysics.terrapins.models.equipment.EquipmentSettings
+import com.coxphysics.terrapins.models.localisations.LocalisationFile
+
+class AssessmentSettings private constructor()
+{
+    private var equipment = EquipmentSettings.default()
+    private var core_settings = CoreSettings.default()
+    private var localisation_file_ = LocalisationFile.default()
+    private var hawk_localisation_file_ = LocalisationFile.default()
+
+    companion object
+    {
+        @JvmStatic
+        fun default(): AssessmentSettings
+        {
+            return AssessmentSettings()
+        }
+    }
+    fun core_settings(): CoreSettings
+    {
+        return core_settings
+    }
+
+    fun widefield_nn(): String
+    {
+        return core_settings.widefield_nn()
+    }
+
+    fun set_widefield(value: String)
+    {
+        core_settings.set_widefield(value)
+    }
+
+    fun settings_file_nn(): String
+    {
+        return core_settings.settings_file_nn()
+    }
+
+    fun set_settings_file(value: String)
+    {
+        core_settings.set_settings_file(value)
+    }
+
+    fun image_stack_nn(): String
+    {
+        return core_settings.image_stack_nn()
+    }
+
+    fun set_image_stack(value: String)
+    {
+        core_settings.set_image_stack(value)
+    }
+
+    fun equipment(): EquipmentSettings
+    {
+        return equipment
+    }
+
+    fun set_equipment_settings(value: EquipmentSettings)
+    {
+        equipment = value
+    }
+
+    fun localisation_file(): LocalisationFile
+    {
+        return localisation_file_
+    }
+
+    fun set_localisation_file(value: LocalisationFile)
+    {
+        localisation_file_ = value
+    }
+
+    fun has_localisation_file(): Boolean
+    {
+        return localisation_file_.is_set()
+    }
+
+    fun localisation_filename(): String
+    {
+        return localisation_file_.filename_nn()
+    }
+
+    fun localisation_file_parse_method(): String
+    {
+        return localisation_file_.parse_method_string()
+    }
+
+    fun hawk_localisation_file(): LocalisationFile
+    {
+        return hawk_localisation_file_
+    }
+
+    fun set_hawk_localisation_file(value: LocalisationFile)
+    {
+        hawk_localisation_file_ = value
+    }
+
+    fun has_hawk_localisation_file(): Boolean
+    {
+        return hawk_localisation_file_.is_set()
+    }
+
+    fun hawk_localisation_filename(): String
+    {
+        return hawk_localisation_file_.filename_nn()
+    }
+
+    fun hawk_localisation_file_parse_method(): String
+    {
+        return hawk_localisation_file_.parse_method_string()
+    }
+}
