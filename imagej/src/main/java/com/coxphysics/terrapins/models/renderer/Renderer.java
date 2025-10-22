@@ -102,13 +102,18 @@ public class Renderer
 
     public ImagePlus render_localisations(String localisation_file, RenderSettings settings)
     {
-        return render_localisations_with(new SystemRunner(), localisation_file, settings);
+        return prepare_output_and_render_localisations_with(new SystemRunner(), localisation_file, settings);
+    }
+
+    public ImagePlus prepare_output_and_render_localisations_with(Runner process_runner, String localisation_file, RenderSettings settings)
+    {
+        if (!FsUtils.prepare_directory(default_output_directory()))
+            return null;
+        return render_localisations_with(process_runner, localisation_file, settings);
     }
 
     public ImagePlus render_localisations_with(Runner process_runner, String localisation_file, RenderSettings settings)
     {
-        if (!FsUtils.prepare_directory(default_output_directory()))
-            return null;
         set_data_output_path(settings);
         List<String> commands = get_commands(localisation_file, settings);
         ProcessBuilder pb = new ProcessBuilder(commands);
