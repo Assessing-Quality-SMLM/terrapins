@@ -36,13 +36,12 @@ public class SquirrelPlugin implements PlugIn
         new ImageJ();
 
         // run the plugin
-        // TODO: open reference and sr image from resources folder
-//        ImagePlus reference = IJ.openImage(SQUIRREL_GetFileFromResource.getLocalFileFromResource("/reference.tif").getAbsolutePath());
-        ImagePlus reference = IJ.openImage("/home/nik/Documents/support/squirrel/TestDataForNick/AVG_RawHD1-ds.tif");
+        ImagePlus reference = IJ.openImage(SQUIRREL_GetFileFromResource.getLocalFileFromResource("/reference.tif").getAbsolutePath());
         reference.show();
-//        ImagePlus superresolution = IJ.openImage(SQUIRREL_GetFileFromResource.getLocalFileFromResource("/super-resolution.tif").getAbsolutePath());
-        ImagePlus superresolution = IJ.openImage("/home/nik/Documents/support/squirrel/TestDataForNick/ASHRawSE3_X8.tif");
+
+        ImagePlus superresolution = IJ.openImage(SQUIRREL_GetFileFromResource.getLocalFileFromResource("/super-resolution.tif").getAbsolutePath());
         superresolution.show();
+
         IJ.runPlugIn(clazz.getName(), "");
     }
 }
