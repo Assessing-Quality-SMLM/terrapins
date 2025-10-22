@@ -1,0 +1,11 @@
+[package]
+name = "rust_ffi"
+version = "0.2.0"
+edition = "2021"
+
+[dependencies]
+jni = "0.21"
+hawk_core = {path = "../../../hawk/hawk_core"}
+
+[lib]
+crate-type = ["cdylib"]
