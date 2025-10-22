@@ -7,9 +7,9 @@
 
 *.iml
 
-image_j/src/main/resources/windows/*
-image_j/src/main/resources/nix/*
-image_j/src/main/resources/mac/*
+imagej/src/main/resources/windows/*
+imagej/src/main/resources/nix/*
+imagej/src/main/resources/mac/*
 imagej/target/*
 
 imagej/rust_ffi/Cargo.lock
