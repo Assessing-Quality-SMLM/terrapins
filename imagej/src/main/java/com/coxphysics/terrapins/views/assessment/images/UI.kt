@@ -115,7 +115,7 @@ class UI private constructor(
         return settings_file_field_.is_visible
     }
 
-    fun set_visisbility(value: Boolean)
+    fun set_visibility(value: Boolean)
     {
         equipment_ui_.set_visibility(value)
         widefield_.set_visibility(value)
