@@ -15,6 +15,7 @@ public class UtilsTests
         assertNotNull(text_areas.area_1());
         assertEquals(text_areas.area_1_text(), "");
         assertNull(text_areas.area_2());
+        assertEquals(text_areas.area_2_text(), "");
     }
 
     @Test
@@ -25,6 +26,7 @@ public class UtilsTests
         assertNotNull(text_areas.area_1());
         assertEquals(text_areas.area_1_text(), "a");
         assertNull(text_areas.area_2());
+        assertEquals(text_areas.area_2_text(), "");
     }
 
     @Test
@@ -43,7 +45,7 @@ public class UtilsTests
     {
         GenericDialog dialog = new GenericDialog("something");
         TextAreas text_areas = Utils.add_text_areas(dialog, "a", "b", 1, 2);
-                assertNotNull(text_areas.area_1());
+        assertNotNull(text_areas.area_1());
         assertEquals(text_areas.area_1_text(), "a");
         assertNotNull(text_areas.area_2());
         assertEquals(text_areas.area_2_text(), "b");
