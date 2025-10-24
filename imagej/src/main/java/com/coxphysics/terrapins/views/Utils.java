@@ -9,6 +9,12 @@ import java.util.Arrays;
 
 public class Utils
 {
+    public static TextAreas add_text_areas(GenericDialog dialog, String text_1, String text_2, int rows, int columns)
+    {
+        dialog.addTextAreas(text_1, text_2, rows, columns);
+        return TextAreas.from(dialog);
+    }
+
     public static DirectoryField add_directory_field(GenericDialog dialog, String name, String default_text)
     {
         dialog.addDirectoryField(name, default_text);
