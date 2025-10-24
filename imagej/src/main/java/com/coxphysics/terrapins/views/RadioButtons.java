@@ -63,6 +63,16 @@ public class RadioButtons
         panel_.setVisible(value);
     }
 
+    public void set_enabled(boolean value)
+    {
+        label_.setEnabled(value);
+        for (Component component : panel_.getComponents())
+        {
+            component.setEnabled(value);
+        }
+        panel_.setEnabled(value);
+    }
+
     public boolean is_button_group(Object object)
     {
         Component[] panel_components = panel_.getComponents();
