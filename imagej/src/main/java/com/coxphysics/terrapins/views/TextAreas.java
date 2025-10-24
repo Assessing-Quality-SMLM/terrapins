@@ -21,7 +21,8 @@ public class TextAreas
     public static TextAreas from(GenericDialog dialog)
     {
         Component[] components = dialog.getComponents();
-        Panel panel = (Panel)components[0];
+        int start_index = components.length - 1;
+        Panel panel = (Panel)components[start_index];
         Component[] panel_components = panel.getComponents();
         int n_areas = panel_components.length;
         TextArea area_1 = null;
@@ -54,6 +55,13 @@ public class TextAreas
 
     public String area_2_text()
     {
-        return area_2_.getText();
+        if (area_2_ != null)
+            return area_2_.getText();
+        return "";
+    }
+
+    public void set_visibility(boolean value)
+    {
+        panel_.setVisible(value);
     }
 }
