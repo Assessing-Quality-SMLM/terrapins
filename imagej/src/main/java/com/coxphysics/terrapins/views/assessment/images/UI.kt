@@ -5,13 +5,23 @@ import com.coxphysics.terrapins.views.Checkbox
 import com.coxphysics.terrapins.views.FileField
 import com.coxphysics.terrapins.views.Utils
 import com.coxphysics.terrapins.views.equipment.EquipmentUI
+import ij.gui.GenericDialog
 import java.awt.event.ItemEvent
 
 private const val WIDEFIELD = "Widefield"
 private const val IMAGE_STACK = "Image Stack"
 
 class UI private constructor(
-    private val dialog_: Dialog,
+    private val dialog_: GenericDialog,
+    private val equipment_ui_: EquipmentUI,
+    private val widefield_ : FileField,
+    private val image_stack_ : FileField,
+    private val reference : FileField,
+    private val hawk_image_ : FileField,
+    private val half_split_a_ : FileField,
+    private val half_split_b_ : FileField,
+    private val zip_split_a_ : FileField,
+    private val zip_split_b_ : FileField,
     private val advanced_settings_visible_: Checkbox,
     private val settings_file_field_: FileField
 )
@@ -19,7 +29,7 @@ class UI private constructor(
     companion object
     {
         @JvmStatic
-        fun add_controls_to_dialog(dialog: Dialog, settings: Settings): UI
+        fun add_controls_to_dialog(dialog: GenericDialog, settings: Settings): UI
         {
             val equipment = EquipmentUI.add_controls_to_dialog(dialog, settings.equipment_settings());
 
@@ -40,7 +50,7 @@ class UI private constructor(
             val settings_file_field = Utils.add_file_field(dialog, "Settings File", settings.settings_file_nn())
             settings_file_field.set_visibility(is_visible)
 
-            val ui = UI(dialog, advanced_settings_checkbox, settings_file_field)
+            val ui = UI(dialog, equipment, widefield, image_stack, reference, hawk_image, half_split_a, half_split_b, zip_split_a, zip_split_b, advanced_settings_checkbox, settings_file_field)
             return ui
         }
     }
@@ -105,4 +115,17 @@ class UI private constructor(
         return settings_file_field_.is_visible
     }
 
+    fun set_visisbility(value: Boolean)
+    {
+        equipment_ui_.set_visibility(value)
+        widefield_.set_visibility(value)
+        image_stack_.set_visibility(value)
+        reference.set_visibility(value)
+        hawk_image_.set_visibility(value)
+        half_split_a_.set_visibility(value)
+        half_split_b_.set_visibility(value)
+        zip_split_a_.set_visibility(value)
+        zip_split_b_.set_visibility(value)
+        advanced_settings_visible_.set_visibility(value)
+    }
 }
