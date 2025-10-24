@@ -2,9 +2,11 @@ package com.coxphysics.terrapins.views.hawk;
 
 import com.coxphysics.terrapins.views.NumericField;
 import com.coxphysics.terrapins.views.StringChoice;
+import com.coxphysics.terrapins.views.TextAreas;
 import com.coxphysics.terrapins.views.Utils;
 import com.coxphysics.terrapins.models.hawk.Config;
 import ij.gui.GenericDialog;
+import org.w3c.dom.Text;
 
 public class HawkUI
 {
@@ -12,11 +14,14 @@ public class HawkUI
     private final StringChoice negative_values_;
     private final StringChoice output_order_;
 
-    private HawkUI(NumericField n_levels, StringChoice negative_values, StringChoice output_order)
+    private final TextAreas text_;
+
+    private HawkUI(NumericField n_levels, StringChoice negative_values, StringChoice output_order, TextAreas text)
     {
         n_levels_ = n_levels;
         output_order_ = output_order;
         negative_values_ = negative_values;
+        text_ = text;
     }
 
     public static HawkUI add_to_dialog(GenericDialog dialog)
@@ -24,8 +29,8 @@ public class HawkUI
         NumericField n_levels = Utils.add_numeric_field(dialog,"Number of Levels", 3, 0);
         StringChoice negative_values = Utils.add_string_choice(dialog, "Negative values", new String[]{"ABS", "Separate"}, "Separate");
         StringChoice output_order = Utils.add_string_choice(dialog,"Output order", new String[]{"Group by level", "Group temporally"}, "Kernel size");
-        dialog.addTextAreas("",null, 8,30);
-        return new HawkUI(n_levels, negative_values, output_order);
+        TextAreas text = Utils.add_text_areas(dialog, "", null, 8, 30);
+        return new HawkUI(n_levels, negative_values, output_order, text);
     }
 
     public static Config create_config(GenericDialog dialog)
