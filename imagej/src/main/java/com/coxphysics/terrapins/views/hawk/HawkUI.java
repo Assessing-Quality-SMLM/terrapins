@@ -61,4 +61,12 @@ public class HawkUI
     {
         return output_order_.choice();
     }
+
+    public void set_visibility(boolean value)
+    {
+        n_levels_.set_visibility(value);
+        negative_values_.set_visible(value);
+        output_order_.set_visible(value);
+        text_.set_visibility(value);
+    }
 }
