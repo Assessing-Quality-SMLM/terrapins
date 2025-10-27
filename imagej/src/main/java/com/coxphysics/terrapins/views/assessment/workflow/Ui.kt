@@ -1,6 +1,6 @@
 package com.coxphysics.terrapins.views.assessment.workflow
 
-import com.coxphysics.terrapins.models.assessment.localisation.AssessmentSettings
+import com.coxphysics.terrapins.models.assessment.workflow.Settings
 import com.coxphysics.terrapins.views.Checkbox
 import com.coxphysics.terrapins.views.Message
 import com.coxphysics.terrapins.views.RadioButtons
@@ -8,34 +8,7 @@ import com.coxphysics.terrapins.views.Utils
 import com.coxphysics.terrapins.views.assessment.localisations.AssessmentUI
 import ij.gui.GenericDialog
 import java.awt.event.ItemEvent
-import com.coxphysics.terrapins.models.assessment.images.Settings as ImagesSettings
 import com.coxphysics.terrapins.views.assessment.images.UI as ImagesUI
-
-class Settings private constructor()
-{
-    private val localisation_settings_ = AssessmentSettings.default()
-    private val images_settings_ = ImagesSettings.default()
-
-    companion object
-    {
-        @JvmStatic
-        fun default() : Settings
-        {
-            return Settings()
-        }
-    }
-
-    fun localisation_settings(): AssessmentSettings
-    {
-        return localisation_settings_
-    }
-
-    fun images_settings(): ImagesSettings
-    {
-        return images_settings_
-    }
-}
-
 
 private val IMAGE_J = "I'm using ImageJ"
 private val NOT_IMAGE_J = "I'm using an external fitter"
