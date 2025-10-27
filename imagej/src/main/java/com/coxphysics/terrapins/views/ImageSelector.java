@@ -81,6 +81,14 @@ public class ImageSelector
         }
     }
 
+    public void set_enabled(boolean value)
+    {
+        for (StringChoice choice : image_choices_)
+        {
+            choice.set_enabled(value);
+        }
+    }
+
     private static class ResetImageChoicesListener implements ActionListener
     {
         private final ImageSelector image_selector_;
