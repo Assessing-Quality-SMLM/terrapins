@@ -39,6 +39,7 @@ public class HawkUI
         int n_levels = (int)Math.ceil(value);
         String negative_handling = dialog.getNextChoice();
         String output_style = dialog.getNextChoice();
+
         return Config.from(n_levels, negative_handling, output_style);
     }
 
