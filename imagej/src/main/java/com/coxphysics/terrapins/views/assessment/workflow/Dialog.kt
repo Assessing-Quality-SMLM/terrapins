@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.views.assessment.workflow
 
+import com.coxphysics.terrapins.models.assessment.workflow.Settings
 import ij.gui.NonBlockingGenericDialog
 import java.awt.event.ItemEvent
 
@@ -16,8 +17,6 @@ class Dialog private constructor() : NonBlockingGenericDialog("Workflow")
             dialog.set_ui(ui)
             return dialog
         }
-
-
     }
 
     private fun set_ui(ui: Ui)
