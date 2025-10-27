@@ -1,10 +1,11 @@
 package com.coxphysics.terrapins.models.assessment
 
+import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.non_null
 
 class CoreSettings
 {
-    private var widefield_: String? = null
+    private var widefield_: DiskOrImage = DiskOrImage.default()
     private var image_stack_: String? = null
     private var settings_file_: String? = null
 
@@ -19,17 +20,17 @@ class CoreSettings
 
     fun has_widefield(): Boolean
     {
-        return !widefield_.isNullOrEmpty()
+        return widefield_.has_data()
     }
 
     fun widefield_nn(): String
     {
-        return widefield_.non_null()
+        return widefield_.filename_nn()
     }
 
     fun set_widefield(value: String)
     {
-        widefield_ = value
+        widefield_.set_filename(value)
     }
 
     fun has_image_stack(): Boolean
