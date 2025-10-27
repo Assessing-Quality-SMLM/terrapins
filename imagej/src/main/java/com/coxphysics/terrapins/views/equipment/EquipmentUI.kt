@@ -1,10 +1,13 @@
 package com.coxphysics.terrapins.views.equipment
 
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
+import com.coxphysics.terrapins.views.NumericField
 import com.coxphysics.terrapins.views.Utils
 import ij.gui.GenericDialog
 
-class EquipmentUI private constructor()
+class EquipmentUI private constructor(
+    private val instrument_psf_: NumericField,
+    private val camera_pixel_size_: NumericField)
 {
     companion object
     {
@@ -15,7 +18,7 @@ class EquipmentUI private constructor()
                 Utils.add_numeric_field(dialog, "Instrument Psf fwhm (nm)", settings.instrument_psf_fwhm_nm(), 2)
             val camera_pixel_size =
                 Utils.add_numeric_field(dialog, "Camera Pixel Size (nm)", settings.camera_pixel_size_nm(), 2)
-            val ui = EquipmentUI()
+            val ui = EquipmentUI(instrument_psf, camera_pixel_size)
             return ui
         }
 
@@ -31,5 +34,11 @@ class EquipmentUI private constructor()
 
             return settings
         }
+    }
+
+    fun set_visibility(value: Boolean)
+    {
+        instrument_psf_.set_visibility(value)
+        camera_pixel_size_.set_visibility(value)
     }
 }

@@ -5,7 +5,51 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UtilsTests {
+public class UtilsTests
+{
+    @Test
+    public void add_null_text_areas()
+    {
+        GenericDialog dialog = new GenericDialog("something");
+        TextAreas text_areas = Utils.add_text_areas(dialog, null, null, 1, 2);
+        assertNotNull(text_areas.area_1());
+        assertEquals(text_areas.area_1_text(), "");
+        assertNull(text_areas.area_2());
+        assertEquals(text_areas.area_2_text(), "");
+    }
+
+    @Test
+    public void add_text_area_1()
+    {
+        GenericDialog dialog = new GenericDialog("something");
+        TextAreas text_areas = Utils.add_text_areas(dialog, "a", null, 1, 2);
+        assertNotNull(text_areas.area_1());
+        assertEquals(text_areas.area_1_text(), "a");
+        assertNull(text_areas.area_2());
+        assertEquals(text_areas.area_2_text(), "");
+    }
+
+    @Test
+    public void add_text_area_2()
+    {
+        GenericDialog dialog = new GenericDialog("something");
+        TextAreas text_areas = Utils.add_text_areas(dialog, null, "a", 1, 2);
+        assertNotNull(text_areas.area_1());
+        assertEquals(text_areas.area_1_text(), "");
+        assertNotNull(text_areas.area_2());
+        assertEquals(text_areas.area_2_text(), "a");
+    }
+
+    @Test
+    public void add_text_areas()
+    {
+        GenericDialog dialog = new GenericDialog("something");
+        TextAreas text_areas = Utils.add_text_areas(dialog, "a", "b", 1, 2);
+        assertNotNull(text_areas.area_1());
+        assertEquals(text_areas.area_1_text(), "a");
+        assertNotNull(text_areas.area_2());
+        assertEquals(text_areas.area_2_text(), "b");
+    }
 
     @Test
     public void add_file_field()

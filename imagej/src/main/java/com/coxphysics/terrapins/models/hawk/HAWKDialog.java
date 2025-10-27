@@ -26,7 +26,7 @@ public class HAWKDialog extends GenericDialog
 
         n_frames_ = n_frames;
 
-        ui_ = HawkUI.add_to_dialog(this);
+        ui_ = HawkUI.add_to_dialog(this, Settings.default_());
 
         dialog_background_ = getBackground(); //Dialog background color
 

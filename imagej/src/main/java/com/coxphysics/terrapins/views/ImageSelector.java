@@ -49,6 +49,16 @@ public class ImageSelector
         return image_names;
     }
 
+    public String[] read_image_names()
+    {
+        String[] image_names = new String[n_images_];
+        for (int idx = 0; idx < n_images_; idx++)
+        {
+            image_names[idx] = image_choices_.get(idx).choice();
+        }
+        return image_names;
+    }
+
     public void reset_image_names()
     {
         String[] titles = Utils.get_valid_image_choices_from_image_j(n_images_);

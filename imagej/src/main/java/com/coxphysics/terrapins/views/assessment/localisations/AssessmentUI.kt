@@ -6,6 +6,7 @@ import com.coxphysics.terrapins.views.FileField
 import com.coxphysics.terrapins.views.Utils
 import com.coxphysics.terrapins.views.equipment.EquipmentUI
 import com.coxphysics.terrapins.views.localisations.LocalisationFileUI
+import ij.gui.GenericDialog
 import java.awt.event.ItemEvent
 
 private const val LOCALISATION_FILE = "Localisation File"
@@ -14,7 +15,12 @@ private const val WIDEFIELD = "Widefield"
 private const val IMAGE_STACK = "Image Stack"
 
 class AssessmentUI private constructor(
-    private val dialog_: AssessmentDialog,
+    private val dialog_: GenericDialog,
+    private val equipment_: EquipmentUI,
+    private val localisation_file_ : LocalisationFileUI,
+    private val hawked_localisation_file_: LocalisationFileUI,
+    private val widefield_: FileField,
+    private val image_stack: FileField,
     private val advanced_settings_visible_: Checkbox,
     private val settings_file_field_: FileField
 )
@@ -22,7 +28,7 @@ class AssessmentUI private constructor(
     companion object
     {
         @JvmStatic
-        fun add_controls_to_dialog(dialog: AssessmentDialog, settings: AssessmentSettings): AssessmentUI
+        fun add_controls_to_dialog(dialog: GenericDialog, settings: AssessmentSettings): AssessmentUI
         {
             val equipment = EquipmentUI.add_controls_to_dialog(dialog, settings.equipment());
 
@@ -40,7 +46,7 @@ class AssessmentUI private constructor(
             val settings_file_field = Utils.add_file_field(dialog, "Settings File", settings.settings_file_nn())
             settings_file_field.set_visibility(is_visible)
 
-            val ui = AssessmentUI(dialog, advanced_settings_checkbox, settings_file_field)
+            val ui = AssessmentUI(dialog, equipment, localisation_file, hawked_localisation_file, widefield, image_stack, advanced_settings_checkbox, settings_file_field)
             return ui
         }
     }
@@ -91,6 +97,16 @@ class AssessmentUI private constructor(
     private fun current_visible() : Boolean
     {
         return settings_file_field_.is_visible
+    }
+
+    fun set_visibility(value: Boolean)
+    {
+        equipment_.set_visibility(value)
+        localisation_file_.set_visibility(value)
+        hawked_localisation_file_.set_visibility(value)
+        widefield_.set_visibility(value)
+        image_stack.set_visibility(value)
+        advanced_settings_visible_.set_visibility(value)
     }
 
 }

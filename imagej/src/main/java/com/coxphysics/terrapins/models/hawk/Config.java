@@ -8,25 +8,56 @@ public class Config
     private final short negative_handling_;
     private final short output_style_;
 
-    public Config(int n_levels, short negative_handling, short output_style)
+    private static short default_output_style()
+    {
+        return NativeHAWK.output_style_sequential();
+    }
+
+    private static short default_negative_handling()
+    {
+        return NativeHAWK.negative_handling_absolute();
+    }
+
+    private static int default_n_levels()
+    {
+        return 3;
+    }
+
+    private Config(int n_levels, short negative_handling, short output_style)
     {
         n_levels_ = n_levels;
         negative_handling_ = negative_handling;
         output_style_ = output_style;
     }
 
-    public static Config from(int n_levels, String negative_handling, String output_style)
+    public static Config with(int n_levels, short negative_handling, short output_style)
     {
-        short nh = NativeHAWK.negative_handling_absolute();
-        short os = NativeHAWK.output_style_sequential();
+        return new Config(n_levels, negative_handling, output_style);
+    }
 
-        if(negative_handling.equals("ABS"))
+    public static Config from(Settings settings)
+    {
+        short nh = default_negative_handling();
+        short os = default_output_style();
+
+        if(settings.is_absolute())
             nh = NativeHAWK.negative_handling_absolute();
-        else if(negative_handling.equals("Separate"))
+        else if(settings.is_separate())
             nh = NativeHAWK.negative_handling_separate();
 
-        if(output_style.equals("Group temporally"))
+        if(settings.is_temporal())
             os = NativeHAWK.output_style_interleaved();
+        else if(settings.is_sequential())
+            os = NativeHAWK.output_style_sequential();
+        return new Config(settings.n_levels(), nh, os);
+    }
+
+
+    public static Config default_()
+    {
+        short nh = default_negative_handling();
+        short os = default_output_style();
+        int n_levels = default_n_levels();
         return new Config(n_levels, nh, os);
     }
 
