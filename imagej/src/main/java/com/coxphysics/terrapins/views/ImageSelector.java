@@ -68,6 +68,12 @@ public class ImageSelector
         }
     }
 
+    public void reset_images()
+    {
+        reset_image_names();
+        dialog_.pack();
+    }
+
     public ActionListener reset_images_listener()
     {
         return new ResetImageChoicesListener(this);
@@ -101,8 +107,7 @@ public class ImageSelector
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            image_selector_.reset_image_names();
-            image_selector_.dialog_.pack();
+            image_selector_.reset_images();
         }
     }
 }
