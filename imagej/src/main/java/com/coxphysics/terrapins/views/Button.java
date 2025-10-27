@@ -30,6 +30,11 @@ public class Button
         return null;
     }
 
+    public void add_listener(ActionListener listener)
+    {
+        button_.addActionListener(listener);
+    }
+
     public void set_visibility(boolean value)
     {
         button_.setVisible(value);
