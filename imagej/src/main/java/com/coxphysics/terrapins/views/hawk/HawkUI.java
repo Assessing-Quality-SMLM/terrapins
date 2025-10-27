@@ -1,12 +1,16 @@
 package com.coxphysics.terrapins.views.hawk;
 
+import com.coxphysics.terrapins.models.hawk.Settings;
 import com.coxphysics.terrapins.views.NumericField;
 import com.coxphysics.terrapins.views.StringChoice;
 import com.coxphysics.terrapins.views.TextAreas;
 import com.coxphysics.terrapins.views.Utils;
 import com.coxphysics.terrapins.models.hawk.Config;
 import ij.gui.GenericDialog;
-import org.w3c.dom.Text;
+import org.jetbrains.annotations.NotNull;
+
+
+import static com.coxphysics.terrapins.models.hawk.ConstantsKt.*;
 
 public class HawkUI
 {
@@ -24,28 +28,35 @@ public class HawkUI
         text_ = text;
     }
 
-    public static HawkUI add_to_dialog(GenericDialog dialog)
+    public static HawkUI add_to_dialog(GenericDialog dialog, Settings settings)
     {
-        NumericField n_levels = Utils.add_numeric_field(dialog,"Number of Levels", 3, 0);
-        StringChoice negative_values = Utils.add_string_choice(dialog, "Negative values", new String[]{"ABS", "Separate"}, "Separate");
-        StringChoice output_order = Utils.add_string_choice(dialog,"Output order", new String[]{"Group by level", "Group temporally"}, "Kernel size");
+        NumericField n_levels = Utils.add_numeric_field(dialog,"Number of Levels", settings.n_levels(), 0);
+        StringChoice negative_values = Utils.add_string_choice(dialog, "Negative values", new String[]{ABSOLUTE, SEPARATE}, settings.negative_handling());
+        StringChoice output_order = Utils.add_string_choice(dialog,"Output order", new String[]{SEQUENTIAL, TEMPORALLY}, settings.output_style());
         TextAreas text = Utils.add_text_areas(dialog, "", null, 8, 30);
         return new HawkUI(n_levels, negative_values, output_order, text);
     }
 
     public static Config create_config(GenericDialog dialog)
     {
-        double value = dialog.getNextNumber();
-        int n_levels = (int)Math.ceil(value);
-        String negative_handling = dialog.getNextChoice();
-        String output_style = dialog.getNextChoice();
+        int n_levels = Utils.extract_numeric_field_as_int(dialog);
+        String negative_handling = Utils.extract_string_choice(dialog);
+        String output_style = Utils.extract_string_choice(dialog);
 
-        return Config.from(n_levels, negative_handling, output_style);
+        Settings settings = Settings.from(n_levels, negative_handling, output_style);
+        return Config.from(settings);
     }
 
     public Config read_config()
     {
-        return Config.from(n_levels(), negative_handling(), output_style());
+        Settings settings = read_into_settings();
+        return Config.from(settings);
+    }
+
+    @NotNull
+    private Settings read_into_settings()
+    {
+        return Settings.from(n_levels(), negative_handling(), output_style());
     }
 
     public int n_levels()
@@ -62,6 +73,7 @@ public class HawkUI
     {
         return output_order_.choice();
     }
+
 
     public void set_visibility(boolean value)
     {

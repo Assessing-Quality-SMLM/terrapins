@@ -3,6 +3,7 @@ package com.coxphysics.terrapins.models;
 import com.coxphysics.terrapins.models.hawk.Config;
 import com.coxphysics.terrapins.models.hawk.MetaDataExtract;
 import com.coxphysics.terrapins.models.hawk.PStreamFilter;
+import com.coxphysics.terrapins.models.hawk.Settings;
 import ij.ImagePlus;
 import ij.ImageStack;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class PStreamFilterTests {
         }
         ImagePlus image = new ImagePlus("image", stack);
         image.getCalibration().setUnit("fake_unit");
-        Config config = Config.from(1, "abs", "");
+        Config config = Config.from(Settings.from(1, "abs", ""));
         PStreamFilter filter = PStreamFilter.from(image, config);
         ImagePlus filtered_image = filter.get_image_plus();
         assertEquals(filtered_image.getCalibration().getUnit(), "fake_unit");
@@ -54,7 +55,7 @@ public class PStreamFilterTests {
         image.getCalibration().setUnit("fake_unit");
         image.getCalibration().frameInterval = 100;
         assertEquals(image.getCalibration().frameInterval, 100);
-        Config config = Config.from(1, "abs", "");
+        Config config = Config.from(Settings.from(1, "abs", ""));
         PStreamFilter filter = PStreamFilter.from(image, config);
         ImagePlus filtered_image = filter.get_image_plus();
         assertEquals(filtered_image.getCalibration().getUnit(), "fake_unit");
@@ -74,7 +75,7 @@ public class PStreamFilterTests {
             count++;
         }
         ImagePlus image = new ImagePlus("image", stack);
-        Config config = Config.from(1, "abs", "");
+        Config config = Config.from(Settings.from(1, "abs", ""));
         PStreamFilter filter = PStreamFilter.from(image, config);
         ImagePlus filtered_image = filter.get_image_plus();
         String metadata = MetaDataExtract.get_metadata(filtered_image);

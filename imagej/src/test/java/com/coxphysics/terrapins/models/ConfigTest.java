@@ -4,6 +4,8 @@ import com.coxphysics.terrapins.models.hawk.NativeHAWK;
 import com.coxphysics.terrapins.models.hawk.Config;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import com.coxphysics.terrapins.models.hawk.Settings;
 import org.junit.jupiter.api.Test;
 
 public class ConfigTest 
@@ -40,7 +42,7 @@ public class ConfigTest
     @Test
     public void validation_errors()
     {
-        Config config = Config.from(2, "ABS", "");
+        Config config = Config.from(Settings.from(2, "ABS", ""));
         String errors = config.get_validation_errors(1);
         String expected = "Validation Error: data length of 1 < kernel size 4";
         assertEquals(errors,  expected);
