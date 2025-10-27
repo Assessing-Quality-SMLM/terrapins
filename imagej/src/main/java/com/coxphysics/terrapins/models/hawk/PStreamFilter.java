@@ -80,7 +80,7 @@ public class PStreamFilter implements ExtendedPlugInFilter {
         if (image_ == null || config_ == null)
             return null;
         int n_pixels = image_.getWidth() * image_.getHeight();
-        PStream new_stack =  PStream.from(image_.getStack(), config_, output_size_, n_pixels);
+        PStream new_stack = PStream.from(image_.getStack(), config_, output_size_, n_pixels);
         ImagePlus view = new ImagePlus("JHAWK pstream", new_stack);
         view.setCalibration(get_calibration());
         String metadata = new_stack.get_metadata();
