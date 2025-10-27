@@ -32,7 +32,7 @@ class Ui private constructor(
         {
             val pre_processing = Utils.add_radio_buttons(dialog, "Pre-processing", arrayOf(IMAGE_J, NOT_IMAGE_J), 2, 1, IMAGE_J)
 
-            val pre_processing_completed = Utils.add_checkbox(dialog, "Super resolution images created", false)
+            val pre_processing_completed = Utils.add_checkbox(dialog, "Super resolution localisations / images created", false)
 
             val processing = Utils.add_radio_buttons(dialog, "Processing", arrayOf(LOCALISATIONS, IMAGES), 2, 1, LOCALISATIONS)
 
