@@ -72,4 +72,11 @@ public class FileField
         text_.setVisible(value);
         button_.setVisible(value);
     }
+
+    public void set_enabled(boolean value)
+    {
+        label_.setEnabled(value);
+        text_.setEnabled(value);
+        button_.setEnabled(value);
+    }
 }
