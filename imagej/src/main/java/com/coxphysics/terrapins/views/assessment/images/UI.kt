@@ -1,11 +1,17 @@
 package com.coxphysics.terrapins.views.assessment.images
 
+import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.assessment.images.Settings
+import com.coxphysics.terrapins.view_models.DiskOrImageVM
+import com.coxphysics.terrapins.views.Button
 import com.coxphysics.terrapins.views.Checkbox
+import com.coxphysics.terrapins.views.DiskOrImageUI
 import com.coxphysics.terrapins.views.FileField
 import com.coxphysics.terrapins.views.Utils
 import com.coxphysics.terrapins.views.equipment.EquipmentUI
 import ij.gui.GenericDialog
+import java.awt.event.ActionEvent
+import java.awt.event.ActionListener
 import java.awt.event.ItemEvent
 
 private const val WIDEFIELD = "Widefield"
@@ -14,18 +20,18 @@ private const val IMAGE_STACK = "Image Stack"
 class UI private constructor(
     private val dialog_: GenericDialog,
     private val equipment_ui_: EquipmentUI,
-    private val widefield_ : FileField,
-    private val image_stack_ : FileField,
-    private val reference : FileField,
-    private val hawk_image_ : FileField,
+    private val widefield_ : DiskOrImageUI,
+    private val image_stack_ : DiskOrImageUI,
+    private val reference_ : DiskOrImageUI,
+    private val hawk_image_ : DiskOrImageUI,
     private val half_split_a_ : FileField,
     private val half_split_b_ : FileField,
     private val zip_split_a_ : FileField,
     private val zip_split_b_ : FileField,
     private val advanced_settings_visible_: Checkbox,
-    private val settings_file_field_: FileField
-)
-{
+    private val settings_file_field_: FileField,
+    private var reset_images_button_: Button?,
+) : ActionListener {
     companion object
     {
         @JvmStatic
@@ -33,11 +39,21 @@ class UI private constructor(
         {
             val equipment = EquipmentUI.add_controls_to_dialog(dialog, settings.equipment_settings());
 
-            val widefield = Utils.add_file_field(dialog, WIDEFIELD, settings.widefield_nn())
-            val image_stack = Utils.add_file_field(dialog, IMAGE_STACK, settings.image_stack_nn())
+            val wf_disk_or_image = DiskOrImageVM.with(WIDEFIELD, DiskOrImage.from_filename(settings.widefield_nn()))
+            wf_disk_or_image.set_draw_reset_button(false)
+            val widefield = DiskOrImageUI.add_to_dialog(dialog, wf_disk_or_image)
 
-            val reference = Utils.add_file_field(dialog, "Reference", settings.reference_image_nn())
-            val hawk_image = Utils.add_file_field(dialog, "HAWK", settings.hawk_image_nn())
+            val is_disk_or_image = DiskOrImageVM.with(IMAGE_STACK, DiskOrImage.from_filename(settings.image_stack_nn()))
+            is_disk_or_image.set_draw_reset_button(false)
+            val image_stack = DiskOrImageUI.add_to_dialog(dialog, is_disk_or_image)
+
+            val ref_disk_or_image = DiskOrImageVM.with("Reference", DiskOrImage.from_filename(settings.reference_image_nn()))
+            ref_disk_or_image.set_draw_reset_button(false)
+            val reference = DiskOrImageUI.add_to_dialog(dialog, ref_disk_or_image)
+
+            val hawk_disk_or_image = DiskOrImageVM.with("HAWK", DiskOrImage.from_filename(settings.hawk_image_nn()))
+            hawk_disk_or_image.set_draw_reset_button(false)
+            val hawk_image = DiskOrImageUI.add_to_dialog(dialog, hawk_disk_or_image)
 
             val half_split_a = Utils.add_file_field(dialog, "Half split image a", settings.half_split_image_a_nn())
             val half_split_b = Utils.add_file_field(dialog, "Half split image b", settings.half_split_image_b_nn())
@@ -50,7 +66,9 @@ class UI private constructor(
             val settings_file_field = Utils.add_file_field(dialog, "Settings File", settings.settings_file_nn())
             settings_file_field.set_visibility(is_visible)
 
-            val ui = UI(dialog, equipment, widefield, image_stack, reference, hawk_image, half_split_a, half_split_b, zip_split_a, zip_split_b, advanced_settings_checkbox, settings_file_field)
+            val ui = UI(dialog, equipment, widefield, image_stack, reference, hawk_image, half_split_a, half_split_b, zip_split_a, zip_split_b, advanced_settings_checkbox, settings_file_field, null)
+            val reset_images_button = Utils.add_button(dialog, "Reset Images", ui)
+            ui.reset_images_button_ = reset_images_button
             return ui
         }
     }
@@ -120,12 +138,20 @@ class UI private constructor(
         equipment_ui_.set_visibility(value)
         widefield_.set_visibility(value)
         image_stack_.set_visibility(value)
-        reference.set_visibility(value)
+        reference_.set_visibility(value)
         hawk_image_.set_visibility(value)
         half_split_a_.set_visibility(value)
         half_split_b_.set_visibility(value)
         zip_split_a_.set_visibility(value)
         zip_split_b_.set_visibility(value)
         advanced_settings_visible_.set_visibility(value)
+    }
+
+    override fun actionPerformed(e: ActionEvent?)
+    {
+        widefield_.reset_images()
+        image_stack_.reset_images()
+        reference_.reset_images()
+        hawk_image_.reset_images()
     }
 }
