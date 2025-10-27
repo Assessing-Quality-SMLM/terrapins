@@ -36,7 +36,7 @@ class Ui private constructor(
 
             val processing = Utils.add_radio_buttons(dialog, "Processing", arrayOf(LOCALISATIONS, IMAGES), 2, 1, LOCALISATIONS)
 
-            val imagej_pre_processing = ImageJPreProcessingUI.add_to_dialog(dialog)
+            val imagej_pre_processing = ImageJPreProcessingUI.add_to_dialog(dialog, settings)
             val external_fitter_ui = Utils.add_message(dialog, "Follow the instructions of your fitter")
             val localisation_ui = AssessmentUI.add_controls_to_dialog(dialog, settings.localisation_settings())
             val images_ui = ImagesUI.add_controls_to_dialog(dialog, settings.images_settings())
