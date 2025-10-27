@@ -15,7 +15,7 @@ public class PStreamTests
     {
         short nh = NativeHAWK.negative_handling_absolute();
         short os = NativeHAWK.output_style_interleaved();
-        Config config = new Config(3, nh, os);
+        Config config = Config.with(3, nh, os);
 
         float[] data = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         ImageStack stack = new ImageStack(1, 1, data.length);
@@ -46,7 +46,7 @@ public class PStreamTests
     {
         short nh = NativeHAWK.negative_handling_absolute();
         short os = NativeHAWK.output_style_sequential();
-        Config config = new Config(3, nh, os);
+        Config config = Config.with(3, nh, os);
 
         float[] data = {0, 1, 2, 3, 4, 5, 6, 7, 8};
         ImageStack stack = new ImageStack(1, 1, data.length);
