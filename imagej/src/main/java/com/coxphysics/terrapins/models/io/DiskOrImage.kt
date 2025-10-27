@@ -42,6 +42,11 @@ class DiskOrImage private constructor(
         return !use_image()
     }
 
+    fun has_data(): Boolean
+    {
+        return filename_ != null || image_ != null
+    }
+
     fun filename_nn(): String
     {
         return filename_.non_null()
