@@ -36,6 +36,12 @@ public class StringChoice
         choice_.setVisible(value);
     }
 
+    public void set_enabled(boolean value)
+    {
+        label_.setEnabled(value);
+        choice_.setEnabled(value);
+    }
+
     public void reset_choices(String[] values)
     {
         choice_.removeAll();
