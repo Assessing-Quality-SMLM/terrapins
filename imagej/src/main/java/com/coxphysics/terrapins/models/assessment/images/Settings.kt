@@ -5,7 +5,6 @@ import com.coxphysics.terrapins.models.assessment.CoreSettings
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import com.coxphysics.terrapins.models.io.FrcImages
 import com.coxphysics.terrapins.models.io.JointImages
-import com.coxphysics.terrapins.models.non_null
 
 class Settings private constructor()
 {
@@ -55,19 +54,24 @@ class Settings private constructor()
         return core_settings_.widefield_nn()
     }
 
-    fun set_widefield(value: String)
+    fun set_widefield(value: DiskOrImage)
     {
         core_settings_.set_widefield(value)
     }
 
-    fun image_stack_nn(): String
+    fun set_widefield_filename(value: String)
     {
-        return core_settings_.image_stack_nn()
+        core_settings_.set_widefield_filename(value)
     }
 
-    fun set_image_stack(value: String)
+    fun set_image_stack(value: DiskOrImage)
     {
         core_settings_.set_image_stack(value)
+    }
+
+    fun set_image_stack_filename(value: String)
+    {
+        core_settings_.set_image_stack_filename(value)
     }
 
     fun settings_file_nn(): String
@@ -95,7 +99,12 @@ class Settings private constructor()
         return reference_image_.filename_nn()
     }
 
-    fun set_reference(value: String)
+    fun set_reference(value: DiskOrImage)
+    {
+        reference_image_ = value
+    }
+
+    fun set_reference_filename(value: String)
     {
         reference_image_.set_filename(value)
     }
@@ -114,7 +123,12 @@ class Settings private constructor()
         return hawk_image_.filename_nn()
     }
 
-    fun set_hawk(value: String)
+    fun set_hawk(value: DiskOrImage)
+    {
+        hawk_image_ = value
+    }
+
+    fun set_hawk_filename(value: String)
     {
         hawk_image_.set_filename(value)
     }
@@ -132,6 +146,12 @@ class Settings private constructor()
     fun frc_model(): FrcImages
     {
         return FrcImages.new(half_split_model(), zip_split_model())
+    }
+
+    fun set_frc_images(value: FrcImages)
+    {
+        half_split_ = value.half_split()
+        zip_split_ = value.zip_split()
     }
 
     fun half_split_valid(): Boolean

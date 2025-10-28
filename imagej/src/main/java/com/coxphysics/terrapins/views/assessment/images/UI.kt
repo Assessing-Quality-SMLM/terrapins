@@ -103,33 +103,23 @@ class UI private constructor(
         val equipment = EquipmentUI.create_settings_record(dialog)
         settings.set_equipment_settings(equipment)
 
-        val widefield = Utils.extract_file_field(dialog)
+        val widefield = widefield_.extract_from(dialog)
         settings.set_widefield(widefield)
 
-        val image_stack = Utils.extract_file_field(dialog)
+        val image_stack = image_stack_.extract_from(dialog)
         settings.set_image_stack(image_stack)
 
-        val reference = Utils.extract_file_field(dialog)
+        val reference = reference_.extract_from(dialog)
         settings.set_reference(reference)
 
-        val hawk = Utils.extract_file_field(dialog)
+        val hawk = hawk_image_.extract_from(dialog)
         settings.set_hawk(hawk)
 
-        val half_split_a = Utils.extract_file_field(dialog)
-        settings.set_half_split_a(half_split_a)
-
-        val half_split_b = Utils.extract_file_field(dialog)
-        settings.set_half_split_b(half_split_b)
-
-        val zip_split_a = Utils.extract_file_field(dialog)
-        settings.set_zip_split_a(zip_split_a)
-
-        val zip_split_b = Utils.extract_file_field(dialog)
-        settings.set_zip_split_b(zip_split_b)
+        val frc_images = frc_images_.extract_from(dialog)
+        settings.set_frc_images(frc_images)
 
         // advanced visible
-        val _advanced_checkbox = Utils.extract_checkbox_value(dialog)
-        val settings_file = Utils.extract_file_field(dialog)
+        val settings_file = settings_file_field_.extract_from(dialog)
         settings.set_settings_file(settings_file)
 
         return settings
