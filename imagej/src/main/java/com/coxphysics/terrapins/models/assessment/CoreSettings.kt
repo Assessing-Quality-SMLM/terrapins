@@ -2,8 +2,10 @@ package com.coxphysics.terrapins.models.assessment
 
 import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.non_null
+import com.coxphysics.terrapins.models.utils.FsUtils
+import java.nio.file.Path
 
-class CoreSettings
+class CoreSettings private constructor(private var working_directory_: Path)
 {
     private var widefield_: DiskOrImage = DiskOrImage.default()
     private var image_stack_: DiskOrImage = DiskOrImage.default()
@@ -14,7 +16,7 @@ class CoreSettings
         @JvmStatic
         fun default(): CoreSettings
         {
-            return CoreSettings()
+            return CoreSettings(FsUtils.temp_directory())
         }
     }
 
