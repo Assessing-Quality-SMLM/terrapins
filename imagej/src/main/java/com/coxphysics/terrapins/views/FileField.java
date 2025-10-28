@@ -1,11 +1,13 @@
 package com.coxphysics.terrapins.views;
 
 import ij.gui.GenericDialog;
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.Button;
 
 import java.awt.*;
 
-public class FileField
+public class FileField implements Recordable<String>, UIElement, RecordableElement<String>
 {
     private final Label label_;
     private final TextField text_;
@@ -27,6 +29,13 @@ public class FileField
         TextField text_field = get_text_field_from_panel(panel);
         Button button = get_button_from_panel(panel);
         return new FileField(label, text_field, button);
+    }
+
+
+    @Override
+    public String extract_from(@NotNull GenericDialog dialog)
+    {
+        return Utils.extract_file_field(dialog);
     }
 
     public boolean is_visible()
