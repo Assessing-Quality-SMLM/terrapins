@@ -52,28 +52,28 @@ class UI private constructor(
 
             val optional_widefield = OptionalInputVM.from(false)
             optional_widefield.set_name("I have a widefield")
-            val widefield = OptionalInputUI.add_to_dialog(dialog, optional_widefield, FileFactory.from(widefield_vm))
+            val widefield = OptionalInputUI.add_to_dialog(dialog, optional_widefield, DiskOrImageFactory.from(widefield_vm))
 
             val image_stack_vm = DiskOrImageVM.with(IMAGE_STACK, settings.image_stack())
             image_stack_vm.set_draw_reset_button(false)
 
             val optional_image_stack = OptionalInputVM.from(false)
             optional_image_stack.set_name("I have an image stack")
-            val image_stack = OptionalInputUI.add_to_dialog(dialog, optional_image_stack, FileFactory.from(image_stack_vm))
+            val image_stack = OptionalInputUI.add_to_dialog(dialog, optional_image_stack, DiskOrImageFactory.from(image_stack_vm))
 
             val reference_vm = DiskOrImageVM.with("Reference", settings.reference_image())
             reference_vm.set_draw_reset_button(false)
 
             val optional_reference = OptionalInputVM.from(false)
             optional_reference.set_name("I have a super resolution image")
-            val reference = OptionalInputUI.add_to_dialog(dialog, optional_reference, FileFactory.from(reference_vm))
+            val reference = OptionalInputUI.add_to_dialog(dialog, optional_reference, DiskOrImageFactory.from(reference_vm))
 
             val hawk_vm = DiskOrImageVM.with("HAWK", settings.hawk_image())
             hawk_vm.set_draw_reset_button(false)
 
             val optional_hawk = OptionalInputVM.from(false)
             optional_hawk.set_name("I Have a HAWK image")
-            val hawk_image = OptionalInputUI.add_to_dialog(dialog, optional_hawk, FileFactory.from(hawk_vm))
+            val hawk_image = OptionalInputUI.add_to_dialog(dialog, optional_hawk, DiskOrImageFactory.from(hawk_vm))
 
             val frc_vm = FrcImagesVM.from(settings.frc_model())
 
