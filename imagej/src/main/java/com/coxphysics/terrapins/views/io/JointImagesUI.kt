@@ -1,11 +1,9 @@
 package com.coxphysics.terrapins.views.io
 
+import com.coxphysics.terrapins.models.io.JointImages
 import com.coxphysics.terrapins.view_models.io.JointImagesVM
-import com.coxphysics.terrapins.views.DiskOrImageUI
-import com.coxphysics.terrapins.views.Message
-import com.coxphysics.terrapins.views.Utils
+import com.coxphysics.terrapins.views.*
 import ij.gui.GenericDialog
-import java.awt.Font
 
 class JointImagesUI private constructor(
     private val vieW_model_: JointImagesVM,
@@ -14,7 +12,7 @@ class JointImagesUI private constructor(
     private val image_1_ui_: DiskOrImageUI,
     private val image_2_header_: Message,
     private val image_2_ui_: DiskOrImageUI
-)
+) : Recordable<JointImages>, UIElement, RecordableElement<JointImages>
 {
     companion object
     {
@@ -34,7 +32,17 @@ class JointImagesUI private constructor(
         }
     }
 
-    fun set_visibility(value: Boolean)
+    override fun extract_from(dialog: GenericDialog): JointImages
+    {
+        val _group_header = ""
+        val _image_1_header = ""
+        val image_1 = image_1_ui_.extract_model(dialog)
+        val image_2_header = ""
+        val image_2 = image_2_ui_.extract_model(dialog)
+        return JointImages.new(image_1, image_2)
+    }
+
+    override fun set_visibility(value: Boolean)
     {
         group_header.set_visibility(value)
         image_1_header_.set_visibility(value)

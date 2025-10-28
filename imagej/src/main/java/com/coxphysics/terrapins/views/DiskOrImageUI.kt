@@ -11,7 +11,8 @@ class DiskOrImageUI(
     private val file_field_: FileField,
     private val checkbox_: Checkbox,
     private val image_selector_: ImageSelector,
-    private val reset_images_button_: Button?) : ItemListener
+    private val reset_images_button_: Button?)
+    : ItemListener, Recordable<DiskOrImage>, UIElement, RecordableElement<DiskOrImage>
 {
     companion object
     {
@@ -33,6 +34,11 @@ class DiskOrImageUI(
         }
     }
 
+    override fun extract_from(dialog: GenericDialog): DiskOrImage
+    {
+        return extract_model(dialog)
+    }
+
     fun extract_model(dialog: GenericDialog): DiskOrImage
     {
         val file = Utils.extract_file_field(dialog)
@@ -42,7 +48,7 @@ class DiskOrImageUI(
         return DiskOrImage.new(file, image, use_image)
     }
 
-    fun set_visibility(value: Boolean)
+    override fun set_visibility(value: Boolean)
     {
         file_field_.set_visibility(value)
         checkbox_.set_visibility(value)
