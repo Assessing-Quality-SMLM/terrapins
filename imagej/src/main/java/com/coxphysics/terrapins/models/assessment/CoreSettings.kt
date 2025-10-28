@@ -38,7 +38,12 @@ class CoreSettings
         return widefield_.filename_nn()
     }
 
-    fun set_widefield(value: String)
+    fun set_widefield(value: DiskOrImage)
+    {
+        widefield_ = value
+    }
+
+    fun set_widefield_filename(value: String)
     {
         widefield_.set_filename(value)
     }
@@ -53,7 +58,12 @@ class CoreSettings
         return image_stack_.filename_nn()
     }
 
-    fun set_image_stack(value: String)
+    fun set_image_stack(value: DiskOrImage)
+    {
+        image_stack_ = value
+    }
+
+    fun set_image_stack_filename(value: String)
     {
         image_stack_.set_filename(value)
     }
