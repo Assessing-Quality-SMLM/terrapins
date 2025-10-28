@@ -5,8 +5,8 @@ import com.coxphysics.terrapins.models.assessment.images.Settings
 import com.coxphysics.terrapins.models.io.FrcImages
 import com.coxphysics.terrapins.view_models.DiskOrImageVM
 import com.coxphysics.terrapins.view_models.OptionalInputVM
+import com.coxphysics.terrapins.view_models.io.FileFieldVM
 import com.coxphysics.terrapins.view_models.io.FrcImagesVM
-import com.coxphysics.terrapins.view_models.io.JointImagesVM
 import com.coxphysics.terrapins.views.Button
 import com.coxphysics.terrapins.views.Checkbox
 import com.coxphysics.terrapins.views.DiskOrImageUI
@@ -35,10 +35,10 @@ class UI private constructor(
 
     private val frc_images_: OptionalInputUI<FrcImagesUI, FrcImages>,
 
-    private val advanced_settings_visible_: Checkbox,
-    private val settings_file_field_: FileField,
+//    private val advanced_settings_visible_: Checkbox,
+    private val settings_file_field_: OptionalInputUI<FileField, String>,
     private var reset_images_button_: Button?,
-) : ActionListener, ItemListener
+) : ActionListener
 {
     companion object
     {
@@ -81,17 +81,18 @@ class UI private constructor(
             optional_frc.set_name("I have FRC splits")
             val frc_images = OptionalInputUI.add_to_dialog(dialog, optional_frc, FrcFactory.from(frc_vm))
 
-            val is_visible = false
-            val advanced_settings_checkbox = Utils.add_checkbox(dialog, "Advanced Settings", is_visible)
-            val settings_file_field = Utils.add_file_field(dialog, "Settings File", settings.settings_file_nn())
-            settings_file_field.set_visibility(is_visible)
 
-            val ui = UI(dialog, equipment, widefield, image_stack, reference, hawk_image, frc_images, advanced_settings_checkbox, settings_file_field, null)
+            val settings_vm = FileFieldVM.from(settings.settings_file_nn())
+            settings_vm.set_name("Settings file")
+            val optional_settings = OptionalInputVM.from(false)
+            optional_settings.set_name("Advanced settings")
+            val settings_file = OptionalInputUI.add_to_dialog(dialog, optional_settings, FileFactory.from(settings_vm))
+
+            val ui = UI(dialog, equipment, widefield, image_stack, reference, hawk_image, frc_images, settings_file, null)
 
             val reset_images_button = Utils.add_button(dialog, "Reset Images", ui)
             ui.reset_images_button_ = reset_images_button
 
-            advanced_settings_checkbox.add_item_listener(ui)
             return ui
         }
     }
@@ -135,34 +136,6 @@ class UI private constructor(
         return settings
     }
 
-    override fun itemStateChanged(e: ItemEvent?)
-    {
-        if (e == null)
-            return
-        handle_event(e)
-        dialog_.pack()
-    }
-
-    fun handle_event(event: ItemEvent)
-    {
-        val source = event.source
-        if (advanced_settings_visible_.is_checkbox(source))
-        {
-            flip_advanced_settings_visibility()
-        }
-    }
-
-    private fun flip_advanced_settings_visibility()
-    {
-        val new_visibility = !current_visible()
-        settings_file_field_.set_visibility(new_visibility)
-    }
-
-    private fun current_visible() : Boolean
-    {
-        return settings_file_field_.is_visible
-    }
-
     fun set_visibility(value: Boolean)
     {
         equipment_ui_.set_visibility(value)
@@ -171,7 +144,7 @@ class UI private constructor(
         reference_.set_visibility(value)
         hawk_image_.set_visibility(value)
         frc_images_.set_visibility(value)
-        advanced_settings_visible_.set_visibility(value)
+        settings_file_field_.set_visibility(value)
     }
 
     override fun actionPerformed(e: ActionEvent?)
