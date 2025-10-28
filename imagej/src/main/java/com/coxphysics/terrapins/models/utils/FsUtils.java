@@ -4,9 +4,18 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class FsUtils
 {
+    private static final String JAVA_TEMP_DIRECTORY = "java.io.tmpdir";
+
+    public static Path temp_directory()
+    {
+        String temp_location = System.getProperty(JAVA_TEMP_DIRECTORY);
+        return Paths.get(temp_location);
+    }
+
     public static boolean prepare_directory(Path directory)
     {
         boolean ok = delete_directory_recursive(directory);
