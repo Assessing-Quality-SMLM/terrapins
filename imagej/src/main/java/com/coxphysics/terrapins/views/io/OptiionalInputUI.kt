@@ -42,6 +42,7 @@ class OptionalInputUI<UI: RecordableElement<T>, T> private constructor(
         if (checkbox_.is_checkbox(e.source))
         {
             re_draw()
+            dialog_.pack()
         }
     }
 
