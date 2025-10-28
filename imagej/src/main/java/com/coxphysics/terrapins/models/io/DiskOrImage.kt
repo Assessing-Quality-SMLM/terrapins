@@ -42,6 +42,16 @@ class DiskOrImage private constructor(
         return !use_image()
     }
 
+    fun set_use_image(value: Boolean)
+    {
+        use_image_ = value
+    }
+
+    fun set_use_disk(value: Boolean)
+    {
+        set_use_image(!value)
+    }
+
     fun has_data(): Boolean
     {
         return filename_ != null || image_ != null
