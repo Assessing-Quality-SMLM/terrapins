@@ -3,16 +3,16 @@ package com.coxphysics.terrapins.models.assessment.images
 import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.assessment.CoreSettings
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
+import com.coxphysics.terrapins.models.io.FrcImages
 import com.coxphysics.terrapins.models.io.JointImages
 import com.coxphysics.terrapins.models.non_null
-import com.coxphysics.terrapins.views.io.JointImagesUI
 
 class Settings private constructor()
 {
     private var equipment = EquipmentSettings.default()
     private var core_settings_ = CoreSettings.default()
-    private var reference_image : String? = null
-    private var hawk_image : String? = null
+    private var reference_image_ = DiskOrImage.default()
+    private var hawk_image_ = DiskOrImage.default()
     private var half_split_ = JointImages.default()
     private var zip_split_ = JointImages.default()
 
@@ -38,6 +38,16 @@ class Settings private constructor()
     fun core_settings(): CoreSettings
     {
         return core_settings_
+    }
+
+    fun widefield(): DiskOrImage
+    {
+        return core_settings_.widefield()
+    }
+
+    fun image_stack(): DiskOrImage
+    {
+        return core_settings_.image_stack()
     }
 
     fun widefield_nn(): String
@@ -70,34 +80,43 @@ class Settings private constructor()
         core_settings_.set_settings_file(value)
     }
 
+    fun reference_image(): DiskOrImage
+    {
+        return reference_image_
+    }
+
     fun reference_image_is_valid(): Boolean
     {
-        return !reference_image.isNullOrEmpty()
+        return reference_image_.has_data()
     }
 
     fun reference_image_nn(): String
     {
-        return reference_image.non_null()
+        return reference_image_.filename_nn()
     }
 
     fun set_reference(value: String)
     {
-        reference_image = value
+        reference_image_.set_filename(value)
     }
 
     fun hawk_image_is_valid(): Boolean
     {
-        return !hawk_image.isNullOrEmpty()
+        return hawk_image_.has_data()
     }
 
+    fun hawk_image(): DiskOrImage
+    {
+        return hawk_image_
+    }
     fun hawk_image_nn(): String
     {
-        return hawk_image.non_null()
+        return hawk_image_.filename_nn()
     }
 
     fun set_hawk(value: String)
     {
-        hawk_image = value
+        hawk_image_.set_filename(value)
     }
 
     fun half_split_model(): JointImages
@@ -108,6 +127,11 @@ class Settings private constructor()
     fun zip_split_model(): JointImages
     {
         return zip_split_
+    }
+
+    fun frc_model(): FrcImages
+    {
+        return FrcImages.new(half_split_model(), zip_split_model())
     }
 
     fun half_split_valid(): Boolean

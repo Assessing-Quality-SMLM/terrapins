@@ -16,7 +16,6 @@ class JointImagesVM private constructor(
         @JvmStatic
         fun from(model: JointImages) : JointImagesVM
         {
-
             val image_1 = DiskOrImageVM.with("Filename", model.image_1())
             image_1.set_use_disk(false)
             image_1.set_draw_reset_button(false)

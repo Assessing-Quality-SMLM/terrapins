@@ -9,9 +9,15 @@ class JointImages private constructor(
     companion object
     {
         @JvmStatic
+        fun new(image_1: DiskOrImage, image_2: DiskOrImage) : JointImages
+        {
+            return JointImages(image_1, image_2)
+        }
+
+        @JvmStatic
         fun default() : JointImages
         {
-            return JointImages(DiskOrImage.default(), DiskOrImage.default())
+            return new(DiskOrImage.default(), DiskOrImage.default())
         }
     }
 
