@@ -31,7 +31,7 @@ class ImagesTests
     fun can_use_reference_image()
     {
         val settings = Settings.default()
-        settings.set_reference("some.thing")
+        settings.set_reference_filename("some.thing")
         val commands = Assessment.custom(exe_path()).get_images_arguments(settings)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--extract", "images", "--reference-image", "some.thing", "--pixel-size-nm", "160.0", "--psf-px", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
@@ -41,7 +41,7 @@ class ImagesTests
     fun can_use_hawk_image()
     {
         val settings = Settings.default()
-        settings.set_hawk("some.thing")
+        settings.set_hawk_filename("some.thing")
         val commands = Assessment.custom(exe_path()).get_images_arguments(settings)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(),"--extract", "images", "--hawk-image", "some.thing", "--pixel-size-nm", "160.0", "--psf-px", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
@@ -113,7 +113,7 @@ class ImagesTests
     fun can_use_widefield()
     {
         val settings = Settings.default()
-        settings.set_widefield("some.thing")
+        settings.set_widefield_filename("some.thing")
         val commands = Assessment.custom(exe_path()).get_images_arguments(settings)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(),"--widefield", "some.thing", "--extract", "images", "--pixel-size-nm", "160.0", "--psf-px", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
@@ -123,7 +123,7 @@ class ImagesTests
     fun can_use_image_stack()
     {
         val settings = Settings.default()
-        settings.set_image_stack("some.thing")
+        settings.set_image_stack_filename("some.thing")
         val commands = Assessment.custom(exe_path()).get_images_arguments(settings)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(),"--image-stack", "some.thing", "--extract", "images","--pixel-size-nm", "160.0",  "--psf-px", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
@@ -138,5 +138,4 @@ class ImagesTests
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(),"--settings", "settings.file", "--extract", "images", "--pixel-size-nm", "160.0", "--psf-px", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
-
 }

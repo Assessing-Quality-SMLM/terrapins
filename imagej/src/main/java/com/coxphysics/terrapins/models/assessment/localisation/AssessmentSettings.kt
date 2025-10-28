@@ -29,9 +29,9 @@ class AssessmentSettings private constructor()
         return core_settings.widefield_nn()
     }
 
-    fun set_widefield(value: String)
+    fun set_widefield_filename(value: String)
     {
-        core_settings.set_widefield(value)
+        core_settings.set_widefield_filename(value)
     }
 
     fun settings_file_nn(): String
@@ -49,9 +49,9 @@ class AssessmentSettings private constructor()
         return core_settings.image_stack_nn()
     }
 
-    fun set_image_stack(value: String)
+    fun set_image_stack_filename(value: String)
     {
-        core_settings.set_image_stack(value)
+        core_settings.set_image_stack_filename(value)
     }
 
     fun equipment(): EquipmentSettings

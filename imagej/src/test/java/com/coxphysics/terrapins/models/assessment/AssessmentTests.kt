@@ -54,7 +54,7 @@ class AssessmentTests
     fun can_use_widefield()
     {
         val settings = AssessmentSettings.default()
-        settings.set_widefield("some.thing")
+        settings.set_widefield_filename("some.thing")
 
         val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--widefield", "some.thing", "--extract", "localisation", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
@@ -65,7 +65,7 @@ class AssessmentTests
     fun can_use_image_stack()
     {
         val settings = AssessmentSettings.default()
-        settings.set_image_stack("some.thing")
+        settings.set_image_stack_filename("some.thing")
 
         val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--image-stack", "some.thing", "--extract", "localisation","--camera-pixel-size-nm", "160.0",  "--instrument-psf-fwhm-nm", "270.0")

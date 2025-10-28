@@ -65,10 +65,10 @@ class AssessmentUI private constructor(
         settings.set_hawk_localisation_file(hawked_locaoisation_file)
 
         val widefield = Utils.extract_file_field(dialog)
-        settings.set_widefield(widefield)
+        settings.set_widefield_filename(widefield)
 
         val image_stack = Utils.extract_file_field(dialog)
-        settings.set_image_stack(image_stack)
+        settings.set_image_stack_filename(image_stack)
 
         // advanced visible
         val _advanced_checkbox = Utils.extract_checkbox_value(dialog)
@@ -108,5 +108,4 @@ class AssessmentUI private constructor(
         image_stack.set_visibility(value)
         advanced_settings_visible_.set_visibility(value)
     }
-
 }
