@@ -3,6 +3,7 @@ package com.coxphysics.terrapins.models.assessment.images
 import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.assessment.CoreSettings
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
+import com.coxphysics.terrapins.models.io.FrcImages
 import com.coxphysics.terrapins.models.io.JointImages
 import com.coxphysics.terrapins.models.non_null
 
@@ -126,6 +127,11 @@ class Settings private constructor()
     fun zip_split_model(): JointImages
     {
         return zip_split_
+    }
+
+    fun frc_model(): FrcImages
+    {
+        return FrcImages.new(half_split_model(), zip_split_model())
     }
 
     fun half_split_valid(): Boolean
