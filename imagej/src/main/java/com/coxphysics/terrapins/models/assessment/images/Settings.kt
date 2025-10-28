@@ -1,47 +1,11 @@
 package com.coxphysics.terrapins.models.assessment.images
 
+import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.assessment.CoreSettings
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
+import com.coxphysics.terrapins.models.io.JointImages
 import com.coxphysics.terrapins.models.non_null
-
-class FRCData private constructor()
-{
-    private var image_a_: String? = null
-    private var image_b_: String? = null
-    companion object
-    {
-        @JvmStatic
-        fun default(): FRCData
-        {
-            return FRCData()
-        }
-    }
-
-    fun is_valid(): Boolean
-    {
-        return !(image_a_.isNullOrEmpty() || image_b_.isNullOrEmpty())
-    }
-
-    fun image_a_nn(): String
-    {
-        return image_a_.non_null()
-    }
-
-    fun set_image_a(value: String)
-    {
-        image_a_ = value
-    }
-
-    fun image_b_nn(): String
-    {
-        return image_b_.non_null()
-    }
-
-    fun set_image_b(value: String)
-    {
-        image_b_ = value
-    }
-}
+import com.coxphysics.terrapins.views.io.JointImagesUI
 
 class Settings private constructor()
 {
@@ -49,8 +13,8 @@ class Settings private constructor()
     private var core_settings_ = CoreSettings.default()
     private var reference_image : String? = null
     private var hawk_image : String? = null
-    private var half_split_ = FRCData.default()
-    private var zip_split_ = FRCData.default()
+    private var half_split_ = JointImages.default()
+    private var zip_split_ = JointImages.default()
 
     companion object
     {
@@ -136,6 +100,16 @@ class Settings private constructor()
         hawk_image = value
     }
 
+    fun half_split_model(): JointImages
+    {
+        return half_split_
+    }
+
+    fun zip_split_model(): JointImages
+    {
+        return zip_split_
+    }
+
     fun half_split_valid(): Boolean
     {
         return half_split_.is_valid()
@@ -143,22 +117,22 @@ class Settings private constructor()
 
     fun half_split_image_a_nn(): String
     {
-        return half_split_.image_a_nn()
+        return half_split_.image_1_filename_nn()
     }
 
     fun set_half_split_a(value: String)
     {
-        half_split_.set_image_a(value)
+        half_split_.set_image_1_filename(value)
     }
 
     fun half_split_image_b_nn(): String
     {
-        return half_split_.image_b_nn()
+        return half_split_.image_2_filename_nn()
     }
 
     fun set_half_split_b(value: String)
     {
-        half_split_.set_image_b(value)
+        half_split_.set_image_2_filename(value)
     }
 
     fun zip_split_valid(): Boolean
@@ -168,21 +142,21 @@ class Settings private constructor()
 
     fun zip_split_image_a_nn(): String
     {
-        return zip_split_.image_a_nn()
+        return zip_split_.image_1_filename_nn()
     }
 
     fun set_zip_split_a(value: String)
     {
-        zip_split_.set_image_a(value)
+        zip_split_.set_image_1_filename(value)
     }
 
     fun zip_split_image_b_nn(): String
     {
-        return zip_split_.image_b_nn()
+        return zip_split_.image_2_filename_nn()
     }
 
     fun set_zip_split_b(value: String)
     {
-        zip_split_.set_image_b(value)
+        zip_split_.set_image_2_filename(value)
     }
 }

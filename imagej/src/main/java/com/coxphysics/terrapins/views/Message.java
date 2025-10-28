@@ -25,6 +25,12 @@ public class Message
         label_.setText(value);
     }
 
+    public void set_bold()
+    {
+        Font bold_font = label_.getFont().deriveFont(Font.BOLD);
+        label_.setFont(bold_font);
+    }
+
     public void set_visibility(boolean value)
     {
         label_.setVisible(value);

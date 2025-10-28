@@ -44,4 +44,28 @@ class DiskOrImageTests
         val disk_or_image = DiskOrImage.new(null, image, false)
         assertEquals(disk_or_image.has_data(), true)
     }
+
+    @Test
+    fun set_use_disk_test()
+    {
+        val disk_or_image = DiskOrImage.new(null, null, true)
+        assertEquals(disk_or_image.use_image(), true)
+        assertEquals(disk_or_image.use_disk(), false)
+
+        disk_or_image.set_use_disk(true)
+        assertEquals(disk_or_image.use_image(), false)
+        assertEquals(disk_or_image.use_disk(), true)
+    }
+
+    @Test
+    fun set_use_image_test()
+    {
+        val disk_or_image = DiskOrImage.new(null, null, true)
+        assertEquals(disk_or_image.use_image(), true)
+        assertEquals(disk_or_image.use_disk(), false)
+
+        disk_or_image.set_use_image(false)
+        assertEquals(disk_or_image.use_image(), false)
+        assertEquals(disk_or_image.use_disk(), true)
+    }
 }

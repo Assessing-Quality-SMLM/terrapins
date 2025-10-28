@@ -59,9 +59,19 @@ class DiskOrImageVM private constructor(
         model_.set_filename(filename)
     }
 
+    fun set_name(value: String)
+    {
+        name_ = value
+    }
+
     fun set_image(image: ImagePlus)
     {
         model_.set_image(image)
+    }
+
+    fun set_use_disk(value: Boolean)
+    {
+        model_.set_use_disk(value)
     }
 
     fun set_draw_reset_button(value: Boolean)
