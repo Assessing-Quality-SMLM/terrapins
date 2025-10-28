@@ -35,7 +35,6 @@ class UI private constructor(
 
     private val frc_images_: OptionalInputUI<FrcImagesUI, FrcImages>,
 
-//    private val advanced_settings_visible_: Checkbox,
     private val settings_file_field_: OptionalInputUI<FileField, String>,
     private var reset_images_button_: Button?,
 ) : ActionListener
