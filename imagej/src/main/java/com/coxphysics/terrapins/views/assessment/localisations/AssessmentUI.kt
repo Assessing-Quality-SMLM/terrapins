@@ -1,13 +1,10 @@
 package com.coxphysics.terrapins.views.assessment.localisations
 
 import com.coxphysics.terrapins.models.assessment.localisation.AssessmentSettings
+import com.coxphysics.terrapins.view_models.DiskOrImageVM
 import com.coxphysics.terrapins.view_models.OptionalInputVM
 import com.coxphysics.terrapins.view_models.io.FileFieldVM
-import com.coxphysics.terrapins.views.Checkbox
-import com.coxphysics.terrapins.views.DirectoryField
-import com.coxphysics.terrapins.views.FileField
-import com.coxphysics.terrapins.views.NumericField
-import com.coxphysics.terrapins.views.Utils
+import com.coxphysics.terrapins.views.*
 import com.coxphysics.terrapins.views.equipment.EquipmentUI
 import com.coxphysics.terrapins.views.io.FileFactory
 import com.coxphysics.terrapins.views.io.OptionalInputUI
@@ -27,8 +24,8 @@ class AssessmentUI private constructor(
     private val magnification_: NumericField,
     private val localisation_file_ : LocalisationFileUI,
     private val hawked_localisation_file_: LocalisationFileUI,
-    private val widefield_: FileField,
-    private val image_stack: FileField,
+    private val widefield_: DiskOrImageUI,
+    private val image_stack: DiskOrImageUI,
     private val settings_file_field_: OptionalInputUI<FileField, String>,
 )
 {
@@ -48,8 +45,11 @@ class AssessmentUI private constructor(
             val hawked_localisation_file =
                 LocalisationFileUI.add_to_dialog(dialog, settings.hawk_localisation_file(), HAWKED_LOCALISATION_FILE)
 
-            val widefield = Utils.add_file_field(dialog, WIDEFIELD, settings.widefield_nn())
-            val image_stack = Utils.add_file_field(dialog, IMAGE_STACK, settings.image_stack_nn())
+            val widefield_vm = DiskOrImageVM.with(WIDEFIELD, settings.widefield())
+            val widefield = DiskOrImageUI.add_to_dialog(dialog, widefield_vm)
+
+            val image_stack_vm = DiskOrImageVM.with(IMAGE_STACK,settings.image_stack())
+            val image_stack = DiskOrImageUI.add_to_dialog(dialog, image_stack_vm)
 
             val settings_vm = FileFieldVM.from(settings.settings_file_nn())
             settings_vm.set_name("Settings file")
@@ -81,11 +81,11 @@ class AssessmentUI private constructor(
         val hawked_locaoisation_file = LocalisationFileUI.create_settings_record(dialog)
         settings.set_hawk_localisation_file(hawked_locaoisation_file)
 
-        val widefield = Utils.extract_file_field(dialog)
-        settings.set_widefield_filename(widefield)
+        val widefield = widefield_.extract_from(dialog)
+        settings.set_widefield(widefield)
 
-        val image_stack = Utils.extract_file_field(dialog)
-        settings.set_image_stack_filename(image_stack)
+        val image_stack = image_stack.extract_from(dialog)
+        settings.set_image_stack(image_stack)
 
         // advanced visible
         val settings_file = settings_file_field_.extract_from(dialog)

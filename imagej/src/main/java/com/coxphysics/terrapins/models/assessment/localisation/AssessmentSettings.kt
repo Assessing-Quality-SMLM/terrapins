@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.models.assessment.localisation
 
+import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.assessment.CoreSettings
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import com.coxphysics.terrapins.models.localisations.LocalisationFile
@@ -45,14 +46,19 @@ class AssessmentSettings private constructor(
         core_settings_.set_working_directory(Paths.get(value))
     }
 
-    fun widefield_nn(): String
+    fun widefield(): DiskOrImage
     {
-        return core_settings_.widefield_nn()
+        return core_settings_.widefield()
     }
 
-    fun set_widefield_filename(value: String)
+    fun image_stack(): DiskOrImage
     {
-        core_settings_.set_widefield_filename(value)
+        return core_settings_.image_stack()
+    }
+
+    fun set_widefield(value: DiskOrImage)
+    {
+        core_settings_.set_widefield(value)
     }
 
     fun settings_file_nn(): String
@@ -65,14 +71,9 @@ class AssessmentSettings private constructor(
         core_settings_.set_settings_file(value)
     }
 
-    fun image_stack_nn(): String
+    fun set_image_stack(value: DiskOrImage)
     {
-        return core_settings_.image_stack_nn()
-    }
-
-    fun set_image_stack_filename(value: String)
-    {
-        core_settings_.set_image_stack_filename(value)
+        core_settings_.set_image_stack(value)
     }
 
     fun equipment(): EquipmentSettings
