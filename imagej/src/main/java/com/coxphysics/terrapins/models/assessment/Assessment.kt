@@ -40,16 +40,6 @@ class Assessment private constructor(private val exe_location_: Path)
         return exe_location_.toString()
     }
 
-    private fun working_directory(): Path?
-    {
-        val parent = exe_location_.parent
-        if (parent == null)
-        {
-            return null
-        }
-        return parent.resolve("smlm_assessment")
-    }
-
     private fun data_directory(working_directory: Path): Path
     {
         val directory_name = working_directory.toString() + "_data"
