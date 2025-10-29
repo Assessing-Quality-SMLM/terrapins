@@ -5,6 +5,7 @@ import com.coxphysics.terrapins.models.assessment.CoreSettings
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import com.coxphysics.terrapins.models.io.FrcImages
 import com.coxphysics.terrapins.models.io.JointImages
+import java.nio.file.Path
 
 class Settings private constructor()
 {
@@ -39,9 +40,19 @@ class Settings private constructor()
         return core_settings_
     }
 
+    private fun working_directory(): Path
+    {
+        return core_settings_.working_directory()
+    }
+
     fun widefield(): DiskOrImage
     {
         return core_settings_.widefield()
+    }
+
+    fun widefield_path(): Path?
+    {
+        return core_settings_.widefield_path()
     }
 
     fun image_stack(): DiskOrImage
@@ -49,9 +60,9 @@ class Settings private constructor()
         return core_settings_.image_stack()
     }
 
-    fun widefield_nn(): String
+    fun image_stack_path(): Path?
     {
-        return core_settings_.widefield_nn()
+        return core_settings_.image_stack_path()
     }
 
     fun set_widefield(value: DiskOrImage)
@@ -89,6 +100,17 @@ class Settings private constructor()
         return reference_image_
     }
 
+    fun reference_image_path(): Path?
+    {
+        return reference_image_path_in(working_directory())
+    }
+
+    fun reference_image_path_in(directory: Path): Path?
+    {
+        val image_path = directory.resolve("sr.tiff")
+        return reference_image_.filepath(image_path)
+    }
+
     fun reference_image_is_valid(): Boolean
     {
         return reference_image_.has_data()
@@ -118,6 +140,18 @@ class Settings private constructor()
     {
         return hawk_image_
     }
+
+    fun hawk_image_path(): Path?
+    {
+        return hawk_image_path_in(working_directory())
+    }
+
+    fun hawk_image_path_in(directory: Path): Path?
+    {
+        val image_path = directory.resolve("hawk.tiff")
+        return hawk_image_.filepath(image_path)
+    }
+
     fun hawk_image_nn(): String
     {
         return hawk_image_.filename_nn()
@@ -202,5 +236,23 @@ class Settings private constructor()
     fun set_zip_split_b(value: String)
     {
         zip_split_.set_image_2_filename(value)
+    }
+
+    fun prepare_images_for_analysis(): Boolean
+    {
+        return prepare_images_for_analysis_in(working_directory())
+    }
+
+    fun prepare_images_for_analysis_in(working_directory: Path): Boolean
+    {
+        val core_ok = core_settings_.to_disk_in(working_directory)
+        val reference_path = reference_image_path_in(working_directory)?.let { p -> reference_image().to_disk_in(p) }
+        val hawk_path = hawk_image_path_in(working_directory)?.let{p -> hawk_image().to_disk_in(p)}
+        val half_split_ok = half_split_.to_disk_in(working_directory.resolve("half_split_images"))
+        val zip_split_ok = zip_split_.to_disk_in(working_directory.resolve("zip_split_images"))
+        return core_ok && reference_path != null &&
+                hawk_path != null &&
+                half_split_ok &&
+                zip_split_ok
     }
 }
