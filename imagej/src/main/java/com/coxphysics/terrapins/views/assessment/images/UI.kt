@@ -19,9 +19,6 @@ import ij.gui.GenericDialog
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 
-private const val WIDEFIELD = "Widefield"
-private const val IMAGE_STACK = "Image Stack"
-
 class UI private constructor(
     private val dialog_: GenericDialog,
 
