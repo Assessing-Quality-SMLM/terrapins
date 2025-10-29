@@ -4,6 +4,7 @@ import com.coxphysics.terrapins.models.assessment.CoreSettings
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import com.coxphysics.terrapins.models.localisations.LocalisationFile
 import java.nio.file.Path
+import java.nio.file.Paths
 
 class AssessmentSettings private constructor(
     private val core_settings: CoreSettings
@@ -36,6 +37,11 @@ class AssessmentSettings private constructor(
     fun working_directory(): Path
     {
         return core_settings.working_directory()
+    }
+
+    fun set_working_directory(value: String)
+    {
+        core_settings.set_working_directory(Paths.get(value))
     }
 
     fun widefield_nn(): String
