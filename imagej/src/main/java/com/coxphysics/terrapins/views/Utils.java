@@ -23,7 +23,7 @@ public class Utils
 
     public static String extract_directory_field(GenericDialog dialog)
     {
-        return dialog.getNextText();
+        return dialog.getNextString();
     }
 
     public static FileField add_file_field(GenericDialog dialog, String name, String default_text)

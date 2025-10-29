@@ -3,6 +3,9 @@ package com.coxphysics.terrapins.views;
 import ij.gui.GenericDialog;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.nio.file.Paths;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UtilsTests
@@ -49,6 +52,24 @@ public class UtilsTests
         assertEquals(text_areas.area_1_text(), "a");
         assertNotNull(text_areas.area_2());
         assertEquals(text_areas.area_2_text(), "b");
+    }
+
+    @Test
+    public void add_directory_field()
+    {
+        GenericDialog dialog = new GenericDialog("something");
+        DirectoryField field = Utils.add_directory_field(dialog, "a", "thing");
+        assertEquals(field.filepath(), "thing" + File.separator);
+    }
+
+    @Test
+    public void extract_directory_field()
+    {
+        GenericDialog dialog = new GenericDialog("something");
+        DirectoryField field = Utils.add_directory_field(dialog, "a", "thing");
+        assertEquals(field.filepath(), "thing" + File.separator);
+        assertEquals(Utils.extract_directory_field(dialog), "thing" + File.separator);
+        assertEquals(field.filepath(), "thing" + File.separator);
     }
 
     @Test
