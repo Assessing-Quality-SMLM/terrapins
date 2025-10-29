@@ -211,8 +211,6 @@ class Assessment private constructor(private val exe_location_: Path)
 //      --extract                    Extract Data to directory
     private fun add_core_commands(settings: CoreSettings, commands: MutableList<String>)
     {
-        // should I check for null - there shouldn't really be a non-parent location
-        // other than in tests - which can do their own thing
         commands.add("--working-directory")
         commands.add(settings.working_directory().toString())
 
