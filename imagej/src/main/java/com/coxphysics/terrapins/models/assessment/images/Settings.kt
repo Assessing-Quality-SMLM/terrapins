@@ -178,9 +178,29 @@ class Settings private constructor()
         return half_split_.is_valid()
     }
 
-    fun half_split_image_a_nn(): String
+    fun half_split_images_directory(): Path
     {
-        return half_split_.image_1_filename_nn()
+        return half_split_images_directory_in(working_directory())
+    }
+
+    fun half_split_images_directory_in(working_directory: Path): Path
+    {
+        return working_directory.resolve("half_split_images")
+    }
+
+    fun zip_split_images_directory(): Path
+    {
+        return zip_split_images_directory_in(working_directory())
+    }
+
+    fun zip_split_images_directory_in(working_directory: Path): Path
+    {
+        return working_directory.resolve("zip_split_images")
+    }
+
+    fun half_split_image_a_filepath(): Path?
+    {
+        return half_split_.image_1_filepath(half_split_images_directory())
     }
 
     fun set_half_split_a(value: String)
@@ -188,9 +208,9 @@ class Settings private constructor()
         half_split_.set_image_1_filename(value)
     }
 
-    fun half_split_image_b_nn(): String
+    fun half_split_image_b_filepath(): Path?
     {
-        return half_split_.image_2_filename_nn()
+        return half_split_.image_2_filepath(half_split_images_directory())
     }
 
     fun set_half_split_b(value: String)
@@ -203,19 +223,19 @@ class Settings private constructor()
         return zip_split_.is_valid()
     }
 
-    fun zip_split_image_a_nn(): String
+    fun zip_split_image_a_filepath(): Path?
     {
-        return zip_split_.image_1_filename_nn()
+        return zip_split_.image_1_filepath(zip_split_images_directory())
+    }
+
+    fun zip_split_image_b_filepath(): Path?
+    {
+        return zip_split_.image_2_filepath(zip_split_images_directory())
     }
 
     fun set_zip_split_a(value: String)
     {
         zip_split_.set_image_1_filename(value)
-    }
-
-    fun zip_split_image_b_nn(): String
-    {
-        return zip_split_.image_2_filename_nn()
     }
 
     fun set_zip_split_b(value: String)
@@ -233,8 +253,8 @@ class Settings private constructor()
         val core_ok = core_settings_.to_disk_in(working_directory)
         val reference_path = reference_image_path_in(working_directory)?.let { p -> reference_image().to_disk_with(p) }
         val hawk_path = hawk_image_path_in(working_directory)?.let{p -> hawk_image().to_disk_with(p)}
-        val half_split_ok = half_split_.to_disk_in(working_directory.resolve("half_split_images"))
-        val zip_split_ok = zip_split_.to_disk_in(working_directory.resolve("zip_split_images"))
+        val half_split_ok = half_split_.to_disk_in(half_split_images_directory_in(working_directory))
+        val zip_split_ok = zip_split_.to_disk_in(zip_split_images_directory_in(working_directory))
         return core_ok && reference_path != null &&
                 hawk_path != null &&
                 half_split_ok &&
