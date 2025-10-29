@@ -28,7 +28,7 @@ private const val IMAGE_STACK = "Image Stack"
 class UI private constructor(
     private val dialog_: GenericDialog,
 
-    private val working_directory: DirectoryField,
+    private val working_directory_: DirectoryField,
 
     private val equipment_ui_: EquipmentUI,
 
