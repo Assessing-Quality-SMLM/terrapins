@@ -8,6 +8,26 @@ import kotlin.test.assertEquals
 class JointImagesTests
 {
     @Test
+    fun setting_image_1_filename_changes_filepath()
+    {
+        val settings = JointImages.default()
+        assertEquals(settings.image_1_filepath(Paths.get("junk")), Paths.get("junk", "image_1.tiff"))
+
+        settings.set_image_1_filename("something")
+        assertEquals(settings.image_1_filepath(Paths.get("junk")).toString(), "something")
+    }
+
+    @Test
+    fun setting_image_2_filename_changes_filepath()
+    {
+        val settings = JointImages.default()
+        assertEquals(settings.image_2_filepath(Paths.get("junk")), Paths.get("junk", "image_2.tiff"))
+
+        settings.set_image_2_filename("something")
+        assertEquals(settings.image_2_filepath(Paths.get("junk")).toString(), "something")
+    }
+
+    @Test
     fun to_disk_fails_if_image_1_fails()
     {
         val image_1 = DiskOrImage.default()

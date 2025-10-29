@@ -36,10 +36,10 @@ class JointImages private constructor(
     {
         return image_1().filepath(image_1_name_in(directory))
     }
-    
+
     fun set_image_1_filename(value: String)
     {
-        image_1_.set_filename(value)
+        image_1_.set_filename_and_switch_usage(value)
     }
 
     fun image_2(): DiskOrImage
@@ -54,7 +54,7 @@ class JointImages private constructor(
 
     fun set_image_2_filename(value: String)
     {
-        image_2_.set_filename(value)
+        image_2_.set_filename_and_switch_usage(value)
     }
 
     private fun image_1_name_in(directory: Path): Path
