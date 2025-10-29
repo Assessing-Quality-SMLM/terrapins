@@ -109,7 +109,7 @@ class DiskOrImage private constructor(
         image_ = image
     }
 
-    fun to_disk_in(image_path: Path): Path?
+    fun to_disk_with(image_path: Path): Path?
     {
         if (use_disk())
             return filename_path()

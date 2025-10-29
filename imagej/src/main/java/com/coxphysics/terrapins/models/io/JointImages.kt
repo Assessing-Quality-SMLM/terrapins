@@ -59,8 +59,8 @@ class JointImages private constructor(
 
     fun to_disk_in(directory: Path): Boolean
     {
-        val image_1_path = image_1_.to_disk_in(directory)
-        val image_2_path = image_2_.to_disk_in(directory)
+        val image_1_path = image_1_.to_disk_with(image_1_name_in(directory))
+        val image_2_path = image_2_.to_disk_with(image_2_name_in(directory))
         return image_1_path != null && image_2_path != null
     }
 }
