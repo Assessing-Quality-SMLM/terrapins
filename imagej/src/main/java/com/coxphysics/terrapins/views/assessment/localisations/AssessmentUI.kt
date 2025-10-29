@@ -4,6 +4,7 @@ import com.coxphysics.terrapins.models.assessment.localisation.AssessmentSetting
 import com.coxphysics.terrapins.view_models.OptionalInputVM
 import com.coxphysics.terrapins.view_models.io.FileFieldVM
 import com.coxphysics.terrapins.views.Checkbox
+import com.coxphysics.terrapins.views.DirectoryField
 import com.coxphysics.terrapins.views.FileField
 import com.coxphysics.terrapins.views.Utils
 import com.coxphysics.terrapins.views.equipment.EquipmentUI
@@ -20,6 +21,7 @@ private const val IMAGE_STACK = "Image Stack"
 
 class AssessmentUI private constructor(
     private val dialog_: GenericDialog,
+    private val working_directory_: DirectoryField,
     private val equipment_: EquipmentUI,
     private val localisation_file_ : LocalisationFileUI,
     private val hawked_localisation_file_: LocalisationFileUI,
@@ -33,6 +35,7 @@ class AssessmentUI private constructor(
         @JvmStatic
         fun add_controls_to_dialog(dialog: GenericDialog, settings: AssessmentSettings): AssessmentUI
         {
+            val working_directory = Utils.add_directory_field(dialog, "Working directory", settings.working_directory().toString())
             val equipment = EquipmentUI.add_controls_to_dialog(dialog, settings.equipment());
 
             val localisation_file =
@@ -50,7 +53,7 @@ class AssessmentUI private constructor(
             optional_settings.set_name("Advanced settings")
             val settings_file_field = OptionalInputUI.add_to_dialog(dialog, optional_settings, FileFactory.from(settings_vm))
 
-            val ui = AssessmentUI(dialog, equipment, localisation_file, hawked_localisation_file, widefield, image_stack, settings_file_field)
+            val ui = AssessmentUI(dialog, working_directory, equipment, localisation_file, hawked_localisation_file, widefield, image_stack, settings_file_field)
             return ui
         }
     }
@@ -58,6 +61,9 @@ class AssessmentUI private constructor(
     fun create_settings_record(dialog: AssessmentDialog) : AssessmentSettings
     {
         val settings = AssessmentSettings.default()
+
+        val working_directory = Utils.extract_directory_field(dialog)
+        settings.set_working_directory(working_directory)
 
         val equipment = EquipmentUI.create_settings_record(dialog)
         settings.set_equipment_settings(equipment)
