@@ -3,25 +3,39 @@ package com.coxphysics.terrapins.models.assessment.localisation
 import com.coxphysics.terrapins.models.assessment.CoreSettings
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import com.coxphysics.terrapins.models.localisations.LocalisationFile
+import java.nio.file.Path
 
-class AssessmentSettings private constructor()
+class AssessmentSettings private constructor(
+    private val core_settings: CoreSettings
+)
 {
     private var equipment = EquipmentSettings.default()
-    private var core_settings = CoreSettings.default()
     private var localisation_file_ = LocalisationFile.default()
     private var hawk_localisation_file_ = LocalisationFile.default()
 
     companion object
     {
         @JvmStatic
+        fun with(working_directory: Path): AssessmentSettings
+        {
+            return AssessmentSettings(CoreSettings.new(working_directory))
+        }
+
+        @JvmStatic
         fun default(): AssessmentSettings
         {
-            return AssessmentSettings()
+            return AssessmentSettings(CoreSettings.default())
         }
     }
+
     fun core_settings(): CoreSettings
     {
         return core_settings
+    }
+
+    fun working_directory(): Path
+    {
+        return core_settings.working_directory()
     }
 
     fun widefield_nn(): String

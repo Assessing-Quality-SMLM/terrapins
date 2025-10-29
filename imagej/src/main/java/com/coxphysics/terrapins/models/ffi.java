@@ -1,5 +1,7 @@
 package com.coxphysics.terrapins.models;
 
+import com.coxphysics.terrapins.models.utils.FsUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -126,12 +128,9 @@ public class ffi
         return nix_resource_path_as_string(resource_name, in_bin);
     }
 
-    private static final String JAVA_TEMP_DIRECTORY = "java.io.tmpdir";
-
     private static Path temp_location_for(String resource_name)
     {
-        String temp_location = System.getProperty(JAVA_TEMP_DIRECTORY);
-        return Paths.get(temp_location).resolve(resource_name);
+        return  FsUtils.temp_directory().resolve(resource_name);
     }
 
     private static Path copy_to_temp(String resource_name, InputStream resource_stream, boolean in_bin, boolean is_exe)

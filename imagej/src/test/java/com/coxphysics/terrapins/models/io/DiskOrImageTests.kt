@@ -4,6 +4,8 @@ import com.coxphysics.terrapins.models.DiskOrImage
 import ij.ImagePlus
 import ij.process.FloatProcessor
 import org.junit.jupiter.api.Test
+import java.nio.file.Files
+import java.nio.file.Paths
 import kotlin.test.assertEquals
 
 class DiskOrImageTests
@@ -23,10 +25,10 @@ class DiskOrImageTests
     }
 
     @Test
-    fun filename_is_null_so_is_filepath()
+    fun filename_is_null()
     {
         val disk_or_image = DiskOrImage.default()
-        assertEquals(disk_or_image.filepath(), null)
+        assertEquals(disk_or_image.filename(), null)
     }
 
     @Test
@@ -34,6 +36,23 @@ class DiskOrImageTests
     {
         val disk_or_image = DiskOrImage.new("something", null, false)
         assertEquals(disk_or_image.has_data(), true)
+    }
+
+    @Test
+    fun if_using_disk_return_disk_filepath()
+    {
+        val disk_or_image = DiskOrImage.from_filename("something.tiff" )
+        assertEquals(disk_or_image.use_disk(), true)
+        assertEquals(disk_or_image.filepath(Paths.get("else.tiff")), Paths.get("something.tiff"))
+    }
+
+    @Test
+    fun if_using_image_return_image_filepath()
+    {
+        val disk_or_image = DiskOrImage.default()
+        disk_or_image.set_use_image(true)
+        assertEquals(disk_or_image.use_image(), true)
+        assertEquals(disk_or_image.filepath(Paths.get("else.tiff")), Paths.get("else.tiff"))
     }
 
     @Test
@@ -65,6 +84,30 @@ class DiskOrImageTests
         assertEquals(disk_or_image.use_disk(), false)
 
         disk_or_image.set_use_image(false)
+        assertEquals(disk_or_image.use_image(), false)
+        assertEquals(disk_or_image.use_disk(), true)
+    }
+
+    @Test
+    fun usage_is_not_switched_on_filename_change()
+    {
+        val disk_or_image = DiskOrImage.new(null, null, true)
+        assertEquals(disk_or_image.use_image(), true)
+        assertEquals(disk_or_image.use_disk(), false)
+
+        disk_or_image.set_filename("something")
+        assertEquals(disk_or_image.use_image(), true)
+        assertEquals(disk_or_image.use_disk(), false)
+    }
+
+    @Test
+    fun change_usage_on_filename_setting()
+    {
+        val disk_or_image = DiskOrImage.new(null, null, true)
+        assertEquals(disk_or_image.use_image(), true)
+        assertEquals(disk_or_image.use_disk(), false)
+
+        disk_or_image.set_filename_and_switch_usage("something")
         assertEquals(disk_or_image.use_image(), false)
         assertEquals(disk_or_image.use_disk(), true)
     }

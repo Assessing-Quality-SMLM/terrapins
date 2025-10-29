@@ -5,11 +5,13 @@ import com.coxphysics.terrapins.models.assessment.CoreSettings
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import com.coxphysics.terrapins.models.io.FrcImages
 import com.coxphysics.terrapins.models.io.JointImages
+import java.nio.file.Path
 
-class Settings private constructor()
+class Settings private constructor(
+    private val core_settings_: CoreSettings
+)
 {
     private var equipment = EquipmentSettings.default()
-    private var core_settings_ = CoreSettings.default()
     private var reference_image_ = DiskOrImage.default()
     private var hawk_image_ = DiskOrImage.default()
     private var half_split_ = JointImages.default()
@@ -18,9 +20,15 @@ class Settings private constructor()
     companion object
     {
         @JvmStatic
+        fun with(working_directory: Path): Settings
+        {
+            return Settings(CoreSettings.new(working_directory))
+        }
+
+        @JvmStatic
         fun default(): Settings
         {
-            return Settings()
+            return Settings(CoreSettings.default())
         }
     }
 
@@ -39,19 +47,14 @@ class Settings private constructor()
         return core_settings_
     }
 
+    fun working_directory(): Path
+    {
+        return core_settings_.working_directory()
+    }
+
     fun widefield(): DiskOrImage
     {
         return core_settings_.widefield()
-    }
-
-    fun image_stack(): DiskOrImage
-    {
-        return core_settings_.image_stack()
-    }
-
-    fun widefield_nn(): String
-    {
-        return core_settings_.widefield_nn()
     }
 
     fun set_widefield(value: DiskOrImage)
@@ -62,6 +65,11 @@ class Settings private constructor()
     fun set_widefield_filename(value: String)
     {
         core_settings_.set_widefield_filename(value)
+    }
+
+    fun image_stack(): DiskOrImage
+    {
+        return core_settings_.image_stack()
     }
 
     fun set_image_stack(value: DiskOrImage)
@@ -94,9 +102,15 @@ class Settings private constructor()
         return reference_image_.has_data()
     }
 
-    fun reference_image_nn(): String
+    fun reference_image_path(): Path?
     {
-        return reference_image_.filename_nn()
+        return reference_image_path_in(working_directory())
+    }
+
+    fun reference_image_path_in(directory: Path): Path?
+    {
+        val image_path = directory.resolve("sr.tiff")
+        return reference_image_.filepath(image_path)
     }
 
     fun set_reference(value: DiskOrImage)
@@ -106,7 +120,12 @@ class Settings private constructor()
 
     fun set_reference_filename(value: String)
     {
-        reference_image_.set_filename(value)
+        reference_image_.set_filename_and_switch_usage(value)
+    }
+
+    fun hawk_image(): DiskOrImage
+    {
+        return hawk_image_
     }
 
     fun hawk_image_is_valid(): Boolean
@@ -114,10 +133,17 @@ class Settings private constructor()
         return hawk_image_.has_data()
     }
 
-    fun hawk_image(): DiskOrImage
+    fun hawk_image_path(): Path?
     {
-        return hawk_image_
+        return hawk_image_path_in(working_directory())
     }
+
+    fun hawk_image_path_in(directory: Path): Path?
+    {
+        val image_path = directory.resolve("hawk.tiff")
+        return hawk_image_.filepath(image_path)
+    }
+
     fun hawk_image_nn(): String
     {
         return hawk_image_.filename_nn()
@@ -130,7 +156,7 @@ class Settings private constructor()
 
     fun set_hawk_filename(value: String)
     {
-        hawk_image_.set_filename(value)
+        hawk_image_.set_filename_and_switch_usage(value)
     }
 
     fun half_split_model(): JointImages
@@ -159,9 +185,29 @@ class Settings private constructor()
         return half_split_.is_valid()
     }
 
-    fun half_split_image_a_nn(): String
+    fun half_split_images_directory(): Path
     {
-        return half_split_.image_1_filename_nn()
+        return half_split_images_directory_in(working_directory())
+    }
+
+    fun half_split_images_directory_in(working_directory: Path): Path
+    {
+        return working_directory.resolve("half_split_images")
+    }
+
+    fun zip_split_images_directory(): Path
+    {
+        return zip_split_images_directory_in(working_directory())
+    }
+
+    fun zip_split_images_directory_in(working_directory: Path): Path
+    {
+        return working_directory.resolve("zip_split_images")
+    }
+
+    fun half_split_image_a_filepath(): Path?
+    {
+        return half_split_.image_1_filepath(half_split_images_directory())
     }
 
     fun set_half_split_a(value: String)
@@ -169,9 +215,9 @@ class Settings private constructor()
         half_split_.set_image_1_filename(value)
     }
 
-    fun half_split_image_b_nn(): String
+    fun half_split_image_b_filepath(): Path?
     {
-        return half_split_.image_2_filename_nn()
+        return half_split_.image_2_filepath(half_split_images_directory())
     }
 
     fun set_half_split_b(value: String)
@@ -184,9 +230,14 @@ class Settings private constructor()
         return zip_split_.is_valid()
     }
 
-    fun zip_split_image_a_nn(): String
+    fun zip_split_image_a_filepath(): Path?
     {
-        return zip_split_.image_1_filename_nn()
+        return zip_split_.image_1_filepath(zip_split_images_directory())
+    }
+
+    fun zip_split_image_b_filepath(): Path?
+    {
+        return zip_split_.image_2_filepath(zip_split_images_directory())
     }
 
     fun set_zip_split_a(value: String)
@@ -194,13 +245,26 @@ class Settings private constructor()
         zip_split_.set_image_1_filename(value)
     }
 
-    fun zip_split_image_b_nn(): String
-    {
-        return zip_split_.image_2_filename_nn()
-    }
-
     fun set_zip_split_b(value: String)
     {
         zip_split_.set_image_2_filename(value)
+    }
+
+    fun prepare_images_for_analysis(): Boolean
+    {
+        return prepare_images_for_analysis_in(working_directory())
+    }
+
+    fun prepare_images_for_analysis_in(working_directory: Path): Boolean
+    {
+        val core_ok = core_settings_.to_disk_in(working_directory)
+        val reference_path = reference_image_path_in(working_directory)?.let { p -> reference_image().to_disk_with(p) }
+        val hawk_path = hawk_image_path_in(working_directory)?.let{p -> hawk_image().to_disk_with(p)}
+        val half_split_ok = half_split_.to_disk_in(half_split_images_directory_in(working_directory))
+        val zip_split_ok = zip_split_.to_disk_in(zip_split_images_directory_in(working_directory))
+        return core_ok && reference_path != null &&
+                hawk_path != null &&
+                half_split_ok &&
+                zip_split_ok
     }
 }

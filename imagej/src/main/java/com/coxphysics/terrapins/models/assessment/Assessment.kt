@@ -40,36 +40,23 @@ class Assessment private constructor(private val exe_location_: Path)
         return exe_location_.toString()
     }
 
-    private fun working_directory(): Path?
+    private fun data_directory(working_directory: Path): Path
     {
-        val parent = exe_location_.parent
-        if (parent == null)
-        {
-            return null
-        }
-        return parent.resolve("smlm_assessment")
-    }
-
-    private fun data_directory(): Path?
-    {
-        val working_directory = working_directory()
-        if (working_directory == null)
-        {
-            return null
-        }
         val directory_name = working_directory.toString() + "_data"
         return Path(directory_name)
     }
 
-    private fun results() : AssessmentResults?
+    private fun results(working_directory: Path) : AssessmentResults
     {
-        return data_directory()?.let { AssessmentResults.from(it) }
+        val data_directory = data_directory(working_directory)
+        return AssessmentResults.from(data_directory)
     }
 
     fun run_images(runner : Runner, images: ImagesSettings): AssessmentResults?
     {
+        images.prepare_images_for_analysis()
         val arguments = get_images_arguments(images)
-        return run_arguments(runner, arguments)
+        return run_arguments(runner, arguments, images.working_directory())
     }
 
     fun get_images_arguments(images: ImagesSettings): List<String>
@@ -99,30 +86,48 @@ class Assessment private constructor(private val exe_location_: Path)
         commands.add("images")
         if (settings.reference_image_is_valid())
         {
-            commands.add("--reference-image")
-            commands.add(settings.reference_image_nn())
+            val reference_path = settings.reference_image_path()
+            if (reference_path != null)
+            {
+                commands.add("--reference-image")
+                commands.add(reference_path.toString())
+            }
         }
 
         if (settings.hawk_image_is_valid())
         {
-            commands.add("--hawk-image")
-            commands.add(settings.hawk_image_nn())
+            val hawk_path = settings.hawk_image_path()
+            if (hawk_path != null)
+            {
+                commands.add("--hawk-image")
+                commands.add(settings.hawk_image_nn())
+            }
         }
 
         if (settings.half_split_valid())
         {
-            commands.add("--half-split-a")
-            commands.add(settings.half_split_image_a_nn())
-            commands.add("--half-split-b")
-            commands.add(settings.half_split_image_b_nn())
+            val half_split_a_path = settings.half_split_image_a_filepath()
+            val half_split_b_path = settings.half_split_image_b_filepath()
+            if (half_split_a_path != null && half_split_b_path != null)
+            {
+                commands.add("--half-split-a")
+                commands.add(half_split_a_path.toString())
+                commands.add("--half-split-b")
+                commands.add(half_split_b_path.toString())
+            }
         }
 
         if (settings.zip_split_valid())
         {
-            commands.add("--zip-split-a")
-            commands.add(settings.zip_split_image_a_nn())
-            commands.add("--zip-split-b")
-            commands.add(settings.zip_split_image_b_nn())
+            val zip_split_a_path = settings.zip_split_image_a_filepath()
+            val zip_split_b_path = settings.zip_split_image_b_filepath()
+            if (zip_split_a_path != null && zip_split_b_path != null)
+            {
+                commands.add("--zip-split-a")
+                commands.add(zip_split_a_path.toString())
+                commands.add("--zip-split-b")
+                commands.add(zip_split_b_path.toString())
+            }
         }
         add_equipment(true, settings.equipment_settings(), commands)
     }
@@ -130,7 +135,7 @@ class Assessment private constructor(private val exe_location_: Path)
     fun run_localisations(runner : Runner, localisations: AssessmentSettings): AssessmentResults?
     {
         val arguments = get_localisations_arguments(localisations)
-        return run_arguments(runner, arguments)
+        return run_arguments(runner, arguments, localisations.working_directory())
     }
 
     fun get_localisations_arguments(localisations: AssessmentSettings): List<String>
@@ -160,15 +165,14 @@ class Assessment private constructor(private val exe_location_: Path)
         add_equipment(false, settings.equipment(), commands)
     }
 
-    private fun run_arguments(runner: Runner, arguments: List<String>): AssessmentResults?
+    private fun run_arguments(runner: Runner, arguments: List<String>, working_directory: Path): AssessmentResults?
     {
-        val working_directory = working_directory()
         if (!FsUtils.delete_directory_recursive(working_directory))
         {
             IJ.log("Cannot delete working directory: " + working_directory.toString())
             return null
         }
-        val data_directory = data_directory()
+        val data_directory = data_directory(working_directory)
         if (!FsUtils.delete_directory_recursive(data_directory))
         {
             IJ.log("Cannot delete data directory: " + data_directory.toString())
@@ -180,7 +184,7 @@ class Assessment private constructor(private val exe_location_: Path)
         {
             return null
         }
-        return results()
+        return results(working_directory)
     }
 
 //  -f, --filename <FILENAME>        filename
@@ -192,21 +196,27 @@ class Assessment private constructor(private val exe_location_: Path)
 //      --extract                    Extract Data to directory
     private fun add_core_commands(settings: CoreSettings, commands: MutableList<String>)
     {
-        // should I check for null - there shouldn't really be a non-parent location
-        // other than in tests - which can do their own thing
         commands.add("--working-directory")
-        commands.add(working_directory().toString())
+        commands.add(settings.working_directory().toString())
 
         if (settings.has_widefield())
         {
-            commands.add("--widefield")
-            commands.add(settings.widefield_nn())
+            val widefield_path = settings.widefield_path()
+            if (widefield_path != null)
+            {
+                commands.add("--widefield")
+                commands.add(widefield_path.toString())
+            }
         }
 
         if (settings.has_image_stack())
         {
-            commands.add("--image-stack")
-            commands.add(settings.image_stack_nn())
+            val image_stack_path = settings.image_stack_path()
+            if (image_stack_path != null)
+            {
+                commands.add("--image-stack")
+                commands.add(image_stack_path.toString())
+            }
         }
 
         if (settings.has_settings_file())
@@ -214,6 +224,7 @@ class Assessment private constructor(private val exe_location_: Path)
             commands.add("--settings")
             commands.add(settings.settings_file_nn())
         }
+
         commands.add("--extract")
     }
 
