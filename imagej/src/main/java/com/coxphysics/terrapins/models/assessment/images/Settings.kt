@@ -113,7 +113,7 @@ class Settings private constructor()
 
     fun set_reference_filename(value: String)
     {
-        reference_image_.set_filename(value)
+        reference_image_.set_filename_and_switch_usage(value)
     }
 
     fun hawk_image(): DiskOrImage
@@ -149,7 +149,7 @@ class Settings private constructor()
 
     fun set_hawk_filename(value: String)
     {
-        hawk_image_.set_filename(value)
+        hawk_image_.set_filename_and_switch_usage(value)
     }
 
     fun half_split_model(): JointImages
