@@ -17,7 +17,7 @@ class  Dialog private constructor() : NonBlockingGenericDialog(TITLE)
         fun from(settings: Settings):  Dialog
         {
             val dialog =  Dialog()
-            val ui = UI.add_controls_to_dialog(dialog, settings)
+            val ui = UI.add_controls_to_dialog(dialog, settings, true)
             dialog.set_ui(ui)
             return dialog
         }

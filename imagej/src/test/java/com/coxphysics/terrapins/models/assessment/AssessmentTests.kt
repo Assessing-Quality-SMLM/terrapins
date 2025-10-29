@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.models.assessment
 
+import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.assessment.localisation.AssessmentSettings
 import com.coxphysics.terrapins.models.localisations.LocalisationFile
 import com.coxphysics.terrapins.models.localisations.ParseMethod
@@ -60,7 +61,7 @@ class AssessmentTests
     fun can_use_widefield()
     {
         val settings = AssessmentSettings.with(working_directory_path())
-        settings.set_widefield_filename("some.thing")
+        settings.set_widefield(DiskOrImage.from_filename("some.thing"))
 
         val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--widefield", "some.thing", "--extract", "localisation", "--magnification", "10.0", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
@@ -71,7 +72,7 @@ class AssessmentTests
     fun can_use_image_stack()
     {
         val settings = AssessmentSettings.with(working_directory_path())
-        settings.set_image_stack_filename("some.thing")
+        settings.set_image_stack(DiskOrImage.from_filename("some.thing"))
 
         val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--image-stack", "some.thing", "--extract", "localisation", "--magnification", "10.0","--camera-pixel-size-nm", "160.0",  "--instrument-psf-fwhm-nm", "270.0")

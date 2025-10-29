@@ -75,9 +75,14 @@ public class PStreamFilter implements ExtendedPlugInFilter {
         view.show();
     }
 
+    private boolean valid_output_size()
+    {
+        return output_size_ > 0;
+    }
+
     public ImagePlus get_image_plus()
     {
-        if (image_ == null || config_ == null)
+        if (image_ == null || config_ == null || !valid_output_size())
             return null;
         int n_pixels = image_.getWidth() * image_.getHeight();
         PStream new_stack = PStream.from(image_.getStack(), config_, output_size_, n_pixels);
