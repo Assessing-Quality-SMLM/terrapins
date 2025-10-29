@@ -20,6 +20,12 @@ public class Utils
         dialog.addDirectoryField(name, default_text);
         return DirectoryField.from(dialog);
     }
+
+    public static String extract_directory_field(GenericDialog dialog)
+    {
+        return dialog.getNextText();
+    }
+
     public static FileField add_file_field(GenericDialog dialog, String name, String default_text)
     {
         dialog.addFileField(name, default_text);
