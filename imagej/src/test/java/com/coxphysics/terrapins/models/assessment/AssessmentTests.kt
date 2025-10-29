@@ -88,4 +88,15 @@ class AssessmentTests
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--settings", "settings.file", "--extract", "localisation", "--magnification", "10.0", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
+
+    @Test
+    fun can_set_magnification()
+    {
+        val settings = AssessmentSettings.with(working_directory_path())
+        settings.set_magnification(123.0)
+
+        val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings)
+        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--extract", "localisation", "--magnification", "123.0", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
+        assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
+    }
 }
