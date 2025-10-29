@@ -1,12 +1,23 @@
 package com.coxphysics.terrapins.models.assessment
 
 import com.coxphysics.terrapins.models.DiskOrImage
+import com.coxphysics.terrapins.models.assessment.images.Settings
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 
 class CoreSettingsTests
 {
+    @Test
+    fun can_set_working_directory()
+    {
+        val settings = Settings.default()
+        assertNotEquals(settings.working_directory(), Paths.get("something"))
+        settings.set_working_directory("something")
+        assertEquals(settings.working_directory(), Paths.get("something"))
+    }
+
     @Test
     fun widefield_path()
     {

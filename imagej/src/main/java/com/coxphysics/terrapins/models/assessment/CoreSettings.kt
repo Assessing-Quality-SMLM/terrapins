@@ -31,6 +31,11 @@ class CoreSettings private constructor(private var working_directory_: Path)
         return working_directory_
     }
 
+    fun set_working_directory(value: Path)
+    {
+        working_directory_ = value
+    }
+
     fun has_widefield(): Boolean
     {
         return widefield_.has_data()

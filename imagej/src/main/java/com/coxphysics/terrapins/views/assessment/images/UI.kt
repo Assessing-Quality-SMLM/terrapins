@@ -9,12 +9,14 @@ import com.coxphysics.terrapins.view_models.io.FileFieldVM
 import com.coxphysics.terrapins.view_models.io.FrcImagesVM
 import com.coxphysics.terrapins.views.Button
 import com.coxphysics.terrapins.views.Checkbox
+import com.coxphysics.terrapins.views.DirectoryField
 import com.coxphysics.terrapins.views.DiskOrImageUI
 import com.coxphysics.terrapins.views.FileField
 import com.coxphysics.terrapins.views.Utils
 import com.coxphysics.terrapins.views.equipment.EquipmentUI
 import com.coxphysics.terrapins.views.io.*
 import ij.gui.GenericDialog
+import jdk.jshell.execution.Util
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import java.awt.event.ItemEvent
@@ -25,6 +27,9 @@ private const val IMAGE_STACK = "Image Stack"
 
 class UI private constructor(
     private val dialog_: GenericDialog,
+
+    private val working_directory: DirectoryField,
+
     private val equipment_ui_: EquipmentUI,
 
     private val widefield_ : OptionalInputUI<DiskOrImageUI, DiskOrImage>,
@@ -44,6 +49,7 @@ class UI private constructor(
         @JvmStatic
         fun add_controls_to_dialog(dialog: GenericDialog, settings: Settings): UI
         {
+            val working_directory = Utils.add_directory_field(dialog, "Working directory", settings.working_directory().toString())
             val equipment = EquipmentUI.add_controls_to_dialog(dialog, settings.equipment_settings());
 
             val widefield_vm = DiskOrImageVM.with(WIDEFIELD, settings.widefield())
@@ -87,7 +93,7 @@ class UI private constructor(
             optional_settings.set_name("Advanced settings")
             val settings_file = OptionalInputUI.add_to_dialog(dialog, optional_settings, FileFactory.from(settings_vm))
 
-            val ui = UI(dialog, equipment, widefield, image_stack, reference, hawk_image, frc_images, settings_file, null)
+            val ui = UI(dialog, working_directory, equipment, widefield, image_stack, reference, hawk_image, frc_images, settings_file, null)
 
             val reset_images_button = Utils.add_button(dialog, "Reset Images", ui)
             ui.reset_images_button_ = reset_images_button
@@ -99,6 +105,9 @@ class UI private constructor(
     fun create_settings_record(dialog: Dialog) : Settings
     {
         val settings = Settings.default()
+
+        val working_directory = Utils.extract_directory_field(dialog)
+        settings.set_working_directory(working_directory)
 
         val equipment = EquipmentUI.create_settings_record(dialog)
         settings.set_equipment_settings(equipment)
