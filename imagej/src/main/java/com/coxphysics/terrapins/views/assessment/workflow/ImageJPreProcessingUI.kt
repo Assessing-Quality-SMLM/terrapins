@@ -20,7 +20,6 @@ class ImageJPreProcessingUI private constructor(
     private val image_selector_: ImageSelector,
     private val hawk_: HawkUI,
     private val run_hawk_ : Button,
-    private val image_reset_button_: Button,
     private val localise_hawk_message_: Message) : ActionListener
 {
     companion object
@@ -34,9 +33,8 @@ class ImageJPreProcessingUI private constructor(
             val image_selector = ImageSelector.add_to_dialog(dialog, settings.hawk_stack_image_selector_settings())
             val hawk = HawkUI.add_to_dialog(dialog, settings.hawk_settings())
             val run_hawk_button = Utils.add_button(dialog, "Run HAWK", null)
-            val image_reset_button = Utils.add_button(dialog, "Reset Images", image_selector.reset_images_listener())
             val localise_hawk_message = Utils.add_message(dialog, "Now localise your HAWK stack")
-            val ui = ImageJPreProcessingUI(dialog, load_data_message, localise_message, hawk_message, image_selector, hawk, run_hawk_button, image_reset_button, localise_hawk_message)
+            val ui = ImageJPreProcessingUI(dialog, load_data_message, localise_message, hawk_message, image_selector, hawk, run_hawk_button, localise_hawk_message)
             ui.run_hawk_.add_listener(ui)
             return ui
         }
@@ -48,7 +46,7 @@ class ImageJPreProcessingUI private constructor(
         val config = hawk_.read_config()
         val image = WindowManager.getImage(image_names[0])
         val hawk_filter = PStreamFilter.from(image, config)
-        hawk_filter.run(null)
+        hawk_filter.get_image_plus()?.show()
     }
 
     fun set_visibility(value: Boolean)
@@ -59,7 +57,11 @@ class ImageJPreProcessingUI private constructor(
         image_selector_.set_visibility(value)
         hawk_.set_visibility(value)
         run_hawk_.set_visibility(value)
-        image_reset_button_.set_visibility(value)
         localise_hawk_message_.set_visibility(value)
+    }
+
+    fun reset_images()
+    {
+        image_selector_.reset_images()
     }
 }

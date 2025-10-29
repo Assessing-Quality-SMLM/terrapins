@@ -12,6 +12,7 @@ import com.coxphysics.terrapins.views.DirectoryField
 import com.coxphysics.terrapins.views.DiskOrImageUI
 import com.coxphysics.terrapins.views.FileField
 import com.coxphysics.terrapins.views.Utils
+import com.coxphysics.terrapins.views.assessment.CoreSettingsUI
 import com.coxphysics.terrapins.views.equipment.EquipmentUI
 import com.coxphysics.terrapins.views.io.*
 import ij.gui.GenericDialog
@@ -28,8 +29,7 @@ class UI private constructor(
 
     private val equipment_ui_: EquipmentUI,
 
-    private val widefield_ : OptionalInputUI<DiskOrImageUI, DiskOrImage>,
-    private val image_stack_ : OptionalInputUI<DiskOrImageUI, DiskOrImage>,
+    private val core_settings_ui_: CoreSettingsUI,
 
     private val reference_ : OptionalInputUI<DiskOrImageUI, DiskOrImage>,
     private val hawk_image_ : OptionalInputUI<DiskOrImageUI, DiskOrImage>,
@@ -37,30 +37,20 @@ class UI private constructor(
     private val frc_images_: OptionalInputUI<FrcImagesUI, FrcImages>,
 
     private val settings_file_field_: OptionalInputUI<FileField, String>,
+
+    private var display_reset_button_: Boolean,
     private var reset_images_button_: Button?,
 ) : ActionListener
 {
     companion object
     {
         @JvmStatic
-        fun add_controls_to_dialog(dialog: GenericDialog, settings: Settings): UI
+        fun add_controls_to_dialog(dialog: GenericDialog, settings: Settings, display_reset_button: Boolean): UI
         {
             val working_directory = Utils.add_directory_field(dialog, "Working directory", settings.working_directory().toString())
             val equipment = EquipmentUI.add_controls_to_dialog(dialog, settings.equipment_settings());
 
-            val widefield_vm = DiskOrImageVM.with(WIDEFIELD, settings.widefield())
-            widefield_vm.set_draw_reset_button(false)
-
-            val optional_widefield = OptionalInputVM.from(false)
-            optional_widefield.set_name("I have a widefield")
-            val widefield = OptionalInputUI.add_to_dialog(dialog, optional_widefield, DiskOrImageFactory.from(widefield_vm))
-
-            val image_stack_vm = DiskOrImageVM.with(IMAGE_STACK, settings.image_stack())
-            image_stack_vm.set_draw_reset_button(false)
-
-            val optional_image_stack = OptionalInputVM.from(false)
-            optional_image_stack.set_name("I have an image stack")
-            val image_stack = OptionalInputUI.add_to_dialog(dialog, optional_image_stack, DiskOrImageFactory.from(image_stack_vm))
+            val core_settings_ui = CoreSettingsUI.add_controls_to_dialog(dialog, settings.core_settings())
 
             val reference_vm = DiskOrImageVM.with("Reference", settings.reference_image())
             reference_vm.set_draw_reset_button(false)
@@ -89,9 +79,11 @@ class UI private constructor(
             optional_settings.set_name("Advanced settings")
             val settings_file = OptionalInputUI.add_to_dialog(dialog, optional_settings, FileFactory.from(settings_vm))
 
-            val ui = UI(dialog, working_directory, equipment, widefield, image_stack, reference, hawk_image, frc_images, settings_file, null)
+            val ui = UI(dialog, working_directory, equipment, core_settings_ui, reference, hawk_image, frc_images, settings_file,  display_reset_button, null)
 
             val reset_images_button = Utils.add_button(dialog, "Reset Images", ui)
+            if (!display_reset_button)
+                reset_images_button.set_visibility(false)
             ui.reset_images_button_ = reset_images_button
 
             return ui
@@ -108,11 +100,8 @@ class UI private constructor(
         val equipment = EquipmentUI.create_settings_record(dialog)
         settings.set_equipment_settings(equipment)
 
-        val widefield = widefield_.extract_from(dialog)
-        settings.set_widefield(widefield)
-
-        val image_stack = image_stack_.extract_from(dialog)
-        settings.set_image_stack(image_stack)
+        val core_settings = core_settings_ui_.create_settings_record(dialog)
+        settings.set_core_settings(core_settings)
 
         val reference = reference_.extract_from(dialog)
         settings.set_reference(reference)
@@ -134,18 +123,24 @@ class UI private constructor(
     {
         working_directory_.set_visibility(value)
         equipment_ui_.set_visibility(value)
-        widefield_.set_visibility(value)
-        image_stack_.set_visibility(value)
+        core_settings_ui_.set_visibility(value)
         reference_.set_visibility(value)
         hawk_image_.set_visibility(value)
         frc_images_.set_visibility(value)
         settings_file_field_.set_visibility(value)
+
+        val button_value = display_reset_button_ && value
+        reset_images_button_?.set_visibility(button_value)
     }
 
     override fun actionPerformed(e: ActionEvent?)
     {
-        widefield_.ui_element().reset_images()
-        image_stack_.ui_element().reset_images()
+        reset_images()
+    }
+
+    fun reset_images()
+    {
+        core_settings_ui_.reset_images()
         reference_.ui_element().reset_images()
         hawk_image_.ui_element().reset_images()
         frc_images_.ui_element().reset_images()

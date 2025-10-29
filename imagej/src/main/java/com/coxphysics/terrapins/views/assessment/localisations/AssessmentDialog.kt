@@ -16,7 +16,7 @@ class AssessmentDialog private constructor() : NonBlockingGenericDialog(TITLE)
         fun from(settings: AssessmentSettings): AssessmentDialog
         {
             val dialog = AssessmentDialog()
-            val ui = AssessmentUI.add_controls_to_dialog(dialog, settings)
+            val ui = AssessmentUI.add_controls_to_dialog(dialog, settings, true)
             dialog.set_ui(ui)
             return dialog
         }

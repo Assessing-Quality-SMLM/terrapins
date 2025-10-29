@@ -1,12 +1,15 @@
 package com.coxphysics.terrapins.views.assessment.workflow
 
 import com.coxphysics.terrapins.models.assessment.workflow.Settings
+import com.coxphysics.terrapins.views.Button
 import com.coxphysics.terrapins.views.Checkbox
 import com.coxphysics.terrapins.views.Message
 import com.coxphysics.terrapins.views.RadioButtons
 import com.coxphysics.terrapins.views.Utils
 import com.coxphysics.terrapins.views.assessment.localisations.AssessmentUI
 import ij.gui.GenericDialog
+import java.awt.event.ActionEvent
+import java.awt.event.ActionListener
 import java.awt.event.ItemEvent
 import com.coxphysics.terrapins.views.assessment.images.UI as ImagesUI
 
@@ -23,7 +26,9 @@ class Ui private constructor(
     private val imagej_preprocessing_ : ImageJPreProcessingUI,
     private val external_preprocessing_: Message,
     private val localisation_ui_: AssessmentUI,
-    private val images_ui_ : ImagesUI)
+    private val images_ui_ : ImagesUI,
+    private var reset_images_button_: Button?
+): ActionListener
 {
     companion object
     {
@@ -38,13 +43,23 @@ class Ui private constructor(
 
             val imagej_pre_processing = ImageJPreProcessingUI.add_to_dialog(dialog, settings)
             val external_fitter_ui = Utils.add_message(dialog, "Follow the instructions of your fitter")
-            val localisation_ui = AssessmentUI.add_controls_to_dialog(dialog, settings.localisation_settings())
-            val images_ui = ImagesUI.add_controls_to_dialog(dialog, settings.images_settings())
+            val localisation_ui = AssessmentUI.add_controls_to_dialog(dialog, settings.localisation_settings(), false)
+            val images_ui = ImagesUI.add_controls_to_dialog(dialog, settings.images_settings(), false)
 
-            val ui = Ui(pre_processing_completed, pre_processing, processing, imagej_pre_processing, external_fitter_ui, localisation_ui, images_ui)
+            val ui = Ui(pre_processing_completed, pre_processing, processing, imagej_pre_processing, external_fitter_ui, localisation_ui, images_ui, null)
+
+            val reset_images_button = Utils.add_button(dialog, "Reset Images", ui)
+            ui.reset_images_button_ = reset_images_button
             ui.re_draw_ui()
             return ui
         }
+    }
+
+    override fun actionPerformed(e: ActionEvent?)
+    {
+        imagej_preprocessing_.reset_images()
+        localisation_ui_.reset_images()
+        images_ui_.reset_images()
     }
 
     fun handle_event(event: ItemEvent)
