@@ -8,7 +8,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 class AssessmentSettings private constructor(
-    private val core_settings_: CoreSettings
+    private var core_settings_: CoreSettings
 )
 {
     private var equipment_ = EquipmentSettings.default()
@@ -34,6 +34,11 @@ class AssessmentSettings private constructor(
     fun core_settings(): CoreSettings
     {
         return core_settings_
+    }
+
+    fun set_core_settings(value: CoreSettings)
+    {
+        core_settings_ = value
     }
 
     fun working_directory(): Path
