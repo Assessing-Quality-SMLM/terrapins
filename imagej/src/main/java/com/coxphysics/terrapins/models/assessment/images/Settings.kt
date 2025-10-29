@@ -47,7 +47,7 @@ class Settings private constructor(
         return core_settings_
     }
 
-    private fun working_directory(): Path
+    fun working_directory(): Path
     {
         return core_settings_.working_directory()
     }

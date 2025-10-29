@@ -33,6 +33,11 @@ class AssessmentSettings private constructor(
         return core_settings
     }
 
+    fun working_directory(): Path
+    {
+        return core_settings.working_directory()
+    }
+
     fun widefield_nn(): String
     {
         return core_settings.widefield_nn()

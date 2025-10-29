@@ -50,27 +50,23 @@ class Assessment private constructor(private val exe_location_: Path)
         return parent.resolve("smlm_assessment")
     }
 
-    private fun data_directory(): Path?
+    private fun data_directory(working_directory: Path): Path
     {
-        val working_directory = working_directory()
-        if (working_directory == null)
-        {
-            return null
-        }
         val directory_name = working_directory.toString() + "_data"
         return Path(directory_name)
     }
 
-    private fun results() : AssessmentResults?
+    private fun results(working_directory: Path) : AssessmentResults
     {
-        return data_directory()?.let { AssessmentResults.from(it) }
+        val data_directory = data_directory(working_directory)
+        return AssessmentResults.from(data_directory)
     }
 
     fun run_images(runner : Runner, images: ImagesSettings): AssessmentResults?
     {
         images.prepare_images_for_analysis()
         val arguments = get_images_arguments(images)
-        return run_arguments(runner, arguments)
+        return run_arguments(runner, arguments, images.working_directory())
     }
 
     fun get_images_arguments(images: ImagesSettings): List<String>
@@ -149,7 +145,7 @@ class Assessment private constructor(private val exe_location_: Path)
     fun run_localisations(runner : Runner, localisations: AssessmentSettings): AssessmentResults?
     {
         val arguments = get_localisations_arguments(localisations)
-        return run_arguments(runner, arguments)
+        return run_arguments(runner, arguments, localisations.working_directory())
     }
 
     fun get_localisations_arguments(localisations: AssessmentSettings): List<String>
@@ -179,15 +175,14 @@ class Assessment private constructor(private val exe_location_: Path)
         add_equipment(false, settings.equipment(), commands)
     }
 
-    private fun run_arguments(runner: Runner, arguments: List<String>): AssessmentResults?
+    private fun run_arguments(runner: Runner, arguments: List<String>, working_directory: Path): AssessmentResults?
     {
-        val working_directory = working_directory()
         if (!FsUtils.delete_directory_recursive(working_directory))
         {
             IJ.log("Cannot delete working directory: " + working_directory.toString())
             return null
         }
-        val data_directory = data_directory()
+        val data_directory = data_directory(working_directory)
         if (!FsUtils.delete_directory_recursive(data_directory))
         {
             IJ.log("Cannot delete data directory: " + data_directory.toString())
@@ -199,7 +194,7 @@ class Assessment private constructor(private val exe_location_: Path)
         {
             return null
         }
-        return results()
+        return results(working_directory)
     }
 
 //  -f, --filename <FILENAME>        filename
