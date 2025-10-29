@@ -96,6 +96,7 @@ class AssessmentUI private constructor(
 
     fun set_visibility(value: Boolean)
     {
+        working_directory_.set_visibility(value)
         equipment_.set_visibility(value)
         magnification_.set_visibility(value)
         localisation_file_.set_visibility(value)
