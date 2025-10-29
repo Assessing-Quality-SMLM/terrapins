@@ -136,6 +136,7 @@ class UI private constructor(
 
     fun set_visibility(value: Boolean)
     {
+        working_directory_.set_visibility(value)
         equipment_ui_.set_visibility(value)
         widefield_.set_visibility(value)
         image_stack_.set_visibility(value)
