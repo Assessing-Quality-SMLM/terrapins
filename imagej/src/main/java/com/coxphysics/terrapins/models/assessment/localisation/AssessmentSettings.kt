@@ -7,10 +7,10 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 class AssessmentSettings private constructor(
-    private val core_settings: CoreSettings
+    private val core_settings_: CoreSettings
 )
 {
-    private var equipment = EquipmentSettings.default()
+    private var equipment_ = EquipmentSettings.default()
     private var localisation_file_ = LocalisationFile.default()
     private var hawk_localisation_file_ = LocalisationFile.default()
 
@@ -31,57 +31,57 @@ class AssessmentSettings private constructor(
 
     fun core_settings(): CoreSettings
     {
-        return core_settings
+        return core_settings_
     }
 
     fun working_directory(): Path
     {
-        return core_settings.working_directory()
+        return core_settings_.working_directory()
     }
 
     fun set_working_directory(value: String)
     {
-        core_settings.set_working_directory(Paths.get(value))
+        core_settings_.set_working_directory(Paths.get(value))
     }
 
     fun widefield_nn(): String
     {
-        return core_settings.widefield_nn()
+        return core_settings_.widefield_nn()
     }
 
     fun set_widefield_filename(value: String)
     {
-        core_settings.set_widefield_filename(value)
+        core_settings_.set_widefield_filename(value)
     }
 
     fun settings_file_nn(): String
     {
-        return core_settings.settings_file_nn()
+        return core_settings_.settings_file_nn()
     }
 
     fun set_settings_file(value: String)
     {
-        core_settings.set_settings_file(value)
+        core_settings_.set_settings_file(value)
     }
 
     fun image_stack_nn(): String
     {
-        return core_settings.image_stack_nn()
+        return core_settings_.image_stack_nn()
     }
 
     fun set_image_stack_filename(value: String)
     {
-        core_settings.set_image_stack_filename(value)
+        core_settings_.set_image_stack_filename(value)
     }
 
     fun equipment(): EquipmentSettings
     {
-        return equipment
+        return equipment_
     }
 
     fun set_equipment_settings(value: EquipmentSettings)
     {
-        equipment = value
+        equipment_ = value
     }
 
     fun localisation_file(): LocalisationFile
