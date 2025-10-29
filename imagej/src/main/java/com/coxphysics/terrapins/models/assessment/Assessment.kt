@@ -149,6 +149,8 @@ class Assessment private constructor(private val exe_location_: Path)
     private fun add_localisations_commands(settings: AssessmentSettings, commands: MutableList<String>)
     {
         commands.add("localisation")
+        commands.add("--magnification")
+        commands.add(settings.magnification().toString())
         if (settings.has_localisation_file())
         {
             commands.add("--locs")
