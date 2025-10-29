@@ -41,9 +41,31 @@ class CoreSettings private constructor(private var working_directory_: Path)
         return widefield_
     }
 
+    fun widefield_path() : Path?
+    {
+        return widefield_path_in(working_directory())
+    }
+
+    private fun widefield_path_in(directory: Path) : Path?
+    {
+        val image_path = directory.resolve("widefield.tiff")
+        return widefield_.filepath(image_path)
+    }
+
     fun image_stack(): DiskOrImage
     {
         return image_stack_
+    }
+
+    fun image_stack_path() : Path?
+    {
+        return image_stack_path_in(working_directory())
+    }
+
+    private fun image_stack_path_in(directory: Path) : Path?
+    {
+        val image_path = directory.resolve("image_stack.tiff")
+        return image_stack_.filepath(image_path)
     }
 
     fun widefield_nn(): String
@@ -94,5 +116,12 @@ class CoreSettings private constructor(private var working_directory_: Path)
     fun set_settings_file(value: String)
     {
         settings_file_ = value
+    }
+
+    fun to_disk_in(directory: Path) : Boolean
+    {
+        val widefield_path = widefield_path_in(directory)?.let { p -> widefield().to_disk_in(p) }
+        val image_stack_path = image_stack_path_in(directory)?.let{p -> image_stack().to_disk_in(p)}
+        return widefield_path != null && image_stack_path != null
     }
 }
