@@ -100,7 +100,7 @@ class Assessment private constructor(private val exe_location_: Path)
             if (hawk_path != null)
             {
                 commands.add("--hawk-image")
-                commands.add(settings.hawk_image_nn())
+                commands.add(hawk_path.toString())
             }
         }
 
