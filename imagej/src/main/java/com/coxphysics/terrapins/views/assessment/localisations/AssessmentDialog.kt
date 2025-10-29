@@ -31,13 +31,4 @@ class AssessmentDialog private constructor() : NonBlockingGenericDialog(TITLE)
     {
         return ui_?.create_settings_record(this)
     }
-
-    @Override
-    override fun itemStateChanged(e: ItemEvent?)
-    {
-        if (e != null)
-        {
-            ui_?.handle_event(e)
-        }
-    }
 }
