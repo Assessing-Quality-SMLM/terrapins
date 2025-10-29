@@ -6,6 +6,7 @@ import com.coxphysics.terrapins.view_models.io.FileFieldVM
 import com.coxphysics.terrapins.views.Checkbox
 import com.coxphysics.terrapins.views.DirectoryField
 import com.coxphysics.terrapins.views.FileField
+import com.coxphysics.terrapins.views.NumericField
 import com.coxphysics.terrapins.views.Utils
 import com.coxphysics.terrapins.views.equipment.EquipmentUI
 import com.coxphysics.terrapins.views.io.FileFactory
@@ -23,6 +24,7 @@ class AssessmentUI private constructor(
     private val dialog_: GenericDialog,
     private val working_directory_: DirectoryField,
     private val equipment_: EquipmentUI,
+    private val magnification_: NumericField,
     private val localisation_file_ : LocalisationFileUI,
     private val hawked_localisation_file_: LocalisationFileUI,
     private val widefield_: FileField,
@@ -37,6 +39,8 @@ class AssessmentUI private constructor(
         {
             val working_directory = Utils.add_directory_field(dialog, "Working directory", settings.working_directory().toString())
             val equipment = EquipmentUI.add_controls_to_dialog(dialog, settings.equipment());
+
+            val magnification = Utils.add_numeric_field(dialog, "Magnification", settings.magnification(), 0)
 
             val localisation_file =
                 LocalisationFileUI.add_to_dialog(dialog, settings.localisation_file(), LOCALISATION_FILE)
@@ -53,7 +57,7 @@ class AssessmentUI private constructor(
             optional_settings.set_name("Advanced settings")
             val settings_file_field = OptionalInputUI.add_to_dialog(dialog, optional_settings, FileFactory.from(settings_vm))
 
-            val ui = AssessmentUI(dialog, working_directory, equipment, localisation_file, hawked_localisation_file, widefield, image_stack, settings_file_field)
+            val ui = AssessmentUI(dialog, working_directory, equipment, magnification, localisation_file, hawked_localisation_file, widefield, image_stack, settings_file_field)
             return ui
         }
     }
@@ -67,6 +71,9 @@ class AssessmentUI private constructor(
 
         val equipment = EquipmentUI.create_settings_record(dialog)
         settings.set_equipment_settings(equipment)
+
+        val magnification = Utils.extract_numeric_field(dialog)
+        settings.set_magnification(magnification)
 
         val localisation_file = LocalisationFileUI.create_settings_record(dialog)
         settings.set_localisation_file(localisation_file)
@@ -90,6 +97,7 @@ class AssessmentUI private constructor(
     fun set_visibility(value: Boolean)
     {
         equipment_.set_visibility(value)
+        magnification_.set_visibility(value)
         localisation_file_.set_visibility(value)
         hawked_localisation_file_.set_visibility(value)
         widefield_.set_visibility(value)
