@@ -73,11 +73,6 @@ class CoreSettings private constructor(private var working_directory_: Path)
         return image_stack_.filepath(image_path)
     }
 
-    fun widefield_nn(): String
-    {
-        return widefield_.filename_nn()
-    }
-
     fun set_widefield(value: DiskOrImage)
     {
         widefield_ = value
@@ -91,11 +86,6 @@ class CoreSettings private constructor(private var working_directory_: Path)
     fun has_image_stack(): Boolean
     {
         return image_stack_.has_data()
-    }
-
-    fun image_stack_nn(): String
-    {
-        return image_stack_.filename_nn()
     }
 
     fun set_image_stack(value: DiskOrImage)
