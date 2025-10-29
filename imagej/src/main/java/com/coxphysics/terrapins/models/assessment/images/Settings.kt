@@ -50,21 +50,6 @@ class Settings private constructor()
         return core_settings_.widefield()
     }
 
-    fun widefield_path(): Path?
-    {
-        return core_settings_.widefield_path()
-    }
-
-    fun image_stack(): DiskOrImage
-    {
-        return core_settings_.image_stack()
-    }
-
-    fun image_stack_path(): Path?
-    {
-        return core_settings_.image_stack_path()
-    }
-
     fun set_widefield(value: DiskOrImage)
     {
         core_settings_.set_widefield(value)
@@ -73,6 +58,11 @@ class Settings private constructor()
     fun set_widefield_filename(value: String)
     {
         core_settings_.set_widefield_filename(value)
+    }
+
+    fun image_stack(): DiskOrImage
+    {
+        return core_settings_.image_stack()
     }
 
     fun set_image_stack(value: DiskOrImage)
@@ -100,6 +90,11 @@ class Settings private constructor()
         return reference_image_
     }
 
+    fun reference_image_is_valid(): Boolean
+    {
+        return reference_image_.has_data()
+    }
+
     fun reference_image_path(): Path?
     {
         return reference_image_path_in(working_directory())
@@ -109,16 +104,6 @@ class Settings private constructor()
     {
         val image_path = directory.resolve("sr.tiff")
         return reference_image_.filepath(image_path)
-    }
-
-    fun reference_image_is_valid(): Boolean
-    {
-        return reference_image_.has_data()
-    }
-
-    fun reference_image_nn(): String
-    {
-        return reference_image_.filename_nn()
     }
 
     fun set_reference(value: DiskOrImage)
@@ -131,14 +116,14 @@ class Settings private constructor()
         reference_image_.set_filename(value)
     }
 
-    fun hawk_image_is_valid(): Boolean
-    {
-        return hawk_image_.has_data()
-    }
-
     fun hawk_image(): DiskOrImage
     {
         return hawk_image_
+    }
+
+    fun hawk_image_is_valid(): Boolean
+    {
+        return hawk_image_.has_data()
     }
 
     fun hawk_image_path(): Path?
@@ -246,8 +231,8 @@ class Settings private constructor()
     fun prepare_images_for_analysis_in(working_directory: Path): Boolean
     {
         val core_ok = core_settings_.to_disk_in(working_directory)
-        val reference_path = reference_image_path_in(working_directory)?.let { p -> reference_image().to_disk_in(p) }
-        val hawk_path = hawk_image_path_in(working_directory)?.let{p -> hawk_image().to_disk_in(p)}
+        val reference_path = reference_image_path_in(working_directory)?.let { p -> reference_image().to_disk_with(p) }
+        val hawk_path = hawk_image_path_in(working_directory)?.let{p -> hawk_image().to_disk_with(p)}
         val half_split_ok = half_split_.to_disk_in(working_directory.resolve("half_split_images"))
         val zip_split_ok = zip_split_.to_disk_in(working_directory.resolve("zip_split_images"))
         return core_ok && reference_path != null &&
