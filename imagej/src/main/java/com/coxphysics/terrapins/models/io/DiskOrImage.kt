@@ -99,6 +99,13 @@ class DiskOrImage private constructor(
         return filename_path()?.let{p -> IJUtils.load_image(p)}
     }
 
+    fun set_filename_and_switch_usage(filename: String)
+    {
+        set_filename(filename)
+        if (!use_disk())
+            set_use_disk(true)
+    }
+
     fun set_filename(filename: String)
     {
         filename_ = filename

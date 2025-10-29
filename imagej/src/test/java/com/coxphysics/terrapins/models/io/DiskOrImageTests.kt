@@ -87,4 +87,28 @@ class DiskOrImageTests
         assertEquals(disk_or_image.use_image(), false)
         assertEquals(disk_or_image.use_disk(), true)
     }
+
+    @Test
+    fun usage_is_not_switched_on_filename_change()
+    {
+        val disk_or_image = DiskOrImage.new(null, null, true)
+        assertEquals(disk_or_image.use_image(), true)
+        assertEquals(disk_or_image.use_disk(), false)
+
+        disk_or_image.set_filename("something")
+        assertEquals(disk_or_image.use_image(), true)
+        assertEquals(disk_or_image.use_disk(), false)
+    }
+
+    @Test
+    fun change_usage_on_filename_setting()
+    {
+        val disk_or_image = DiskOrImage.new(null, null, true)
+        assertEquals(disk_or_image.use_image(), true)
+        assertEquals(disk_or_image.use_disk(), false)
+
+        disk_or_image.set_filename_and_switch_usage("something")
+        assertEquals(disk_or_image.use_image(), false)
+        assertEquals(disk_or_image.use_disk(), true)
+    }
 }
