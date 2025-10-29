@@ -80,7 +80,7 @@ class CoreSettings private constructor(private var working_directory_: Path)
 
     fun set_widefield_filename(value: String)
     {
-        widefield_.set_filename(value)
+        widefield_.set_filename_and_switch_usage(value)
     }
 
     fun has_image_stack(): Boolean
@@ -100,7 +100,7 @@ class CoreSettings private constructor(private var working_directory_: Path)
 
     fun set_image_stack_filename(value: String)
     {
-        image_stack_.set_filename(value)
+        image_stack_.set_filename_and_switch_usage(value)
     }
 
     fun has_settings_file(): Boolean

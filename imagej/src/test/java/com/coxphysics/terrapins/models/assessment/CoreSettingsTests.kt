@@ -17,12 +17,34 @@ class CoreSettingsTests
     }
 
     @Test
+    fun widefield_changes_usage_on_filename_setting()
+    {
+        val working_directory = Paths.get("some", "thing")
+        val settings = CoreSettings.new(working_directory)
+        assertEquals(settings.widefield_path(), working_directory.resolve("widefield.tiff"))
+
+        settings.set_widefield_filename("something.tiff")
+        assertEquals(settings.widefield_path(), Paths.get("something.tiff"))
+    }
+
+    @Test
     fun image_stack_path()
     {
         val working_directory = Paths.get("some", "thing")
         val settings = CoreSettings.new(working_directory)
         val expected = working_directory.resolve("image_stack.tiff")
         assertEquals(settings.image_stack_path(), expected)
+    }
+
+    @Test
+    fun image_stack_changes_usage_on_filename_setting()
+    {
+        val working_directory = Paths.get("some", "thing")
+        val settings = CoreSettings.new(working_directory)
+        assertEquals(settings.image_stack_path(), working_directory.resolve("image_stack.tiff"))
+
+        settings.set_image_stack_filename("something.tiff")
+        assertEquals(settings.image_stack_path(), Paths.get("something.tiff"))
     }
 
     @Test
