@@ -8,7 +8,6 @@ import com.coxphysics.terrapins.view_models.OptionalInputVM
 import com.coxphysics.terrapins.view_models.io.FileFieldVM
 import com.coxphysics.terrapins.view_models.io.FrcImagesVM
 import com.coxphysics.terrapins.views.Button
-import com.coxphysics.terrapins.views.Checkbox
 import com.coxphysics.terrapins.views.DirectoryField
 import com.coxphysics.terrapins.views.DiskOrImageUI
 import com.coxphysics.terrapins.views.FileField
@@ -16,11 +15,8 @@ import com.coxphysics.terrapins.views.Utils
 import com.coxphysics.terrapins.views.equipment.EquipmentUI
 import com.coxphysics.terrapins.views.io.*
 import ij.gui.GenericDialog
-import jdk.jshell.execution.Util
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
-import java.awt.event.ItemEvent
-import java.awt.event.ItemListener
 
 private const val WIDEFIELD = "Widefield"
 private const val IMAGE_STACK = "Image Stack"
