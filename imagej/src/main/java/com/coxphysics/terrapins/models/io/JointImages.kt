@@ -1,6 +1,7 @@
 package com.coxphysics.terrapins.models.io
 
 import com.coxphysics.terrapins.models.DiskOrImage
+import java.nio.file.Path
 
 class JointImages private constructor(
     private val image_1_: DiskOrImage,
@@ -54,5 +55,12 @@ class JointImages private constructor(
     fun set_image_2_filename(value: String)
     {
         image_2_.set_filename(value)
+    }
+
+    fun to_disk_in(directory: Path): Boolean
+    {
+        val image_1_path = image_1_.to_disk_in(directory)
+        val image_2_path = image_2_.to_disk_in(directory)
+        return image_1_path != null && image_2_path != null
     }
 }
