@@ -1,10 +1,14 @@
 package com.coxphysics.terrapins.views.assessment.localisations
 
 import com.coxphysics.terrapins.models.assessment.localisation.AssessmentSettings
+import com.coxphysics.terrapins.view_models.OptionalInputVM
+import com.coxphysics.terrapins.view_models.io.FileFieldVM
 import com.coxphysics.terrapins.views.Checkbox
 import com.coxphysics.terrapins.views.FileField
 import com.coxphysics.terrapins.views.Utils
 import com.coxphysics.terrapins.views.equipment.EquipmentUI
+import com.coxphysics.terrapins.views.io.FileFactory
+import com.coxphysics.terrapins.views.io.OptionalInputUI
 import com.coxphysics.terrapins.views.localisations.LocalisationFileUI
 import ij.gui.GenericDialog
 import java.awt.event.ItemEvent
@@ -21,8 +25,7 @@ class AssessmentUI private constructor(
     private val hawked_localisation_file_: LocalisationFileUI,
     private val widefield_: FileField,
     private val image_stack: FileField,
-    private val advanced_settings_visible_: Checkbox,
-    private val settings_file_field_: FileField
+    private val settings_file_field_: OptionalInputUI<FileField, String>,
 )
 {
     companion object
@@ -41,12 +44,13 @@ class AssessmentUI private constructor(
             val widefield = Utils.add_file_field(dialog, WIDEFIELD, settings.widefield_nn())
             val image_stack = Utils.add_file_field(dialog, IMAGE_STACK, settings.image_stack_nn())
 
-            val is_visible = false
-            val advanced_settings_checkbox = Utils.add_checkbox(dialog, "Advanced Settings", is_visible)
-            val settings_file_field = Utils.add_file_field(dialog, "Settings File", settings.settings_file_nn())
-            settings_file_field.set_visibility(is_visible)
+            val settings_vm = FileFieldVM.from(settings.settings_file_nn())
+            settings_vm.set_name("Settings file")
+            val optional_settings = OptionalInputVM.from(false)
+            optional_settings.set_name("Advanced settings")
+            val settings_file_field = OptionalInputUI.add_to_dialog(dialog, optional_settings, FileFactory.from(settings_vm))
 
-            val ui = AssessmentUI(dialog, equipment, localisation_file, hawked_localisation_file, widefield, image_stack, advanced_settings_checkbox, settings_file_field)
+            val ui = AssessmentUI(dialog, equipment, localisation_file, hawked_localisation_file, widefield, image_stack, settings_file_field)
             return ui
         }
     }
@@ -71,32 +75,10 @@ class AssessmentUI private constructor(
         settings.set_image_stack_filename(image_stack)
 
         // advanced visible
-        val _advanced_checkbox = Utils.extract_checkbox_value(dialog)
-        val settings_file = Utils.extract_file_field(dialog)
+        val settings_file = settings_file_field_.extract_from(dialog)
         settings.set_settings_file(settings_file)
 
         return settings
-    }
-
-    fun handle_event(event: ItemEvent)
-    {
-        val source = event.source
-        if (advanced_settings_visible_.is_checkbox(source))
-        {
-            flip_advanced_settings_visibility()
-            dialog_.pack()
-        }
-    }
-
-    private fun flip_advanced_settings_visibility()
-    {
-        val new_visibility = !current_visible()
-        settings_file_field_.set_visibility(new_visibility)
-    }
-
-    private fun current_visible() : Boolean
-    {
-        return settings_file_field_.is_visible
     }
 
     fun set_visibility(value: Boolean)
@@ -106,6 +88,6 @@ class AssessmentUI private constructor(
         hawked_localisation_file_.set_visibility(value)
         widefield_.set_visibility(value)
         image_stack.set_visibility(value)
-        advanced_settings_visible_.set_visibility(value)
+        settings_file_field_.set_visibility(value)
     }
 }
