@@ -7,10 +7,11 @@ import com.coxphysics.terrapins.models.io.FrcImages
 import com.coxphysics.terrapins.models.io.JointImages
 import java.nio.file.Path
 
-class Settings private constructor()
+class Settings private constructor(
+    private val core_settings_: CoreSettings
+)
 {
     private var equipment = EquipmentSettings.default()
-    private var core_settings_ = CoreSettings.default()
     private var reference_image_ = DiskOrImage.default()
     private var hawk_image_ = DiskOrImage.default()
     private var half_split_ = JointImages.default()
@@ -19,9 +20,15 @@ class Settings private constructor()
     companion object
     {
         @JvmStatic
+        fun with(working_directory: Path): Settings
+        {
+            return Settings(CoreSettings.new(working_directory))
+        }
+
+        @JvmStatic
         fun default(): Settings
         {
-            return Settings()
+            return Settings(CoreSettings.default())
         }
     }
 
