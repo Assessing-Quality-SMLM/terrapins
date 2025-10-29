@@ -6,6 +6,7 @@ import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import com.coxphysics.terrapins.models.io.FrcImages
 import com.coxphysics.terrapins.models.io.JointImages
 import java.nio.file.Path
+import java.nio.file.Paths
 
 class Settings private constructor(
     private val core_settings_: CoreSettings
@@ -50,6 +51,11 @@ class Settings private constructor(
     fun working_directory(): Path
     {
         return core_settings_.working_directory()
+    }
+
+    fun set_working_directory(value: String)
+    {
+        core_settings_.set_working_directory(Paths.get(value))
     }
 
     fun widefield(): DiskOrImage
