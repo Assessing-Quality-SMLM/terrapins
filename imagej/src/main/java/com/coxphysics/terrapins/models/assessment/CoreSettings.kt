@@ -22,7 +22,7 @@ class CoreSettings private constructor(private var working_directory_: Path)
         @JvmStatic
         fun default(): CoreSettings
         {
-            return new(FsUtils.temp_directory())
+            return new(FsUtils.temp_directory().resolve("smlm_assessment"))
         }
     }
 
