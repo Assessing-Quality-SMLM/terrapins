@@ -14,10 +14,21 @@ class CoreSettings private constructor(private var working_directory_: Path)
     companion object
     {
         @JvmStatic
+        fun new(working_directory: Path): CoreSettings
+        {
+            return CoreSettings(working_directory)
+        }
+
+        @JvmStatic
         fun default(): CoreSettings
         {
-            return CoreSettings(FsUtils.temp_directory())
+            return new(FsUtils.temp_directory())
         }
+    }
+
+    fun working_directory():Path
+    {
+        return working_directory_
     }
 
     fun has_widefield(): Boolean
