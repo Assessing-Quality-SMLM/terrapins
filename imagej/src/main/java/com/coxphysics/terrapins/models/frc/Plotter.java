@@ -1,6 +1,5 @@
 package com.coxphysics.terrapins.models.frc;
 
-import com.coxphysics.terrapins.models.squirrel.tools.FRC;
 import ij.gui.Plot;
 
 import java.awt.*;
