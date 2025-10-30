@@ -58,7 +58,9 @@ public class UtilsTests
     {
         GenericDialog dialog = new GenericDialog("something");
         DirectoryField field = Utils.add_directory_field(dialog, "a", "thing");
-        assertEquals(field.filepath(), "thing" + File.separator);
+        // wierdly imageJ uses / not system separator
+//        assertEquals(field.filepath(), "thing" + File.separator);
+        assertEquals(field.filepath(), "thing/");
     }
 
     @Test
@@ -66,9 +68,13 @@ public class UtilsTests
     {
         GenericDialog dialog = new GenericDialog("something");
         DirectoryField field = Utils.add_directory_field(dialog, "a", "thing");
-        assertEquals(field.filepath(), "thing" + File.separator);
-        assertEquals(Utils.extract_directory_field(dialog), "thing" + File.separator);
-        assertEquals(field.filepath(), "thing" + File.separator);
+        // wierdly imageJ uses / not system separator
+//        assertEquals(field.filepath(), "thing" + File.separator);
+        assertEquals(field.filepath(), "thing/");
+//        assertEquals(Utils.extract_directory_field(dialog), "thing" + File.separator);
+        assertEquals(Utils.extract_directory_field(dialog), "thing/");
+//        assertEquals(field.filepath(), "thing" + File.separator);
+        assertEquals(field.filepath(), "thing/");
     }
 
     @Test
