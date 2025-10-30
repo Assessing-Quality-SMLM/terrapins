@@ -1,6 +1,5 @@
 package com.coxphysics.terrapins.models.frc;
 
-import com.coxphysics.terrapins.models.squirrel.tools.FRC;
 import ij.gui.Plot;
 
 import java.awt.*;
@@ -23,9 +22,27 @@ public class Plotter
         p.setColor(Color.blue);
         double[] threshold_curve = result.threshold_curve();
         p.add("line", qs, threshold_curve);
-        p.addLegend("Correlation\tThreshold");
+        draw_bounds_on(p);
+        p.addLegend("Correlation\tThreshold\tMagnification too low\tMagnification too high");
         p.show();
         return p;
+    }
+
+    private static void draw_bounds_on(Plot plot)
+    {
+        double min_mag = 0.2;
+        plot.setColor(Color.black);
+        add_vertical_to(plot, min_mag);
+        double max_mag = 0.7;
+        plot.setColor(Color.BLACK);
+        add_vertical_to(plot, max_mag);
+    }
+
+    private static void add_vertical_to(Plot plot, double x)
+    {
+        double[] xs = new double[]{x, x};
+        double[] ys = new double[]{0, 1};
+        plot.add("line", xs, ys);
     }
 
     public static String get_title(double fire_number, String name)
