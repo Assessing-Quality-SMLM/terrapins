@@ -1,6 +1,7 @@
 package com.coxphysics.terrapins.models.squirrel.external
 
 import com.coxphysics.terrapins.models.squirrel.SquirrelSettings
+import ij.ImagePlus
 import org.junit.jupiter.api.Assertions.assertArrayEquals
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -28,8 +29,9 @@ class SquirrelTests
         val settings = SquirrelSettings.default_()
         settings.set_registration(true)
         val squirrel = Squirrel.custom (program_path())
-        val commands = squirrel.get_commands(File("widefield").toPath(), File("super-res").toPath(), settings)
-        val expected = listOf(program_path().toString(), "wf=widefield", "sr=super-res", output_data_parameter(), "sigma=200.0", "reg", "cb")
+        val widefield_image = ImagePlus()
+        val commands = squirrel.get_commands(widefield_image, File("widefield").toPath(), File("super-res").toPath(), settings)
+        val expected = listOf(program_path().toString(), "wf=widefield", "sr=super-res", output_data_parameter(), "px=100.0", "sigma=200.0", "reg", "cb")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
 
@@ -39,8 +41,9 @@ class SquirrelTests
         val settings = SquirrelSettings.default_()
         settings.set_registration(false)
         val squirrel = Squirrel.custom (program_path())
-        val commands = squirrel.get_commands(File("widefield").toPath(), File("super-res").toPath(), settings)
-        val expected = listOf(program_path().toString(), "wf=widefield", "sr=super-res", output_data_parameter(), "sigma=200.0", "cb")
+        val widefield_image = ImagePlus()
+        val commands = squirrel.get_commands(widefield_image, File("widefield").toPath(), File("super-res").toPath(), settings)
+        val expected = listOf(program_path().toString(), "wf=widefield", "sr=super-res", output_data_parameter(), "px=100.0", "sigma=200.0", "cb")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
 
@@ -50,8 +53,9 @@ class SquirrelTests
         val settings = SquirrelSettings.default_()
         settings.set_crop_borders(true)
         val squirrel = Squirrel.custom (File("some/program").toPath())
-        val commands = squirrel.get_commands(File("widefield").toPath(), File("super-res").toPath(), settings)
-        val expected = listOf(program_path().toString(), "wf=widefield", "sr=super-res", output_data_parameter(), "sigma=200.0", "reg", "cb")
+        val widefield_image = ImagePlus()
+        val commands = squirrel.get_commands(widefield_image, File("widefield").toPath(), File("super-res").toPath(), settings)
+        val expected = listOf(program_path().toString(), "wf=widefield", "sr=super-res", output_data_parameter(), "px=100.0", "sigma=200.0", "reg", "cb")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
 
@@ -61,8 +65,9 @@ class SquirrelTests
         val settings = SquirrelSettings.default_()
         settings.set_crop_borders(false)
         val squirrel = Squirrel.custom (program_path())
-        val commands = squirrel.get_commands(File("widefield").toPath(), File("super-res").toPath(), settings)
-        val expected = listOf(program_path().toString(), "wf=widefield", "sr=super-res", output_data_parameter(), "sigma=200.0", "reg")
+        val widefield_image = ImagePlus()
+        val commands = squirrel.get_commands(widefield_image, File("widefield").toPath(), File("super-res").toPath(), settings)
+        val expected = listOf(program_path().toString(), "wf=widefield", "sr=super-res", output_data_parameter(), "px=100.0", "sigma=200.0", "reg")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
 }
