@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.models.squirrel.external
 
+import com.coxphysics.terrapins.models.calibration.Calibration
 import com.coxphysics.terrapins.models.ffi
 import com.coxphysics.terrapins.models.hawkman.external.name_to_image
 import com.coxphysics.terrapins.models.process.ImageJLoggingRunner
@@ -14,6 +15,8 @@ import java.nio.file.Paths
 import kotlin.io.path.exists
 
 private val EXE_NAME = "squirrel"
+
+private val DEFAULT_PIXEL_SIZE_NM = 100.0
 
 class Squirrel private constructor(private val exe_path_: Path)
 {
@@ -96,7 +99,7 @@ class Squirrel private constructor(private val exe_path_: Path)
         commands.add(String.format("wf=%s",widefield))
         commands.add(String.format("sr=%s", sr))
         commands.add(String.format("od=%s", output_directory()))
-//        commands.add(String.format("px=%s", settings.pixel_size()))
+        commands.add(String.format("px=%s", pixel_size(settings)))
         commands.add(String.format("sigma=%s", settings.sigma_nm()))
         if (settings.show_positive_and_negative())
             commands.add("pn")
@@ -114,6 +117,12 @@ class Squirrel private constructor(private val exe_path_: Path)
 
 
         return commands;
+    }
+
+    private fun pixel_size(settings: SquirrelSettings): Double
+    {
+        val widefield = get_widefield(settings)
+        return Calibration.from_image(widefield).pixel_size_nm_or(DEFAULT_PIXEL_SIZE_NM)
     }
 
     private fun prepare_images(settings: SquirrelSettings): Pair<Path, Path>
