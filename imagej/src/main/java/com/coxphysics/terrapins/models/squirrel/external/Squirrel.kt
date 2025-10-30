@@ -8,6 +8,7 @@ import com.coxphysics.terrapins.models.squirrel.SquirrelSettings
 import com.coxphysics.terrapins.models.utils.FsUtils
 import com.coxphysics.terrapins.models.utils.IJUtils
 import ij.IJ
+import ij.ImagePlus
 import java.nio.file.Path
 import java.nio.file.Paths
 import kotlin.io.path.exists
@@ -118,7 +119,7 @@ class Squirrel private constructor(private val exe_path_: Path)
     private fun prepare_images(settings: SquirrelSettings): Pair<Path, Path>
     {
         val widefield_path = Paths.get(output_directory(), "widefield.tiff")
-        val image_1 = name_to_image(settings.reference_image())
+        val image_1 = get_widefield(settings)
 //        image_1.write_to_disk(widefield_path)
         IJUtils.write_to_disk(image_1, widefield_path)
         val sr_path = Paths.get(output_directory(), "super_res.tiff")
@@ -126,5 +127,10 @@ class Squirrel private constructor(private val exe_path_: Path)
 //        image_2.write_to_disk(sr_path)
         IJUtils.write_to_disk(image_2, sr_path);
         return Pair(widefield_path, sr_path)
+    }
+
+    private fun get_widefield(settings: SquirrelSettings): ImagePlus
+    {
+        return name_to_image(settings.reference_image())
     }
 }
