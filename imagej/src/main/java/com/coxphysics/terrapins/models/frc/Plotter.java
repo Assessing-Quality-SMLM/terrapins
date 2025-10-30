@@ -6,6 +6,10 @@ import java.awt.*;
 
 public class Plotter
 {
+
+    private static final double MIN_MAGNIFICATION = 0.2;
+    private static final double MAX_MAGNIFICATION = 0.4;
+
     public static Plot plot(FRCResult result)
     {
         return named_plot(result, null);
@@ -30,12 +34,10 @@ public class Plotter
 
     private static void draw_bounds_on(Plot plot)
     {
-        double min_mag = 0.2;
         plot.setColor(Color.black);
-        add_vertical_to(plot, min_mag);
-        double max_mag = 0.7;
+        add_vertical_to(plot, MIN_MAGNIFICATION);
         plot.setColor(Color.BLACK);
-        add_vertical_to(plot, max_mag);
+        add_vertical_to(plot, MAX_MAGNIFICATION);
     }
 
     private static void add_vertical_to(Plot plot, double x)
