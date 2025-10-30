@@ -20,8 +20,8 @@ public class SquirrelPlugin implements PlugIn
         if (dialog_.wasCanceled())
             return;
         SquirrelSettings settings = dialog_.create_settings_record();
-        com.coxphysics.terrapins.models.squirrel.Squirrel.run(settings);
-//        Squirrel.Factory.default_().run(settings);
+//        com.coxphysics.terrapins.models.squirrel.Squirrel.run(settings);
+        Squirrel.Factory.default_().run(settings);
     }
 
     public static void main(String[] args) throws Exception {

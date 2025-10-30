@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.models.squirrel.external
 
+import com.coxphysics.terrapins.models.calibration.Calibration
 import com.coxphysics.terrapins.models.ffi
 import com.coxphysics.terrapins.models.hawkman.external.name_to_image
 import com.coxphysics.terrapins.models.process.ImageJLoggingRunner
@@ -8,11 +9,14 @@ import com.coxphysics.terrapins.models.squirrel.SquirrelSettings
 import com.coxphysics.terrapins.models.utils.FsUtils
 import com.coxphysics.terrapins.models.utils.IJUtils
 import ij.IJ
+import ij.ImagePlus
 import java.nio.file.Path
 import java.nio.file.Paths
 import kotlin.io.path.exists
 
 private val EXE_NAME = "squirrel"
+
+private val DEFAULT_PIXEL_SIZE_NM = 100.0
 
 class Squirrel private constructor(private val exe_path_: Path)
 {
@@ -80,14 +84,20 @@ class Squirrel private constructor(private val exe_path_: Path)
     {
         FsUtils.prepare_directory(output_directory_path())
         val image_paths = prepare_images(settings)
-        val commands = get_commands(image_paths.component1(), image_paths.component2(), settings);
+        val widefield = image_paths.component1()
+        val widefield_image = widefield.component1()
+        val widefield_path = widefield.component2()
+
+        val super_res = image_paths.component2()
+        val sr_path = super_res.component2()
+        val commands = get_commands(widefield_image, widefield_path, sr_path, settings);
 //        val builder = process_runnder.create_builder(commands)
         val builder = ProcessBuilder(commands)
         val exit_code = runner.run(builder)
         return exit_code == 0
     }
 
-    fun get_commands(widefield: Path, sr: Path, settings: SquirrelSettings): List<String>
+    fun get_commands(widefield_image: ImagePlus, widefield: Path, sr: Path, settings: SquirrelSettings): List<String>
     {
         val commands = mutableListOf<String>()
         commands.add(program_name());
@@ -95,7 +105,7 @@ class Squirrel private constructor(private val exe_path_: Path)
         commands.add(String.format("wf=%s",widefield))
         commands.add(String.format("sr=%s", sr))
         commands.add(String.format("od=%s", output_directory()))
-//        commands.add(String.format("px=%s", settings.pixel_size()))
+        commands.add(String.format("px=%s", pixel_size(widefield_image)))
         commands.add(String.format("sigma=%s", settings.sigma_nm()))
         if (settings.show_positive_and_negative())
             commands.add("pn")
@@ -115,16 +125,26 @@ class Squirrel private constructor(private val exe_path_: Path)
         return commands;
     }
 
-    private fun prepare_images(settings: SquirrelSettings): Pair<Path, Path>
+    private fun pixel_size(widefield: ImagePlus): Double
+    {
+        return Calibration.from_image(widefield).pixel_size_nm_or(DEFAULT_PIXEL_SIZE_NM)
+    }
+
+    private fun prepare_images(settings: SquirrelSettings): Pair<Pair<ImagePlus, Path>, Pair<ImagePlus, Path>>
     {
         val widefield_path = Paths.get(output_directory(), "widefield.tiff")
-        val image_1 = name_to_image(settings.reference_image())
+        val image_1 = get_widefield(settings)
 //        image_1.write_to_disk(widefield_path)
         IJUtils.write_to_disk(image_1, widefield_path)
         val sr_path = Paths.get(output_directory(), "super_res.tiff")
         val image_2 = name_to_image(settings.super_res_image())
 //        image_2.write_to_disk(sr_path)
         IJUtils.write_to_disk(image_2, sr_path);
-        return Pair(widefield_path, sr_path)
+        return Pair(Pair(image_1, widefield_path), Pair(image_2, sr_path))
+    }
+
+    private fun get_widefield(settings: SquirrelSettings): ImagePlus
+    {
+        return name_to_image(settings.reference_image())
     }
 }
