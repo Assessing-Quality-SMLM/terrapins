@@ -65,7 +65,7 @@ class AssessmentUI private constructor(
         }
     }
 
-    fun create_settings_record(dialog: AssessmentDialog) : AssessmentSettings
+    fun create_settings_record(dialog: GenericDialog) : AssessmentSettings
     {
         val settings = AssessmentSettings.default()
 
