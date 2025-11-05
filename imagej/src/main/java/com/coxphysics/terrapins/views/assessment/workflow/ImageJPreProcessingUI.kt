@@ -40,6 +40,13 @@ class ImageJPreProcessingUI private constructor(
         }
     }
 
+    fun create_settings_record(dialog: GenericDialog)
+    {
+        image_selector_.extract_image_names_recorded(dialog)
+        hawk_.create_settings_recorded(dialog)
+    }
+
+
     override fun actionPerformed(e: ActionEvent?)
     {
         val image_names = image_selector_.read_image_names()
