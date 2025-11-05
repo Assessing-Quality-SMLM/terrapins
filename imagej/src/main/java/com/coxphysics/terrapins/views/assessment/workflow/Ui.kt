@@ -102,7 +102,7 @@ class Ui private constructor(
         }
     }
 
-    private fun pre_processing_completed(): Boolean
+    fun pre_processing_completed(): Boolean
     {
         return pre_processing_completed_.is_checked
     }
@@ -117,7 +117,7 @@ class Ui private constructor(
         return pre_processing_completed()
     }
 
-    private fun localisation_selected(): Boolean
+    fun localisation_selected(): Boolean
     {
         return processing_.is_checked(LOCALISATIONS)
     }
