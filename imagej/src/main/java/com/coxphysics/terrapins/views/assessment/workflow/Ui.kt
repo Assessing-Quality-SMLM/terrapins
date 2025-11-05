@@ -55,6 +55,26 @@ class Ui private constructor(
         }
     }
 
+    fun create_settings_record(dialog: GenericDialog): Settings
+    {
+        val settings = Settings.default()
+
+        val pre_processing = Utils.extract_radio_buttons(dialog)
+        val pre_processing_completed = Utils.extract_checkbox_value(dialog)
+        val processing = Utils.extract_radio_buttons(dialog)
+        val imagej_preprocessing = imagej_preprocessing_.create_settings_record(dialog)
+
+        val localisation_settings = localisation_ui_.create_settings_record(dialog)
+        settings.set_localisations(localisation_settings)
+
+        val images_settings = images_ui_.create_settings_record(dialog)
+        settings.set_images(images_settings)
+
+
+        return settings
+
+    }
+
     override fun actionPerformed(e: ActionEvent?)
     {
         imagej_preprocessing_.reset_images()
