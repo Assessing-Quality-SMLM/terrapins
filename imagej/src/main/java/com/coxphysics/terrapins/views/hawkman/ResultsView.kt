@@ -10,7 +10,6 @@ class ResultsView private constructor(private val results_: Results )
 {
     // CORE
     private var resolution_image_ : ImagePlus? = null
-    private var scale_map_ : ImagePlus? = null
 
     //REST
     private var confidence_map_ : ImagePlus? = null
@@ -43,18 +42,9 @@ class ResultsView private constructor(private val results_: Results )
     {
         if (is_empty(resolution_image_))
         {
-            resolution_image_ =  load_image(results_.resolution_map_path())
+            resolution_image_ =  load_image(results_.combined_resolution_map_path())
         }
         return resolution_image_
-    }
-
-    private fun scale_map() : ImagePlus?
-    {
-        if (is_empty(scale_map_))
-        {
-            scale_map_ =  load_image(results_.scale_map_path())
-        }
-        return scale_map_
     }
 
     private fun confidence_map() : ImagePlus?
@@ -111,7 +101,6 @@ class ResultsView private constructor(private val results_: Results )
     fun hide_core()
     {
         resolution_image_?.hide()
-        scale_map_?.hide()
     }
 
     fun hide_details()

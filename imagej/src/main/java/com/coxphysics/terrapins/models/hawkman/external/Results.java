@@ -128,8 +128,7 @@ public class Results
 
     public void display_core_results()
     {
-        show_image(resolution_map_path());
-        show_image(scale_map_path());
+        show_image(combined_resolution_map_path());
         plot_scores();
     }
 
