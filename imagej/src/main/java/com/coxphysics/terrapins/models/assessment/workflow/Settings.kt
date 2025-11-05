@@ -9,8 +9,8 @@ class Settings private constructor(image_selector_setttings: ImageSelectorSettti
 {
     private val hawk_stack_image_selector_settings_ = image_selector_setttings
     private val hawk_settings_ = HawkSettings.default()
-    private val localisation_settings_ = AssessmentSettings.default()
-    private val images_settings_ = ImagesSettings.default()
+    private var localisation_settings_ = AssessmentSettings.default()
+    private var images_settings_ = ImagesSettings.default()
 
     companion object
     {
@@ -39,8 +39,18 @@ class Settings private constructor(image_selector_setttings: ImageSelectorSettti
         return localisation_settings_
     }
 
+    fun set_localisations(value: AssessmentSettings)
+    {
+        localisation_settings_ = value
+    }
+
     fun images_settings(): ImagesSettings
     {
         return images_settings_
+    }
+
+    fun set_images(value: ImagesSettings)
+    {
+        images_settings_ = value
     }
 }
