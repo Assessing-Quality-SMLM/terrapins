@@ -57,6 +57,7 @@ class Dialog private constructor() : NonBlockingGenericDialog("Results"), Action
     private var results_ : AssessmentResults? = null
     private var half_split_results_ : FrcResultsView? = null
     private var zip_split_results_ : FrcResultsView? = null
+    private var drift_split_results_ : FrcResultsView? = null
     private var hawkman_results_ : HawkmanResultsView? = null
     private var squirrel_results_ : SquirrelResultsView? = null
 
@@ -108,6 +109,11 @@ class Dialog private constructor() : NonBlockingGenericDialog("Results"), Action
             handle_zip_split()
         }
 
+        if (ui_?.is_drift_split(e) == true)
+        {
+            handle_drift_split()
+        }
+
         if (ui_?.is_hawkman_core(e) == true)
         {
             handle_hawkman_core_data()
@@ -132,6 +138,7 @@ class Dialog private constructor() : NonBlockingGenericDialog("Results"), Action
         handle_report()
         handle_half_split()
         handle_zip_split()
+        handle_drift_split()
         handle_hawkman_core_data()
         handle_hawkman_details()
         handle_squirrel_results()
@@ -154,6 +161,7 @@ class Dialog private constructor() : NonBlockingGenericDialog("Results"), Action
         results_ = results()
         half_split_results_ = results_?.half_split_results()?.let { r -> FrcResultsView.with(r, "Half Split") }
         zip_split_results_ = results_?.zip_split_results()?.let { r -> FrcResultsView.with(r, "Zip Split") }
+        drift_split_results_ = results_?.drift_split_results()?.let { r -> FrcResultsView.with(r, "Drift Split") }
         hawkman_results_ = results_?.hawkman_results()?.let { r -> HawkmanResultsView.from(r) }
         squirrel_results_ = results_?.squirrel_results()?.let { r -> SquirrelResultsView.from(r) }
     }
@@ -172,9 +180,11 @@ class Dialog private constructor() : NonBlockingGenericDialog("Results"), Action
     private fun clear_results()
     {
         half_split_results_?.close()
-        half_split_results_ = null;
+        half_split_results_ = null
         zip_split_results_?.close()
-        zip_split_results_ = null;
+        zip_split_results_ = null
+        drift_split_results_?.close()
+        drift_split_results_ = null
         hawkman_results_ = null;
     }
 
@@ -207,6 +217,19 @@ class Dialog private constructor() : NonBlockingGenericDialog("Results"), Action
         else
         {
             zip_split_results_?.hide()
+        }
+    }
+
+    private fun handle_drift_split()
+    {
+        val visible = ui_?.drift_split_visible() ?: false
+        if (visible)
+        {
+            drift_split_results_?.show()
+        }
+        else
+        {
+            drift_split_results_?.hide()
         }
     }
 
