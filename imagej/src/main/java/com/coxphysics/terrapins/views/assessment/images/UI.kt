@@ -87,7 +87,7 @@ class UI private constructor(
         }
     }
 
-    fun create_settings_record(dialog: Dialog) : Settings
+    fun create_settings_record(dialog: GenericDialog) : Settings
     {
         val settings = Settings.default()
 
