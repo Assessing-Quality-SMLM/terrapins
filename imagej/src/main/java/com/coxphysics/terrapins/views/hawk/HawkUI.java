@@ -37,6 +37,11 @@ public class HawkUI
         return new HawkUI(n_levels, negative_values, output_order, text);
     }
 
+    public Config create_settings_recorded(GenericDialog dialog)
+    {
+        return create_config(dialog);
+    }
+
     public static Config create_config(GenericDialog dialog)
     {
         int n_levels = Utils.extract_numeric_field_as_int(dialog);

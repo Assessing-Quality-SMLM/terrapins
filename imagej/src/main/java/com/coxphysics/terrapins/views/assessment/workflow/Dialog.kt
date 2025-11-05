@@ -19,6 +19,21 @@ class Dialog private constructor() : NonBlockingGenericDialog("Workflow")
         }
     }
 
+    fun create_settings_record(): Settings?
+    {
+        return ui_?.create_settings_record(this)
+    }
+
+    fun pre_processing_complete(): Boolean?
+    {
+        return ui_?.pre_processing_completed()
+    }
+
+    fun use_localisations(): Boolean?
+    {
+        return ui_?.localisation_selected()
+    }
+
     private fun set_ui(ui: Ui)
     {
         ui_ = ui
