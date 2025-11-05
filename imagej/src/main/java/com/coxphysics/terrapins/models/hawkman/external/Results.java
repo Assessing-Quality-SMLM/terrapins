@@ -6,6 +6,8 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.gui.Plot;
+import ij.gui.PlotWindow;
+import ij.process.ImageProcessor;
 import kotlin.Pair;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,9 +17,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class Results
 {
@@ -89,6 +92,11 @@ public class Results
         return get_data_path("structure_map");
     }
 
+    public Path combined_resolution_map_path()
+    {
+        return get_data_path("combined_resolution_scale_map.tiff");
+    }
+
     public Path resolution_map_path()
     {
         return get_data_path("resolution_map.tiff");
@@ -123,8 +131,7 @@ public class Results
 
     public void display_core_results()
     {
-        show_image(resolution_map_path());
-        show_image(scale_map_path());
+        show_image(combined_resolution_map_path());
         plot_scores();
     }
 
@@ -137,14 +144,14 @@ public class Results
         structure_map_generator().show();
     }
 
-    private void plot_scores()
+    public PlotWindow plot_scores()
     {
         Pair<double[], double[]> global_scores = global_scores();
         Pair<double[], double[]> sharpening_scores = sharpening_scores();
         Pair<double[], double[]> structure_scores = structure_scores();
         if (is_empty(global_scores) && is_empty(sharpening_scores) && is_empty(structure_scores))
         {
-            return;
+            return null;
         }
         Plot p = new Plot("HAWKMAN scores", "Level", "Correlation");
         p.setColor(Color.RED);
@@ -154,7 +161,7 @@ public class Results
         p.setColor(Color.GREEN);
         p.add("line", structure_scores.component1(), structure_scores.component2());
         p.addLegend("Score\tSharpening\tStructure");
-        p.show();
+        return p.show();
     }
 
     private boolean is_empty(Pair<double[], double[]> scores)

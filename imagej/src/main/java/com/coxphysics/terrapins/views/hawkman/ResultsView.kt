@@ -4,19 +4,20 @@ import com.coxphysics.terrapins.models.hawkman.external.Results
 import com.coxphysics.terrapins.models.utils.FsUtils
 import com.coxphysics.terrapins.models.utils.IJUtils
 import ij.ImagePlus
+import ij.gui.PlotWindow
 import java.nio.file.Path
 
 class ResultsView private constructor(private val results_: Results )
 {
     // CORE
     private var resolution_image_ : ImagePlus? = null
-    private var scale_map_ : ImagePlus? = null
 
     //REST
     private var confidence_map_ : ImagePlus? = null
     private var sharpening_map_ : ImagePlus? = null
     private var skeleton_map_ : ImagePlus? = null
     private var structure_map_ : ImagePlus? = null
+    private var scores_: PlotWindow? = null
 
     companion object
     {
@@ -43,18 +44,9 @@ class ResultsView private constructor(private val results_: Results )
     {
         if (is_empty(resolution_image_))
         {
-            resolution_image_ =  load_image(results_.resolution_map_path())
+            resolution_image_ =  load_image(results_.combined_resolution_map_path())
         }
         return resolution_image_
-    }
-
-    private fun scale_map() : ImagePlus?
-    {
-        if (is_empty(scale_map_))
-        {
-            scale_map_ =  load_image(results_.scale_map_path())
-        }
-        return scale_map_
     }
 
     private fun confidence_map() : ImagePlus?
@@ -93,25 +85,29 @@ class ResultsView private constructor(private val results_: Results )
         return structure_map_;
     }
 
+    private fun generate_scores()
+    {
+        scores_ = results_.plot_scores()
+    }
+
     fun show_core()
     {
         resolution_image()?.show()
-        scale_map()?.show()
     }
 
     fun show_details()
     {
         show_core()
-        confidence_map()?.show();
-        skeleton_map()?.show();
-        sharpening_map()?.show();
-        structure_map()?.show();
+        confidence_map()?.show()
+        skeleton_map()?.show()
+        sharpening_map()?.show()
+        structure_map()?.show()
+        generate_scores()
     }
 
     fun hide_core()
     {
         resolution_image_?.hide()
-        scale_map_?.hide()
     }
 
     fun hide_details()
@@ -120,5 +116,6 @@ class ResultsView private constructor(private val results_: Results )
         skeleton_map_?.hide()
         sharpening_map_?.hide()
         structure_map_?.hide()
+        scores_?.close()
     }
 }
