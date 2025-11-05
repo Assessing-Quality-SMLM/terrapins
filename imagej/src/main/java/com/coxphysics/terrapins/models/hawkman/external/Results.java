@@ -89,6 +89,11 @@ public class Results
         return get_data_path("structure_map");
     }
 
+    public Path combined_resolution_map_path()
+    {
+        return get_data_path("combined_resolution_scale_map.tiff");
+    }
+
     public Path resolution_map_path()
     {
         return get_data_path("resolution_map.tiff");
