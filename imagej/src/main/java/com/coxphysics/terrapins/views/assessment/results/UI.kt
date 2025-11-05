@@ -16,6 +16,7 @@ class UI private constructor(private val data_path_: DirectoryField,
                              private val report_ : StringField,
                              private val half_split_: Checkbox,
                              private val zip_split_: Checkbox,
+                             private val drift_split_: Checkbox,
                              private val hawkman_core_: Checkbox,
                              private val hawkman_details_: Checkbox,
                              private val squirrel_results_: Checkbox)
@@ -31,12 +32,13 @@ class UI private constructor(private val data_path_: DirectoryField,
 
             val half_split = Utils.add_checkbox(dialog, "Show half split results", true)
             val zip_split = Utils.add_checkbox(dialog, "Show zip split results", true)
+            val drift_split = Utils.add_checkbox(dialog, "Show drift split results", true)
 
             val hawkmna_core = Utils.add_checkbox(dialog, "Show HAWKMAN resolution map", true)
             val hawkman_details = Utils.add_checkbox(dialog, "Show all HAWKMAN results", false)
 
             val squirrel_results = Utils.add_checkbox(dialog, "Show all Squirrel results", true)
-            return UI(data_path, report_message, half_split, zip_split, hawkmna_core, hawkman_details, squirrel_results)
+            return UI(data_path, report_message, half_split, zip_split, drift_split, hawkmna_core, hawkman_details, squirrel_results)
         }
     }
 
@@ -73,6 +75,16 @@ class UI private constructor(private val data_path_: DirectoryField,
     fun zip_split_visible(): Boolean
     {
         return zip_split_.is_checked
+    }
+
+    fun is_drift_split(event: ItemEvent) : Boolean
+    {
+        return drift_split_.is_checkbox(event.source)
+    }
+
+    fun drift_split_visible(): Boolean
+    {
+        return drift_split_.is_checked
     }
 
     fun is_hawkman_core(event: ItemEvent) : Boolean

@@ -10,6 +10,7 @@ import com.coxphysics.terrapins.models.squirrel.external.Results as SquirrelResu
 
 private const val HALF_SPLIT_DATA = "frc_half_split"
 private const val ZIP_SPLIT_DATA = "frc_zip_split"
+private const val DRIFT_SPLIT_DATA = "frc_drift_split"
 private const val HAWKMAN_DATA = "hawkman"
 private const val SQUIRREL_DATA = "squirrel"
 private const val REPORT = "report"
@@ -54,6 +55,16 @@ class AssessmentResults private constructor(private val data_path: Path)
     fun zip_split_results(): FRCResult?
     {
         return FRCResult.from(zip_split_results_path())
+    }
+
+    private fun drift_split_results_path() : Path
+    {
+        return data_path.resolve(DRIFT_SPLIT_DATA)
+    }
+
+    fun drift_split_results(): FRCResult?
+    {
+        return FRCResult.from(drift_split_results_path())
     }
 
     private fun hawkman_results_path(): Path
