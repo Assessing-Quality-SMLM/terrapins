@@ -3,6 +3,8 @@ package com.coxphysics.terrapins.views.assessment.results;
 import com.coxphysics.terrapins.view_models.assessment.ReportVM;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -37,6 +39,39 @@ class FileDialogAction implements ActionListener
     }
 }
 
+class DataPathListner implements DocumentListener
+{
+    private final ReportView view_;
+
+    private DataPathListner(ReportView view)
+    {
+        view_ = view;
+    }
+
+    public static DataPathListner from(ReportView view)
+    {
+        return new DataPathListner(view);
+    }
+
+    @Override
+    public void insertUpdate(DocumentEvent e)
+    {
+        view_.update_data_path_from_view();
+    }
+
+    @Override
+    public void removeUpdate(DocumentEvent e)
+    {
+        view_.update_data_path_from_view();
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent e)
+    {
+        view_.update_data_path_from_view();
+    }
+}
+
 public class ReportView extends JFrame
 {
     private final ReportVM view_model_;
@@ -50,6 +85,7 @@ public class ReportView extends JFrame
     {
         view_model_ = view_model;
         data_path_btn_.addActionListener(FileDialogAction.from(this));
+        data_path_.getDocument().addDocumentListener(DataPathListner.from(this));
     }
 
     public static ReportView from(ReportVM view_model)
