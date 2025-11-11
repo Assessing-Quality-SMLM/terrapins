@@ -3,6 +3,7 @@ package com.coxphysics.terrapins.models.assessment.reports
 import java.io.File
 import java.io.InputStream
 import java.nio.file.Path
+import kotlin.io.path.exists
 
 class Assessment private constructor(
     private val name_: String,
@@ -60,6 +61,8 @@ class Assessment private constructor(
 
         fun from_disk(filename: Path): Assessment?
         {
+            if (!filename.exists())
+                return null
             val stream = File(filename.toString()).inputStream()
             return from_stream(stream)
         }
