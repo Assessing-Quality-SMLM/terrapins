@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.views.assessment.results;
 
+import com.coxphysics.terrapins.view_models.assessment.AssessmentVM;
 import com.coxphysics.terrapins.view_models.assessment.ReportVM;
 
 import javax.swing.*;
@@ -9,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 class FileDialogAction implements ActionListener
 {
@@ -102,10 +104,30 @@ public class ReportView extends JFrame
         return view_model_.data_path();
     }
 
+    public void update_data_path_from_view()
+    {
+        String new_path = data_path_.getText();
+        view_model_.set_data_path(Paths.get(new_path));
+        update_views();
+    }
+
     public void reset_data_path()
     {
         data_path_.setText(view_model_.data_path().toString());
-//        pack();
+        update_views();
+    }
+
+    private void update_views()
+    {
+        update_blinking_assessment();
+    }
+
+    private void update_blinking_assessment()
+    {
+        AssessmentVM blinking_view_model = view_model_.blinking_assessment();
+        if (blinking_view_model == null)
+            return;
+        blinking_assessment_.set_view_model(blinking_view_model);
     }
 
     public void set_data_path(Path value)

@@ -23,4 +23,10 @@ class ReportVM private constructor(private val model_ : AssessmentResults)
     {
         model_.set_data_path(value)
     }
+
+    fun blinking_assessment(): AssessmentVM?
+    {
+        val assessment = model_.blinking_assessment() ?: return null
+        return AssessmentVM.from(assessment)
+    }
 }
