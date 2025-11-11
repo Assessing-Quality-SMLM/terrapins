@@ -53,7 +53,7 @@ class AssessmentResults private constructor(private var data_path: Path)
         return reports_path().resolve("blinking")
     }
 
-    private fun blinking_assessment(): Assessment?
+    fun blinking_assessment(): Assessment?
     {
         return Assessment.from_disk(blinking_assessment_path())
     }
