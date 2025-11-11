@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.models.assessment
 
+import com.coxphysics.terrapins.models.assessment.reports.Assessment
 import com.coxphysics.terrapins.models.frc.FRCResult
 import com.coxphysics.terrapins.models.utils.FsUtils
 import com.coxphysics.terrapins.models.utils.StringUtils
@@ -35,6 +36,21 @@ class AssessmentResults private constructor(private val data_path: Path)
     fun data_path(): Path
     {
         return data_path
+    }
+
+    private fun reports_path(): Path
+    {
+        return data_path().resolve("report")
+    }
+
+    private fun blinking_assessment_path(): Path
+    {
+        return reports_path().resolve("blinking")
+    }
+
+    private fun blinking_assessment(): Assessment?
+    {
+        return Assessment.from_disk(blinking_assessment_path())
     }
 
     private fun half_split_results_path() : Path
