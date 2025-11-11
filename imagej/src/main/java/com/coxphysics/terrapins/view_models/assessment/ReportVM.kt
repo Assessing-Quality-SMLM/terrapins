@@ -18,4 +18,9 @@ class ReportVM private constructor(private val model_ : AssessmentResults)
     {
         return model_.data_path()
     }
+
+    fun set_data_path(value: Path)
+    {
+        model_.set_data_path(value)
+    }
 }

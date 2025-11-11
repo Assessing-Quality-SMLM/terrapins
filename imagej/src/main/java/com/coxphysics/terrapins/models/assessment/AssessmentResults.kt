@@ -16,7 +16,7 @@ private const val HAWKMAN_DATA = "hawkman"
 private const val SQUIRREL_DATA = "squirrel"
 private const val REPORT = "report"
 
-class AssessmentResults private constructor(private val data_path: Path)
+class AssessmentResults private constructor(private var data_path: Path)
 {
     companion object
     {
@@ -36,6 +36,11 @@ class AssessmentResults private constructor(private val data_path: Path)
     fun data_path(): Path
     {
         return data_path
+    }
+
+    fun set_data_path(value: Path)
+    {
+        data_path = value
     }
 
     private fun reports_path(): Path
