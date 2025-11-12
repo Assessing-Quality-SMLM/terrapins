@@ -20,7 +20,8 @@ class Assessment private constructor(
             val splits = line.split(",")
             if (splits.size < 2)
                 return null
-            return Pair(splits[0], splits[1])
+            val tail = splits.asSequence().drop(1).joinToString(separator = ",")
+            return Pair(splits[0], tail)
         }
 
         @JvmStatic
