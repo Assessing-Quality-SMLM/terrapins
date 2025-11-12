@@ -116,7 +116,7 @@ public class ReportView extends JFrame {
 
     public static ReportView from(ReportVM view_model) {
         ReportView view = new ReportView(view_model);
-        view.setTitle("Something");
+        view.setTitle("Results View");
         view.add(view.content_panel_);
         view.reset_data_path();
         view.blinking_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.blinking_assessment_, view_model::display_blining_details));
