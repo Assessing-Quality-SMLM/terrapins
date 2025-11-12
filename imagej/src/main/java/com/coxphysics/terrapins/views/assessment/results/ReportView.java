@@ -96,6 +96,25 @@ class BlinkingAssessmentListener implements ActionListener
     }
 }
 
+class BiasAssessmentListener implements ActionListener
+{
+    private final ReportVM report_vm_;
+    private final AssessmentView bias_view;
+
+    public BiasAssessmentListener(ReportVM report_vm, AssessmentView bias_view)
+    {
+
+        report_vm_ = report_vm;
+        this.bias_view = bias_view;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        report_vm_.display_bias_details(bias_view.show_details());
+    }
+}
+
 public class ReportView extends JFrame {
     private final ReportVM view_model_;
     private JPanel content_panel_;
@@ -116,6 +135,8 @@ public class ReportView extends JFrame {
         view.setTitle("Something");
         view.add(view.content_panel_);
         view.reset_data_path();
+        view.blinking_assessment_.add_details_listener(new BlinkingAssessmentListener(view_model, view.blinking_assessment_));
+        view.bias_assessment_.add_details_listener(new BiasAssessmentListener(view_model, view.bias_assessment_));
         return view;
     }
 
@@ -136,6 +157,7 @@ public class ReportView extends JFrame {
 
     private void update_views() {
         update_blinking_assessment();
+        update_bias_assessment();
     }
 
     private void update_blinking_assessment() {
@@ -143,7 +165,13 @@ public class ReportView extends JFrame {
         if (blinking_view_model == null)
             return;
         blinking_assessment_.set_view_model(blinking_view_model);
-        blinking_assessment_.add_details_listener(new BlinkingAssessmentListener(view_model_, blinking_assessment_));
+    }
+
+    private void update_bias_assessment() {
+        AssessmentVM bias_vm = view_model_.bias_assessment();
+        if (bias_vm == null)
+            return;
+        bias_assessment_.set_view_model(bias_vm);
     }
 
     public void set_data_path(Path value) {
@@ -167,7 +195,7 @@ public class ReportView extends JFrame {
      */
     private void $$$setupUI$$$() {
         content_panel_ = new JPanel();
-        content_panel_.setLayout(new GridLayoutManager(3, 5, new Insets(10, 10, 2, 5), -1, -1));
+        content_panel_.setLayout(new GridLayoutManager(4, 5, new Insets(10, 10, 2, 5), -1, -1));
         content_panel_.setAutoscrolls(true);
         data_path_ = new JTextField();
         content_panel_.add(data_path_, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
@@ -182,6 +210,8 @@ public class ReportView extends JFrame {
         data_path_btn_.setLabel("Find");
         data_path_btn_.setText("Find");
         content_panel_.add(data_path_btn_, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        bias_assessment_ = new AssessmentView();
+        content_panel_.add(bias_assessment_.$$$getRootComponent$$$(), new GridConstraints(3, 0, 1, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**

@@ -44,4 +44,18 @@ class ReportVM private constructor(private val model_ : Report)
         else
             model_.hide_blinking_details()
     }
+
+    fun bias_assessment(): AssessmentVM?
+    {
+        val assessment = model_.bias_assessment() ?: return null
+        return AssessmentVM.from(assessment)
+    }
+
+    fun display_bias_details(show_details: Boolean)
+    {
+        if (show_details)
+            model_.show_bias_details()
+        else
+            model_.hide_bias_details()
+    }
 }
