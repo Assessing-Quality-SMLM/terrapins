@@ -8,6 +8,7 @@ import com.coxphysics.terrapins.views.hawkman.ResultsView as HawkmanResultsView
 
 class Report private constructor(private val results_: AssessmentResults)
 {
+    private var localisation_precision_assessment_ : Assessment? = null
     private var blinking_assessment_ : Assessment? = null
     private var bias_assessment_ : Assessment? = null
     private var frc_resolution_assessment_ : Assessment? = null
@@ -38,6 +39,11 @@ class Report private constructor(private val results_: AssessmentResults)
     {
         results_.set_data_path(path)
         cache_data()
+    }
+
+    fun localisation_precision_assessment(): Assessment?
+    {
+        return localisation_precision_assessment_
     }
 
     fun blinking_assessment(): Assessment?
@@ -89,6 +95,7 @@ class Report private constructor(private val results_: AssessmentResults)
 
     private fun cache_data()
     {
+        localisation_precision_assessment_ = results_.localisation_precision_assessment()
         blinking_assessment_ = results_.blinking_assessment()
         bias_assessment_ = results_.bias_assessment()
         frc_resolution_assessment_ = results_.frc_resolution_assessment()

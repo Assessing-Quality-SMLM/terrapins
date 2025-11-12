@@ -142,9 +142,18 @@ public class ReportView extends JFrame {
     }
 
     private void update_views() {
+        update_localisation_precision_assessment();
         update_blinking_assessment();
         update_frc_resolution_assessment();
         update_bias_assessment();
+    }
+
+    private void update_localisation_precision_assessment()
+    {
+        AssessmentVM view_model = view_model_.localisation_precision_assessment();
+        if (view_model == null)
+            return;
+        localisation_assessment_.set_view_model(view_model);
     }
 
     private void update_blinking_assessment() {

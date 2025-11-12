@@ -31,6 +31,12 @@ class ReportVM private constructor(private val model_ : Report)
         model_.set_data_path(value)
     }
 
+    fun localisation_precision_assessment(): AssessmentVM?
+    {
+        val assessment = model_.localisation_precision_assessment() ?: return null
+        return AssessmentVM.from(assessment)
+    }
+
     fun blinking_assessment(): AssessmentVM?
     {
         val assessment = model_.blinking_assessment() ?: return null
