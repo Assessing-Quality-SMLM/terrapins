@@ -16,7 +16,7 @@ private const val HAWKMAN_DATA = "hawkman"
 private const val SQUIRREL_DATA = "squirrel"
 private const val REPORT = "report"
 
-class AssessmentResults private constructor(private val data_path: Path)
+class AssessmentResults private constructor(private var data_path: Path)
 {
     companion object
     {
@@ -38,9 +38,24 @@ class AssessmentResults private constructor(private val data_path: Path)
         return data_path
     }
 
+    fun set_data_path(value: Path)
+    {
+        data_path = value
+    }
+
     private fun reports_path(): Path
     {
         return data_path().resolve("report")
+    }
+
+    fun localisation_precision_assessment_path(): Path
+    {
+        return reports_path().resolve("localisation_precision")
+    }
+
+    fun localisation_precision_assessment(): Assessment?
+    {
+        return Assessment.from_disk(localisation_precision_assessment_path())
     }
 
     private fun blinking_assessment_path(): Path
@@ -48,9 +63,29 @@ class AssessmentResults private constructor(private val data_path: Path)
         return reports_path().resolve("blinking")
     }
 
-    private fun blinking_assessment(): Assessment?
+    fun blinking_assessment(): Assessment?
     {
         return Assessment.from_disk(blinking_assessment_path())
+    }
+
+    private fun bias_assessment_path() : Path
+    {
+        return reports_path().resolve("bias")
+    }
+
+    fun bias_assessment(): Assessment?
+    {
+        return Assessment.from_disk(bias_assessment_path())
+    }
+
+    private fun frc_resolution_assessment_path() : Path
+    {
+        return reports_path().resolve("frc_resolution")
+    }
+
+    fun frc_resolution_assessment(): Assessment?
+    {
+        return Assessment.from_disk(frc_resolution_assessment_path())
     }
 
     private fun half_split_results_path() : Path

@@ -1,0 +1,229 @@
+package com.coxphysics.terrapins.views.assessment.results;
+
+import com.coxphysics.terrapins.view_models.assessment.AssessmentVM;
+import com.coxphysics.terrapins.view_models.assessment.ReportVM;
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.function.Consumer;
+
+class FileDialogAction implements ActionListener
+{
+
+    private final ReportView view_;
+
+    private FileDialogAction(ReportView view)
+    {
+        view_ = view;
+    }
+
+    public static FileDialogAction from(ReportView view)
+    {
+        return new FileDialogAction(view);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        JFileChooser jfc = new JFileChooser();
+        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        jfc.setCurrentDirectory(view_.data_path().toFile());
+        int result = jfc.showOpenDialog(null);
+        if (result != JFileChooser.APPROVE_OPTION)
+            return;
+        File current_directory = jfc.getSelectedFile();
+        view_.set_data_path(current_directory.toPath());
+    }
+}
+
+class DataPathListner implements DocumentListener
+{
+    private final ReportView view_;
+
+    private DataPathListner(ReportView view)
+    {
+        view_ = view;
+    }
+
+    public static DataPathListner from(ReportView view)
+    {
+        return new DataPathListner(view);
+    }
+
+    @Override
+    public void insertUpdate(DocumentEvent e)
+    {
+        view_.update_data_path_from_view();
+    }
+
+    @Override
+    public void removeUpdate(DocumentEvent e)
+    {
+        view_.update_data_path_from_view();
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent e)
+    {
+        view_.update_data_path_from_view();
+    }
+}
+
+class ShowDetailsAssessmentListener implements ActionListener
+{
+    private final ReportVM report_vm_;
+    private final AssessmentView view_;
+    private final Consumer<Boolean> action_;
+
+    public ShowDetailsAssessmentListener(ReportVM report_vm, AssessmentView bias_view, Consumer<Boolean> action)
+    {
+
+        report_vm_ = report_vm;
+        this.view_ = bias_view;
+        this.action_ = action;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        action_.accept(view_.show_details());
+    }
+}
+
+public class ReportView extends JFrame {
+    private final ReportVM view_model_;
+    private JPanel content_panel_;
+    private JTextField data_path_;
+    private AssessmentView localisation_assessment_;
+    private AssessmentView blinking_assessment_;
+    private JButton data_path_btn_;
+    private AssessmentView bias_assessment_;
+    private AssessmentView frc_resolution_assessment_;
+
+    private ReportView(ReportVM view_model) {
+        view_model_ = view_model;
+        data_path_btn_.addActionListener(FileDialogAction.from(this));
+        data_path_.getDocument().addDocumentListener(DataPathListner.from(this));
+    }
+
+    public static ReportView from(ReportVM view_model) {
+        ReportView view = new ReportView(view_model);
+        view.setTitle("Results View");
+        view.add(view.content_panel_);
+        view.reset_data_path();
+        view.blinking_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.blinking_assessment_, view_model::display_blining_details));
+        view.bias_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.bias_assessment_, view_model::display_bias_details));
+        view.frc_resolution_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.frc_resolution_assessment_, view_model::display_frc_resolution_details));
+        return view;
+    }
+
+    public Path data_path() {
+        return view_model_.data_path();
+    }
+
+    public void update_data_path_from_view() {
+        String new_path = data_path_.getText();
+        view_model_.set_data_path(Paths.get(new_path));
+        update_views();
+    }
+
+    public void reset_data_path() {
+        data_path_.setText(view_model_.data_path().toString());
+        update_views();
+    }
+
+    private void update_views() {
+        update_localisation_precision_assessment();
+        update_blinking_assessment();
+        update_frc_resolution_assessment();
+        update_bias_assessment();
+    }
+
+    private void update_localisation_precision_assessment()
+    {
+        AssessmentVM view_model = view_model_.localisation_precision_assessment();
+        if (view_model == null)
+            return;
+        localisation_assessment_.set_view_model(view_model);
+    }
+
+    private void update_blinking_assessment() {
+        AssessmentVM blinking_view_model = view_model_.blinking_assessment();
+        if (blinking_view_model == null)
+            return;
+        blinking_assessment_.set_view_model(blinking_view_model);
+    }
+
+    private void update_bias_assessment() {
+        AssessmentVM bias_vm = view_model_.bias_assessment();
+        if (bias_vm == null)
+            return;
+        bias_assessment_.set_view_model(bias_vm);
+    }
+
+    private void update_frc_resolution_assessment() {
+        AssessmentVM resolution_vm = view_model_.frc_resolution_assessment();
+        if (resolution_vm == null)
+            return;
+        frc_resolution_assessment_.set_view_model(resolution_vm);
+    }
+
+    public void set_data_path(Path value) {
+        view_model_.set_data_path(value);
+        reset_data_path();
+    }
+
+    {
+// GUI initializer generated by IntelliJ IDEA GUI Designer
+// >>> IMPORTANT!! <<<
+// DO NOT EDIT OR ADD ANY CODE HERE!
+        $$$setupUI$$$();
+    }
+
+    /**
+     * Method generated by IntelliJ IDEA GUI Designer
+     * >>> IMPORTANT!! <<<
+     * DO NOT edit this method OR call it in your code!
+     *
+     * @noinspection ALL
+     */
+    private void $$$setupUI$$$() {
+        content_panel_ = new JPanel();
+        content_panel_.setLayout(new GridLayoutManager(5, 5, new Insets(10, 10, 2, 5), -1, -1));
+        content_panel_.setAutoscrolls(true);
+        data_path_ = new JTextField();
+        content_panel_.add(data_path_, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        final JLabel label1 = new JLabel();
+        label1.setText("Data Path");
+        content_panel_.add(label1, new GridConstraints(0, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        localisation_assessment_ = new AssessmentView();
+        content_panel_.add(localisation_assessment_.$$$getRootComponent$$$(), new GridConstraints(1, 0, 1, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        blinking_assessment_ = new AssessmentView();
+        content_panel_.add(blinking_assessment_.$$$getRootComponent$$$(), new GridConstraints(2, 0, 1, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        data_path_btn_ = new JButton();
+        data_path_btn_.setLabel("Find");
+        data_path_btn_.setText("Find");
+        content_panel_.add(data_path_btn_, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        bias_assessment_ = new AssessmentView();
+        content_panel_.add(bias_assessment_.$$$getRootComponent$$$(), new GridConstraints(3, 0, 1, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        frc_resolution_assessment_ = new AssessmentView();
+        content_panel_.add(frc_resolution_assessment_.$$$getRootComponent$$$(), new GridConstraints(4, 0, 1, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    public JComponent $$$getRootComponent$$$() {
+        return content_panel_;
+    }
+
+}

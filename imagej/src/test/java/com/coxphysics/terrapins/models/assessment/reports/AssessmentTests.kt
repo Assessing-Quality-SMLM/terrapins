@@ -64,4 +64,17 @@ class AssessmentTests {
         assertEquals(assessment.failed(), true)
         assertEquals(assessment.message(), "else")
     }
+
+    @Test
+    fun can_handle_messages_with_commas()
+    {
+        val lines = listOf("name,something","score,-","result,failed","message,a,nother, thing")
+        val assessment = Assessment.from_lines(lines)
+        assertNotNull(assessment)
+        assertEquals(assessment!!.name(), "something")
+        assertEquals(assessment.score(), null)
+        assertEquals(assessment.passed(), false)
+        assertEquals(assessment.failed(), true)
+        assertEquals(assessment.message(), "a,nother, thing")
+    }
 }

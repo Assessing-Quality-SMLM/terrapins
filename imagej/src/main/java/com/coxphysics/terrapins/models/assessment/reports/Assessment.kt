@@ -3,6 +3,7 @@ package com.coxphysics.terrapins.models.assessment.reports
 import java.io.File
 import java.io.InputStream
 import java.nio.file.Path
+import kotlin.io.path.exists
 
 class Assessment private constructor(
     private val name_: String,
@@ -19,7 +20,8 @@ class Assessment private constructor(
             val splits = line.split(",")
             if (splits.size < 2)
                 return null
-            return Pair(splits[0], splits[1])
+            val tail = splits.asSequence().drop(1).joinToString(separator = ",")
+            return Pair(splits[0], tail)
         }
 
         @JvmStatic
@@ -60,6 +62,8 @@ class Assessment private constructor(
 
         fun from_disk(filename: Path): Assessment?
         {
+            if (!filename.exists())
+                return null
             val stream = File(filename.toString()).inputStream()
             return from_stream(stream)
         }

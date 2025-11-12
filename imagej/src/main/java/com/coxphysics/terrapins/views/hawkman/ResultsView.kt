@@ -112,6 +112,7 @@ class ResultsView private constructor(private val results_: Results )
 
     fun hide_details()
     {
+        hide_core()
         confidence_map_?.hide()
         skeleton_map_?.hide()
         sharpening_map_?.hide()
