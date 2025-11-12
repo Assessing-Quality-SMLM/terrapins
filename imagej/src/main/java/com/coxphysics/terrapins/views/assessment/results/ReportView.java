@@ -75,6 +75,25 @@ class DataPathListner implements DocumentListener
     }
 }
 
+class BlinkingAssessmentListener implements ActionListener
+{
+    private final ReportVM report_vm_;
+    private final AssessmentView blinking_view_;
+
+    public BlinkingAssessmentListener(ReportVM report_vm, AssessmentView blinking_view)
+    {
+
+        report_vm_ = report_vm;
+        blinking_view_ = blinking_view;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        report_vm_.display_blining_details(blinking_view_.show_details());
+    }
+}
+
 public class ReportView extends JFrame {
     private final ReportVM view_model_;
     private JPanel content_panel_;
@@ -121,6 +140,7 @@ public class ReportView extends JFrame {
         if (blinking_view_model == null)
             return;
         blinking_assessment_.set_view_model(blinking_view_model);
+        blinking_assessment_.add_details_listener(new BlinkingAssessmentListener(view_model_, blinking_assessment_));
     }
 
     public void set_data_path(Path value) {

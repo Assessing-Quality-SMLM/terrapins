@@ -34,8 +34,8 @@ class Plugin : PlugIn
 
     override fun run(p0: String?)
     {
-        val model = AssessmentResults.empty()
-        val view_model = ReportVM.from(model)
+        val results = AssessmentResults.empty()
+        val view_model = ReportVM.from_results(results)
         val view = ReportView.from(view_model)
         view.preferredSize = Dimension(400, 400)
         view.pack()
