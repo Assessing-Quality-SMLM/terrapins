@@ -103,6 +103,7 @@ public class ReportView extends JFrame {
     private AssessmentView localisation_assessment_;
     private AssessmentView blinking_assessment_;
     private JButton data_path_btn_;
+    private AssessmentView bias_assessment_;
 
     private ReportView(ReportVM view_model) {
         view_model_ = view_model;
