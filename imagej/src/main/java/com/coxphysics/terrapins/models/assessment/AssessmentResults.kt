@@ -48,6 +48,16 @@ class AssessmentResults private constructor(private var data_path: Path)
         return data_path().resolve("report")
     }
 
+    fun localisation_precision_assessment_path(): Path
+    {
+        return reports_path().resolve("localisation_precision")
+    }
+
+    fun localisation_precision_assessment(): Assessment?
+    {
+        return Assessment.from_disk(localisation_precision_assessment_path())
+    }
+
     private fun blinking_assessment_path(): Path
     {
         return reports_path().resolve("blinking")
