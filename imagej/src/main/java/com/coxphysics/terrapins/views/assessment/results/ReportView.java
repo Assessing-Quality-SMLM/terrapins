@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.function.Consumer;
 
 class FileDialogAction implements ActionListener
 {
@@ -77,41 +78,24 @@ class DataPathListner implements DocumentListener
     }
 }
 
-class BlinkingAssessmentListener implements ActionListener
+class ShowDetailsAssessmentListener implements ActionListener
 {
     private final ReportVM report_vm_;
-    private final AssessmentView blinking_view_;
+    private final AssessmentView view_;
+    private final Consumer<Boolean> action_;
 
-    public BlinkingAssessmentListener(ReportVM report_vm, AssessmentView blinking_view)
+    public ShowDetailsAssessmentListener(ReportVM report_vm, AssessmentView bias_view, Consumer<Boolean> action)
     {
 
         report_vm_ = report_vm;
-        blinking_view_ = blinking_view;
+        this.view_ = bias_view;
+        this.action_ = action;
     }
 
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        report_vm_.display_blining_details(blinking_view_.show_details());
-    }
-}
-
-class BiasAssessmentListener implements ActionListener
-{
-    private final ReportVM report_vm_;
-    private final AssessmentView bias_view;
-
-    public BiasAssessmentListener(ReportVM report_vm, AssessmentView bias_view)
-    {
-
-        report_vm_ = report_vm;
-        this.bias_view = bias_view;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e)
-    {
-        report_vm_.display_bias_details(bias_view.show_details());
+        action_.accept(view_.show_details());
     }
 }
 
@@ -135,8 +119,8 @@ public class ReportView extends JFrame {
         view.setTitle("Something");
         view.add(view.content_panel_);
         view.reset_data_path();
-        view.blinking_assessment_.add_details_listener(new BlinkingAssessmentListener(view_model, view.blinking_assessment_));
-        view.bias_assessment_.add_details_listener(new BiasAssessmentListener(view_model, view.bias_assessment_));
+        view.blinking_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.blinking_assessment_, view_model::display_blining_details));
+        view.bias_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.bias_assessment_, view_model::display_bias_details));
         return view;
     }
 
