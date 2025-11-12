@@ -10,6 +10,7 @@ class Report private constructor(private val results_: AssessmentResults)
 {
     private var blinking_assessment_ : Assessment? = null
     private var bias_assessment_ : Assessment? = null
+    private var frc_resolution_assessment_ : Assessment? = null
 
     private var drift_results_ : FRCResult? = null
     private var drift_view_: ResultsView? = null
@@ -71,10 +72,26 @@ class Report private constructor(private val results_: AssessmentResults)
         hawkman_results_?.hide_details()
     }
 
+    fun frc_resolution_assessment(): Assessment?
+    {
+        return frc_resolution_assessment_
+    }
+
+    fun show_frc_resolution_details()
+    {
+        drift_view_?.show()
+    }
+
+    fun hide_frc_resolution_details()
+    {
+        drift_view_?.hide()
+    }
+
     private fun cache_data()
     {
         blinking_assessment_ = results_.blinking_assessment()
         bias_assessment_ = results_.bias_assessment()
+        frc_resolution_assessment_ = results_.frc_resolution_assessment()
 
         zip_results_ = results_.zip_split_results()
         zip_view_ = zip_results_?.let { r ->  ResultsView.with(r, "Zip Split") }

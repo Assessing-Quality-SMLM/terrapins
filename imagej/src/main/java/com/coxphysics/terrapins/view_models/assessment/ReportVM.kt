@@ -51,11 +51,25 @@ class ReportVM private constructor(private val model_ : Report)
         return AssessmentVM.from(assessment)
     }
 
+    fun frc_resolution_assessment(): AssessmentVM?
+    {
+        val assessment = model_.frc_resolution_assessment() ?: return null
+        return AssessmentVM.from(assessment)
+    }
+
     fun display_bias_details(show_details: Boolean)
     {
         if (show_details)
             model_.show_bias_details()
         else
             model_.hide_bias_details()
+    }
+
+    fun display_frc_resolution_details(show_details: Boolean)
+    {
+        if (show_details)
+            model_.show_frc_resolution_details()
+        else
+            model_.hide_frc_resolution_details()
     }
 }

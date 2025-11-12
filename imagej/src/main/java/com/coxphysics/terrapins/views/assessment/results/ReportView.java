@@ -107,6 +107,7 @@ public class ReportView extends JFrame {
     private AssessmentView blinking_assessment_;
     private JButton data_path_btn_;
     private AssessmentView bias_assessment_;
+    private AssessmentView frc_resolution_assessment_;
 
     private ReportView(ReportVM view_model) {
         view_model_ = view_model;
@@ -121,6 +122,7 @@ public class ReportView extends JFrame {
         view.reset_data_path();
         view.blinking_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.blinking_assessment_, view_model::display_blining_details));
         view.bias_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.bias_assessment_, view_model::display_bias_details));
+        view.frc_resolution_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.frc_resolution_assessment_, view_model::display_frc_resolution_details));
         return view;
     }
 
@@ -141,6 +143,7 @@ public class ReportView extends JFrame {
 
     private void update_views() {
         update_blinking_assessment();
+        update_frc_resolution_assessment();
         update_bias_assessment();
     }
 
@@ -156,6 +159,13 @@ public class ReportView extends JFrame {
         if (bias_vm == null)
             return;
         bias_assessment_.set_view_model(bias_vm);
+    }
+
+    private void update_frc_resolution_assessment() {
+        AssessmentVM resolution_vm = view_model_.frc_resolution_assessment();
+        if (resolution_vm == null)
+            return;
+        frc_resolution_assessment_.set_view_model(resolution_vm);
     }
 
     public void set_data_path(Path value) {
@@ -179,7 +189,7 @@ public class ReportView extends JFrame {
      */
     private void $$$setupUI$$$() {
         content_panel_ = new JPanel();
-        content_panel_.setLayout(new GridLayoutManager(4, 5, new Insets(10, 10, 2, 5), -1, -1));
+        content_panel_.setLayout(new GridLayoutManager(5, 5, new Insets(10, 10, 2, 5), -1, -1));
         content_panel_.setAutoscrolls(true);
         data_path_ = new JTextField();
         content_panel_.add(data_path_, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
@@ -196,6 +206,8 @@ public class ReportView extends JFrame {
         content_panel_.add(data_path_btn_, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         bias_assessment_ = new AssessmentView();
         content_panel_.add(bias_assessment_.$$$getRootComponent$$$(), new GridConstraints(3, 0, 1, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        frc_resolution_assessment_ = new AssessmentView();
+        content_panel_.add(frc_resolution_assessment_.$$$getRootComponent$$$(), new GridConstraints(4, 0, 1, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
