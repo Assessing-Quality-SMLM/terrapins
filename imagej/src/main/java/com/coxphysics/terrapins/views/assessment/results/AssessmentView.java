@@ -5,6 +5,7 @@ import com.coxphysics.terrapins.view_models.assessment.AssessmentVM;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class AssessmentView {
     private JPanel content_panel_;
@@ -17,6 +18,10 @@ public class AssessmentView {
 
     private AssessmentVM view_model_;
 
+    public boolean show_details() {
+        return show_results_.isSelected();
+    }
+
     public void set_view_model(AssessmentVM view_model) {
         view_model_ = view_model;
         update_data();
@@ -28,6 +33,10 @@ public class AssessmentView {
         passed_.setText(view_model_.passed_text());
         passed_panel_.setBackground(view_model_.background_colour());
         details_.setText(view_model_.message());
+    }
+
+    public void add_details_listener(ActionListener listener) {
+        show_results_.addActionListener(listener);
     }
 
     {
