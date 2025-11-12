@@ -58,6 +58,16 @@ class AssessmentResults private constructor(private var data_path: Path)
         return Assessment.from_disk(blinking_assessment_path())
     }
 
+    private fun bias_assessment_path() : Path
+    {
+        return reports_path().resolve("bias")
+    }
+
+    fun bias_assessment(): Assessment?
+    {
+        return Assessment.from_disk(bias_assessment_path())
+    }
+
     private fun half_split_results_path() : Path
     {
         return data_path.resolve(HALF_SPLIT_DATA)
