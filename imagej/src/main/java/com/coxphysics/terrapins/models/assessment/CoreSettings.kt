@@ -115,8 +115,18 @@ class CoreSettings private constructor(private var working_directory_: Path)
 
     fun to_disk_in(directory: Path) : Boolean
     {
-        val widefield_path = widefield_path_in(directory)?.let { p -> widefield().to_disk_with(p) }
-        val image_stack_path = image_stack_path_in(directory)?.let{p -> image_stack().to_disk_with(p)}
-        return widefield_path != null && image_stack_path != null
+        var widefield_ok = true
+        var image_stack_ok = true
+        if (widefield_.has_data())
+        {
+            val widefield_path = widefield_path_in(directory)?.let { p -> widefield().to_disk_with(p) }
+            widefield_ok = widefield_path != null
+        }
+        if (image_stack_.has_data())
+        {
+            val image_stack_path = image_stack_path_in(directory)?.let{p -> image_stack().to_disk_with(p)}
+            image_stack_ok = image_stack_path != null
+        }
+        return widefield_ok && image_stack_ok
     }
 }
