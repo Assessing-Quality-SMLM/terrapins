@@ -12,7 +12,6 @@ class AssessmentSettings private constructor(
 )
 {
     private var equipment_ = EquipmentSettings.default()
-    private var magnification_ = 10.0
     private var localisation_file_ = LocalisationFile.default()
     private var hawk_localisation_file_ = LocalisationFile.default()
 
@@ -93,12 +92,12 @@ class AssessmentSettings private constructor(
 
     fun magnification(): Double
     {
-        return magnification_
+        return equipment_.magnification()
     }
 
     fun set_magnification(value: Double)
     {
-        magnification_ = value
+        equipment_.set_magnification(value)
     }
 
     fun localisation_file(): LocalisationFile
