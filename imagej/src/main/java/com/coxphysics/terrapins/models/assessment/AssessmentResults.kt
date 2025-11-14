@@ -16,6 +16,13 @@ private const val HAWKMAN_DATA = "hawkman"
 private const val SQUIRREL_DATA = "squirrel"
 private const val REPORT = "report"
 
+const val SR_0_005_LABEL = "0.005x"
+const val SR_0_05_LABEL = "0.05x"
+const val SR_0_5_LABEL = "0.5x"
+const val SR_5_LABEL = "5x"
+const val SR_25_LABEL = "25x"
+const val SR_SAMPLE_LABEL = "Sample"
+
 class AssessmentResults private constructor(private var data_path: Path)
 {
     companion object
@@ -176,6 +183,78 @@ class AssessmentResults private constructor(private var data_path: Path)
     fun squirrel_results(): SquirrelResults?
     {
         return SquirrelResults.from(squirrel_results_path())
+    }
+
+    private fun sr_0_005_path(): Path
+    {
+        return reports_path().resolve("sr_0_005")
+    }
+
+    fun calibration_data() : List<Pair<String, FRCResult?>>
+    {
+        return listOf(
+            Pair(SR_0_005_LABEL, sr_0_005()),
+            Pair(SR_0_05_LABEL, sr_0_05()),
+            Pair(SR_0_5_LABEL, sr_0_5()),
+            Pair(SR_5_LABEL, sr_5()),
+            Pair(SR_25_LABEL, sr_25()),
+            Pair(SR_SAMPLE_LABEL, aligned_frc())
+        )
+    }
+
+    fun sr_0_005(): FRCResult?
+    {
+        return FRCResult.from_filename(sr_0_005_path())
+    }
+
+    private fun sr_0_05_path(): Path
+    {
+        return reports_path().resolve("sr_0_05")
+    }
+
+    fun sr_0_05(): FRCResult?
+    {
+        return FRCResult.from_filename(sr_0_05_path())
+    }
+
+    private fun sr_0_5_path(): Path
+    {
+        return reports_path().resolve("sr_0_5")
+    }
+
+    fun sr_0_5(): FRCResult?
+    {
+        return FRCResult.from_filename(sr_0_5_path())
+    }
+
+    private fun sr_5_path(): Path
+    {
+        return reports_path().resolve("sr_5")
+    }
+
+    fun sr_5(): FRCResult?
+    {
+        return FRCResult.from_filename(sr_5_path())
+    }
+
+    private fun sr_25_path(): Path
+    {
+        return reports_path().resolve("sr_25")
+    }
+
+    fun sr_25(): FRCResult?
+    {
+        return FRCResult.from_filename(sr_25_path())
+    }
+
+    private fun aligned_frc_path(): Path
+    {
+        return reports_path().resolve("frc_calibration_space")
+    }
+
+    private fun aligned_frc(): FRCResult?
+    {
+        return FRCResult.from_filename(aligned_frc_path())
     }
 
     fun report(): String?
