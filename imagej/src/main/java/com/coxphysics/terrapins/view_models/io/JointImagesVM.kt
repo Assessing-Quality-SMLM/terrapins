@@ -17,10 +17,8 @@ class JointImagesVM private constructor(
         fun from(model: JointImages) : JointImagesVM
         {
             val image_1 = DiskOrImageVM.with("Filename", model.image_1())
-            image_1.set_use_disk(false)
             image_1.set_draw_reset_button(false)
             val image_2 = DiskOrImageVM.with("Filename", model.image_2())
-            image_2.set_use_disk(false)
             image_2.set_draw_reset_button(false)
             return JointImagesVM(model, "Group", "A", image_1, "B", image_2)
         }
