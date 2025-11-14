@@ -2,6 +2,7 @@ package com.coxphysics.terrapins.models.assessment.reports
 
 import com.coxphysics.terrapins.models.assessment.AssessmentResults
 import com.coxphysics.terrapins.models.frc.FRCResult
+import com.coxphysics.terrapins.views.frc.CalibrationView
 import com.coxphysics.terrapins.views.frc.ResultsView
 import java.nio.file.Path
 import com.coxphysics.terrapins.views.hawkman.ResultsView as HawkmanResultsView
@@ -27,6 +28,8 @@ class Report private constructor(private val results_: AssessmentResults)
     private var hawkman_results_ : HawkmanResultsView? = null
 
     private var squirrel_results_ : SquirrelResultsView? = null
+
+    private var calibration_view_ : CalibrationView? = null
 
     companion object
     {
@@ -102,10 +105,12 @@ class Report private constructor(private val results_: AssessmentResults)
 
     fun show_sampling_details()
     {
+        calibration_view_?.show()
     }
 
     fun hide_sampling_details()
     {
+        calibration_view_?.hide()
     }
 
     fun localisation_precision_assessment(): Assessment?
@@ -177,5 +182,7 @@ class Report private constructor(private val results_: AssessmentResults)
 
         hawkman_results_ = results_.hawkman_results()?.let{ r -> HawkmanResultsView.from(r)}
         squirrel_results_ = results_.squirrel_results()?.let{r -> SquirrelResultsView.from(r)}
+
+        calibration_view_ = CalibrationView.from(results_.calibration_data());
     }
 }
