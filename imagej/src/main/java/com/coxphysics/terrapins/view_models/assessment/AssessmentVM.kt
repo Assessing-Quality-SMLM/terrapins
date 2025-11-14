@@ -26,7 +26,7 @@ class AssessmentVM private constructor(
         val score = model_.score()
         if (score == null)
             return "-"
-        return score.toString()
+        return String.format( "%.2f", score)
     }
 
     fun passed_text(): String
