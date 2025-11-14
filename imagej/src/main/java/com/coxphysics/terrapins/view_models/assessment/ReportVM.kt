@@ -31,24 +31,84 @@ class ReportVM private constructor(private val model_ : Report)
         model_.set_data_path(value)
     }
 
+    fun drift_assessment(): AssessmentVM?
+    {
+        val assessment = model_.drift_assessment() ?: return null
+        return AssessmentVM.from(assessment)
+    }
+
+    fun display_drift_details(show_details: Boolean)
+    {
+        if (show_details)
+            model_.show_drift_details()
+        else
+            model_.hide_drift_details()
+    }
+
+    fun magnification_assessment(): AssessmentVM?
+    {
+        val assessment = model_.magnification_assessment() ?: return null
+        return AssessmentVM.from(assessment)
+    }
+
+    fun display_magnification_details(show_details: Boolean)
+    {
+        if (show_details)
+            model_.show_magnification_details()
+        else
+            model_.hide_magnification_details()
+    }
+
+     fun blinking_assessment(): AssessmentVM?
+    {
+        val assessment = model_.blinking_assessment() ?: return null
+        return AssessmentVM.from(assessment)
+    }
+
+    fun display_blinking_details(show_details: Boolean)
+    {
+        if (show_details)
+            model_.show_blinking_details()
+        else
+            model_.hide_blinking_details()
+    }
+
+    fun sampling_assessment(): AssessmentVM?
+    {
+        val assessment = model_.sampling_assessment() ?: return null
+        return AssessmentVM.from(assessment)
+    }
+
+    fun display_sampling_details(show_details: Boolean)
+    {
+        if (show_details)
+            model_.show_sampling_details()
+        else
+            model_.hide_sampling_details()
+    }
+
     fun localisation_precision_assessment(): AssessmentVM?
     {
         val assessment = model_.localisation_precision_assessment() ?: return null
         return AssessmentVM.from(assessment)
     }
 
-    fun blinking_assessment(): AssessmentVM?
+    //    fun display_localisation_precision_details(show_details: Boolean)
+//    {
+//    }
+
+    fun frc_resolution_assessment(): AssessmentVM?
     {
-        val assessment = model_.blinking_assessment() ?: return null
+        val assessment = model_.frc_resolution_assessment() ?: return null
         return AssessmentVM.from(assessment)
     }
 
-    fun display_blining_details(show_details: Boolean)
+    fun display_frc_resolution_details(show_details: Boolean)
     {
         if (show_details)
-            model_.show_blinking_details()
+            model_.show_frc_resolution_details()
         else
-            model_.hide_blinking_details()
+            model_.hide_frc_resolution_details()
     }
 
     fun bias_assessment(): AssessmentVM?
@@ -57,11 +117,6 @@ class ReportVM private constructor(private val model_ : Report)
         return AssessmentVM.from(assessment)
     }
 
-    fun frc_resolution_assessment(): AssessmentVM?
-    {
-        val assessment = model_.frc_resolution_assessment() ?: return null
-        return AssessmentVM.from(assessment)
-    }
 
     fun display_bias_details(show_details: Boolean)
     {
@@ -71,11 +126,18 @@ class ReportVM private constructor(private val model_ : Report)
             model_.hide_bias_details()
     }
 
-    fun display_frc_resolution_details(show_details: Boolean)
+    fun squirrel_assessment(): AssessmentVM?
+    {
+        val assessment = model_.squirrel_assessment() ?: return null
+        return AssessmentVM.from(assessment)
+    }
+
+
+    fun display_squirrel_details(show_details: Boolean)
     {
         if (show_details)
-            model_.show_frc_resolution_details()
+            model_.show_squirrel_details()
         else
-            model_.hide_frc_resolution_details()
+            model_.hide_squirrel_details()
     }
 }
