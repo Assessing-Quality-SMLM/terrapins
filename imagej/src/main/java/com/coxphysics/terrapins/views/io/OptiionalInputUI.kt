@@ -32,6 +32,7 @@ class OptionalInputUI<UI: RecordableElement<T>, T> private constructor(
 
     override fun extract_from(dialog: GenericDialog): T
     {
+        var cb = Utils.extract_checkbox_value(dialog)
         return ui_element_.extract_from(dialog)
     }
 
