@@ -60,7 +60,7 @@ class DiskOrImageTests
     {
         val processor = FloatProcessor(0, 0)
         val image = ImagePlus("An image", processor)
-        val disk_or_image = DiskOrImage.new(null, image, false)
+        val disk_or_image = DiskOrImage.new(null, image, true)
         assertEquals(disk_or_image.has_data(), true)
     }
 

@@ -83,7 +83,7 @@ class Assessment private constructor(private val exe_location_: Path)
 //      --zip-split-b <ZIP_SPLIT_B>          Rendering of second part of data zip split
 //      --pixel-size-nm <PIXEL_SIZE_NM>      Pixel size (nm) in images
 //      --psf-px <PSF_PX>                    PSF size (px) in images
-        commands.add("images")
+        commands.add("image")
         if (settings.reference_image_is_valid())
         {
             val reference_path = settings.reference_image_path()

@@ -5,6 +5,7 @@ import com.coxphysics.terrapins.models.utils.StringUtils
 import ij.ImagePlus
 import java.io.File
 import java.nio.file.Path
+import java.nio.file.Paths
 
 class DiskOrImage private constructor(
     private var filename_: String?,
@@ -85,7 +86,7 @@ class DiskOrImage private constructor(
 
     private fun filename_path(): Path?
     {
-        return filename()?.let{s -> File(s).toPath() }
+        return filename()?.let{s -> Paths.get(s) }
     }
 
     fun image(): ImagePlus?
