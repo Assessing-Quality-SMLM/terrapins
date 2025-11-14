@@ -37,6 +37,12 @@ public class FRCResult
     public static FRCResult from(Path frc_data_directory)
     {
         Path resolution_file = frc_data_directory.resolve(RESOLUTION_FILE);
+        return from_filename(resolution_file);
+    }
+
+    @Nullable
+    public static FRCResult from_filename(Path resolution_file)
+    {
         if (!FsUtils.exists(resolution_file))
         {
             return null;
