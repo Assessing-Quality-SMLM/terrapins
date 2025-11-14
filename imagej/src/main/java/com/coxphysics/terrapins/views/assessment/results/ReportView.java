@@ -4,6 +4,7 @@ import com.coxphysics.terrapins.view_models.assessment.AssessmentVM;
 import com.coxphysics.terrapins.view_models.assessment.ReportVM;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import ij.IJ;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -108,6 +109,12 @@ public class ReportView extends JFrame {
     private JButton data_path_btn_;
     private AssessmentView bias_assessment_;
     private AssessmentView frc_resolution_assessment_;
+    private AssessmentView sampling_assessment_;
+    private JScrollPane scroll_panel_;
+    private JPanel scrolling_panel_;
+    private AssessmentView squirrel_assessment_;
+    private AssessmentView drift_assessment_;
+    private AssessmentView magnification_assessment_;
 
     private ReportView(ReportVM view_model) {
         view_model_ = view_model;
@@ -120,9 +127,14 @@ public class ReportView extends JFrame {
         view.setTitle("Results View");
         view.add(view.content_panel_);
         view.reset_data_path();
-        view.blinking_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.blinking_assessment_, view_model::display_blining_details));
-        view.bias_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.bias_assessment_, view_model::display_bias_details));
+        view.drift_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.drift_assessment_, view_model::display_drift_details));
+        view.magnification_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.magnification_assessment_, view_model::display_magnification_details));
+        view.blinking_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.blinking_assessment_, view_model::display_blinking_details));
+        view.sampling_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.sampling_assessment_, view_model::display_sampling_details));
+//        view.localisation_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.localisation_assessment_, view_model::display_localisation_precision_details));
         view.frc_resolution_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.frc_resolution_assessment_, view_model::display_frc_resolution_details));
+        view.bias_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.bias_assessment_, view_model::display_bias_details));
+        view.squirrel_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.squirrel_assessment_, view_model::display_squirrel_details));
         return view;
     }
 
@@ -131,9 +143,18 @@ public class ReportView extends JFrame {
     }
 
     public void update_data_path_from_view() {
-        String new_path = data_path_.getText();
-        view_model_.set_data_path(Paths.get(new_path));
-        update_views();
+        String new_path_text = data_path_.getText();
+        try
+        {
+            Path new_path = Paths.get(new_path_text);
+            view_model_.set_data_path(new_path);
+            update_views();
+        }
+        catch (Exception e)
+        {
+            String message = "Could not load path due to " + e;
+            IJ.log(message);
+        }
     }
 
     public void reset_data_path() {
@@ -142,39 +163,73 @@ public class ReportView extends JFrame {
     }
 
     private void update_views() {
-        update_localisation_precision_assessment();
+        update_drift_assessment();
+        update_magnification_assessment();
         update_blinking_assessment();
+        update_sampling_assessment();
+        update_localisation_precision_assessment();
         update_frc_resolution_assessment();
         update_bias_assessment();
+        update_squirrel_assessment();
     }
 
-    private void update_localisation_precision_assessment()
+    private void update_drift_assessment()
     {
+        AssessmentVM view_model = view_model_.drift_assessment();
+        if (view_model == null)
+            return;
+        drift_assessment_.set_view_model(view_model);
+    }
+
+    private void update_magnification_assessment()
+    {
+        AssessmentVM view_model = view_model_.magnification_assessment();
+        if (view_model == null)
+            return;
+        magnification_assessment_.set_view_model(view_model);
+    }
+
+    private void update_blinking_assessment() {
+        AssessmentVM vieW_model = view_model_.blinking_assessment();
+        if (vieW_model == null)
+            return;
+        blinking_assessment_.set_view_model(vieW_model);
+    }
+
+    private void update_sampling_assessment()
+    {
+        AssessmentVM view_model = view_model_.sampling_assessment();
+        if (view_model == null)
+            return;
+        sampling_assessment_.set_view_model(view_model);
+    }
+
+    private void update_localisation_precision_assessment() {
         AssessmentVM view_model = view_model_.localisation_precision_assessment();
         if (view_model == null)
             return;
         localisation_assessment_.set_view_model(view_model);
     }
 
-    private void update_blinking_assessment() {
-        AssessmentVM blinking_view_model = view_model_.blinking_assessment();
-        if (blinking_view_model == null)
+    private void update_frc_resolution_assessment() {
+        AssessmentVM vieW_model = view_model_.frc_resolution_assessment();
+        if (vieW_model == null)
             return;
-        blinking_assessment_.set_view_model(blinking_view_model);
+        frc_resolution_assessment_.set_view_model(vieW_model);
     }
 
     private void update_bias_assessment() {
-        AssessmentVM bias_vm = view_model_.bias_assessment();
-        if (bias_vm == null)
+        AssessmentVM view_model = view_model_.bias_assessment();
+        if (view_model == null)
             return;
-        bias_assessment_.set_view_model(bias_vm);
+        bias_assessment_.set_view_model(view_model);
     }
 
-    private void update_frc_resolution_assessment() {
-        AssessmentVM resolution_vm = view_model_.frc_resolution_assessment();
-        if (resolution_vm == null)
+    private void update_squirrel_assessment() {
+        AssessmentVM view_model = view_model_.squirrel_assessment();
+        if (view_model == null)
             return;
-        frc_resolution_assessment_.set_view_model(resolution_vm);
+        squirrel_assessment_.set_view_model(view_model);
     }
 
     public void set_data_path(Path value) {
@@ -198,25 +253,38 @@ public class ReportView extends JFrame {
      */
     private void $$$setupUI$$$() {
         content_panel_ = new JPanel();
-        content_panel_.setLayout(new GridLayoutManager(5, 5, new Insets(10, 10, 2, 5), -1, -1));
-        content_panel_.setAutoscrolls(true);
+        content_panel_.setLayout(new GridLayoutManager(4, 5, new Insets(10, 10, 2, 5), -1, -1));
+        content_panel_.setAutoscrolls(false);
         data_path_ = new JTextField();
         content_panel_.add(data_path_, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         final JLabel label1 = new JLabel();
         label1.setText("Data Path");
         content_panel_.add(label1, new GridConstraints(0, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        localisation_assessment_ = new AssessmentView();
-        content_panel_.add(localisation_assessment_.$$$getRootComponent$$$(), new GridConstraints(1, 0, 1, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        blinking_assessment_ = new AssessmentView();
-        content_panel_.add(blinking_assessment_.$$$getRootComponent$$$(), new GridConstraints(2, 0, 1, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         data_path_btn_ = new JButton();
         data_path_btn_.setLabel("Find");
         data_path_btn_.setText("Find");
         content_panel_.add(data_path_btn_, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        bias_assessment_ = new AssessmentView();
-        content_panel_.add(bias_assessment_.$$$getRootComponent$$$(), new GridConstraints(3, 0, 1, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        scroll_panel_ = new JScrollPane();
+        content_panel_.add(scroll_panel_, new GridConstraints(1, 0, 1, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        scrolling_panel_ = new JPanel();
+        scrolling_panel_.setLayout(new GridLayoutManager(8, 1, new Insets(0, 0, 0, 0), -1, -1));
+        scroll_panel_.setViewportView(scrolling_panel_);
+        localisation_assessment_ = new AssessmentView();
+        scrolling_panel_.add(localisation_assessment_.$$$getRootComponent$$$(), new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         frc_resolution_assessment_ = new AssessmentView();
-        content_panel_.add(frc_resolution_assessment_.$$$getRootComponent$$$(), new GridConstraints(4, 0, 1, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        scrolling_panel_.add(frc_resolution_assessment_.$$$getRootComponent$$$(), new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        bias_assessment_ = new AssessmentView();
+        scrolling_panel_.add(bias_assessment_.$$$getRootComponent$$$(), new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        squirrel_assessment_ = new AssessmentView();
+        scrolling_panel_.add(squirrel_assessment_.$$$getRootComponent$$$(), new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        drift_assessment_ = new AssessmentView();
+        scrolling_panel_.add(drift_assessment_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        blinking_assessment_ = new AssessmentView();
+        scrolling_panel_.add(blinking_assessment_.$$$getRootComponent$$$(), new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        sampling_assessment_ = new AssessmentView();
+        scrolling_panel_.add(sampling_assessment_.$$$getRootComponent$$$(), new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        magnification_assessment_ = new AssessmentView();
+        scrolling_panel_.add(magnification_assessment_.$$$getRootComponent$$$(), new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
