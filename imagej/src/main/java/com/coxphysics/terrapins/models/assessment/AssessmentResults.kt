@@ -48,14 +48,24 @@ class AssessmentResults private constructor(private var data_path: Path)
         return data_path().resolve("report")
     }
 
-    fun localisation_precision_assessment_path(): Path
+    fun drift_assessment_path(): Path
     {
-        return reports_path().resolve("localisation_precision")
+        return reports_path().resolve("drift")
     }
 
-    fun localisation_precision_assessment(): Assessment?
+    fun drift_assessment(): Assessment?
     {
-        return Assessment.from_disk(localisation_precision_assessment_path())
+        return Assessment.from_disk(drift_assessment_path())
+    }
+
+    fun magnification_assessment_path(): Path
+    {
+        return reports_path().resolve("magnification")
+    }
+
+    fun magnification_assessment(): Assessment?
+    {
+        return Assessment.from_disk(magnification_assessment_path())
     }
 
     private fun blinking_assessment_path(): Path
@@ -68,14 +78,24 @@ class AssessmentResults private constructor(private var data_path: Path)
         return Assessment.from_disk(blinking_assessment_path())
     }
 
-    private fun bias_assessment_path() : Path
+    private fun sampling_assessment_path(): Path
     {
-        return reports_path().resolve("bias")
+        return reports_path().resolve("sampling")
     }
 
-    fun bias_assessment(): Assessment?
+    fun sampling_assessment(): Assessment?
     {
-        return Assessment.from_disk(bias_assessment_path())
+        return Assessment.from_disk(sampling_assessment_path())
+    }
+
+    fun localisation_precision_assessment_path(): Path
+    {
+        return reports_path().resolve("localisation_precision")
+    }
+
+    fun localisation_precision_assessment(): Assessment?
+    {
+        return Assessment.from_disk(localisation_precision_assessment_path())
     }
 
     private fun frc_resolution_assessment_path() : Path
@@ -86,6 +106,26 @@ class AssessmentResults private constructor(private var data_path: Path)
     fun frc_resolution_assessment(): Assessment?
     {
         return Assessment.from_disk(frc_resolution_assessment_path())
+    }
+
+    private fun bias_assessment_path() : Path
+    {
+        return reports_path().resolve("bias")
+    }
+
+    fun bias_assessment(): Assessment?
+    {
+        return Assessment.from_disk(bias_assessment_path())
+    }
+
+    private fun squirrel_assessment_path() : Path
+    {
+        return reports_path().resolve("squirrel")
+    }
+
+    fun squirrel_assessment(): Assessment?
+    {
+        return Assessment.from_disk(squirrel_assessment_path())
     }
 
     private fun half_split_results_path() : Path
