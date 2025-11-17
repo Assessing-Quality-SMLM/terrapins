@@ -32,7 +32,7 @@ public class ConfigTest
         long config_ptr = NativeHAWK.config_new(3, negative_handling, output_style);
         try {
             String metadata = NativeHAWK.get_metadata(config_ptr);
-            assertEquals(metadata, "hawk_core:\nVersion: 0.1.0\nconfig: {\"Version1\":{\"threading\":\"Parallel\",\"memory\":\"Contiguous\",\"run_style\":\"InMemory\",\"algorithm\":{\"n_levels\":3,\"output_style\":\"Sequential\",\"negative_handling\":\"Absolute\"},\"validation\":{\"LimitOutputsToUnder32Bits\":true}}}");
+            assertEquals(metadata, "hawk_core:\nVersion: 0.2.0\nconfig: {\"Version1\":{\"threading\":\"Parallel\",\"memory\":\"Contiguous\",\"run_style\":\"InMemory\",\"algorithm\":{\"n_levels\":3,\"output_style\":\"Sequential\",\"negative_handling\":\"Absolute\"},\"validation\":{\"LimitOutputsToUnder32Bits\":true}}}");
         }
         finally {
             NativeHAWK.config_free(config_ptr);
