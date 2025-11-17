@@ -5,7 +5,8 @@ edition = "2021"
 
 [dependencies]
 jni = "0.21"
-hawk_core = {path = "../../hawk/hawk_core"}
+# smlm-hawk-core = {path = "../../hawk/smlm-hawk-core"}
+smlm-hawk-core = "0.2"
 
 [lib]
 crate-type = ["cdylib"]
