@@ -80,7 +80,7 @@ public class PStreamFilterTests {
         ImagePlus filtered_image = filter.get_image_plus();
         String metadata = MetaDataExtract.get_metadata(filtered_image);
         String expected = "hawk_core:\n" +
-                "Version: 0.1.0\n" +
+                "Version: 0.2.0\n" +
                 "config: {\"Version1\":{\"threading\":\"Parallel\",\"memory\":\"Contiguous\",\"run_style\":\"InMemory\",\"algorithm\":{\"n_levels\":1,\"output_style\":\"Sequential\",\"negative_handling\":\"Absolute\"},\"validation\":{\"LimitOutputsToUnder32Bits\":true}}}";
         assertEquals(metadata, expected);
     }
