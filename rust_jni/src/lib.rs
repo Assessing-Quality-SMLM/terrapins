@@ -1,4 +1,4 @@
-extern crate hawk_core;
+extern crate smlm_hawk_core as hawk_core;
 extern crate jni;
 
 use hawk_core::config::{Config, AlgorithmConfig, Threading, Memory, RunStyle, NegativeHandling, OutputStyle, Validation};

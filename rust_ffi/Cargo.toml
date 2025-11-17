@@ -4,7 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-hawk_core = {path = "../../hawk/hawk_core"}
+# smlm-hawk-core = {path = "../../hawk/smlm-hawk-core"}
+smlm-hawk-core = "0.2"
 
 [lib]
 crate_type = ["cdylib"]

@@ -1,4 +1,4 @@
-extern crate hawk_core;
+extern crate smlm_hawk_core as hawk_core;
 
 mod error;
 mod image_store;
