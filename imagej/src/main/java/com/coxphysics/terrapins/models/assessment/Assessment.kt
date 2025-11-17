@@ -169,17 +169,17 @@ class Assessment private constructor(private val exe_location_: Path)
 
     private fun run_arguments(runner: Runner, arguments: List<String>, working_directory: Path): AssessmentResults?
     {
-        if (!FsUtils.delete_directory_recursive(working_directory))
-        {
-            IJ.log("Cannot delete working directory: " + working_directory.toString())
-            return null
-        }
-        val data_directory = data_directory(working_directory)
-        if (!FsUtils.delete_directory_recursive(data_directory))
-        {
-            IJ.log("Cannot delete data directory: " + data_directory.toString())
-            return null
-        }
+//        if (!FsUtils.delete_directory_recursive(working_directory))
+//        {
+//            IJ.log("Cannot delete working directory: " + working_directory.toString())
+//            return null
+//        }
+//        val data_directory = data_directory(working_directory)
+//        if (!FsUtils.delete_directory_recursive(data_directory))
+//        {
+//            IJ.log("Cannot delete data directory: " + data_directory.toString())
+//            return null
+//        }
         val pb = ProcessBuilder(arguments)
         val exit_code = runner.run(pb)
         if (exit_code != 0)
