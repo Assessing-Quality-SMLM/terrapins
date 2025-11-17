@@ -7,7 +7,8 @@ import ij.gui.GenericDialog
 
 class EquipmentUI private constructor(
     private val instrument_psf_: NumericField,
-    private val camera_pixel_size_: NumericField)
+    private val camera_pixel_size_: NumericField,
+    private val magnification_: NumericField)
 {
     companion object
     {
@@ -18,7 +19,9 @@ class EquipmentUI private constructor(
                 Utils.add_numeric_field(dialog, "Instrument Psf fwhm (nm)", settings.instrument_psf_fwhm_nm(), 2)
             val camera_pixel_size =
                 Utils.add_numeric_field(dialog, "Camera Pixel Size (nm)", settings.camera_pixel_size_nm(), 2)
-            val ui = EquipmentUI(instrument_psf, camera_pixel_size)
+            val magnification = Utils.add_numeric_field(dialog, "Magnification", settings.magnification(), 0)
+
+            val ui = EquipmentUI(instrument_psf, camera_pixel_size, magnification)
             return ui
         }
 
@@ -32,6 +35,9 @@ class EquipmentUI private constructor(
             val camera_pixel_size = Utils.extract_numeric_field(dialog)
             settings.set_camera_pixel_size_nm(camera_pixel_size)
 
+            val magnification = Utils.extract_numeric_field(dialog)
+            settings.set_magnification(magnification)
+
             return settings
         }
     }
@@ -40,5 +46,6 @@ class EquipmentUI private constructor(
     {
         instrument_psf_.set_visibility(value)
         camera_pixel_size_.set_visibility(value)
+        magnification_.set_visibility(value)
     }
 }

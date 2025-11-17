@@ -254,12 +254,23 @@ class Settings private constructor(
     private fun prepare_images_for_analysis_in(working_directory: Path): Boolean
     {
         val core_ok = core_settings_.to_disk_in(working_directory)
-        val reference_path = reference_image_path_in(working_directory)?.let { p -> reference_image().to_disk_with(p) }
-        val hawk_path = hawk_image_path_in(working_directory)?.let{p -> hawk_image().to_disk_with(p)}
+        var reference_ok = true
+        if (reference_image_.has_data())
+        {
+            val reference_path = reference_image_path_in(working_directory)?.let { p -> reference_image().to_disk_with(p) }
+            reference_ok = reference_path != null
+        }
+        var hawk_ok = true
+        if (hawk_image_.has_data())
+        {
+            val hawk_path = hawk_image_path_in(working_directory)?.let{p -> hawk_image().to_disk_with(p)}
+            hawk_ok = hawk_path != null
+        }
+
         val half_split_ok = half_split_.to_disk_in(half_split_images_directory_in(working_directory))
         val zip_split_ok = zip_split_.to_disk_in(zip_split_images_directory_in(working_directory))
-        return core_ok && reference_path != null &&
-                hawk_path != null &&
+        return core_ok && reference_ok &&
+                hawk_ok &&
                 half_split_ok &&
                 zip_split_ok
     }
