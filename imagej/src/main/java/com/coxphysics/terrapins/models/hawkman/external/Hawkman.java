@@ -38,6 +38,8 @@ public class Hawkman
                                                                   "opencv_world4100d.dll",
                                                                   "opencv_world4100d.pdb");
 
+    private final static List<String> unix_extra_sos_ = Arrays.asList("libomp.so");
+
 
     private Hawkman(Path exe_path)
     {
@@ -70,6 +72,13 @@ public class Hawkman
              {
                  ffi.extract_resource_to_temp(Hawkman.class, dll_name, true, true); // artifacts in bin so need this on unix this would fail as try to set execute bit but ok for hack
              }
+        }
+        if (ffi.is_nix())
+        {
+            for(String dll_name : unix_extra_sos_)
+            {
+                ffi.extract_resource_to_temp(Hawkman.class, dll_name, true, true); // artifacts in bin so need this on unix this would fail as try to set execute bit but ok for hack
+            }
         }
         return exe_path;
     }
