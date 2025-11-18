@@ -38,6 +38,11 @@ public class Hawkman
                                                                   "opencv_world4100d.dll",
                                                                   "opencv_world4100d.pdb");
 
+
+    private final static List<String> mac_extra_dylibs_ = Arrays.asList("libOrbbecSDK.1.9.4.dylib",
+                                                                        "libOrbbecSDK.1.9.dylib",
+                                                                        "libOrbbecSDK.dylib");
+
     private final static List<String> unix_extra_sos_ = Arrays.asList("libomp.so");
 
 
@@ -69,6 +74,13 @@ public class Hawkman
                  ffi.extract_resource_to_temp(Hawkman.class, exe_name, true, true);
              }
              for(String dll_name : windows_extra_dlls_)
+             {
+                 ffi.extract_resource_to_temp(Hawkman.class, dll_name, true, true); // artifacts in bin so need this on unix this would fail as try to set execute bit but ok for hack
+             }
+        }
+        if (ffi.is_mac())
+        {
+            for(String dll_name : mac_extra_dylibs_)
              {
                  ffi.extract_resource_to_temp(Hawkman.class, dll_name, true, true); // artifacts in bin so need this on unix this would fail as try to set execute bit but ok for hack
              }
