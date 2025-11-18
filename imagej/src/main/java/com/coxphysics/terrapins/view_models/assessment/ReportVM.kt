@@ -31,9 +31,9 @@ class ReportVM private constructor(private val model_ : Report)
         model_.set_data_path(value)
     }
 
-    fun drift_assessment(): AssessmentVM?
+    fun drift_assessment(): AssessmentVM
     {
-        val assessment = model_.drift_assessment() ?: return null
+        val assessment = model_.drift_assessment() ?: return AssessmentVM.empty("Drift")
         return AssessmentVM.from(assessment)
     }
 
@@ -45,9 +45,9 @@ class ReportVM private constructor(private val model_ : Report)
             model_.hide_drift_details()
     }
 
-    fun magnification_assessment(): AssessmentVM?
+    fun magnification_assessment(): AssessmentVM
     {
-        val assessment = model_.magnification_assessment() ?: return null
+        val assessment = model_.magnification_assessment() ?: return AssessmentVM.empty("Magnification")
         return AssessmentVM.from(assessment)
     }
 
@@ -59,9 +59,9 @@ class ReportVM private constructor(private val model_ : Report)
             model_.hide_magnification_details()
     }
 
-     fun blinking_assessment(): AssessmentVM?
+     fun blinking_assessment(): AssessmentVM
     {
-        val assessment = model_.blinking_assessment() ?: return null
+        val assessment = model_.blinking_assessment() ?: return AssessmentVM.empty("Blinking")
         return AssessmentVM.from(assessment)
     }
 
@@ -73,9 +73,9 @@ class ReportVM private constructor(private val model_ : Report)
             model_.hide_blinking_details()
     }
 
-    fun sampling_assessment(): AssessmentVM?
+    fun sampling_assessment(): AssessmentVM
     {
-        val assessment = model_.sampling_assessment() ?: return null
+        val assessment = model_.sampling_assessment() ?: return AssessmentVM.empty("Sampling")
         return AssessmentVM.from(assessment)
     }
 
@@ -87,9 +87,9 @@ class ReportVM private constructor(private val model_ : Report)
             model_.hide_sampling_details()
     }
 
-    fun localisation_precision_assessment(): AssessmentVM?
+    fun localisation_precision_assessment(): AssessmentVM
     {
-        val assessment = model_.localisation_precision_assessment() ?: return null
+        val assessment = model_.localisation_precision_assessment() ?: return AssessmentVM.empty("Localisation Precision")
         return AssessmentVM.from(assessment)
     }
 
@@ -97,9 +97,9 @@ class ReportVM private constructor(private val model_ : Report)
 //    {
 //    }
 
-    fun frc_resolution_assessment(): AssessmentVM?
+    fun frc_resolution_assessment(): AssessmentVM
     {
-        val assessment = model_.frc_resolution_assessment() ?: return null
+        val assessment = model_.frc_resolution_assessment() ?: return AssessmentVM.empty("Frc Resolution")
         return AssessmentVM.from(assessment)
     }
 
@@ -113,7 +113,7 @@ class ReportVM private constructor(private val model_ : Report)
 
     fun bias_assessment(): AssessmentVM?
     {
-        val assessment = model_.bias_assessment() ?: return null
+        val assessment = model_.bias_assessment() ?: return AssessmentVM.empty("Bias")
         return AssessmentVM.from(assessment)
     }
 
@@ -126,9 +126,9 @@ class ReportVM private constructor(private val model_ : Report)
             model_.hide_bias_details()
     }
 
-    fun squirrel_assessment(): AssessmentVM?
+    fun squirrel_assessment(): AssessmentVM
     {
-        val assessment = model_.squirrel_assessment() ?: return null
+        val assessment = model_.squirrel_assessment() ?: return AssessmentVM.empty("SQUIRREL")
         return AssessmentVM.from(assessment)
     }
 

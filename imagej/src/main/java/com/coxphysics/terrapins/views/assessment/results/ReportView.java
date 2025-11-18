@@ -176,46 +176,34 @@ public class ReportView extends JFrame {
     private void update_drift_assessment()
     {
         AssessmentVM view_model = view_model_.drift_assessment();
-        if (view_model == null)
-            return;
         drift_assessment_.set_view_model(view_model);
     }
 
     private void update_magnification_assessment()
     {
         AssessmentVM view_model = view_model_.magnification_assessment();
-        if (view_model == null)
-            return;
         magnification_assessment_.set_view_model(view_model);
     }
 
     private void update_blinking_assessment() {
         AssessmentVM vieW_model = view_model_.blinking_assessment();
-        if (vieW_model == null)
-            return;
         blinking_assessment_.set_view_model(vieW_model);
     }
 
     private void update_sampling_assessment()
     {
         AssessmentVM view_model = view_model_.sampling_assessment();
-        if (view_model == null)
-            return;
         sampling_assessment_.set_view_model(view_model);
     }
 
     private void update_localisation_precision_assessment() {
         AssessmentVM view_model = view_model_.localisation_precision_assessment();
-        if (view_model == null)
-            return;
         localisation_assessment_.set_view_model(view_model);
     }
 
     private void update_frc_resolution_assessment() {
-        AssessmentVM vieW_model = view_model_.frc_resolution_assessment();
-        if (vieW_model == null)
-            return;
-        frc_resolution_assessment_.set_view_model(vieW_model);
+        AssessmentVM view_model = view_model_.frc_resolution_assessment();
+        frc_resolution_assessment_.set_view_model(view_model);
     }
 
     private void update_bias_assessment() {
@@ -227,8 +215,6 @@ public class ReportView extends JFrame {
 
     private void update_squirrel_assessment() {
         AssessmentVM view_model = view_model_.squirrel_assessment();
-        if (view_model == null)
-            return;
         squirrel_assessment_.set_view_model(view_model);
     }
 
