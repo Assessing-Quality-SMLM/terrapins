@@ -67,6 +67,12 @@ public class Hawkman
     {
         String name = ffi.os_exe_name(EXE_NAME);
         Path exe_path = ffi.extract_resource_to_temp(Hawkman.class, name, true, true);
+        extract_depenencies();
+        return exe_path;
+    }
+
+    public static void extract_depenencies()
+    {
         if (ffi.is_windows())
         {
              for(String exe_name : windows_extra_exes_)
@@ -92,7 +98,6 @@ public class Hawkman
                 ffi.extract_resource_to_temp(Hawkman.class, dll_name, true, true); // artifacts in bin so need this on unix this would fail as try to set execute bit but ok for hack
             }
         }
-        return exe_path;
     }
 
     public boolean is_valid()
