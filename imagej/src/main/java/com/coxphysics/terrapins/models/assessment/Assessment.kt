@@ -6,6 +6,7 @@ import com.coxphysics.terrapins.models.ffi
 import com.coxphysics.terrapins.models.frc.FRC
 import com.coxphysics.terrapins.models.hawkman.external.Hawkman
 import com.coxphysics.terrapins.models.process.Runner
+import com.coxphysics.terrapins.models.squirrel.external.Squirrel
 import com.coxphysics.terrapins.models.utils.FsUtils
 import ij.IJ
 import java.nio.file.Path
@@ -29,6 +30,7 @@ class Assessment private constructor(private val exe_location_: Path)
         {
             FRC.extract_dependencies()
             Hawkman.extract_default_tool()
+            Squirrel.extract_default_tool()
             val name = ffi.os_exe_name(EXE_NAME)
             val exe_path = ffi.extract_resource_to_temp(this::class.java, name, true, true)
             return custom(exe_path);

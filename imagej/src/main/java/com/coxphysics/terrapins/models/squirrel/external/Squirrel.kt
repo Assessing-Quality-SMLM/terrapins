@@ -2,6 +2,7 @@ package com.coxphysics.terrapins.models.squirrel.external
 
 import com.coxphysics.terrapins.models.calibration.Calibration
 import com.coxphysics.terrapins.models.ffi
+import com.coxphysics.terrapins.models.hawkman.external.Hawkman
 import com.coxphysics.terrapins.models.hawkman.external.name_to_image
 import com.coxphysics.terrapins.models.process.ImageJLoggingRunner
 import com.coxphysics.terrapins.models.process.Runner
@@ -31,9 +32,16 @@ class Squirrel private constructor(private val exe_path_: Path)
         @JvmStatic
         fun default_(): Squirrel
         {
+            val exe_path = extract_default_tool()
+            return custom(exe_path)
+        }
+
+        fun extract_default_tool(): Path
+        {
             val name = ffi.os_exe_name(EXE_NAME);
             val exe_path = ffi.extract_resource_to_temp(this::class.java, name, true, true)
-            return custom(exe_path)
+            Hawkman.extract_depenencies();
+            return exe_path
         }
     }
 

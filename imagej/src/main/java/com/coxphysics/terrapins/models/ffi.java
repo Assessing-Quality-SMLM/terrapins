@@ -39,6 +39,11 @@ public class ffi
         return os_is_mac(get_os_name());
     }
 
+    public static boolean is_nix()
+    {
+        return !(is_windows() || is_mac());
+    }
+
     public static String windows_dll_name(String dll)
     {
         return dll + ".dll";
