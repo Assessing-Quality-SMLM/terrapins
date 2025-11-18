@@ -33,7 +33,9 @@ public class AssessmentView {
         name_.setText(view_model_.name());
         score_.setText(view_model_.score_text());
         passed_.setText(view_model_.passed_text());
-        passed_panel_.setBackground(view_model_.background_colour());
+        Color background = view_model_.background_colour();
+        if (background != null)
+            passed_panel_.setBackground(background);
         details_.setText(view_model_.message());
     }
 
