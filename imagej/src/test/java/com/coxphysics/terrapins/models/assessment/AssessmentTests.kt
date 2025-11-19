@@ -8,7 +8,11 @@ import org.junit.jupiter.api.Assertions.assertArrayEquals
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import kotlin.io.path.Path
+import kotlin.test.assertEquals
 
 class AssessmentTests
 {
@@ -31,7 +35,7 @@ class AssessmentTests
     fun default_arguments_test()
     {
         val settings = AssessmentSettings.with(working_directory_path())
-        val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings)
+        val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--extract", "localisation", "--magnification", "10.0", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
@@ -41,7 +45,7 @@ class AssessmentTests
     {
         val settings = AssessmentSettings.with(working_directory_path())
         settings.set_localisation_file(LocalisationFile.new("localisations.file", ParseMethod.default_()))
-        val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings)
+        val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--extract", "localisation", "--magnification", "10.0", "--locs", "localisations.file", "--locs-format", "ts", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
@@ -52,7 +56,7 @@ class AssessmentTests
         val settings = AssessmentSettings.with(working_directory_path())
         settings.set_hawk_localisation_file(LocalisationFile.new("hawk.file", ParseMethod.default_()))
 
-        val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings)
+        val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--extract", "localisation", "--magnification", "10.0", "--locs-hawk", "hawk.file", "--locs-hawk-format", "ts", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
@@ -63,7 +67,7 @@ class AssessmentTests
         val settings = AssessmentSettings.with(working_directory_path())
         settings.set_widefield(DiskOrImage.from_filename("some.thing"))
 
-        val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings)
+        val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--widefield", "some.thing", "--extract", "localisation", "--magnification", "10.0", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
@@ -74,7 +78,7 @@ class AssessmentTests
         val settings = AssessmentSettings.with(working_directory_path())
         settings.set_image_stack(DiskOrImage.from_filename("some.thing"))
 
-        val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings)
+        val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--image-stack", "some.thing", "--extract", "localisation", "--magnification", "10.0","--camera-pixel-size-nm", "160.0",  "--instrument-psf-fwhm-nm", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
@@ -85,7 +89,7 @@ class AssessmentTests
         val settings = AssessmentSettings.with(working_directory_path())
         settings.set_settings_file("settings.file")
 
-        val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings)
+        val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--settings", "settings.file", "--extract", "localisation", "--magnification", "10.0", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
@@ -96,8 +100,28 @@ class AssessmentTests
         val settings = AssessmentSettings.with(working_directory_path())
         settings.set_magnification(123.0)
 
-        val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings)
+        val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--extract", "localisation", "--magnification", "123.0", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
+
+    @Test
+    fun date_time_as_file_path()
+    {
+        val assessment = Assessment.custom(working_directory_path())
+        val date = LocalDate.of(2025, 11, 19)
+        val time = LocalTime.of(12, 5, 12)
+        val date_time = LocalDateTime.of(date, time)
+        assertEquals(assessment.date_time_to_file_path(date_time), "2025_11_19_12_05_12")
+    }
+
+    @Test
+    fun can_set_data_name()
+    {
+        val settings = AssessmentSettings.with(working_directory_path())
+        val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings, "some_thing")
+        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--data-name", "some_thing", "--extract", "localisation", "--magnification", "10.0", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
+        assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
+    }
+
 }

@@ -7,9 +7,9 @@ import com.coxphysics.terrapins.models.frc.FRC
 import com.coxphysics.terrapins.models.hawkman.external.Hawkman
 import com.coxphysics.terrapins.models.process.Runner
 import com.coxphysics.terrapins.models.squirrel.external.Squirrel
-import com.coxphysics.terrapins.models.utils.FsUtils
-import ij.IJ
 import java.nio.file.Path
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.io.path.Path
 import com.coxphysics.terrapins.models.assessment.images.Settings as ImagesSettings
 
@@ -57,14 +57,15 @@ class Assessment private constructor(private val exe_location_: Path)
     fun run_images(runner : Runner, images: ImagesSettings): AssessmentResults?
     {
         images.prepare_images_for_analysis()
-        val arguments = get_images_arguments(images)
-        return run_arguments(runner, arguments, images.working_directory())
+        val data_name = generate_data_name()
+        val arguments = get_images_arguments(images, data_name)
+        return run_arguments(runner, arguments, images.working_directory(), data_name)
     }
 
-    fun get_images_arguments(images: ImagesSettings): List<String>
+    fun get_images_arguments(images: ImagesSettings, data_name: String?): List<String>
     {
         val commands = get_commands()
-        add_core_commands(images.core_settings(), commands)
+        add_core_commands(images.core_settings(), data_name, commands)
         add_image_commands_to(commands, images)
         return commands
     }
@@ -138,14 +139,15 @@ class Assessment private constructor(private val exe_location_: Path)
 
     fun run_localisations(runner : Runner, localisations: AssessmentSettings): AssessmentResults?
     {
-        val arguments = get_localisations_arguments(localisations)
-        return run_arguments(runner, arguments, localisations.working_directory())
+        val data_name = generate_data_name()
+        val arguments = get_localisations_arguments(localisations, data_name)
+        return run_arguments(runner, arguments, localisations.working_directory(), data_name)
     }
 
-    fun get_localisations_arguments(localisations: AssessmentSettings): List<String>
+    fun get_localisations_arguments(localisations: AssessmentSettings, data_name: String?): List<String>
     {
         val commands = get_commands()
-        add_core_commands(localisations.core_settings(),commands)
+        add_core_commands(localisations.core_settings(), data_name, commands)
         add_localisations_commands(localisations, commands)
         return commands
     }
@@ -171,26 +173,29 @@ class Assessment private constructor(private val exe_location_: Path)
         add_equipment(false, settings.equipment(), commands)
     }
 
-    private fun run_arguments(runner: Runner, arguments: List<String>, working_directory: Path): AssessmentResults?
+    private fun generate_data_name(): String?
     {
-//        if (!FsUtils.delete_directory_recursive(working_directory))
-//        {
-//            IJ.log("Cannot delete working directory: " + working_directory.toString())
-//            return null
-//        }
-//        val data_directory = data_directory(working_directory)
-//        if (!FsUtils.delete_directory_recursive(data_directory))
-//        {
-//            IJ.log("Cannot delete data directory: " + data_directory.toString())
-//            return null
-//        }
+        val date_time = LocalDateTime.now()
+        return date_time_to_file_path(date_time)
+    }
+
+    fun date_time_to_file_path(date_time: LocalDateTime): String?
+    {
+        val formatter = DateTimeFormatter.ofPattern("yyyy_MM_dd_hh_mm_ss")
+        return date_time.format(formatter)
+    }
+
+    private fun run_arguments(runner: Runner, arguments: List<String>, working_directory: Path, data_name: String?): AssessmentResults?
+    {
         val pb = ProcessBuilder(arguments)
         val exit_code = runner.run(pb)
         if (exit_code != 0)
         {
             return null
         }
-        return results(working_directory)
+        if (data_name == null)
+            return results(working_directory)
+        return results(working_directory.resolve(data_name))
     }
 
 //  -f, --filename <FILENAME>        filename
@@ -200,10 +205,16 @@ class Assessment private constructor(private val exe_location_: Path)
 //      --image-stack <IMAGE_STACK>  Image stack file
 //      --metrics-only               Only generate metric file
 //      --extract                    Extract Data to directory
-    private fun add_core_commands(settings: CoreSettings, commands: MutableList<String>)
+    private fun add_core_commands(settings: CoreSettings, data_name: String?, commands: MutableList<String>)
     {
         commands.add("--working-directory")
         commands.add(settings.working_directory().toString())
+
+        if (data_name != null)
+        {
+            commands.add("--data-name")
+            commands.add(data_name)
+        }
 
         if (settings.has_widefield())
         {
