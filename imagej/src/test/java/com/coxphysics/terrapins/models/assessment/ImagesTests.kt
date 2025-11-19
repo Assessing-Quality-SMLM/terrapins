@@ -28,7 +28,7 @@ class ImagesTests
     fun default_arguments_test()
     {
         val settings = Settings.with(working_directory_path())
-        val commands = Assessment.custom(exe_path()).get_images_arguments(settings)
+        val commands = Assessment.custom(exe_path()).get_images_arguments(settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--extract", "image", "--magnification", "10.0", "--pixel-size-nm", "160.0", "--psf-px", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
@@ -38,7 +38,7 @@ class ImagesTests
     {
         val settings = Settings.with(working_directory_path())
         settings.set_reference_filename("some.thing")
-        val commands = Assessment.custom(exe_path()).get_images_arguments(settings)
+        val commands = Assessment.custom(exe_path()).get_images_arguments(settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--extract", "image", "--magnification", "10.0", "--reference-image", "some.thing", "--pixel-size-nm", "160.0", "--psf-px", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
@@ -48,7 +48,7 @@ class ImagesTests
     {
         val settings = Settings.with(working_directory_path())
         settings.set_hawk_filename("some.thing")
-        val commands = Assessment.custom(exe_path()).get_images_arguments(settings)
+        val commands = Assessment.custom(exe_path()).get_images_arguments(settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(),"--extract", "image", "--magnification", "10.0", "--hawk-image", "some.thing", "--pixel-size-nm", "160.0", "--psf-px", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
@@ -58,7 +58,7 @@ class ImagesTests
     {
         val settings = Settings.with(working_directory_path())
         settings.set_half_split_a("some.thing")
-        val commands = Assessment.custom(exe_path()).get_images_arguments(settings)
+        val commands = Assessment.custom(exe_path()).get_images_arguments(settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(),"--extract", "image", "--magnification", "10.0", "--pixel-size-nm", "160.0", "--psf-px", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
@@ -68,7 +68,7 @@ class ImagesTests
     {
         val settings = Settings.with(working_directory_path())
         settings.set_half_split_b("some.thing")
-        val commands = Assessment.custom(exe_path()).get_images_arguments(settings)
+        val commands = Assessment.custom(exe_path()).get_images_arguments(settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(),"--extract", "image", "--magnification", "10.0", "--pixel-size-nm", "160.0", "--psf-px", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
@@ -79,7 +79,7 @@ class ImagesTests
         val settings = Settings.with(working_directory_path())
         settings.set_half_split_a("some.thing")
         settings.set_half_split_b("some.thing.else")
-        val commands = Assessment.custom(exe_path()).get_images_arguments(settings)
+        val commands = Assessment.custom(exe_path()).get_images_arguments(settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(),"--extract", "image", "--magnification", "10.0", "--half-split-a", "some.thing", "--half-split-b", "some.thing.else", "--pixel-size-nm", "160.0", "--psf-px", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
@@ -89,7 +89,7 @@ class ImagesTests
     {
         val settings = Settings.with(working_directory_path())
         settings.set_zip_split_a("some.thing")
-        val commands = Assessment.custom(exe_path()).get_images_arguments(settings)
+        val commands = Assessment.custom(exe_path()).get_images_arguments(settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(),"--extract", "image", "--magnification", "10.0", "--pixel-size-nm", "160.0", "--psf-px", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
@@ -99,7 +99,7 @@ class ImagesTests
     {
         val settings = Settings.with(working_directory_path())
         settings.set_zip_split_b("some.thing")
-        val commands = Assessment.custom(exe_path()).get_images_arguments(settings)
+        val commands = Assessment.custom(exe_path()).get_images_arguments(settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(),"--extract", "image", "--magnification", "10.0", "--pixel-size-nm", "160.0", "--psf-px", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
@@ -110,7 +110,7 @@ class ImagesTests
         val settings = Settings.with(working_directory_path())
         settings.set_zip_split_a("some.thing")
         settings.set_zip_split_b("some.thing.else")
-        val commands = Assessment.custom(exe_path()).get_images_arguments(settings)
+        val commands = Assessment.custom(exe_path()).get_images_arguments(settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(),"--extract", "image", "--magnification", "10.0", "--zip-split-a", "some.thing", "--zip-split-b", "some.thing.else", "--pixel-size-nm", "160.0", "--psf-px", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
@@ -120,7 +120,7 @@ class ImagesTests
     {
         val settings = Settings.with(working_directory_path())
         settings.set_widefield_filename("some.thing")
-        val commands = Assessment.custom(exe_path()).get_images_arguments(settings)
+        val commands = Assessment.custom(exe_path()).get_images_arguments(settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(),"--widefield", "some.thing", "--extract", "image", "--magnification", "10.0", "--pixel-size-nm", "160.0", "--psf-px", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
@@ -130,7 +130,7 @@ class ImagesTests
     {
         val settings = Settings.with(working_directory_path())
         settings.set_image_stack_filename("some.thing")
-        val commands = Assessment.custom(exe_path()).get_images_arguments(settings)
+        val commands = Assessment.custom(exe_path()).get_images_arguments(settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(),"--image-stack", "some.thing", "--extract", "image", "--magnification", "10.0","--pixel-size-nm", "160.0",  "--psf-px", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
@@ -140,7 +140,7 @@ class ImagesTests
     {
         val settings = Settings.with(working_directory_path())
         settings.set_settings_file("settings.file")
-        val commands = Assessment.custom(exe_path()).get_images_arguments(settings)
+        val commands = Assessment.custom(exe_path()).get_images_arguments(settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(),"--settings", "settings.file", "--extract", "image", "--magnification", "10.0", "--pixel-size-nm", "160.0", "--psf-px", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
@@ -150,8 +150,18 @@ class ImagesTests
     {
         val settings = Settings.with(working_directory_path())
         settings.set_magnification(12.3)
-        val commands = Assessment.custom(exe_path()).get_images_arguments(settings)
+        val commands = Assessment.custom(exe_path()).get_images_arguments(settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--extract", "image", "--magnification", "12.3", "--pixel-size-nm", "160.0", "--psf-px", "270.0")
+        assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
+    }
+
+    @Test
+    fun can_set_data_name()
+    {
+        val settings = Settings.with(working_directory_path())
+
+        val commands = Assessment.custom(exe_path()).get_images_arguments(settings, "some_thing")
+        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--data-name", "some_thing", "--extract", "image", "--magnification", "10.0", "--pixel-size-nm", "160.0", "--psf-px", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
 }
