@@ -86,6 +86,8 @@ class Assessment private constructor(private val exe_location_: Path)
 //      --pixel-size-nm <PIXEL_SIZE_NM>      Pixel size (nm) in images
 //      --psf-px <PSF_PX>                    PSF size (px) in images
         commands.add("image")
+        commands.add("--magnification")
+        commands.add(settings.magnification().toString())
         if (settings.reference_image_is_valid())
         {
             val reference_path = settings.reference_image_path()
