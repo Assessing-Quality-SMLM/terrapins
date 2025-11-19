@@ -19,6 +19,9 @@ class Report private constructor(private val results_: AssessmentResults)
     private var bias_assessment_ : Assessment? = null
     private var squirrel_assessment_ : Assessment? = null
 
+    private var half_results_ : FRCResult? = null
+    private var half_view_: ResultsView? = null
+
     private var drift_results_ : FRCResult? = null
     private var drift_view_: ResultsView? = null
 
@@ -59,11 +62,13 @@ class Report private constructor(private val results_: AssessmentResults)
     fun show_drift_details()
     {
         drift_view_?.show()
+        half_view_?.show()
     }
 
     fun hide_drift_details()
     {
         drift_view_?.hide()
+        half_view_?.hide()
     }
 
     fun magnification_assessment(): Assessment?
@@ -173,6 +178,9 @@ class Report private constructor(private val results_: AssessmentResults)
         frc_resolution_assessment_ = results_.frc_resolution_assessment()
         bias_assessment_ = results_.bias_assessment()
         squirrel_assessment_ = results_.squirrel_assessment()
+
+        half_results_ = results_.half_split_results()
+        half_view_ = half_results_?.let { r -> ResultsView.with(r, "Half Split") }
 
         zip_results_ = results_.zip_split_results()
         zip_view_ = zip_results_?.let { r ->  ResultsView.with(r, "Zip Split") }
