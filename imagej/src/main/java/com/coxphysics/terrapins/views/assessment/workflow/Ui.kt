@@ -13,9 +13,6 @@ import java.awt.event.ActionListener
 import java.awt.event.ItemEvent
 import com.coxphysics.terrapins.views.assessment.images.UI as ImagesUI
 
-private val IMAGE_J = "I'm using ImageJ"
-private val NOT_IMAGE_J = "I'm using an external fitter"
-
 private val LOCALISATIONS = "Localisations"
 private val IMAGES = "Images"
 
@@ -23,8 +20,6 @@ class Ui private constructor(
     private val pre_processing_: PreProcessingUI,
     private val pre_processing_completed_: Checkbox,
     private val processing_: RadioButtons,
-//    private val imagej_preprocessing_ : ImageJPreProcessingUI,
-//    private val external_preprocessing_: Message,
     private val localisation_ui_: AssessmentUI,
     private val images_ui_ : ImagesUI,
     private var reset_images_button_: Button?
@@ -41,8 +36,6 @@ class Ui private constructor(
 
             val processing = Utils.add_radio_buttons(dialog, "Processing", arrayOf(LOCALISATIONS, IMAGES), 2, 1, LOCALISATIONS)
 
-//            val imagej_pre_processing = ImageJPreProcessingUI.add_to_dialog(dialog, settings)
-//            val external_fitter_ui = Utils.add_message(dialog, "Follow the instructions of your fitter")
             val localisation_ui = AssessmentUI.add_controls_to_dialog(dialog, settings.localisation_settings(), false)
             val images_ui = ImagesUI.add_controls_to_dialog(dialog, settings.images_settings(), false)
 
@@ -62,8 +55,8 @@ class Ui private constructor(
         pre_processing_.create_settings_record(dialog)
 
         val pre_processing_completed = Utils.extract_checkbox_value(dialog)
+
         val processing = Utils.extract_radio_buttons(dialog)
-//        val imagej_preprocessing = imagej_preprocessing_.create_settings_record(dialog)
 
         val localisation_settings = localisation_ui_.create_settings_record(dialog)
         settings.set_localisations(localisation_settings)
@@ -94,11 +87,6 @@ class Ui private constructor(
             re_draw_ui()
             return
         }
-//        if (pre_processing_.is_button_group(source))
-//        {
-//            re_draw_ui()
-//            return
-//        }
         if (processing_.is_button_group(source))
         {
             re_draw_ui()
@@ -109,11 +97,6 @@ class Ui private constructor(
     fun pre_processing_completed(): Boolean
     {
         return pre_processing_completed_.is_checked
-    }
-
-    private fun pre_processing_enabled(): Boolean
-    {
-        return !pre_processing_completed()
     }
 
     private fun processing_enabled(): Boolean
@@ -130,16 +113,6 @@ class Ui private constructor(
     {
         return processing_.is_checked(IMAGES)
     }
-
-//    private fun display_image_j_pre_processing(): Boolean
-//    {
-//        return pre_processing_enabled() && pre_processing_.is_checked(IMAGE_J)
-//    }
-
-//    private fun display_external_pre_processing(): Boolean
-//    {
-//        return pre_processing_enabled() && pre_processing_.is_checked(NOT_IMAGE_J)
-//    }
 
     private fun display_pre_processing(): Boolean
     {
@@ -173,12 +146,7 @@ class Ui private constructor(
         {
             return draw_pre_processing()
         }
-//        if (display_image_j_pre_processing()) {
-//            return draw_imagej_ui()
-//        }
-//        if (display_external_pre_processing()) {
-//            return draw_external_ui()
-//        }
+
         if (display_localisation_ui())
         {
             return draw_localisation_ui()
@@ -196,26 +164,9 @@ class Ui private constructor(
         hide_images_ui()
     }
 
-//    private fun draw_imagej_ui()
-//    {
-//        imagej_preprocessing_.set_visibility(true)
-//        external_preprocessing_.set_visibility(false)
-//        hide_localisation_ui()
-//        hide_images_ui()
-//    }
-//
-//    private fun draw_external_ui()
-//    {
-//        imagej_preprocessing_.set_visibility(false)
-//        external_preprocessing_.set_visibility(true)
-//        hide_localisation_ui()
-//        hide_images_ui()
-//    }
-
     private fun draw_images_ui()
     {
         pre_processing_.set_visibility(false)
-//        external_preprocessing_.set_visibility(false)
         hide_localisation_ui()
         show_images_ui()
     }
@@ -223,7 +174,6 @@ class Ui private constructor(
     private fun draw_localisation_ui()
     {
         pre_processing_.set_visibility(false)
-//        external_preprocessing_.set_visibility(false)
         show_localisation_ui()
         hide_images_ui()
     }
