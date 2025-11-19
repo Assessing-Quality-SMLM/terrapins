@@ -4,6 +4,7 @@ import ij.gui.GenericDialog;
 
 public class Config
 {
+    private final String filename_;
     private final int n_levels_;
     private final short negative_handling_;
     private final short output_style_;
@@ -23,8 +24,9 @@ public class Config
         return 3;
     }
 
-    private Config(int n_levels, short negative_handling, short output_style)
+    private Config(String filename, int n_levels, short negative_handling, short output_style)
     {
+        filename_ = filename;
         n_levels_ = n_levels;
         negative_handling_ = negative_handling;
         output_style_ = output_style;
@@ -32,7 +34,7 @@ public class Config
 
     public static Config with(int n_levels, short negative_handling, short output_style)
     {
-        return new Config(n_levels, negative_handling, output_style);
+        return new Config(null, n_levels, negative_handling, output_style);
     }
 
     public static Config from(Settings settings)
@@ -49,7 +51,7 @@ public class Config
             os = NativeHAWK.output_style_interleaved();
         else if(settings.is_sequential())
             os = NativeHAWK.output_style_sequential();
-        return new Config(settings.n_levels(), nh, os);
+        return new Config(settings.filename(), settings.n_levels(), nh, os);
     }
 
 
@@ -58,7 +60,17 @@ public class Config
         short nh = default_negative_handling();
         short os = default_output_style();
         int n_levels = default_n_levels();
-        return new Config(n_levels, nh, os);
+        return Config.with(n_levels, nh, os);
+    }
+
+    public String filename()
+    {
+        return filename_;
+    }
+
+    public boolean has_output_filename_set()
+    {
+        return filename_ != null;
     }
 
     public String get_validation_errors(int n_frames)
