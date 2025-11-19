@@ -144,4 +144,14 @@ class ImagesTests
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(),"--settings", "settings.file", "--extract", "image", "--magnification", "10.0", "--pixel-size-nm", "160.0", "--psf-px", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
+
+    @Test
+    fun magnification_passed_on()
+    {
+        val settings = Settings.with(working_directory_path())
+        settings.set_magnification(12.3)
+        val commands = Assessment.custom(exe_path()).get_images_arguments(settings)
+        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--extract", "image", "--magnification", "12.3", "--pixel-size-nm", "160.0", "--psf-px", "270.0")
+        assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
+    }
 }

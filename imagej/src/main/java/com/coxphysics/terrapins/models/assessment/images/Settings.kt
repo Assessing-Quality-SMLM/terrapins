@@ -50,6 +50,11 @@ class Settings private constructor(
         return equipment.magnification()
     }
 
+    fun set_magnification(value: Double)
+    {
+        equipment.set_magnification(value)
+    }
+
     /// CORE SETTINGS
 
     fun core_settings(): CoreSettings
