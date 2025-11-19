@@ -7,8 +7,6 @@ import com.coxphysics.terrapins.models.frc.FRC
 import com.coxphysics.terrapins.models.hawkman.external.Hawkman
 import com.coxphysics.terrapins.models.process.Runner
 import com.coxphysics.terrapins.models.squirrel.external.Squirrel
-import com.coxphysics.terrapins.models.utils.FsUtils
-import ij.IJ
 import java.nio.file.Path
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -189,18 +187,6 @@ class Assessment private constructor(private val exe_location_: Path)
 
     private fun run_arguments(runner: Runner, arguments: List<String>, working_directory: Path, data_name: String?): AssessmentResults?
     {
-//        if (!FsUtils.delete_directory_recursive(working_directory))
-//        {
-//            IJ.log("Cannot delete working directory: " + working_directory.toString())
-//            return null
-//        }
-//        val data_directory = data_directory(working_directory)
-//        if (!FsUtils.delete_directory_recursive(data_directory))
-//        {
-//            IJ.log("Cannot delete data directory: " + data_directory.toString())
-//            return null
-//        }
-
         val pb = ProcessBuilder(arguments)
         val exit_code = runner.run(pb)
         if (exit_code != 0)
