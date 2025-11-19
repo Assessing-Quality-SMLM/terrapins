@@ -65,6 +65,11 @@ class AssessmentSettings private constructor(
         core_settings_.set_widefield(value)
     }
 
+    fun set_n_threads(value: Int)
+    {
+        core_settings_.set_n_threads(value)
+    }
+
     fun settings_file_nn(): String
     {
         return core_settings_.settings_file_nn()
