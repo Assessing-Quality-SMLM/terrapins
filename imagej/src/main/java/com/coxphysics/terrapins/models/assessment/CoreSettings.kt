@@ -3,12 +3,15 @@ package com.coxphysics.terrapins.models.assessment
 import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.non_null
 import com.coxphysics.terrapins.models.utils.FsUtils
+import com.coxphysics.terrapins.models.utils.IJUtils
+import ij.Prefs
 import java.nio.file.Path
 
 class CoreSettings private constructor(private var working_directory_: Path)
 {
     private var widefield_: DiskOrImage = DiskOrImage.default()
     private var image_stack_: DiskOrImage = DiskOrImage.default()
+    private var n_threads_ = Prefs.getThreads();
     private var settings_file_: String? = null
 
     companion object
@@ -96,6 +99,16 @@ class CoreSettings private constructor(private var working_directory_: Path)
     fun set_image_stack_filename(value: String)
     {
         image_stack_.set_filename_and_switch_usage(value)
+    }
+
+    fun n_threads(): Int
+    {
+        return n_threads_
+    }
+
+    fun set_n_threads(value: Int)
+    {
+        n_threads_ = value
     }
 
     fun has_settings_file(): Boolean
