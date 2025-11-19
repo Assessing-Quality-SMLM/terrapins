@@ -35,8 +35,9 @@ class AssessmentTests
     fun default_arguments_test()
     {
         val settings = AssessmentSettings.with(working_directory_path())
+        settings.set_n_threads(4)
         val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings, null)
-        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--extract", "localisation", "--magnification", "10.0", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
+        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--n-threads", "4", "--extract", "localisation", "--magnification", "10.0", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
 
@@ -44,9 +45,10 @@ class AssessmentTests
     fun can_use_localisation_file()
     {
         val settings = AssessmentSettings.with(working_directory_path())
+        settings.set_n_threads(4)
         settings.set_localisation_file(LocalisationFile.new("localisations.file", ParseMethod.default_()))
         val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings, null)
-        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--extract", "localisation", "--magnification", "10.0", "--locs", "localisations.file", "--locs-format", "ts", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
+        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--n-threads", "4", "--extract", "localisation", "--magnification", "10.0", "--locs", "localisations.file", "--locs-format", "ts", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
 
@@ -54,10 +56,11 @@ class AssessmentTests
     fun can_use_hawk_localisation_file()
     {
         val settings = AssessmentSettings.with(working_directory_path())
+        settings.set_n_threads(4)
         settings.set_hawk_localisation_file(LocalisationFile.new("hawk.file", ParseMethod.default_()))
 
         val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings, null)
-        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--extract", "localisation", "--magnification", "10.0", "--locs-hawk", "hawk.file", "--locs-hawk-format", "ts", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
+        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--n-threads", "4", "--extract", "localisation", "--magnification", "10.0", "--locs-hawk", "hawk.file", "--locs-hawk-format", "ts", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
 
@@ -65,10 +68,11 @@ class AssessmentTests
     fun can_use_widefield()
     {
         val settings = AssessmentSettings.with(working_directory_path())
+        settings.set_n_threads(4)
         settings.set_widefield(DiskOrImage.from_filename("some.thing"))
 
         val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings, null)
-        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--widefield", "some.thing", "--extract", "localisation", "--magnification", "10.0", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
+        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--widefield", "some.thing", "--n-threads", "4", "--extract", "localisation", "--magnification", "10.0", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
 
@@ -76,10 +80,11 @@ class AssessmentTests
     fun can_use_image_stack()
     {
         val settings = AssessmentSettings.with(working_directory_path())
+        settings.set_n_threads(4)
         settings.set_image_stack(DiskOrImage.from_filename("some.thing"))
 
         val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings, null)
-        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--image-stack", "some.thing", "--extract", "localisation", "--magnification", "10.0","--camera-pixel-size-nm", "160.0",  "--instrument-psf-fwhm-nm", "270.0")
+        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--image-stack", "some.thing", "--n-threads", "4", "--extract", "localisation", "--magnification", "10.0","--camera-pixel-size-nm", "160.0",  "--instrument-psf-fwhm-nm", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
 
@@ -87,10 +92,11 @@ class AssessmentTests
     fun can_use_settings_file()
     {
         val settings = AssessmentSettings.with(working_directory_path())
+        settings.set_n_threads(4)
         settings.set_settings_file("settings.file")
 
         val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings, null)
-        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--settings", "settings.file", "--extract", "localisation", "--magnification", "10.0", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
+        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--n-threads", "4", "--settings", "settings.file", "--extract", "localisation", "--magnification", "10.0", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
 
@@ -98,10 +104,11 @@ class AssessmentTests
     fun can_set_magnification()
     {
         val settings = AssessmentSettings.with(working_directory_path())
+        settings.set_n_threads(4)
         settings.set_magnification(123.0)
 
         val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings, null)
-        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--extract", "localisation", "--magnification", "123.0", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
+        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--n-threads", "4", "--extract", "localisation", "--magnification", "123.0", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
 
@@ -119,8 +126,9 @@ class AssessmentTests
     fun can_set_data_name()
     {
         val settings = AssessmentSettings.with(working_directory_path())
+        settings.set_n_threads(4)
         val commands = Assessment.custom(exe_path()).get_localisations_arguments(settings, "some_thing")
-        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--data-name", "some_thing", "--extract", "localisation", "--magnification", "10.0", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
+        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--data-name", "some_thing", "--n-threads", "4", "--extract", "localisation", "--magnification", "10.0", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
 

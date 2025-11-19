@@ -87,6 +87,11 @@ class Settings private constructor(
         core_settings_.set_image_stack_filename(value)
     }
 
+    fun set_n_threads(value: Int)
+    {
+        core_settings_.set_n_threads(value)
+    }
+
     fun settings_file_nn(): String
     {
         return core_settings_.settings_file_nn()

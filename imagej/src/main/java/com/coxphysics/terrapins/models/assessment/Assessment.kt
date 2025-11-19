@@ -236,6 +236,9 @@ class Assessment private constructor(private val exe_location_: Path)
             }
         }
 
+        commands.add("--n-threads")
+        commands.add(settings.n_threads().toString())
+
         if (settings.has_settings_file())
         {
             commands.add("--settings")
