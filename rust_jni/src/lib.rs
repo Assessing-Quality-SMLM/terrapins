@@ -1,14 +1,18 @@
 extern crate smlm_hawk_core as hawk_core;
+extern crate smlm_tiff as tiff_wrap;
 extern crate jni;
 
 use hawk_core::config::{Config, AlgorithmConfig, Threading, Memory, RunStyle, NegativeHandling, OutputStyle, Validation};
 use hawk_core::pstreams::{ImageStore};
 
+use tiff_wrap::writer::{StandardTiffWriter, BigTiffWriter};
+
 use jni::{JNIEnv};
 use jni::objects::{JClass, JObject, JFloatArray, ReleaseMode, JString};
-use jni::sys::{jint, jlong, jshort, jstring, jfloatArray};
+use jni::sys::{jboolean, jfloatArray, jint, jlong, jshort, jstring, JNI_FALSE, JNI_TRUE};
 
 use std::cell::RefCell;
+use std::fs::File;
 
 type JavaConfig = Config;
 
@@ -197,5 +201,52 @@ pub extern "system" fn Java_com_coxphysics_terrapins_models_hawk_NativeHAWK_hawk
     {
         Ok(a) => **a,
         Err(_e) => std::ptr::null_mut()
+    }
+}
+
+fn write_to_tiff_stack(filename: &str, image_store: &ImageJImageStore, config: &Config, width: u32, height: u32) -> Result<bool, String>
+{
+    let n_frames = image_store.get_stack_size().map_err(|_e| format!("Could not get store size"))?;
+    let algorithm_config = config.algorithm_config();
+    let output_size = hawk_core::utils::output_size(n_frames as u64, algorithm_config);
+
+    let height = height as u32;
+    let width = width as u32;
+    let writer = File::create(filename).map_err(|e| format!("Could not create file {filename} due to {e}"))?;
+    let mut output_tiff = BigTiffWriter::buffered(writer, width, height).map_err(|e| format!("Could not create tiff writer due to {e}"))?;
+    
+    let mut tiff_image = output_tiff.create_image_for::<f32>().map_err(|e| e.to_string()).unwrap();
+    let metadata  = hawk_core::get_metadata(config);
+    let _ = tiff_image.write_image_description(&metadata);
+
+    let n_pixels = (height * width).try_into().map_err(|e| format!("Could not cast {height} * {width} into usize due to {e}"))?;
+    let image = hawk_core::pstreams::get_hawk_stream_value(image_store, 0, n_pixels, algorithm_config);
+    tiff_image.write_data(&image).map_err(|e| e.to_string()).unwrap();
+
+    for timepoint in 1..output_size
+    {
+        let frame_number = timepoint.try_into().map_err(|e| format!("Could not cast {timepoint} into usize due to {e}"))?;
+        let image = hawk_core::pstreams::get_hawk_stream_value(image_store, frame_number, n_pixels, algorithm_config);
+        let _ = output_tiff.write_image_for(&image).map_err(|e| format!("Could not write frame {timepoint} due to {e}"))?;
+    }
+    Ok(true)
+
+}
+
+#[no_mangle]
+pub extern "system" fn Java_com_coxphysics_terrapins_models_hawk_NativeHAWK_hawk_1to_1file<'local>(mut env: JNIEnv<'local>, _class: JClass<'local>, stack_wrapper: JObject, config_ptr_address: jlong, height: jint, width: jint, filename: JString<'local>) -> jboolean
+{
+    let config_ptr = config_ptr_address as *const JavaConfig;
+    let config: &JavaConfig = unsafe{&*config_ptr};
+    let filename : String = env.get_string(&filename).expect("Couldn't get java string!").into();
+    let image_store = ImageJImageStore::new(env, stack_wrapper);
+    match write_to_tiff_stack(&filename, &image_store, config, width as u32, height as u32)
+    {
+        Ok(result) => if result{JNI_TRUE} else{JNI_FALSE},
+        Err(_e) => 
+        {
+            println!("{_e}");
+            JNI_FALSE
+        }
     }
 }
