@@ -30,6 +30,12 @@ public class PStream extends ImageStack implements AutoCloseable{
         return NativeHAWK.get_metadata(config_ptr_);
     }
 
+    public boolean write_to_disk(String filename)
+    {
+        StackWrapper wrapper = StackWrapper.from_stack(stack_);
+        return NativeHAWK.hawk_to_file(wrapper, config_ptr_, stack_.getHeight(), stack_.getWidth(), filename);
+    }
+
     /** Returns the number of slices in this stack. */
     @Override
     public int getSize()
