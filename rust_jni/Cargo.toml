@@ -8,5 +8,7 @@ jni = "0.21"
 # smlm-hawk-core = {path = "../../hawk/smlm-hawk-core"}
 smlm-hawk-core = "0.2"
 
+smlm-tiff = "0.7"
+
 [lib]
 crate-type = ["cdylib"]

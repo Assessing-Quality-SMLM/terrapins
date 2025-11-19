@@ -42,4 +42,6 @@ public class NativeHAWK
     public static native long output_size(long config_ptr, long n_frames);
 
     public static native float[] hawk_stream_get_image_float(Object stack_wrapper, long config_ptr, int stream_index, int n_pixels);
+
+    public static native boolean hawk_to_file(Object stack_wrapper, long config_ptr, int height, int width, String file_name);
 }

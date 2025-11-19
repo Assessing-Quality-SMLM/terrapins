@@ -1,6 +1,7 @@
 package com.coxphysics.terrapins.models.hawk
 
 class Settings private constructor(
+    private var filename_: String?,
     private val n_levels_: Int,
     private val negative_handling_: String,
     private val output_style_: String)
@@ -10,7 +11,7 @@ class Settings private constructor(
         @JvmStatic
         fun from(n_levels: Int, negative_handling: String, output_style: String) : Settings
         {
-            return Settings(n_levels, negative_handling, output_style)
+            return Settings(null, n_levels, negative_handling, output_style)
         }
 
         @JvmStatic
@@ -25,6 +26,16 @@ class Settings private constructor(
         {
             return default()
         }
+    }
+
+    fun filename(): String?
+    {
+        return filename_
+    }
+
+    fun set_filename(value: String)
+    {
+        filename_ = value
     }
 
     fun n_levels(): Int

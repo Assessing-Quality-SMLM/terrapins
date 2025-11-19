@@ -1,31 +1,39 @@
 package com.coxphysics.terrapins.views.hawk;
 
-import com.coxphysics.terrapins.models.hawk.Settings;
-import com.coxphysics.terrapins.views.NumericField;
-import com.coxphysics.terrapins.views.StringChoice;
-import com.coxphysics.terrapins.views.TextAreas;
-import com.coxphysics.terrapins.views.Utils;
 import com.coxphysics.terrapins.models.hawk.Config;
+import com.coxphysics.terrapins.models.hawk.Settings;
+import com.coxphysics.terrapins.views.*;
 import ij.gui.GenericDialog;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import static com.coxphysics.terrapins.models.hawk.ConstantsKt.*;
 
-public class HawkUI
-{
+public class HawkUI implements ItemListener {
     private final NumericField n_levels_;
     private final StringChoice negative_values_;
     private final StringChoice output_order_;
 
     private final TextAreas text_;
 
-    private HawkUI(NumericField n_levels, StringChoice negative_values, StringChoice output_order, TextAreas text)
+    private final Checkbox save_to_disk_;
+    private final FileField output_filename_;
+    private HawkUI(
+            NumericField n_levels,
+            StringChoice negative_values,
+            StringChoice output_order,
+            TextAreas text,
+            Checkbox save_to_disk,
+            FileField output_filename)
     {
         n_levels_ = n_levels;
         output_order_ = output_order;
         negative_values_ = negative_values;
         text_ = text;
+        save_to_disk_ = save_to_disk;
+        output_filename_ = output_filename;
     }
 
     public static HawkUI add_to_dialog(GenericDialog dialog, Settings settings)
@@ -34,7 +42,12 @@ public class HawkUI
         StringChoice negative_values = Utils.add_string_choice(dialog, "Negative values", new String[]{ABSOLUTE, SEPARATE}, settings.negative_handling());
         StringChoice output_order = Utils.add_string_choice(dialog,"Output order", new String[]{SEQUENTIAL, TEMPORALLY}, settings.output_style());
         TextAreas text = Utils.add_text_areas(dialog, "", null, 8, 30);
-        return new HawkUI(n_levels, negative_values, output_order, text);
+        Checkbox save_to_disk = Utils.add_checkbox(dialog, "Save to disk", false);
+        FileField file_field = Utils.add_file_field(dialog, "HAWK output file", settings.filename());
+        file_field.set_enabled(save_to_disk.is_checked());
+        HawkUI ui = new HawkUI(n_levels, negative_values, output_order, text, save_to_disk, file_field);
+        save_to_disk.add_item_listener(ui);
+        return ui;
     }
 
     public Config create_settings_recorded(GenericDialog dialog)
@@ -48,7 +61,12 @@ public class HawkUI
         String negative_handling = Utils.extract_string_choice(dialog);
         String output_style = Utils.extract_string_choice(dialog);
 
+        boolean save_to_disk = Utils.extract_checkbox_value(dialog);
+        String filename = Utils.extract_file_field(dialog);
+
         Settings settings = Settings.from(n_levels, negative_handling, output_style);
+        if (save_to_disk)
+            settings.set_filename(filename);
         return Config.from(settings);
     }
 
@@ -61,7 +79,11 @@ public class HawkUI
     @NotNull
     private Settings read_into_settings()
     {
-        return Settings.from(n_levels(), negative_handling(), output_style());
+        String filename = output_filename_.filepath();
+        Settings settings = Settings.from(n_levels(), negative_handling(), output_style());
+        if (save_to_disk_.is_checked())
+            settings.set_filename(filename);
+        return settings;
     }
 
     public int n_levels()
@@ -86,5 +108,28 @@ public class HawkUI
         negative_values_.set_visible(value);
         output_order_.set_visible(value);
         text_.set_visibility(value);
+        save_to_disk_.set_visibility(value);
+        output_filename_.set_visibility(value);
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e)
+    {
+        Object source = e.getSource();
+        if (save_to_disk_.is_checkbox(source))
+        {
+            sync_filename_to_checkbox();
+        }
+    }
+
+    private void sync_filename_to_checkbox()
+    {
+        output_filename_.set_enabled(save_to_disk_.is_checked());
+    }
+
+    public void save_to_disk(boolean value)
+    {
+        save_to_disk_.set_checked(value);
+        sync_filename_to_checkbox();
     }
 }

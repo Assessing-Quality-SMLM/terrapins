@@ -7,6 +7,7 @@ import ij.measure.Calibration;
 import ij.plugin.filter.ExtendedPlugInFilter;
 import ij.plugin.filter.PlugInFilterRunner;
 import ij.process.ImageProcessor;
+import org.jetbrains.annotations.Nullable;
 
 public class PStreamFilter implements ExtendedPlugInFilter {
     Config config_ = null;
@@ -82,15 +83,22 @@ public class PStreamFilter implements ExtendedPlugInFilter {
 
     public ImagePlus get_image_plus()
     {
+        PStream p_stream = create_p_stream();
+        if (p_stream == null) return null;
+        ImagePlus view = new ImagePlus("JHAWK pstream", p_stream);
+        view.setCalibration(get_calibration());
+        String metadata = p_stream.get_metadata();
+        view.setProp("hawk_metadata", metadata);
+        return view;
+    }
+
+    @Nullable
+    public PStream create_p_stream()
+    {
         if (image_ == null || config_ == null || !valid_output_size())
             return null;
         int n_pixels = image_.getWidth() * image_.getHeight();
-        PStream new_stack = PStream.from(image_.getStack(), config_, output_size_, n_pixels);
-        ImagePlus view = new ImagePlus("JHAWK pstream", new_stack);
-        view.setCalibration(get_calibration());
-        String metadata = new_stack.get_metadata();
-        view.setProp("hawk_metadata", metadata);
-        return view;
+        return PStream.from(image_.getStack(), config_, output_size_, n_pixels);
     }
 
     private Calibration get_calibration()
@@ -100,6 +108,21 @@ public class PStreamFilter implements ExtendedPlugInFilter {
         return base;
     }
 
+    public boolean write_to_disk()
+    {
+        try (PStream p_stream = create_p_stream())
+        {
+            if (p_stream == null)
+                return false;
+            if (config_.has_output_filename_set())
+                return p_stream.write_to_disk(config_.filename());
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+        return false;
+    }
     public static void main(String[] args) throws Exception {
         // set the plugins.dir property to make the plugin appear in the Plugins menu
         // see: https://stackoverflow.com/a/7060464/1207769
