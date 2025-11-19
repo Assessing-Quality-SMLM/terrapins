@@ -3,7 +3,6 @@ package com.coxphysics.terrapins.views.assessment.workflow
 import com.coxphysics.terrapins.models.assessment.workflow.Settings
 import com.coxphysics.terrapins.views.Button
 import com.coxphysics.terrapins.views.Checkbox
-import com.coxphysics.terrapins.views.Message
 import com.coxphysics.terrapins.views.RadioButtons
 import com.coxphysics.terrapins.views.Utils
 import com.coxphysics.terrapins.views.assessment.localisations.AssessmentUI
