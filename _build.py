@@ -45,14 +45,14 @@ def _merge_frc(resources_dir: str) -> bool:
 def _merge_hawkman_and_squirrel(resources_dir: str) -> bool:
     artifacts = "hawkman_and_squirrel_artifacts"
     repo = "https://github.com/Assessing-Quality-SMLM/hawkman/"
-    release = "hawkman_and_squirrel_0.10.0"
+    release = "hawkman_and_squirrel_0.12.0"
     return _merge(resources_dir, artifacts, repo, release)
 
 
 def _merge_assessment(resources_dir: str) -> bool:
     artifacts = "assessment_artifacts"
     repo = "https://github.com/Assessing-Quality-SMLM/assessment/"
-    release = "assessment_0.11.0"
+    release = "assessment_0.13.0"
     return _merge(resources_dir, artifacts, repo, release)
 
 
