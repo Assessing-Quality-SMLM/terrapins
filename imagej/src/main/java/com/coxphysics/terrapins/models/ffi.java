@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Map;
 
 public class ffi
 {
@@ -182,5 +183,23 @@ public class ffi
         if (in == null)
             return null;
         return copy_to_temp(resource_name, in, in_bin, is_exe);
+    }
+
+    public static void set_library_path_for(ProcessBuilder process_builder, Path exe_path)
+    {
+        set_library_path(process_builder, exe_path.getParent());
+    }
+    public static void set_library_path(ProcessBuilder process_builder, Path library_path)
+    {
+        if (is_nix())
+        {
+            Map<String, String> env = process_builder.environment();
+            env.put("LD_LIBRARY_PATH", library_path.toString());
+        }
+        if (is_mac())
+        {
+            Map<String, String> env = process_builder.environment();
+            env.put("DYLD_FALLBACK_LIBRARY_PATH", library_path.toString());
+        }
     }
 }
