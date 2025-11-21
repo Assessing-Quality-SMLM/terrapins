@@ -101,6 +101,7 @@ class Squirrel private constructor(private val exe_path_: Path)
         val commands = get_commands(widefield_image, widefield_path, sr_path, settings);
 //        val builder = process_runnder.create_builder(commands)
         val builder = ProcessBuilder(commands)
+        ffi.set_library_path_for(builder, exe_path_);
         val exit_code = runner.run(builder)
         return exit_code == 0
     }
