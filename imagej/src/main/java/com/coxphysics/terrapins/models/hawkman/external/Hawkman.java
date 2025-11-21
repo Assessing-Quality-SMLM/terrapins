@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class Hawkman
 {
@@ -43,7 +44,54 @@ public class Hawkman
                                                                         "libOrbbecSDK.1.9.dylib",
                                                                         "libOrbbecSDK.dylib");
 
-    private final static List<String> unix_extra_sos_ = Arrays.asList("libomp.so");
+    private final static List<String> unix_extra_sos_ = Arrays.asList("libomp.so",
+                                                                      "libopencv_calib3d.so",
+                                                                      "libopencv_calib3d.so.4.11.0",
+                                                                      "libopencv_calib3d.so.411",
+                                                                      "libopencv_core.so",
+                                                                      "libopencv_core.so.4.11.0",
+                                                                      "libopencv_core.so.411",
+                                                                      "libopencv_dnn.so",
+                                                                      "libopencv_dnn.so.4.11.0",
+                                                                      "libopencv_dnn.so.411",
+                                                                      "libopencv_features2d.so",
+                                                                      "libopencv_features2d.so.4.11.0",
+                                                                      "libopencv_features2d.so.411",
+                                                                      "libopencv_flann.so",
+                                                                      "libopencv_flann.so.4.11.0",
+                                                                      "libopencv_flann.so.411",
+                                                                      "libopencv_gapi.so",
+                                                                      "libopencv_gapi.so.4.11.0",
+                                                                      "libopencv_gapi.so.411",
+                                                                      "libopencv_highgui.so",
+                                                                      "libopencv_highgui.so.4.11.0",
+                                                                      "libopencv_highgui.so.411",
+                                                                      "libopencv_imgcodecs.so",
+                                                                      "libopencv_imgcodecs.so.4.11.0",
+                                                                      "libopencv_imgcodecs.so.411",
+                                                                      "libopencv_imgproc.so",
+                                                                      "libopencv_imgproc.so.4.11.0",
+                                                                      "libopencv_imgproc.so.411",
+                                                                      "libopencv_java4110.so",
+                                                                      "libopencv_ml.so",
+                                                                      "libopencv_ml.so.4.11.0",
+                                                                      "libopencv_ml.so.411",
+                                                                      "libopencv_objdetect.so",
+                                                                      "libopencv_objdetect.so.4.11.0",
+                                                                      "libopencv_objdetect.so.411",
+                                                                      "libopencv_photo.so",
+                                                                      "libopencv_photo.so.4.11.0",
+                                                                      "libopencv_photo.so.411",
+                                                                      "libopencv_stitching.so",
+                                                                      "libopencv_stitching.so.4.11.0",
+                                                                      "libopencv_stitching.so.411",
+                                                                      "libopencv_ts.a",
+                                                                      "libopencv_video.so",
+                                                                      "libopencv_video.so.4.11.0",
+                                                                      "libopencv_video.so.411",
+                                                                      "libopencv_videoio.so",
+                                                                      "libopencv_videoio.so.4.11.0",
+                                                                      "libopencv_videoio.so.411");
 
 
     private Hawkman(Path exe_path)
