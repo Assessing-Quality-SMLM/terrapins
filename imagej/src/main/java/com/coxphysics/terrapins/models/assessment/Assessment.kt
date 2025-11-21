@@ -188,6 +188,7 @@ class Assessment private constructor(private val exe_location_: Path)
     private fun run_arguments(runner: Runner, arguments: List<String>, working_directory: Path, data_name: String?): AssessmentResults?
     {
         val pb = ProcessBuilder(arguments)
+        ffi.set_library_path_for(pb, exe_location_);
         val exit_code = runner.run(pb)
         if (exit_code != 0)
         {

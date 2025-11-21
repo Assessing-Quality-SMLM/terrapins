@@ -138,6 +138,7 @@ public class Hawkman
     {
         List<String> commands = get_commands(image_paths.component1(), image_paths.component2(), settings);
         ProcessBuilder pb = new ProcessBuilder(commands);
+        ffi.set_library_path_for(pb, exe_path_);
         try
         {
             Process p = pb.start();
