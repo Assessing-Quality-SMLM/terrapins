@@ -66,6 +66,7 @@ class Assessment private constructor(private val exe_location_: Path)
     {
         val commands = get_commands()
         add_core_commands(images.core_settings(), data_name, commands)
+        add_equipment(images.equipment_settings(), commands)
         add_image_commands_to(commands, images)
         return commands
     }
@@ -86,9 +87,9 @@ class Assessment private constructor(private val exe_location_: Path)
 //      --zip-split-b <ZIP_SPLIT_B>          Rendering of second part of data zip split
 //      --pixel-size-nm <PIXEL_SIZE_NM>      Pixel size (nm) in images
 //      --psf-px <PSF_PX>                    PSF size (px) in images
-        commands.add("image")
         commands.add("--magnification")
         commands.add(settings.magnification().toString())
+        commands.add("image")
         if (settings.reference_image_is_valid())
         {
             val reference_path = settings.reference_image_path()
@@ -134,7 +135,7 @@ class Assessment private constructor(private val exe_location_: Path)
                 commands.add(zip_split_b_path.toString())
             }
         }
-        add_equipment(true, settings.equipment_settings(), commands)
+//        add_equipment(true, settings.equipment_settings(), commands)
     }
 
     fun run_localisations(runner : Runner, localisations: AssessmentSettings): AssessmentResults?
@@ -148,15 +149,16 @@ class Assessment private constructor(private val exe_location_: Path)
     {
         val commands = get_commands()
         add_core_commands(localisations.core_settings(), data_name, commands)
+        add_equipment(localisations.equipment(), commands)
         add_localisations_commands(localisations, commands)
         return commands
     }
 
     private fun add_localisations_commands(settings: AssessmentSettings, commands: MutableList<String>)
     {
-        commands.add("localisation")
         commands.add("--magnification")
         commands.add(settings.magnification().toString())
+        commands.add("localisation")
         if (settings.has_localisation_file())
         {
             commands.add("--locs")
@@ -170,7 +172,7 @@ class Assessment private constructor(private val exe_location_: Path)
             commands.add("--locs-hawk-format")
             commands.add(settings.hawk_localisation_file_parse_method())
         }
-        add_equipment(false, settings.equipment(), commands)
+//        add_equipment(false, settings.equipment(), commands)
     }
 
     private fun generate_data_name(): String?
@@ -181,7 +183,7 @@ class Assessment private constructor(private val exe_location_: Path)
 
     fun date_time_to_file_path(date_time: LocalDateTime): String?
     {
-        val formatter = DateTimeFormatter.ofPattern("yyyy_MM_dd_hh_mm_ss")
+        val formatter = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss")
         return date_time.format(formatter)
     }
 
@@ -249,26 +251,12 @@ class Assessment private constructor(private val exe_location_: Path)
         commands.add("--extract")
     }
 
-    private fun add_equipment(is_images: Boolean, settings: EquipmentSettings, commands: MutableList<String>)
+    private fun add_equipment(settings: EquipmentSettings, commands: MutableList<String>)
     {
-        if (is_images)
-        {
-            commands.add("--pixel-size-nm")
-        }
-        else
-        {
-            commands.add("--camera-pixel-size-nm")
-        }
+        commands.add("--camera-pixel-size-nm")
         commands.add(settings.camera_pixel_size_nm().toString())
 
-        if (is_images)
-        {
-            commands.add("--psf-px")
-        }
-        else
-        {
-            commands.add("--instrument-psf-fwhm-nm")
-        }
+        commands.add("--instrument-psf-fwhm-nm")
         commands.add(settings.instrument_psf_fwhm_nm().toString())
     }
 }
