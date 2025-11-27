@@ -79,7 +79,8 @@ class AssessmentUI private constructor(
         settings.set_hawk_localisation_file(hawked_locaoisation_file)
 
         val core_settings = core_settings_ui_.create_settings_record(dialog)
-        settings.set_core_settings(core_settings)
+        settings.set_image_stack(core_settings.image_stack())
+        settings.set_widefield(core_settings.widefield())
 
         // advanced visible
         val settings_file = settings_file_field_.extract_from(dialog)
