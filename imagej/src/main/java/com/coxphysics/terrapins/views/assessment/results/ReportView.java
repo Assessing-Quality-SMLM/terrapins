@@ -115,6 +115,9 @@ public class ReportView extends JFrame {
     private AssessmentView squirrel_assessment_;
     private AssessmentView drift_assessment_;
     private AssessmentView magnification_assessment_;
+    private JTabbedPane tabbed_panel_;
+    private JScrollPane details_scroll_panel_;
+    private JPanel details_scrolling_panel_;
 
     private ReportView(ReportVM view_model) {
         view_model_ = view_model;
@@ -144,14 +147,11 @@ public class ReportView extends JFrame {
 
     public void update_data_path_from_view() {
         String new_path_text = data_path_.getText();
-        try
-        {
+        try {
             Path new_path = Paths.get(new_path_text);
             view_model_.set_data_path(new_path);
             update_views();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             String message = "Could not load path due to " + e;
             IJ.log(message);
         }
@@ -173,14 +173,12 @@ public class ReportView extends JFrame {
         update_squirrel_assessment();
     }
 
-    private void update_drift_assessment()
-    {
+    private void update_drift_assessment() {
         AssessmentVM view_model = view_model_.drift_assessment();
         drift_assessment_.set_view_model(view_model);
     }
 
-    private void update_magnification_assessment()
-    {
+    private void update_magnification_assessment() {
         AssessmentVM view_model = view_model_.magnification_assessment();
         magnification_assessment_.set_view_model(view_model);
     }
@@ -190,8 +188,7 @@ public class ReportView extends JFrame {
         blinking_assessment_.set_view_model(vieW_model);
     }
 
-    private void update_sampling_assessment()
-    {
+    private void update_sampling_assessment() {
         AssessmentVM view_model = view_model_.sampling_assessment();
         sampling_assessment_.set_view_model(view_model);
     }
@@ -250,8 +247,13 @@ public class ReportView extends JFrame {
         data_path_btn_.setLabel("Find");
         data_path_btn_.setText("Find");
         content_panel_.add(data_path_btn_, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        tabbed_panel_ = new JTabbedPane();
+        content_panel_.add(tabbed_panel_, new GridConstraints(1, 0, 1, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
+        final JPanel panel1 = new JPanel();
+        panel1.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        tabbed_panel_.addTab("Reports", panel1);
         scroll_panel_ = new JScrollPane();
-        content_panel_.add(scroll_panel_, new GridConstraints(1, 0, 1, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel1.add(scroll_panel_, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         scrolling_panel_ = new JPanel();
         scrolling_panel_.setLayout(new GridLayoutManager(8, 1, new Insets(0, 0, 0, 0), -1, -1));
         scroll_panel_.setViewportView(scrolling_panel_);
@@ -271,6 +273,14 @@ public class ReportView extends JFrame {
         scrolling_panel_.add(sampling_assessment_.$$$getRootComponent$$$(), new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         magnification_assessment_ = new AssessmentView();
         scrolling_panel_.add(magnification_assessment_.$$$getRootComponent$$$(), new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JPanel panel2 = new JPanel();
+        panel2.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        tabbed_panel_.addTab("Details", panel2);
+        details_scroll_panel_ = new JScrollPane();
+        panel2.add(details_scroll_panel_, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        details_scrolling_panel_ = new JPanel();
+        details_scrolling_panel_.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        details_scroll_panel_.setViewportView(details_scrolling_panel_);
     }
 
     /**
