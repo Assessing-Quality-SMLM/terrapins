@@ -56,12 +56,12 @@ class ReportVM private constructor(private val model_ : Report)
         return AssessmentVM.from(assessment)
     }
 
-    fun display_drift_details(show_details: Boolean)
+    fun display_drift_report_details(show_details: Boolean)
     {
         if (show_details)
-            model_.show_drift_details()
+            model_.show_drift_report_details()
         else
-            model_.hide_drift_details()
+            model_.hide_drift_report_details()
     }
 
     fun magnification_assessment(): AssessmentVM

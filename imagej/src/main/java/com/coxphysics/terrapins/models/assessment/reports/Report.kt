@@ -2,6 +2,7 @@ package com.coxphysics.terrapins.models.assessment.reports
 
 import com.coxphysics.terrapins.models.assessment.AssessmentResults
 import com.coxphysics.terrapins.models.assessment.results.FRC
+import com.coxphysics.terrapins.models.frc.Plotter
 import com.coxphysics.terrapins.views.frc.CalibrationView
 import com.coxphysics.terrapins.views.frc.ResultsView
 import java.nio.file.Path
@@ -76,16 +77,14 @@ class Report private constructor(private val results_: AssessmentResults)
         return drift_assessment_
     }
 
-    fun show_drift_details()
+    fun show_drift_report_details()
     {
-        drift_view_?.show()
-        half_view_?.show()
+        drift_report_view_?.show()
     }
 
-    fun hide_drift_details()
+    fun hide_drift_report_details()
     {
-        drift_view_?.hide()
-        half_view_?.hide()
+        drift_report_view_?.hide()
     }
 
     fun magnification_assessment(): Assessment?

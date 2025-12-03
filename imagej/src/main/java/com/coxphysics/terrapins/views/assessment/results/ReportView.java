@@ -138,7 +138,7 @@ public class ReportView extends JFrame {
         view.setTitle("Results View");
         view.add(view.content_panel_);
         view.reset_data_path();
-        view.drift_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.drift_assessment_, view_model::display_drift_details));
+        view.drift_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.drift_assessment_, view_model::display_drift_report_details));
         view.magnification_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.magnification_assessment_, view_model::display_magnification_details));
         view.blinking_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.blinking_assessment_, view_model::display_blinking_details));
         view.sampling_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.sampling_assessment_, view_model::display_sampling_details));
