@@ -159,9 +159,9 @@ class Dialog private constructor() : NonBlockingGenericDialog("Results"), Action
     private fun create_results_views()
     {
         results_ = results()
-        half_split_results_ = results_?.half_split_results()?.let { r -> FrcResultsView.with(r, "Half Split") }
-        zip_split_results_ = results_?.zip_split_results()?.let { r -> FrcResultsView.with(r, "Zip Split") }
-        drift_split_results_ = results_?.drift_split_results()?.let { r -> FrcResultsView.with(r, "Drift Split") }
+        half_split_results_ = results_?.half_split_results()?.results()?.let { r -> FrcResultsView.with(r, "Half Split") }
+        zip_split_results_ = results_?.zip_split_results()?.results()?.let { r -> FrcResultsView.with(r, "Zip Split") }
+        drift_split_results_ = results_?.drift_split_results()?.results()?.let { r -> FrcResultsView.with(r, "Drift Split") }
         hawkman_results_ = results_?.hawkman_results()?.let { r -> HawkmanResultsView.from(r) }
         squirrel_results_ = results_?.squirrel_results()?.let { r -> SquirrelResultsView.from(r) }
     }

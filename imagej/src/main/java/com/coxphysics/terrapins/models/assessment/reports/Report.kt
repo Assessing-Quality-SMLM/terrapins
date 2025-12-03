@@ -1,7 +1,7 @@
 package com.coxphysics.terrapins.models.assessment.reports
 
 import com.coxphysics.terrapins.models.assessment.AssessmentResults
-import com.coxphysics.terrapins.models.frc.FRCResult
+import com.coxphysics.terrapins.models.assessment.results.FRC
 import com.coxphysics.terrapins.views.frc.CalibrationView
 import com.coxphysics.terrapins.views.frc.ResultsView
 import java.nio.file.Path
@@ -19,13 +19,13 @@ class Report private constructor(private val results_: AssessmentResults)
     private var bias_assessment_ : Assessment? = null
     private var squirrel_assessment_ : Assessment? = null
 
-    private var half_results_ : FRCResult? = null
+    private var half_results_ : FRC? = null
     private var half_view_: ResultsView? = null
 
-    private var drift_results_ : FRCResult? = null
+    private var drift_results_ : FRC? = null
     private var drift_view_: ResultsView? = null
 
-    private var zip_results_ : FRCResult? = null
+    private var zip_results_ : FRC? = null
     private var zip_view_: ResultsView? = null
 
     private var hawkman_results_ : HawkmanResultsView? = null
@@ -52,6 +52,21 @@ class Report private constructor(private val results_: AssessmentResults)
     {
         results_.set_data_path(path)
         cache_data()
+    }
+
+    fun half_split_results(): FRC?
+    {
+        return half_results_
+    }
+
+    fun drift_split_results(): FRC?
+    {
+        return drift_results_
+    }
+
+    fun zip_split_results(): FRC?
+    {
+        return zip_results_
     }
 
     fun drift_assessment(): Assessment?
@@ -180,13 +195,13 @@ class Report private constructor(private val results_: AssessmentResults)
         squirrel_assessment_ = results_.squirrel_assessment()
 
         half_results_ = results_.half_split_results()
-        half_view_ = half_results_?.let { r -> ResultsView.with(r, "Half Split") }
+        half_view_ = half_results_?.results()?.let{ r -> ResultsView.with(r, "Half Split") }
 
         zip_results_ = results_.zip_split_results()
-        zip_view_ = zip_results_?.let { r ->  ResultsView.with(r, "Zip Split") }
+        zip_view_ = zip_results_?.results()?.let{ r ->  ResultsView.with(r, "Zip Split") }
 
         drift_results_ = results_.drift_split_results()
-        drift_view_ = drift_results_?.let { r -> ResultsView.with(r, "Drift Split") }
+        drift_view_ = drift_results_?.results()?.let { r -> ResultsView.with(r, "Drift Split") }
 
         hawkman_results_ = results_.hawkman_results()?.let{ r -> HawkmanResultsView.from(r)}
         squirrel_results_ = results_.squirrel_results()?.let{r -> SquirrelResultsView.from(r)}
