@@ -7,9 +7,11 @@ import com.coxphysics.terrapins.models.utils.StringUtils
 import java.io.File
 import java.nio.file.Path
 import com.coxphysics.terrapins.models.assessment.results.FRC
+import com.coxphysics.terrapins.models.assessment.results.Recon
 import com.coxphysics.terrapins.models.hawkman.external.Results as HawkmanResults
 import com.coxphysics.terrapins.models.squirrel.external.Results as SquirrelResults
 
+private const val RECON = "recon"
 private const val HALF_SPLIT_DATA = "frc_half_split"
 private const val ZIP_SPLIT_DATA = "frc_zip_split"
 private const val DRIFT_SPLIT_DATA = "frc_drift_split"
@@ -49,6 +51,16 @@ class AssessmentResults private constructor(private var data_path: Path)
     fun set_data_path(value: Path)
     {
         data_path = value
+    }
+
+    private fun recon_path(): Path
+    {
+        return data_path.resolve(RECON)
+    }
+
+    fun recon(): Recon
+    {
+        return Recon.from(recon_path())
     }
 
     private fun reports_path(): Path
