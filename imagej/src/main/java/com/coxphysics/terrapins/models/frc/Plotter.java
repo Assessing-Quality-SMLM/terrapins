@@ -35,7 +35,7 @@ public class Plotter
             Color colour = colour_map.get(curve.component1());
             p.setColor(colour);
             plot_score(result, p);
-            String prefix = names.length() < 1 ? "" : "\t";
+            String prefix = names.isEmpty() ? "" : "\t";
             names = String.format("%s%s%s", names, prefix, curve.component1());
         }
 
