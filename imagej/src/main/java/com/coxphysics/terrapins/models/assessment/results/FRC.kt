@@ -39,7 +39,7 @@ class FRC private constructor(private val path: Path)
 
     private fun image_a_data(): String?
     {
-        return read_to_string(image_a_data_path())
+        return FsUtils.read_to_string_utf8(image_a_data_path())
     }
 
     private fun image_b_path(): Path
@@ -59,15 +59,7 @@ class FRC private constructor(private val path: Path)
 
     private fun image_b_data(): String?
     {
-        return read_to_string(image_b_data_path())
-    }
-
-    fun read_to_string(filename: Path): String?
-    {
-        if (!FsUtils.exists(filename))
-            return null
-        val reader = filename.toFile().bufferedReader()
-        return reader.use { it.readText() }
+        return FsUtils.read_to_string_utf8(image_b_data_path())
     }
 
     fun info(): String
