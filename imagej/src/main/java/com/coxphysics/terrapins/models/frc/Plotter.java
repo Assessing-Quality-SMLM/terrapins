@@ -2,6 +2,7 @@ package com.coxphysics.terrapins.models.frc;
 
 import ij.gui.Plot;
 import kotlin.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ public class Plotter
         colour_map.put(SR_25_LABEL, Color.MAGENTA);
         colour_map.put(SR_SAMPLE_LABEL, Color.black);
         String title = "Sampling Calibration Curves";
-        Plot p = new Plot(title, "q (spatial frequency)", "Correlation");
+        Plot p = get_plot(title);
         String names = "";
         for (Pair<String, FRCResult> curve : curves)
         {
@@ -52,7 +53,7 @@ public class Plotter
     public static Plot named_plot(FRCResult result, String name)
     {
         String title = get_title(result.fire_number(), name);
-        Plot p = new Plot(title, "q (spatial frequency)", "Correlation");
+        Plot p = get_plot(title);
         p.setColor(Color.red);
         double[] qs = plot_score(result, p);
         p.setColor(Color.blue);
@@ -62,6 +63,12 @@ public class Plotter
         p.addLegend("Correlation\tThreshold\tMagnification too low\tMagnification too high");
         p.show();
         return p;
+    }
+
+    @NotNull
+    private static Plot get_plot(String title)
+    {
+        return new Plot(title, "q (spatial frequency)", "Correlation");
     }
 
     private static double[] plot_score(FRCResult result, Plot p)
