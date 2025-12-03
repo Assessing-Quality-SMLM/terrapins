@@ -4,6 +4,7 @@ import com.coxphysics.terrapins.view_models.assessment.AssessmentVM;
 import com.coxphysics.terrapins.view_models.assessment.ReportVM;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.intellij.uiDesigner.core.Spacer;
 import ij.IJ;
 
 import javax.swing.*;
@@ -115,6 +116,15 @@ public class ReportView extends JFrame {
     private AssessmentView squirrel_assessment_;
     private AssessmentView drift_assessment_;
     private AssessmentView magnification_assessment_;
+    private JTabbedPane tabbed_panel_;
+    private JScrollPane results_scroll_pane_;
+    private JCheckBox hawk_recon_;
+    private JCheckBox recon_;
+    private JCheckBox half_split_frc_;
+    private JCheckBox drfit_split_frc_;
+    private JCheckBox hawkman_;
+    private JCheckBox average_of_frames_squirrel_;
+    private JCheckBox widefield_squirrel_;
 
     private ReportView(ReportVM view_model) {
         view_model_ = view_model;
@@ -144,14 +154,11 @@ public class ReportView extends JFrame {
 
     public void update_data_path_from_view() {
         String new_path_text = data_path_.getText();
-        try
-        {
+        try {
             Path new_path = Paths.get(new_path_text);
             view_model_.set_data_path(new_path);
             update_views();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             String message = "Could not load path due to " + e;
             IJ.log(message);
         }
@@ -173,14 +180,12 @@ public class ReportView extends JFrame {
         update_squirrel_assessment();
     }
 
-    private void update_drift_assessment()
-    {
+    private void update_drift_assessment() {
         AssessmentVM view_model = view_model_.drift_assessment();
         drift_assessment_.set_view_model(view_model);
     }
 
-    private void update_magnification_assessment()
-    {
+    private void update_magnification_assessment() {
         AssessmentVM view_model = view_model_.magnification_assessment();
         magnification_assessment_.set_view_model(view_model);
     }
@@ -190,8 +195,7 @@ public class ReportView extends JFrame {
         blinking_assessment_.set_view_model(vieW_model);
     }
 
-    private void update_sampling_assessment()
-    {
+    private void update_sampling_assessment() {
         AssessmentVM view_model = view_model_.sampling_assessment();
         sampling_assessment_.set_view_model(view_model);
     }
@@ -250,8 +254,13 @@ public class ReportView extends JFrame {
         data_path_btn_.setLabel("Find");
         data_path_btn_.setText("Find");
         content_panel_.add(data_path_btn_, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        tabbed_panel_ = new JTabbedPane();
+        content_panel_.add(tabbed_panel_, new GridConstraints(1, 0, 1, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
+        final JPanel panel1 = new JPanel();
+        panel1.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        tabbed_panel_.addTab("Reports", panel1);
         scroll_panel_ = new JScrollPane();
-        content_panel_.add(scroll_panel_, new GridConstraints(1, 0, 1, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel1.add(scroll_panel_, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         scrolling_panel_ = new JPanel();
         scrolling_panel_.setLayout(new GridLayoutManager(8, 1, new Insets(0, 0, 0, 0), -1, -1));
         scroll_panel_.setViewportView(scrolling_panel_);
@@ -271,6 +280,43 @@ public class ReportView extends JFrame {
         scrolling_panel_.add(sampling_assessment_.$$$getRootComponent$$$(), new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         magnification_assessment_ = new AssessmentView();
         scrolling_panel_.add(magnification_assessment_.$$$getRootComponent$$$(), new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JPanel panel2 = new JPanel();
+        panel2.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        tabbed_panel_.addTab("Results", panel2);
+        results_scroll_pane_ = new JScrollPane();
+        panel2.add(results_scroll_pane_, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        final JPanel panel3 = new JPanel();
+        panel3.setLayout(new GridLayoutManager(8, 2, new Insets(0, 0, 0, 0), -1, -1));
+        results_scroll_pane_.setViewportView(panel3);
+        final Spacer spacer1 = new Spacer();
+        panel3.add(spacer1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer2 = new Spacer();
+        panel3.add(spacer2, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        hawk_recon_ = new JCheckBox();
+        hawk_recon_.setLabel("HAWK Recon");
+        hawk_recon_.setText("HAWK Recon");
+        panel3.add(hawk_recon_, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        recon_ = new JCheckBox();
+        recon_.setLabel("Recon");
+        recon_.setText("Recon");
+        panel3.add(recon_, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        half_split_frc_ = new JCheckBox();
+        half_split_frc_.setLabel("Half Split FRC");
+        half_split_frc_.setText("Half Split FRC");
+        panel3.add(half_split_frc_, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        drfit_split_frc_ = new JCheckBox();
+        drfit_split_frc_.setLabel("Drift Split FRC");
+        drfit_split_frc_.setText("Drift Split FRC");
+        panel3.add(drfit_split_frc_, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        hawkman_ = new JCheckBox();
+        hawkman_.setText("HAWKMAN");
+        panel3.add(hawkman_, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        average_of_frames_squirrel_ = new JCheckBox();
+        average_of_frames_squirrel_.setText("Average of Frames SQUIRREL");
+        panel3.add(average_of_frames_squirrel_, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        widefield_squirrel_ = new JCheckBox();
+        widefield_squirrel_.setText("True Widefield SQUIRREL");
+        panel3.add(widefield_squirrel_, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**

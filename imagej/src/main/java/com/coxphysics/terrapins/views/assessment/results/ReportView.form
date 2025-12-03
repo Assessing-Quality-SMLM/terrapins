@@ -35,63 +35,181 @@
           <text value="Find"/>
         </properties>
       </component>
-      <scrollpane id="1d18a" binding="scroll_panel_">
+      <tabbedpane id="44f62" binding="tabbed_panel_">
         <constraints>
-          <grid row="1" column="0" row-span="1" col-span="5" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="0" row-span="1" col-span="5" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="200" height="200"/>
+          </grid>
         </constraints>
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="8d337" binding="scrolling_panel_" layout-manager="GridLayoutManager" row-count="8" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="dd309" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
-            <constraints/>
+            <constraints>
+              <tabbedpane title="Reports"/>
+            </constraints>
             <properties/>
             <border type="none"/>
             <children>
-              <nested-form id="ce9b0" form-file="com/coxphysics/terrapins/views/assessment/results/AssessmentView.form" binding="localisation_assessment_">
+              <scrollpane id="1d18a" binding="scroll_panel_">
                 <constraints>
-                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
-              </nested-form>
-              <nested-form id="2ab25" form-file="com/coxphysics/terrapins/views/assessment/results/AssessmentView.form" binding="frc_resolution_assessment_">
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <grid id="8d337" binding="scrolling_panel_" layout-manager="GridLayoutManager" row-count="8" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints/>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <nested-form id="ce9b0" form-file="com/coxphysics/terrapins/views/assessment/results/AssessmentView.form" binding="localisation_assessment_">
+                        <constraints>
+                          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </nested-form>
+                      <nested-form id="2ab25" form-file="com/coxphysics/terrapins/views/assessment/results/AssessmentView.form" binding="frc_resolution_assessment_">
+                        <constraints>
+                          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </nested-form>
+                      <nested-form id="bed9a" form-file="com/coxphysics/terrapins/views/assessment/results/AssessmentView.form" binding="bias_assessment_">
+                        <constraints>
+                          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </nested-form>
+                      <nested-form id="d4228" form-file="com/coxphysics/terrapins/views/assessment/results/AssessmentView.form" binding="squirrel_assessment_">
+                        <constraints>
+                          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </nested-form>
+                      <nested-form id="212f2" form-file="com/coxphysics/terrapins/views/assessment/results/AssessmentView.form" binding="drift_assessment_">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </nested-form>
+                      <nested-form id="e63cb" form-file="com/coxphysics/terrapins/views/assessment/results/AssessmentView.form" binding="blinking_assessment_">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </nested-form>
+                      <nested-form id="a61fd" form-file="com/coxphysics/terrapins/views/assessment/results/AssessmentView.form" binding="sampling_assessment_">
+                        <constraints>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </nested-form>
+                      <nested-form id="3cf20" form-file="com/coxphysics/terrapins/views/assessment/results/AssessmentView.form" binding="magnification_assessment_">
+                        <constraints>
+                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </nested-form>
+                    </children>
+                  </grid>
+                </children>
+              </scrollpane>
+            </children>
+          </grid>
+          <grid id="c4497" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title="Results"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <scrollpane id="d5033" binding="results_scroll_pane_">
                 <constraints>
-                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
-              </nested-form>
-              <nested-form id="bed9a" form-file="com/coxphysics/terrapins/views/assessment/results/AssessmentView.form" binding="bias_assessment_">
-                <constraints>
-                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </nested-form>
-              <nested-form id="d4228" form-file="com/coxphysics/terrapins/views/assessment/results/AssessmentView.form" binding="squirrel_assessment_">
-                <constraints>
-                  <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </nested-form>
-              <nested-form id="212f2" form-file="com/coxphysics/terrapins/views/assessment/results/AssessmentView.form" binding="drift_assessment_">
-                <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </nested-form>
-              <nested-form id="e63cb" form-file="com/coxphysics/terrapins/views/assessment/results/AssessmentView.form" binding="blinking_assessment_">
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </nested-form>
-              <nested-form id="a61fd" form-file="com/coxphysics/terrapins/views/assessment/results/AssessmentView.form" binding="sampling_assessment_">
-                <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </nested-form>
-              <nested-form id="3cf20" form-file="com/coxphysics/terrapins/views/assessment/results/AssessmentView.form" binding="magnification_assessment_">
-                <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </nested-form>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <grid id="723f8" layout-manager="GridLayoutManager" row-count="8" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints/>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <hspacer id="e433">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </hspacer>
+                      <vspacer id="87c50">
+                        <constraints>
+                          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </vspacer>
+                      <component id="4bce2" class="javax.swing.JCheckBox" binding="hawk_recon_">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <label value="HAWK Recon"/>
+                          <text value="HAWK Recon"/>
+                        </properties>
+                      </component>
+                      <component id="dd07e" class="javax.swing.JCheckBox" binding="recon_">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <label value="Recon"/>
+                          <text value="Recon"/>
+                        </properties>
+                      </component>
+                      <component id="be1f4" class="javax.swing.JCheckBox" binding="half_split_frc_">
+                        <constraints>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <label value="Half Split FRC"/>
+                          <text value="Half Split FRC"/>
+                        </properties>
+                      </component>
+                      <component id="7116" class="javax.swing.JCheckBox" binding="drfit_split_frc_">
+                        <constraints>
+                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <label value="Drift Split FRC"/>
+                          <text value="Drift Split FRC"/>
+                        </properties>
+                      </component>
+                      <component id="81957" class="javax.swing.JCheckBox" binding="hawkman_">
+                        <constraints>
+                          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text value="HAWKMAN"/>
+                        </properties>
+                      </component>
+                      <component id="7d87e" class="javax.swing.JCheckBox" binding="average_of_frames_squirrel_">
+                        <constraints>
+                          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text value="Average of Frames SQUIRREL"/>
+                        </properties>
+                      </component>
+                      <component id="3633" class="javax.swing.JCheckBox" binding="widefield_squirrel_">
+                        <constraints>
+                          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text value="True Widefield SQUIRREL"/>
+                        </properties>
+                      </component>
+                    </children>
+                  </grid>
+                </children>
+              </scrollpane>
             </children>
           </grid>
         </children>
-      </scrollpane>
+      </tabbedpane>
     </children>
   </grid>
 </form>
