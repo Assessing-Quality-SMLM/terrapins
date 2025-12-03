@@ -119,10 +119,6 @@ class ReportVM private constructor(
         return AssessmentVM.from(assessment)
     }
 
-    //    fun display_localisation_precision_details(show_details: Boolean)
-//    {
-//    }
-
     fun frc_resolution_assessment(): AssessmentVM
     {
         val assessment = model_.frc_resolution_assessment() ?: return AssessmentVM.empty("Frc Resolution")
