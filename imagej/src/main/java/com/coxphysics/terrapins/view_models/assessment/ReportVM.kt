@@ -3,9 +3,11 @@ package com.coxphysics.terrapins.view_models.assessment
 import com.coxphysics.terrapins.models.assessment.AssessmentResults
 import com.coxphysics.terrapins.models.assessment.reports.Report
 import com.coxphysics.terrapins.view_models.assessment.results.FRCVM
+import com.coxphysics.terrapins.view_models.assessment.results.ReconVM
 import java.nio.file.Path
 
-class ReportVM private constructor(private val model_ : Report)
+class ReportVM private constructor(
+    private val model_ : Report)
 {
     companion object
     {
@@ -30,6 +32,16 @@ class ReportVM private constructor(private val model_ : Report)
     fun set_data_path(value: Path)
     {
         model_.set_data_path(value)
+    }
+
+    fun recon_view_model() : ReconVM
+    {
+        return ReconVM.from("Recon", model_.recon())
+    }
+
+    fun hawk_recon_view_model() : ReconVM
+    {
+        return ReconVM.from("HAWK Recon", model_.hawk_recon())
     }
 
     fun half_split_results() : FRCVM
@@ -111,10 +123,6 @@ class ReportVM private constructor(private val model_ : Report)
         val assessment = model_.localisation_precision_assessment() ?: return AssessmentVM.empty("Localisation Precision")
         return AssessmentVM.from(assessment)
     }
-
-    //    fun display_localisation_precision_details(show_details: Boolean)
-//    {
-//    }
 
     fun frc_resolution_assessment(): AssessmentVM
     {

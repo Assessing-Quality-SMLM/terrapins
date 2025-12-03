@@ -1,7 +1,11 @@
 package com.coxphysics.terrapins.models.utils;
 
+import ij.IJ;
+
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -77,5 +81,26 @@ public class FsUtils
     public static boolean exists(Path path)
     {
         return Files.exists(path);
+    }
+
+    public static String read_to_string_utf8(Path filepath)
+    {
+        return read_to_string(filepath, StandardCharsets.UTF_8);
+    }
+    public static String read_to_string(Path filepath, Charset encoding)
+    {
+        if (!exists(filepath))
+            return null;
+        try
+        {
+            byte[] encoded = Files.readAllBytes(filepath);
+            return new String(encoded, encoding);
+        }
+        catch (IOException e)
+        {
+            String message = String.format("Could not read %s to string: %s", filepath, e);
+            IJ.log(message);
+            return null;
+        }
     }
 }

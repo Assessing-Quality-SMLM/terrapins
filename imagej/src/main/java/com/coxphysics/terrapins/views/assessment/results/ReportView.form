@@ -132,24 +132,6 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="4bce2" class="javax.swing.JCheckBox" binding="hawk_recon_">
-                        <constraints>
-                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <label value="HAWK Recon"/>
-                          <text value="HAWK Recon"/>
-                        </properties>
-                      </component>
-                      <component id="dd07e" class="javax.swing.JCheckBox" binding="recon_">
-                        <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <label value="Recon"/>
-                          <text value="Recon"/>
-                        </properties>
-                      </component>
                       <component id="81957" class="javax.swing.JCheckBox" binding="hawkman_">
                         <constraints>
                           <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -187,6 +169,16 @@
                       <nested-form id="6b39b" form-file="com/coxphysics/terrapins/views/assessment/results/FRCView.form" binding="zip_split_results_">
                         <constraints>
                           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="1" use-parent-layout="false"/>
+                        </constraints>
+                      </nested-form>
+                      <nested-form id="b2ef5" form-file="com/coxphysics/terrapins/views/assessment/results/ReconView.form" binding="recon_view_">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </nested-form>
+                      <nested-form id="d6f9e" form-file="com/coxphysics/terrapins/views/assessment/results/ReconView.form" binding="hawk_recon_view_">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
                       </nested-form>
                     </children>

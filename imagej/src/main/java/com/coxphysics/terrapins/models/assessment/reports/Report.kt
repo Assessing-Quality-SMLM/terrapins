@@ -2,6 +2,7 @@ package com.coxphysics.terrapins.models.assessment.reports
 
 import com.coxphysics.terrapins.models.assessment.AssessmentResults
 import com.coxphysics.terrapins.models.assessment.results.FRC
+import com.coxphysics.terrapins.models.assessment.results.Recon
 import com.coxphysics.terrapins.models.frc.Plotter
 import com.coxphysics.terrapins.views.frc.CalibrationView
 import com.coxphysics.terrapins.views.frc.ResultsView
@@ -56,6 +57,16 @@ class Report private constructor(private val results_: AssessmentResults)
     {
         results_.set_data_path(path)
         cache_data()
+    }
+
+    fun recon(): Recon
+    {
+        return results_.recon()
+    }
+
+    fun hawk_recon(): Recon
+    {
+        return results_.hawk_recon()
     }
 
     fun half_split_results(): FRC?
