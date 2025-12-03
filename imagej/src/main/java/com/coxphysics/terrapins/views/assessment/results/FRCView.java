@@ -5,9 +5,12 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Locale;
 
 class FRCViewImageAction implements ActionListener
 {
@@ -71,8 +74,7 @@ public class FRCView {
     private JTextPane info_pane_;
     private JCheckBox show_info_;
 
-    public FRCView()
-    {
+    public FRCView() {
         show_images_.addActionListener(new FRCViewImageAction(this));
 
         show_plot_.addActionListener(new FRCViewPlotAction(this));
@@ -80,55 +82,46 @@ public class FRCView {
         show_info_.addActionListener(new FRCViewInfoAction(this));
     }
 
-    public void set_view_model(FRCVM view_model)
-    {
+    public void set_view_model(FRCVM view_model) {
         view_model_ = view_model;
         update_view();
     }
 
-    private boolean show_images()
-    {
+    private boolean show_images() {
         return show_images_.isSelected();
     }
 
-    private boolean show_plot()
-    {
+    private boolean show_plot() {
         return show_plot_.isSelected();
     }
 
-    private boolean show_info()
-    {
+    private boolean show_info() {
         return show_info_.isSelected();
     }
 
-    private void update_view()
-    {
+    private void update_view() {
         title_.setText(view_model_.title());
         info_pane_.setText(view_model_.info());
         update_display();
     }
 
-    private void update_display()
-    {
+    private void update_display() {
         update_show_images_state();
         update_show_info_state();
         update_show_plot_state();
     }
 
-    public void update_show_images_state()
-    {
+    public void update_show_images_state() {
         boolean value = show_images();
         view_model_.show_images(value);
     }
 
-    public void update_show_info_state()
-    {
+    public void update_show_info_state() {
         boolean value = show_info();
         info_pane_.setVisible(value);
     }
 
-    public void update_show_plot_state()
-    {
+    public void update_show_plot_state() {
         boolean value = show_plot();
         view_model_.show_results(value);
     }
@@ -154,6 +147,8 @@ public class FRCView {
         show_plot_.setText("Show Plot");
         panel_.add(show_plot_, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         title_ = new JLabel();
+        Font title_Font = this.$$$getFont$$$(null, Font.BOLD, -1, title_.getFont());
+        if (title_Font != null) title_.setFont(title_Font);
         title_.setName("");
         title_.setText("Title");
         panel_.add(title_, new GridConstraints(0, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -166,6 +161,28 @@ public class FRCView {
         show_info_ = new JCheckBox();
         show_info_.setText("Show Image Info");
         panel_.add(show_info_, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+        if (currentFont == null) return null;
+        String resultName;
+        if (fontName == null) {
+            resultName = currentFont.getName();
+        } else {
+            Font testFont = new Font(fontName, Font.PLAIN, 10);
+            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+                resultName = fontName;
+            } else {
+                resultName = currentFont.getName();
+            }
+        }
+        Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+        boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
+        Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
+        return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
     }
 
     /**
