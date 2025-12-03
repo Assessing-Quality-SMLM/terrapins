@@ -64,6 +64,11 @@ class Report private constructor(private val results_: AssessmentResults)
         return results_.recon()
     }
 
+    fun hawk_recon(): Recon
+    {
+        return results_.hawk_recon()
+    }
+
     fun half_split_results(): FRC?
     {
         return half_results_

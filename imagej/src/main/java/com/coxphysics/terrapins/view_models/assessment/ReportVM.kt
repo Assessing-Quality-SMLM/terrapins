@@ -39,6 +39,11 @@ class ReportVM private constructor(
         return ReconVM.from("Recon", model_.recon())
     }
 
+    fun hawk_recon_view_model() : ReconVM
+    {
+        return ReconVM.from("HAWK Recon", model_.hawk_recon())
+    }
+
     fun half_split_results() : FRCVM
     {
         val results = model_.half_split_results() ?: return FRCVM.empty("Half Split")

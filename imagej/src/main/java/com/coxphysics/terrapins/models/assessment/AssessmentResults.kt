@@ -12,6 +12,7 @@ import com.coxphysics.terrapins.models.hawkman.external.Results as HawkmanResult
 import com.coxphysics.terrapins.models.squirrel.external.Results as SquirrelResults
 
 private const val RECON = "recon"
+private const val HAWK_RECON = "hawk"
 private const val HALF_SPLIT_DATA = "frc_half_split"
 private const val ZIP_SPLIT_DATA = "frc_zip_split"
 private const val DRIFT_SPLIT_DATA = "frc_drift_split"
@@ -61,6 +62,16 @@ class AssessmentResults private constructor(private var data_path: Path)
     fun recon(): Recon
     {
         return Recon.from(recon_path())
+    }
+
+    private fun hawk_recon_path(): Path
+    {
+        return data_path.resolve(HAWK_RECON)
+    }
+
+    fun hawk_recon(): Recon
+    {
+        return Recon.from(hawk_recon_path())
     }
 
     private fun reports_path(): Path
