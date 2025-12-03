@@ -3,6 +3,7 @@ package com.coxphysics.terrapins.views.assessment.results;
 import com.coxphysics.terrapins.view_models.assessment.AssessmentVM;
 import com.coxphysics.terrapins.view_models.assessment.results.FRCVM;
 import com.coxphysics.terrapins.view_models.assessment.ReportVM;
+import com.coxphysics.terrapins.view_models.assessment.results.ReconVM;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import ij.IJ;
@@ -119,13 +120,13 @@ public class ReportView extends JFrame {
     private JTabbedPane tabbed_panel_;
     private JScrollPane results_scroll_pane_;
     private JCheckBox hawk_recon_;
-    private JCheckBox recon_;
     private JCheckBox hawkman_;
     private JCheckBox average_of_frames_squirrel_;
     private JCheckBox widefield_squirrel_;
     private FRCView half_split_results_;
     private FRCView drift_split_results_;
     private FRCView zip_split_results_;
+    private ReconView recon_view_;
 
     private ReportView(ReportVM view_model) {
         view_model_ = view_model;
@@ -176,9 +177,15 @@ public class ReportView extends JFrame {
     }
 
     private void update_results() {
+        update_recon_results();
         update_half_split_results();
         update_drift_split_results();
         update_zip_split_results();
+    }
+
+    private void update_recon_results() {
+        ReconVM view_model = view_model_.recon_view_model();
+        recon_view_.set_view_model(view_model);
     }
 
     private void update_half_split_results() {
@@ -319,10 +326,6 @@ public class ReportView extends JFrame {
         hawk_recon_.setLabel("HAWK Recon");
         hawk_recon_.setText("HAWK Recon");
         panel3.add(hawk_recon_, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        recon_ = new JCheckBox();
-        recon_.setLabel("Recon");
-        recon_.setText("Recon");
-        panel3.add(recon_, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         hawkman_ = new JCheckBox();
         hawkman_.setText("HAWKMAN");
         panel3.add(hawkman_, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -338,6 +341,8 @@ public class ReportView extends JFrame {
         panel3.add(drift_split_results_.$$$getRootComponent$$$(), new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         zip_split_results_ = new FRCView();
         panel3.add(zip_split_results_.$$$getRootComponent$$$(), new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 1, false));
+        recon_view_ = new ReconView();
+        panel3.add(recon_view_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
     }
 
     /**
