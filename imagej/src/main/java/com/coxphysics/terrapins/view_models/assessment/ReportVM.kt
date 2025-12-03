@@ -2,6 +2,7 @@ package com.coxphysics.terrapins.view_models.assessment
 
 import com.coxphysics.terrapins.models.assessment.AssessmentResults
 import com.coxphysics.terrapins.models.assessment.reports.Report
+import com.coxphysics.terrapins.view_models.assessment.results.FRCVM
 import java.nio.file.Path
 
 class ReportVM private constructor(private val model_ : Report)
@@ -29,6 +30,24 @@ class ReportVM private constructor(private val model_ : Report)
     fun set_data_path(value: Path)
     {
         model_.set_data_path(value)
+    }
+
+    fun half_split_results() : FRCVM
+    {
+        val results = model_.half_split_results() ?: return FRCVM.empty("Half Split")
+        return FRCVM.from("Half Split", results)
+    }
+
+    fun drift_split_results() : FRCVM
+    {
+        val results = model_.drift_split_results() ?: return FRCVM.empty("Drift Split")
+        return FRCVM.from("Drift Split", results)
+    }
+
+    fun zip_split_results() : FRCVM
+    {
+        val results = model_.zip_split_results() ?: return FRCVM.empty("Zip Split")
+        return FRCVM.from("Zip Split", results)
     }
 
     fun drift_assessment(): AssessmentVM

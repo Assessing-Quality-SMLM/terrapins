@@ -6,6 +6,7 @@ import com.coxphysics.terrapins.models.utils.FsUtils
 import com.coxphysics.terrapins.models.utils.StringUtils
 import java.io.File
 import java.nio.file.Path
+import com.coxphysics.terrapins.models.assessment.results.FRC
 import com.coxphysics.terrapins.models.hawkman.external.Results as HawkmanResults
 import com.coxphysics.terrapins.models.squirrel.external.Results as SquirrelResults
 
@@ -140,9 +141,9 @@ class AssessmentResults private constructor(private var data_path: Path)
         return data_path.resolve(HALF_SPLIT_DATA)
     }
 
-    fun half_split_results() : FRCResult?
+    fun half_split_results() : FRC
     {
-        return FRCResult.from(half_split_results_path())
+        return FRC.from(half_split_results_path())
     }
 
     private fun zip_split_results_path() : Path
@@ -150,9 +151,9 @@ class AssessmentResults private constructor(private var data_path: Path)
         return data_path.resolve(ZIP_SPLIT_DATA)
     }
 
-    fun zip_split_results(): FRCResult?
+    fun zip_split_results(): FRC
     {
-        return FRCResult.from(zip_split_results_path())
+        return FRC.from(zip_split_results_path())
     }
 
     private fun drift_split_results_path() : Path
@@ -160,9 +161,9 @@ class AssessmentResults private constructor(private var data_path: Path)
         return data_path.resolve(DRIFT_SPLIT_DATA)
     }
 
-    fun drift_split_results(): FRCResult?
+    fun drift_split_results(): FRC?
     {
-        return FRCResult.from(drift_split_results_path())
+        return FRC.from(drift_split_results_path())
     }
 
     private fun hawkman_results_path(): Path
