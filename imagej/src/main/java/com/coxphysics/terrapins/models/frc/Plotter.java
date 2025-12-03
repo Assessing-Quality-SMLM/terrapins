@@ -16,6 +16,21 @@ public class Plotter
     private static final float MIN_MAGNIFICATION = 0.2f;
     private static final float MAX_MAGNIFICATION = 0.4f;
 
+    public static Plot merge(String title, Pair<String, FRCResult> result_1, Pair<String, FRCResult> result_2)
+    {
+        Plot plot = get_plot(title);
+        plot.setColor(Color.RED);
+        plot_score(result_1.component2(), plot);
+        plot.setColor(Color.BLUE);
+        plot_score(result_2.component2(), plot);
+        plot.setColor(Color.black);
+        double[] threshold_curve = result_1.component2().threshold_curve();
+        plot.add("line", result_1.component2().qs(), threshold_curve);
+        String legend = String.format("%s\t%s\t%s", result_1.component1(), result_2.component1(), "Threshold");
+        plot.addLegend(legend);
+        return plot;
+    }
+
     public static Plot plot_sampling_calibration_curves(Pair<String, FRCResult>[] curves)
     {
         Map<String, Color> colour_map = new HashMap<String, Color>();
