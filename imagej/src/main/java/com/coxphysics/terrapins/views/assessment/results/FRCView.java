@@ -70,21 +70,14 @@ public class FRCView {
     private JLabel title_;
     private JTextPane info_pane_;
     private JCheckBox show_info_;
-    private final FRCViewImageAction image_listener_;
-
-    private final FRCViewPlotAction plot_listener_;
-    private final FRCViewInfoAction info_listener_;
 
     public FRCView()
     {
-        image_listener_ = new FRCViewImageAction(this);
-        show_images_.addActionListener(image_listener_);
+        show_images_.addActionListener(new FRCViewImageAction(this));
 
-        plot_listener_ = new FRCViewPlotAction(this);
-        show_plot_.addActionListener(plot_listener_);
+        show_plot_.addActionListener(new FRCViewPlotAction(this));
 
-        info_listener_ = new FRCViewInfoAction(this);
-        show_info_.addActionListener(info_listener_);
+        show_info_.addActionListener(new FRCViewInfoAction(this));
     }
 
     public void set_view_model(FRCVM view_model)
