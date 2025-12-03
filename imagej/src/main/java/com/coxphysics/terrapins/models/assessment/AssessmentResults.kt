@@ -161,7 +161,7 @@ class AssessmentResults private constructor(private var data_path: Path)
         return data_path.resolve(DRIFT_SPLIT_DATA)
     }
 
-    fun drift_split_results(): FRC?
+    fun drift_split_results(): FRC
     {
         return FRC.from(drift_split_results_path())
     }
