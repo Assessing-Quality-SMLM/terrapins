@@ -1,11 +1,9 @@
 package com.coxphysics.terrapins.models.frc;
 
-import com.coxphysics.terrapins.models.assessment.AssessmentResults;
 import ij.gui.Plot;
 import kotlin.Pair;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
