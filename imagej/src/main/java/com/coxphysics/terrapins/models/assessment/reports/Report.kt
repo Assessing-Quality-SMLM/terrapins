@@ -25,6 +25,8 @@ class Report private constructor(private val results_: AssessmentResults)
     private var drift_results_ : FRC? = null
     private var drift_view_: ResultsView? = null
 
+    private var drift_report_view_: ResultsView? = null
+
     private var zip_results_ : FRC? = null
     private var zip_view_: ResultsView? = null
 
@@ -195,13 +197,18 @@ class Report private constructor(private val results_: AssessmentResults)
         squirrel_assessment_ = results_.squirrel_assessment()
 
         half_results_ = results_.half_split_results()
-        half_view_ = half_results_?.results()?.let{ r -> ResultsView.with(r, "Half Split") }
+        val half_results = half_results_?.results()
+        half_view_ = half_results?.let{ r -> ResultsView.with(r, "Half Split") }
 
         zip_results_ = results_.zip_split_results()
         zip_view_ = zip_results_?.results()?.let{ r ->  ResultsView.with(r, "Zip Split") }
 
         drift_results_ = results_.drift_split_results()
-        drift_view_ = drift_results_?.results()?.let { r -> ResultsView.with(r, "Drift Split") }
+        val drift_results = drift_results_?.results()
+        drift_view_ = drift_results?.let{ r ->  ResultsView.with(r, "Drift Split") }
+
+        if (drift_results != null && half_results != null)
+            drift_report_view_ = ResultsView.merged("Drift", "Drift", drift_results, "Half", half_results_!!.results()!!)
 
         hawkman_results_ = results_.hawkman_results()?.let{ r -> HawkmanResultsView.from(r)}
         squirrel_results_ = results_.squirrel_results()?.let{r -> SquirrelResultsView.from(r)}
