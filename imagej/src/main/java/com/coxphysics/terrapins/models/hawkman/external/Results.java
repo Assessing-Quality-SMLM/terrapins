@@ -175,20 +175,13 @@ public class Results
         Path score_file = directory.resolve("score");
         if (!FsUtils.exists(score_file))
             return new Pair<>(new double[]{}, new double[]{});
-        List<Integer> levels = new ArrayList<>();
-        List<Double> values = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(score_file.toString())))
         {
-            String line = reader.readLine();
-            while (line != null)
-            {
-                Pair<Integer, Double> score_values = Helpers.parse_score(line);
-                if (score_values == null)
-                    return null;
-                levels.add(score_values.component1());
-                values.add(score_values.component2());
-                line = reader.readLine();
-            }
+            Pair<List<Integer>, List<Double>> results = read_scores_from(reader);
+            if (results == null)
+                return null;
+            List<Integer> levels = results.component1();
+            List<Double> values = results.component2();
             double [] level_array = levels.stream().mapToDouble(Integer::doubleValue).toArray();
             double[] value_array = values.stream().mapToDouble(Double::doubleValue).toArray();
             return new Pair<>(level_array, value_array);
@@ -196,6 +189,37 @@ public class Results
         catch (IOException e)
         {
             IJ.log("Could not read results output at " + score_file);
+            return null;
+        }
+    }
+
+    public static Pair<List<Integer>, List<Double>> read_scores_from(BufferedReader reader)
+    {
+        try
+        {
+            List<Pair<Integer, Double>> data = new ArrayList<>();
+            String line = reader.readLine();
+            while (line != null)
+            {
+                Pair<Integer, Double> score_values = Helpers.parse_score(line);
+                if (score_values == null)
+                    return null;
+                data.add(score_values);
+                line = reader.readLine();
+            }
+            data.sort(Comparator.comparing(Pair::component1));
+            List<Integer> levels = new ArrayList<>();
+            List<Double> values = new ArrayList<>();
+            for (Pair<Integer, Double> p : data)
+            {
+                levels.add(p.component1());
+                values.add(p.component2());
+            }
+            return new Pair<>(levels, values);
+        }
+        catch (IOException e)
+        {
+            IJ.log(String.format("Could not parse score file due to: %s", e));
             return null;
         }
     }
