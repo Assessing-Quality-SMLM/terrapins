@@ -14,21 +14,21 @@ import java.awt.event.ActionListener;
 import java.util.Locale;
 import java.util.function.Consumer;
 
-class CombinedResolutionListener implements ActionListener
+class HAWKMANViewListener implements ActionListener
 {
 
     private final HawkmanView view_;
     private final Consumer<HawkmanView> action_;
 
-    private CombinedResolutionListener(HawkmanView view, Consumer<HawkmanView> action)
+    private HAWKMANViewListener(HawkmanView view, Consumer<HawkmanView> action)
     {
         view_ = view;
         action_ = action;
     }
 
-    public static CombinedResolutionListener from(HawkmanView view, Consumer<HawkmanView> action)
+    public static HAWKMANViewListener from(HawkmanView view, Consumer<HawkmanView> action)
     {
-        return new CombinedResolutionListener(view, action);
+        return new HAWKMANViewListener(view, action);
     }
 
     @Override
@@ -51,11 +51,11 @@ public class HawkmanView {
     private HAWMANVM view_model_;
 
     public HawkmanView() {
-        combined_resolution_map_.addActionListener(CombinedResolutionListener.from(this, HawkmanView::update_combined_resolution_map));
-        confidence_map_.addActionListener(CombinedResolutionListener.from(this, HawkmanView::update_confidence_map));
-        sharpening_map_.addActionListener(CombinedResolutionListener.from(this, HawkmanView::update_sharpening_map));
-        structure_map_.addActionListener(CombinedResolutionListener.from(this, HawkmanView::update_structure_map));
-        skeleton_map_.addActionListener(CombinedResolutionListener.from(this, HawkmanView::update_skeleton_map));
+        combined_resolution_map_.addActionListener(HAWKMANViewListener.from(this, HawkmanView::update_combined_resolution_map));
+        confidence_map_.addActionListener(HAWKMANViewListener.from(this, HawkmanView::update_confidence_map));
+        sharpening_map_.addActionListener(HAWKMANViewListener.from(this, HawkmanView::update_sharpening_map));
+        structure_map_.addActionListener(HAWKMANViewListener.from(this, HawkmanView::update_structure_map));
+        skeleton_map_.addActionListener(HAWKMANViewListener.from(this, HawkmanView::update_skeleton_map));
     }
 
     void set_view_model(HAWMANVM view_model) {
