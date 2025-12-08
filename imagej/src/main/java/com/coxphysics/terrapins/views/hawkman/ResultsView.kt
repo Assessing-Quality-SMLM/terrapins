@@ -92,7 +92,12 @@ class ResultsView private constructor(private val results_: Results )
 
     fun show_core()
     {
-        resolution_image()?.show()
+        show_combined_resolution_map()
+    }
+
+    fun hide_core()
+    {
+        hide_combined_resolution_map()
     }
 
     fun show_details()
@@ -105,11 +110,6 @@ class ResultsView private constructor(private val results_: Results )
         generate_scores()
     }
 
-    fun hide_core()
-    {
-        resolution_image_?.hide()
-    }
-
     fun hide_details()
     {
         hide_core()
@@ -118,5 +118,55 @@ class ResultsView private constructor(private val results_: Results )
         sharpening_map_?.hide()
         structure_map_?.hide()
         scores_?.close()
+    }
+
+    fun show_combined_resolution_map()
+    {
+        resolution_image()?.show()
+    }
+
+    fun hide_combined_resolution_map()
+    {
+        resolution_image()?.hide()
+    }
+
+    fun show_confidence_map()
+    {
+        confidence_map()?.show()
+    }
+
+    fun hide_confidence_map()
+    {
+        confidence_map()?.hide()
+    }
+
+    fun show_sharpening_map()
+    {
+        sharpening_map()?.show()
+    }
+
+    fun hide_sharpening_map()
+    {
+        sharpening_map()?.hide()
+    }
+
+    fun show_structure_map()
+    {
+        structure_map()?.show()
+    }
+
+    fun hide_structure_map()
+    {
+        structure_map()?.hide()
+    }
+
+    fun show_skeleton_map()
+    {
+        skeleton_map()?.show()
+    }
+
+    fun hide_skeleton_map()
+    {
+        skeleton_map()?.hide()
     }
 }

@@ -3,10 +3,10 @@ package com.coxphysics.terrapins.models.assessment.reports
 import com.coxphysics.terrapins.models.assessment.AssessmentResults
 import com.coxphysics.terrapins.models.assessment.results.FRC
 import com.coxphysics.terrapins.models.assessment.results.Recon
-import com.coxphysics.terrapins.models.frc.Plotter
 import com.coxphysics.terrapins.views.frc.CalibrationView
 import com.coxphysics.terrapins.views.frc.ResultsView
 import java.nio.file.Path
+import com.coxphysics.terrapins.models.hawkman.external.Results as HawkmanResults
 import com.coxphysics.terrapins.views.hawkman.ResultsView as HawkmanResultsView
 import com.coxphysics.terrapins.views.squirrel.ResultsView as SquirrelResultsView
 
@@ -33,7 +33,8 @@ class Report private constructor(private val results_: AssessmentResults)
     private var zip_results_ : FRC? = null
     private var zip_view_: ResultsView? = null
 
-    private var hawkman_results_ : HawkmanResultsView? = null
+    private var hawkman_results_ : HawkmanResults? = null
+    private var hawkman_results_view_ : HawkmanResultsView? = null
 
     private var squirrel_results_ : SquirrelResultsView? = null
 
@@ -171,12 +172,17 @@ class Report private constructor(private val results_: AssessmentResults)
 
     fun show_bias_details()
     {
-        hawkman_results_?.show_details()
+        hawkman_results_view_?.show_details()
     }
 
     fun hide_bias_details()
     {
-        hawkman_results_?.hide_details()
+        hawkman_results_view_?.hide_details()
+    }
+
+    fun hawkman_results(): HawkmanResults?
+    {
+        return hawkman_results_
     }
 
     fun squirrel_assessment(): Assessment?
@@ -222,7 +228,8 @@ class Report private constructor(private val results_: AssessmentResults)
         if (drift_results != null && zip_results != null)
             blinking_report_view_ = ResultsView.merged("Blinking", "Drift", drift_results, "Zip", zip_results)
 
-        hawkman_results_ = results_.hawkman_results()?.let{ r -> HawkmanResultsView.from(r)}
+        hawkman_results_ = results_.hawkman_results()
+        hawkman_results_view_ = hawkman_results_?.let{ r -> HawkmanResultsView.from(r)}
         squirrel_results_ = results_.squirrel_results()?.let{r -> SquirrelResultsView.from(r)}
 
         calibration_view_ = CalibrationView.from(results_.calibration_data());

@@ -3,6 +3,7 @@ package com.coxphysics.terrapins.views.assessment.results;
 import com.coxphysics.terrapins.view_models.assessment.AssessmentVM;
 import com.coxphysics.terrapins.view_models.assessment.results.FRCVM;
 import com.coxphysics.terrapins.view_models.assessment.ReportVM;
+import com.coxphysics.terrapins.view_models.assessment.results.HAWMANVM;
 import com.coxphysics.terrapins.view_models.assessment.results.ReconVM;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -119,7 +120,6 @@ public class ReportView extends JFrame {
     private AssessmentView magnification_assessment_;
     private JTabbedPane tabbed_panel_;
     private JScrollPane results_scroll_pane_;
-    private JCheckBox hawkman_;
     private JCheckBox average_of_frames_squirrel_;
     private JCheckBox widefield_squirrel_;
     private FRCView half_split_results_;
@@ -127,6 +127,7 @@ public class ReportView extends JFrame {
     private FRCView zip_split_results_;
     private ReconView recon_view_;
     private ReconView hawk_recon_view_;
+    private HawkmanView hawkman_results_view_;
 
     private ReportView(ReportVM view_model) {
         view_model_ = view_model;
@@ -182,6 +183,7 @@ public class ReportView extends JFrame {
         update_half_split_results();
         update_drift_split_results();
         update_zip_split_results();
+        update_hawkman_results();
     }
 
     private void update_recon_results() {
@@ -207,6 +209,12 @@ public class ReportView extends JFrame {
     private void update_zip_split_results() {
         FRCVM view_model = view_model_.zip_split_results();
         zip_split_results_.set_view_model(view_model);
+    }
+
+    private void update_hawkman_results() {
+        HAWMANVM view_model = view_model_.hawkman_results();
+        hawkman_results_view_.set_view_model(view_model);
+        //recon_view_.set_view_model(view_model);
     }
 
     private void update_reports() {
@@ -328,9 +336,6 @@ public class ReportView extends JFrame {
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridLayoutManager(8, 1, new Insets(0, 0, 0, 0), -1, -1));
         results_scroll_pane_.setViewportView(panel3);
-        hawkman_ = new JCheckBox();
-        hawkman_.setText("HAWKMAN");
-        panel3.add(hawkman_, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         average_of_frames_squirrel_ = new JCheckBox();
         average_of_frames_squirrel_.setText("Average of Frames SQUIRREL");
         panel3.add(average_of_frames_squirrel_, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -347,6 +352,8 @@ public class ReportView extends JFrame {
         panel3.add(recon_view_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         hawk_recon_view_ = new ReconView();
         panel3.add(hawk_recon_view_.$$$getRootComponent$$$(), new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        hawkman_results_view_ = new HawkmanView();
+        panel3.add(hawkman_results_view_.$$$getRootComponent$$$(), new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
     }
 
     /**
