@@ -5,6 +5,7 @@ import com.coxphysics.terrapins.view_models.assessment.results.FRCVM;
 import com.coxphysics.terrapins.view_models.assessment.ReportVM;
 import com.coxphysics.terrapins.view_models.assessment.results.HAWMANVM;
 import com.coxphysics.terrapins.view_models.assessment.results.ReconVM;
+import com.coxphysics.terrapins.view_models.assessment.results.SQUIRRELVM;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import ij.IJ;
@@ -120,14 +121,14 @@ public class ReportView extends JFrame {
     private AssessmentView magnification_assessment_;
     private JTabbedPane tabbed_panel_;
     private JScrollPane results_scroll_pane_;
-    private JCheckBox average_of_frames_squirrel_;
-    private JCheckBox widefield_squirrel_;
     private FRCView half_split_results_;
     private FRCView drift_split_results_;
     private FRCView zip_split_results_;
     private ReconView recon_view_;
     private ReconView hawk_recon_view_;
     private HawkmanView hawkman_results_view_;
+    private SQUIRRELView average_of_frames_squirrel_;
+    private SQUIRRELView widefield_squirrel_;
 
     private ReportView(ReportVM view_model) {
         view_model_ = view_model;
@@ -184,6 +185,8 @@ public class ReportView extends JFrame {
         update_drift_split_results();
         update_zip_split_results();
         update_hawkman_results();
+        update_average_of_frames_squirrel_results();
+        update_true_widefield_squirrel_results();
     }
 
     private void update_recon_results() {
@@ -215,6 +218,15 @@ public class ReportView extends JFrame {
         HAWMANVM view_model = view_model_.hawkman_results();
         hawkman_results_view_.set_view_model(view_model);
     }
+
+    private void update_average_of_frames_squirrel_results() {
+        SQUIRRELVM view_model = view_model_.average_of_frames_squirrel_results();
+        average_of_frames_squirrel_.set_view_model(view_model);
+    }
+
+    private void update_true_widefield_squirrel_results() {
+        SQUIRRELVM view_model = view_model_.widefield_squirrel_results();
+        widefield_squirrel_.set_view_model(view_model);
     }
 
     private void update_reports() {
@@ -336,12 +348,6 @@ public class ReportView extends JFrame {
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridLayoutManager(8, 1, new Insets(0, 0, 0, 0), -1, -1));
         results_scroll_pane_.setViewportView(panel3);
-        average_of_frames_squirrel_ = new JCheckBox();
-        average_of_frames_squirrel_.setText("Average of Frames SQUIRREL");
-        panel3.add(average_of_frames_squirrel_, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        widefield_squirrel_ = new JCheckBox();
-        widefield_squirrel_.setText("True Widefield SQUIRREL");
-        panel3.add(widefield_squirrel_, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         half_split_results_ = new FRCView();
         panel3.add(half_split_results_.$$$getRootComponent$$$(), new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         drift_split_results_ = new FRCView();
@@ -354,6 +360,10 @@ public class ReportView extends JFrame {
         panel3.add(hawk_recon_view_.$$$getRootComponent$$$(), new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         hawkman_results_view_ = new HawkmanView();
         panel3.add(hawkman_results_view_.$$$getRootComponent$$$(), new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        average_of_frames_squirrel_ = new SQUIRRELView();
+        panel3.add(average_of_frames_squirrel_.$$$getRootComponent$$$(), new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        widefield_squirrel_ = new SQUIRRELView();
+        panel3.add(widefield_squirrel_.$$$getRootComponent$$$(), new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
     }
 
     /**
