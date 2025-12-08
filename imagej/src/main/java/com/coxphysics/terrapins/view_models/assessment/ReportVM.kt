@@ -3,6 +3,7 @@ package com.coxphysics.terrapins.view_models.assessment
 import com.coxphysics.terrapins.models.assessment.AssessmentResults
 import com.coxphysics.terrapins.models.assessment.reports.Report
 import com.coxphysics.terrapins.view_models.assessment.results.FRCVM
+import com.coxphysics.terrapins.view_models.assessment.results.HAWMANVM
 import com.coxphysics.terrapins.view_models.assessment.results.ReconVM
 import java.nio.file.Path
 
@@ -60,6 +61,12 @@ class ReportVM private constructor(
     {
         val results = model_.zip_split_results() ?: return FRCVM.empty("Zip Split")
         return FRCVM.from("Zip Split", results)
+    }
+
+    fun hawkman_results() : HAWMANVM
+    {
+        val results = model_.hawkman_results() ?: return HAWMANVM.empty()
+        return HAWMANVM.from(results)
     }
 
     fun drift_assessment(): AssessmentVM
