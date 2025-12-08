@@ -132,22 +132,6 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="7d87e" class="javax.swing.JCheckBox" binding="average_of_frames_squirrel_">
-                        <constraints>
-                          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Average of Frames SQUIRREL"/>
-                        </properties>
-                      </component>
-                      <component id="3633" class="javax.swing.JCheckBox" binding="widefield_squirrel_">
-                        <constraints>
-                          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="True Widefield SQUIRREL"/>
-                        </properties>
-                      </component>
                       <nested-form id="6dca1" form-file="com/coxphysics/terrapins/views/assessment/results/FRCView.form" binding="half_split_results_">
                         <constraints>
                           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -176,6 +160,16 @@
                       <nested-form id="645df" form-file="com/coxphysics/terrapins/views/assessment/results/HawkmanView.form" binding="hawkman_results_view_">
                         <constraints>
                           <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </nested-form>
+                      <nested-form id="105b4" form-file="com/coxphysics/terrapins/views/assessment/results/SQUIRRELView.form" binding="average_of_frames_squirrel_">
+                        <constraints>
+                          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </nested-form>
+                      <nested-form id="35416" form-file="com/coxphysics/terrapins/views/assessment/results/SQUIRRELView.form" binding="widefield_squirrel_">
+                        <constraints>
+                          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
                       </nested-form>
                     </children>

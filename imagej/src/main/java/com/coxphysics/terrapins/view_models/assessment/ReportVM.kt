@@ -5,6 +5,7 @@ import com.coxphysics.terrapins.models.assessment.reports.Report
 import com.coxphysics.terrapins.view_models.assessment.results.FRCVM
 import com.coxphysics.terrapins.view_models.assessment.results.HAWMANVM
 import com.coxphysics.terrapins.view_models.assessment.results.ReconVM
+import com.coxphysics.terrapins.view_models.assessment.results.SQUIRRELVM
 import java.nio.file.Path
 
 class ReportVM private constructor(
@@ -67,6 +68,20 @@ class ReportVM private constructor(
     {
         val results = model_.hawkman_results() ?: return HAWMANVM.empty()
         return HAWMANVM.from(results)
+    }
+
+    fun average_of_frames_squirrel_results(): SQUIRRELVM
+    {
+        val title = "Average of Frames"
+        val results = model_.average_of_frames_results()?: return SQUIRRELVM.empty(title)
+        return SQUIRRELVM.from(title, results)
+    }
+
+    fun widefield_squirrel_results(): SQUIRRELVM
+    {
+        val title = "Widefield"
+        val results = model_.true_widefield_results()?: return SQUIRRELVM.empty(title)
+        return SQUIRRELVM.from(title, results)
     }
 
     fun drift_assessment(): AssessmentVM

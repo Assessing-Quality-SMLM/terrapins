@@ -2,6 +2,7 @@ package com.coxphysics.terrapins.views.squirrel
 
 import com.coxphysics.terrapins.models.squirrel.external.Results
 import com.coxphysics.terrapins.models.squirrel.utils.StackHelper
+import com.coxphysics.terrapins.models.utils.IJUtils
 import ij.ImagePlus
 import com.coxphysics.terrapins.views.hawkman.ResultsView as HawkmanResultsView
 
@@ -20,12 +21,9 @@ class ResultsView private constructor(private val results_: Results)
 
     private fun error_map() : ImagePlus?
     {
-        if (HawkmanResultsView.is_empty(error_map_))
+        if (error_map_ == null)
         {
-            error_map_ = HawkmanResultsView.load_image(results_.error_map_path())
-            if (error_map_ == null)
-                return null
-            StackHelper.applyLUT(error_map_,"SQUIRREL-Errors.lut");
+            error_map_ = results_.load_error_map()
         }
         return error_map_
     }

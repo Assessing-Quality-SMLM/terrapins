@@ -7,6 +7,7 @@ import com.coxphysics.terrapins.views.frc.CalibrationView
 import com.coxphysics.terrapins.views.frc.ResultsView
 import java.nio.file.Path
 import com.coxphysics.terrapins.models.hawkman.external.Results as HawkmanResults
+import com.coxphysics.terrapins.models.squirrel.external.Results as SquirrelResults
 import com.coxphysics.terrapins.views.hawkman.ResultsView as HawkmanResultsView
 import com.coxphysics.terrapins.views.squirrel.ResultsView as SquirrelResultsView
 
@@ -36,7 +37,11 @@ class Report private constructor(private val results_: AssessmentResults)
     private var hawkman_results_ : HawkmanResults? = null
     private var hawkman_results_view_ : HawkmanResultsView? = null
 
-    private var squirrel_results_ : SquirrelResultsView? = null
+    private var average_of_frames_squirrel_results_ : SquirrelResults? = null
+    private var average_of_frames_squirrel_results_view_ : SquirrelResultsView? = null
+
+    private var true_widefield_squirrel_results_ : SquirrelResults? = null
+    private var true_widefield_squirrel_results_view_ : SquirrelResultsView? = null
 
     private var calibration_view_ : CalibrationView? = null
 
@@ -185,6 +190,16 @@ class Report private constructor(private val results_: AssessmentResults)
         return hawkman_results_
     }
 
+    fun average_of_frames_results(): SquirrelResults?
+    {
+        return average_of_frames_squirrel_results_
+    }
+
+    fun true_widefield_results(): SquirrelResults?
+    {
+        return true_widefield_squirrel_results_
+    }
+
     fun squirrel_assessment(): Assessment?
     {
         return squirrel_assessment_
@@ -192,12 +207,12 @@ class Report private constructor(private val results_: AssessmentResults)
 
     fun show_squirrel_details()
     {
-        squirrel_results_?.show()
+        average_of_frames_squirrel_results_view_?.show()
     }
 
     fun hide_squirrel_details()
     {
-        squirrel_results_?.hide()
+        average_of_frames_squirrel_results_view_?.hide()
     }
 
     private fun cache_data()
@@ -230,7 +245,12 @@ class Report private constructor(private val results_: AssessmentResults)
 
         hawkman_results_ = results_.hawkman_results()
         hawkman_results_view_ = hawkman_results_?.let{ r -> HawkmanResultsView.from(r)}
-        squirrel_results_ = results_.squirrel_results()?.let{r -> SquirrelResultsView.from(r)}
+
+        average_of_frames_squirrel_results_ = results_.average_of_frames_squirrel_results()
+        average_of_frames_squirrel_results_view_ = average_of_frames_squirrel_results_?.let{ r -> SquirrelResultsView.from(r)}
+
+        true_widefield_squirrel_results_ = results_.true_widefield_squirrel_results()
+        true_widefield_squirrel_results_view_ = true_widefield_squirrel_results_?.let{ r -> SquirrelResultsView.from(r)}
 
         calibration_view_ = CalibrationView.from(results_.calibration_data());
     }

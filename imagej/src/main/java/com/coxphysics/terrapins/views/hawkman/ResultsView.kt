@@ -34,8 +34,6 @@ class ResultsView private constructor(private val results_: Results )
 
         fun load_image(image_path: Path): ImagePlus?
         {
-            if (!FsUtils.exists(image_path))
-                return null;
             return IJUtils.load_image(image_path);
         }
     }
