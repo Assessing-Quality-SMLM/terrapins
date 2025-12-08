@@ -214,7 +214,7 @@ public class ReportView extends JFrame {
     private void update_hawkman_results() {
         HAWMANVM view_model = view_model_.hawkman_results();
         hawkman_results_view_.set_view_model(view_model);
-        //recon_view_.set_view_model(view_model);
+    }
     }
 
     private void update_reports() {
