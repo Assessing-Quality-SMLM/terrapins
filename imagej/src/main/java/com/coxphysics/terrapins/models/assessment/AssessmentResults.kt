@@ -18,6 +18,7 @@ private const val ZIP_SPLIT_DATA = "frc_zip_split"
 private const val DRIFT_SPLIT_DATA = "frc_drift_split"
 private const val HAWKMAN_DATA = "hawkman"
 private const val SQUIRREL_DATA = "squirrel"
+private const val NON_LINEAR_SQUIRREL_DATA = "non_linear_squirrel"
 private const val REPORT = "report"
 
 const val SR_0_005_LABEL = "0.005x"
@@ -199,14 +200,24 @@ class AssessmentResults private constructor(private var data_path: Path)
         return HawkmanResults.from(hawkman_results_path())
     }
 
-    private fun squirrel_results_path(): Path
+    private fun non_linear_squirrel_results_path(): Path
+    {
+        return data_path.resolve(NON_LINEAR_SQUIRREL_DATA)
+    }
+
+    fun average_of_frames_squirrel_results(): SquirrelResults?
+    {
+        return SquirrelResults.from(non_linear_squirrel_results_path())
+    }
+
+    private fun true_widefield_squirrel_results_path(): Path
     {
         return data_path.resolve(SQUIRREL_DATA)
     }
 
-    fun squirrel_results(): SquirrelResults?
+    fun true_widefield_squirrel_results(): SquirrelResults?
     {
-        return SquirrelResults.from(squirrel_results_path())
+        return SquirrelResults.from(true_widefield_squirrel_results_path())
     }
 
     private fun sr_0_005_path(): Path
