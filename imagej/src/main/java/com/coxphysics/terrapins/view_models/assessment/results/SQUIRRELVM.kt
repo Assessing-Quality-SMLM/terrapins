@@ -36,13 +36,21 @@ class SQUIRRELVM private constructor(
 
     fun show_map(display: Boolean)
     {
-        if(display)
-        {
-            results_view_?.show()
-        }
-        else
-        {
-            results_view_?.hide()
-        }
+        results_view_?.show_error_map(display)
+    }
+
+    fun show_sr_transform(display: Boolean)
+    {
+        results_view_?.show_sr_transform(display)
+    }
+
+    fun show_widefield(display: Boolean)
+    {
+        results_view_?.show_widefield(display)
+    }
+
+    fun show_big_widefield(display: Boolean)
+    {
+        results_view_?.show_big_widefield(display)
     }
 }
