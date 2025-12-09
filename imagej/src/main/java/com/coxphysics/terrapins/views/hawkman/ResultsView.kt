@@ -31,18 +31,13 @@ class ResultsView private constructor(private val results_: Results )
         {
             return image?.image == null
         }
-
-        fun load_image(image_path: Path): ImagePlus?
-        {
-            return IJUtils.load_image(image_path);
-        }
     }
 
     private fun resolution_image() : ImagePlus?
     {
         if (is_empty(resolution_image_))
         {
-            resolution_image_ =  load_image(results_.combined_resolution_map_path())
+            resolution_image_ =  IJUtils.load_image(results_.combined_resolution_map_path())
         }
         return resolution_image_
     }
