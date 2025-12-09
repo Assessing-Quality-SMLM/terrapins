@@ -27,7 +27,7 @@ class ResultsView private constructor(private val results_: Results )
             return ResultsView(results)
         }
 
-        fun is_empty(image: ImagePlus?): Boolean
+        private fun is_empty(image: ImagePlus?): Boolean
         {
             return image?.image == null
         }
