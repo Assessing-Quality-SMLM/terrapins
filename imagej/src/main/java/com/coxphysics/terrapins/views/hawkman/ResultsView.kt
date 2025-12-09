@@ -95,21 +95,13 @@ class ResultsView private constructor(private val results_: Results )
 
     fun show_details()
     {
-        show_core()
-        confidence_map()?.show()
-        skeleton_map()?.show()
-        sharpening_map()?.show()
-        structure_map()?.show()
+        show_combined_resolution_map()
         generate_scores()
     }
 
     fun hide_details()
     {
-        hide_core()
-        confidence_map_?.hide()
-        skeleton_map_?.hide()
-        sharpening_map_?.hide()
-        structure_map_?.hide()
+        hide_combined_resolution_map()
         scores_?.close()
     }
 
