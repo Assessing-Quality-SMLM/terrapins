@@ -60,16 +60,16 @@ public class HawkmanView {
 
     void set_view_model(HAWMANVM view_model) {
         view_model_ = view_model;
-        update_views();
+        //update_views();
     }
 
-    private void update_views() {
-        update_combined_resolution_map(this);
-        update_confidence_map(this);
-        update_sharpening_map(this);
-        update_sharpening_map(this);
-        update_skeleton_map(this);
-    }
+//    private void update_views() {
+//        update_combined_resolution_map(this);
+//        update_confidence_map(this);
+//        update_sharpening_map(this);
+//        update_sharpening_map(this);
+//        update_skeleton_map(this);
+//    }
 
     private static void update_combined_resolution_map(HawkmanView view) {
         view.view_model_.show_combined_resolution_map(view.combined_resolution_map_.isSelected());
