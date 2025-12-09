@@ -208,11 +208,13 @@ class Report private constructor(private val results_: AssessmentResults)
     fun show_squirrel_details()
     {
         average_of_frames_squirrel_results_view_?.show()
+        true_widefield_squirrel_results_view_?.show()
     }
 
     fun hide_squirrel_details()
     {
         average_of_frames_squirrel_results_view_?.hide()
+        true_widefield_squirrel_results_view_?.hide()
     }
 
     private fun cache_data()

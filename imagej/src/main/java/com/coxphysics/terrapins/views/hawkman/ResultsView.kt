@@ -27,14 +27,9 @@ class ResultsView private constructor(private val results_: Results )
             return ResultsView(results)
         }
 
-        fun is_empty(image: ImagePlus?): Boolean
+        private fun is_empty(image: ImagePlus?): Boolean
         {
             return image?.image == null
-        }
-
-        fun load_image(image_path: Path): ImagePlus?
-        {
-            return IJUtils.load_image(image_path);
         }
     }
 
@@ -42,7 +37,7 @@ class ResultsView private constructor(private val results_: Results )
     {
         if (is_empty(resolution_image_))
         {
-            resolution_image_ =  load_image(results_.combined_resolution_map_path())
+            resolution_image_ =  IJUtils.load_image(results_.combined_resolution_map_path())
         }
         return resolution_image_
     }
@@ -100,21 +95,13 @@ class ResultsView private constructor(private val results_: Results )
 
     fun show_details()
     {
-        show_core()
-        confidence_map()?.show()
-        skeleton_map()?.show()
-        sharpening_map()?.show()
-        structure_map()?.show()
+        show_combined_resolution_map()
         generate_scores()
     }
 
     fun hide_details()
     {
-        hide_core()
-        confidence_map_?.hide()
-        skeleton_map_?.hide()
-        sharpening_map_?.hide()
-        structure_map_?.hide()
+        hide_combined_resolution_map()
         scores_?.close()
     }
 

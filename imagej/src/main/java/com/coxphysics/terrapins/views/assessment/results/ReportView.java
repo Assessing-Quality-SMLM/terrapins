@@ -303,7 +303,7 @@ public class ReportView extends JFrame {
      */
     private void $$$setupUI$$$() {
         content_panel_ = new JPanel();
-        content_panel_.setLayout(new GridLayoutManager(4, 5, new Insets(10, 10, 2, 5), -1, -1));
+        content_panel_.setLayout(new GridLayoutManager(2, 5, new Insets(10, 10, 2, 5), -1, -1));
         content_panel_.setAutoscrolls(false);
         data_path_ = new JTextField();
         content_panel_.add(data_path_, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
