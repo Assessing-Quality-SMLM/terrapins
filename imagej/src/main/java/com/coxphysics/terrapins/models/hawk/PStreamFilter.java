@@ -84,7 +84,8 @@ public class PStreamFilter implements ExtendedPlugInFilter {
     public ImagePlus get_image_plus()
     {
         PStream p_stream = create_p_stream();
-        if (p_stream == null) return null;
+        if (p_stream == null)
+            return null;
         ImagePlus view = new ImagePlus("JHAWK pstream", p_stream);
         view.setCalibration(get_calibration());
         String metadata = p_stream.get_metadata();
