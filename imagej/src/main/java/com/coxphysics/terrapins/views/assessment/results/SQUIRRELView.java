@@ -51,6 +51,7 @@ public class SQUIRRELView {
     public SQUIRRELView() {
         error_map_.addActionListener(SquirrelViewListener.from(this, SQUIRRELView::update_error_map));
         optimiser_output_.addActionListener(SquirrelViewListener.from(this, SQUIRRELView::update_optimiser_info));
+        info_panel_.setVisible(false);
     }
 
     void set_view_model(SQUIRRELVM view_model) {
@@ -68,10 +69,12 @@ public class SQUIRRELView {
         {
             String text = view.view_model_.optimiser_text();
             view.info_panel_.setText(text);
+            view.info_panel_.setVisible(true);
         }
         else
         {
             view.info_panel_.setText("");
+            view.info_panel_.setVisible(false);
         }
     }
 
