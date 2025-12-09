@@ -44,12 +44,18 @@ public class SQUIRRELView {
     private JCheckBox optimiser_output_;
     private JTextArea info_panel_;
     private JLabel title_;
+    private JCheckBox widefield_;
+    private JCheckBox super_res_transform_;
+    private JCheckBox big_widefield_;
 
 
     private SQUIRRELVM view_model_;
 
     public SQUIRRELView() {
         error_map_.addActionListener(SquirrelViewListener.from(this, SQUIRRELView::update_error_map));
+        widefield_.addActionListener(SquirrelViewListener.from(this, SQUIRRELView::update_widefield));
+        super_res_transform_.addActionListener(SquirrelViewListener.from(this, SQUIRRELView::update_sr_transform));
+        big_widefield_.addActionListener(SquirrelViewListener.from(this, SQUIRRELView::update_big_widefield));
         optimiser_output_.addActionListener(SquirrelViewListener.from(this, SQUIRRELView::update_optimiser_info));
         info_panel_.setVisible(false);
     }
@@ -63,16 +69,24 @@ public class SQUIRRELView {
         view.view_model_.show_map(view.error_map_.isSelected());
     }
 
-    private static void update_optimiser_info(SQUIRRELView view)
-    {
-        if (view.optimiser_output_.isSelected())
-        {
+    private static void update_widefield(SQUIRRELView view) {
+        view.view_model_.show_widefield(view.widefield_.isSelected());
+    }
+
+    private static void update_sr_transform(SQUIRRELView view) {
+        view.view_model_.show_sr_transform(view.super_res_transform_.isSelected());
+    }
+
+    private static void update_big_widefield(SQUIRRELView view) {
+        view.view_model_.show_big_widefield(view.big_widefield_.isSelected());
+    }
+
+    private static void update_optimiser_info(SQUIRRELView view) {
+        if (view.optimiser_output_.isSelected()) {
             String text = view.view_model_.optimiser_text();
             view.info_panel_.setText(text);
             view.info_panel_.setVisible(true);
-        }
-        else
-        {
+        } else {
             view.info_panel_.setText("");
             view.info_panel_.setVisible(false);
         }
@@ -94,20 +108,29 @@ public class SQUIRRELView {
      */
     private void $$$setupUI$$$() {
         panel_ = new JPanel();
-        panel_.setLayout(new GridLayoutManager(3, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel_.setLayout(new GridLayoutManager(3, 5, new Insets(0, 0, 0, 0), -1, -1));
         error_map_ = new JCheckBox();
         error_map_.setText("Error Map");
         panel_.add(error_map_, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
         optimiser_output_ = new JCheckBox();
         optimiser_output_.setText("Optimiser Output");
-        panel_.add(optimiser_output_, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        panel_.add(optimiser_output_, new GridConstraints(1, 4, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
         info_panel_ = new JTextArea();
-        panel_.add(info_panel_, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
+        panel_.add(info_panel_, new GridConstraints(2, 0, 1, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
         title_ = new JLabel();
         Font title_Font = this.$$$getFont$$$(null, Font.BOLD, -1, title_.getFont());
         if (title_Font != null) title_.setFont(title_Font);
         title_.setText("SQUIRREL");
         panel_.add(title_, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        widefield_ = new JCheckBox();
+        widefield_.setText("Widefield");
+        panel_.add(widefield_, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        super_res_transform_ = new JCheckBox();
+        super_res_transform_.setText("Super Res Transform");
+        panel_.add(super_res_transform_, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        big_widefield_ = new JCheckBox();
+        big_widefield_.setText("Widefield SR");
+        panel_.add(big_widefield_, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
