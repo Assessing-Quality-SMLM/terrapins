@@ -17,7 +17,27 @@ class Results private constructor(private val data_path_: Path)
         }
     }
 
-    public fun error_map_path(): Path
+    private fun assessment_data_dir(): Path
+    {
+        return data_path_.parent
+    }
+
+    private fun widefield_path(): Path
+    {
+        return assessment_data_dir().resolve("widefield.tiff")
+    }
+
+    private fun big_widefield_path(): Path
+    {
+        return assessment_data_dir().resolve("big_widefield.tiff")
+    }
+
+    private fun sr_transform_path(): Path
+    {
+        return data_path_.resolve("sr_affine_blurred.tiff")
+    }
+
+    private fun error_map_path(): Path
     {
         return data_path_.resolve("error_map.tiff")
     }
@@ -34,6 +54,21 @@ class Results private constructor(private val data_path_: Path)
             return null
         StackHelper.applyLUT(map,"SQUIRREL-Errors.lut");
         return map
+    }
+
+    fun load_widefield(): ImagePlus?
+    {
+        return IJUtils.load_image(widefield_path())
+    }
+
+    fun load_big_widefield(): ImagePlus?
+    {
+        return IJUtils.load_image(big_widefield_path())
+    }
+
+    fun load_sr_transform(): ImagePlus?
+    {
+        return IJUtils.load_image(sr_transform_path())
     }
 
     fun display_error_map()

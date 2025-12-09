@@ -207,14 +207,14 @@ class Report private constructor(private val results_: AssessmentResults)
 
     fun show_squirrel_details()
     {
-        average_of_frames_squirrel_results_view_?.show()
-        true_widefield_squirrel_results_view_?.show()
+        average_of_frames_squirrel_results_view_?.show_error_map(true)
+        true_widefield_squirrel_results_view_?.show_error_map(true)
     }
 
     fun hide_squirrel_details()
     {
-        average_of_frames_squirrel_results_view_?.hide()
-        true_widefield_squirrel_results_view_?.hide()
+        average_of_frames_squirrel_results_view_?.show_error_map(false)
+        true_widefield_squirrel_results_view_?.show_error_map(false)
     }
 
     private fun cache_data()
