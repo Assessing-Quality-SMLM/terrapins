@@ -1,14 +1,14 @@
 package com.coxphysics.terrapins.views.squirrel
 
 import com.coxphysics.terrapins.models.squirrel.external.Results
-import com.coxphysics.terrapins.models.squirrel.utils.StackHelper
-import com.coxphysics.terrapins.models.utils.IJUtils
 import ij.ImagePlus
-import com.coxphysics.terrapins.views.hawkman.ResultsView as HawkmanResultsView
 
 class ResultsView private constructor(private val results_: Results)
 {
     private var error_map_ : ImagePlus? = null
+    private var widefield_ : ImagePlus? = null
+    private var big_widefield_ : ImagePlus? = null
+    private var sr_transform_ : ImagePlus? = null
 
     companion object
     {
@@ -28,15 +28,79 @@ class ResultsView private constructor(private val results_: Results)
         return error_map_
     }
 
-    fun show()
+    fun widefield(): ImagePlus?
     {
-        error_map()?.show()
+        if (widefield_ == null)
+        {
+            widefield_ = results_.load_widefield()
+        }
+        return widefield_
     }
 
-    fun hide()
+    fun sr_transform(): ImagePlus?
     {
-        error_map_?.hide()
+        if (sr_transform_ == null)
+        {
+            sr_transform_ = results_.load_sr_transform()
+        }
+        return sr_transform_
     }
 
+    fun big_widefield(): ImagePlus?
+    {
+        if (big_widefield_ == null)
+        {
+            big_widefield_ = results_.load_sr_transform()
+        }
+        return big_widefield_
+    }
+
+    fun show_error_map(display: Boolean)
+    {
+        if(display)
+        {
+            error_map()?.show()
+        }
+        else
+        {
+            error_map_?.hide()
+        }
+    }
+
+    fun show_sr_transform(display: Boolean)
+    {
+        if(display)
+        {
+            sr_transform()?.show()
+        }
+        else
+        {
+            sr_transform_?.hide()
+        }
+    }
+
+    fun show_widefield(display: Boolean)
+    {
+        if(display)
+        {
+            widefield()?.show()
+        }
+        else
+        {
+            widefield_?.hide()
+        }
+    }
+
+    fun show_big_widefield(display: Boolean)
+    {
+        if(display)
+        {
+            big_widefield()?.show()
+        }
+        else
+        {
+            big_widefield_?.hide()
+        }
+    }
 
 }

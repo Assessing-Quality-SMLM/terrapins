@@ -262,13 +262,6 @@ class Dialog private constructor() : NonBlockingGenericDialog("Results"), Action
     private fun handle_squirrel_results()
     {
         val visible = ui_?.squirrel_results_visible() ?: false
-        if (visible)
-        {
-            squirrel_results_?.show()
-        }
-        else
-        {
-            squirrel_results_?.hide()
-        }
+        squirrel_results_?.show_error_map(visible)
     }
 }
