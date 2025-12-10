@@ -268,7 +268,7 @@ class Settings private constructor(
 
     private fun prepare_images_for_analysis_in(working_directory: Path): Boolean
     {
-        val core_ok = core_settings_.to_disk_in(working_directory)
+        val core_ok = core_settings_.to_disk_in(working_directory) != null
         var reference_ok = true
         if (reference_image_.has_data())
         {
