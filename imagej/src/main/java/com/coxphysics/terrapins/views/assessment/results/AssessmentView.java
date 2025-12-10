@@ -32,7 +32,7 @@ public class AssessmentView {
     private void update_data() {
         name_.setText(view_model_.name());
         score_.setText(view_model_.score_text());
-        passed_.setText(view_model_.passed_text());
+        passed_.setText(view_model_.outcome_text());
         Color background = view_model_.background_colour();
         if (background != null)
             passed_panel_.setBackground(background);
