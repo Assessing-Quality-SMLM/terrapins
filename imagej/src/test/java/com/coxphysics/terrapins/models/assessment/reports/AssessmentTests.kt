@@ -7,17 +7,11 @@ import kotlin.io.path.Path
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-class AssessmentTests {
-    private fun exe_path(): Path {
-        return Path("a/program")
-    }
+class AssessmentTests
+{
 
     private fun working_directory_path(): Path {
         return Path("a/smlm_assessment")
-    }
-
-    private fun working_directory(): String {
-        return working_directory_path().toString()
     }
 
     @Test
