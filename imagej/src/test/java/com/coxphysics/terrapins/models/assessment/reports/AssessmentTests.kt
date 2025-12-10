@@ -7,17 +7,11 @@ import kotlin.io.path.Path
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-class AssessmentTests {
-    private fun exe_path(): Path {
-        return Path("a/program")
-    }
+class AssessmentTests
+{
 
     private fun working_directory_path(): Path {
         return Path("a/smlm_assessment")
-    }
-
-    private fun working_directory(): String {
-        return working_directory_path().toString()
     }
 
     @Test
@@ -62,6 +56,20 @@ class AssessmentTests {
         assertEquals(assessment.score(), null)
         assertEquals(assessment.passed(), false)
         assertEquals(assessment.failed(), true)
+        assertEquals(assessment.message(), "else")
+    }
+
+    @Test
+    fun can_parse_indeterminate()
+    {
+        val lines = listOf("name,something","score,-","result,-","message,else")
+        val assessment = Assessment.from_lines(lines)
+        assertNotNull(assessment)
+        assertEquals(assessment!!.name(), "something")
+        assertEquals(assessment.score(), null)
+        assertEquals(assessment.passed(), false)
+        assertEquals(assessment.failed(), false)
+        assertEquals(assessment.indeterminate(), true)
         assertEquals(assessment.message(), "else")
     }
 

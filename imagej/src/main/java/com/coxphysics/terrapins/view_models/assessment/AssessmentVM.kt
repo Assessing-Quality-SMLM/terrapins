@@ -2,7 +2,6 @@ package com.coxphysics.terrapins.view_models.assessment
 
 import com.coxphysics.terrapins.models.assessment.reports.Assessment
 import java.awt.Color
-import javax.swing.JPanel
 
 class AssessmentVM private constructor(
     private val default_name_: String?,
@@ -46,11 +45,17 @@ class AssessmentVM private constructor(
         return String.format( "%.2f", score)
     }
 
-    fun passed_text(): String
+    fun outcome_text(): String
     {
         if (is_empty())
             return ""
-        return if (model_!!.passed()) "Passed" else "Failed"
+        if (model_!!.passed())
+            return "Passed"
+        else if (model_.failed())
+            return "Failed"
+        else if (model_.indeterminate())
+            return "Indeterminate"
+        return ""
     }
 
     fun background_colour(): Color?
@@ -61,7 +66,11 @@ class AssessmentVM private constructor(
         {
             return Color.GREEN
         }
-        return Color.RED
+        else if (model_.failed())
+            return Color.RED
+        else if (model_.indeterminate())
+            return Color.orange
+        return null
     }
 
     fun message(): String

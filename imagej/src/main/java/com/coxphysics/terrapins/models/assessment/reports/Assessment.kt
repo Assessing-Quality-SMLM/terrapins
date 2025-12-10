@@ -5,10 +5,15 @@ import java.io.InputStream
 import java.nio.file.Path
 import kotlin.io.path.exists
 
+enum class Outcome
+{
+    PASS, FAIL, INDETERMINATE
+}
+
 class Assessment private constructor(
     private val name_: String,
     private val score_: Double?,
-    private val result_: Boolean,
+    private val result_: Outcome,
     private val message_: String
     )
 {
@@ -31,12 +36,14 @@ class Assessment private constructor(
         }
 
         @JvmStatic
-        fun parse_result(result: String) : Boolean?
+        fun parse_result(result: String) : Outcome?
         {
             if (result == "passed")
-                return true
+                return Outcome.PASS
             if (result == "failed")
-                return false
+                return Outcome.FAIL
+            if (result == "-")
+                return Outcome.INDETERMINATE
             return null
         }
 
@@ -81,12 +88,17 @@ class Assessment private constructor(
 
     fun passed(): Boolean
     {
-        return result_
+        return result_ == Outcome.PASS
     }
 
     fun failed(): Boolean
     {
-        return !passed()
+        return result_ == Outcome.FAIL
+    }
+
+    fun indeterminate(): Boolean
+    {
+        return result_ == Outcome.INDETERMINATE
     }
 
     fun message(): String
