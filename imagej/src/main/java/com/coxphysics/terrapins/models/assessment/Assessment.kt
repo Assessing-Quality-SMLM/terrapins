@@ -7,6 +7,7 @@ import com.coxphysics.terrapins.models.frc.FRC
 import com.coxphysics.terrapins.models.hawkman.external.Hawkman
 import com.coxphysics.terrapins.models.process.Runner
 import com.coxphysics.terrapins.models.squirrel.external.Squirrel
+import ij.IJ
 import java.nio.file.Path
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -56,7 +57,11 @@ class Assessment private constructor(private val exe_location_: Path)
 
     fun run_images(runner : Runner, images: ImagesSettings): AssessmentResults?
     {
-        images.prepare_images_for_analysis()
+        if (!images.prepare_images_for_analysis())
+        {
+            IJ.log("Failed to prepare images for analysis")
+            return null
+        }
         val data_name = generate_data_name()
         val arguments = get_images_arguments(images, data_name)
         return run_arguments(runner, arguments, images.working_directory(), data_name)
@@ -140,15 +145,21 @@ class Assessment private constructor(private val exe_location_: Path)
 
     fun run_localisations(runner : Runner, localisations: AssessmentSettings): AssessmentResults?
     {
+        val core_settings = localisations.prepare_images_for_analysis()
+        if (core_settings == null)
+        {
+            IJ.log("Failed to prepare images for analysis")
+            return null
+        }
         val data_name = generate_data_name()
-        val arguments = get_localisations_arguments(localisations, data_name)
+        val arguments = get_localisations_arguments(core_settings, localisations, data_name)
         return run_arguments(runner, arguments, localisations.working_directory(), data_name)
     }
 
-    fun get_localisations_arguments(localisations: AssessmentSettings, data_name: String?): List<String>
+    fun get_localisations_arguments(adjusted_core_settings: CoreSettings, localisations: AssessmentSettings, data_name: String?): List<String>
     {
         val commands = get_commands()
-        add_core_commands(localisations.core_settings(), data_name, commands)
+        add_core_commands(adjusted_core_settings, data_name, commands)
         add_equipment(localisations.equipment(), commands)
         add_localisations_commands(localisations, commands)
         return commands
