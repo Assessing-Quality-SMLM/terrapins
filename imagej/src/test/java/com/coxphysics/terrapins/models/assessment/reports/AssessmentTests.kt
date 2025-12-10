@@ -60,6 +60,20 @@ class AssessmentTests
     }
 
     @Test
+    fun can_parse_indeterminate()
+    {
+        val lines = listOf("name,something","score,-","result,-","message,else")
+        val assessment = Assessment.from_lines(lines)
+        assertNotNull(assessment)
+        assertEquals(assessment!!.name(), "something")
+        assertEquals(assessment.score(), null)
+        assertEquals(assessment.passed(), false)
+        assertEquals(assessment.failed(), false)
+        assertEquals(assessment.indeterminate(), true)
+        assertEquals(assessment.message(), "else")
+    }
+
+    @Test
     fun can_handle_messages_with_commas()
     {
         val lines = listOf("name,something","score,-","result,failed","message,a,nother, thing")
