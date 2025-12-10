@@ -50,7 +50,7 @@ class ResultsView private constructor(private val results_: Results)
     {
         if (big_widefield_ == null)
         {
-            big_widefield_ = results_.load_sr_transform()
+            big_widefield_ = results_.load_big_widefield()
         }
         return big_widefield_
     }

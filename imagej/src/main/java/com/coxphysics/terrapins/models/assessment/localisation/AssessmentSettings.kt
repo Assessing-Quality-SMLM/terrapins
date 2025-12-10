@@ -154,4 +154,15 @@ class AssessmentSettings private constructor(
     {
         return hawk_localisation_file_.parse_method_string()
     }
+
+    /// METHODS
+    fun prepare_images_for_analysis(): CoreSettings?
+    {
+        return prepare_images_for_analysis_in(working_directory())
+    }
+
+    private fun prepare_images_for_analysis_in(working_directory: Path): CoreSettings?
+    {
+        return core_settings_.to_disk_in(working_directory)
+    }
 }

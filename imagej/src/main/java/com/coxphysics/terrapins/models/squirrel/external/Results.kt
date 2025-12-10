@@ -29,7 +29,7 @@ class Results private constructor(private val data_path_: Path)
 
     private fun big_widefield_path(): Path
     {
-        return assessment_data_dir().resolve("big_widefield.tiff")
+        return data_path_.resolve("big_widefield.tiff")
     }
 
     private fun sr_transform_path(): Path

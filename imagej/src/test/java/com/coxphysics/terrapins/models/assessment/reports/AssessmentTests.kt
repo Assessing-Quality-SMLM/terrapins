@@ -10,10 +10,6 @@ import kotlin.test.assertNull
 class AssessmentTests
 {
 
-    private fun working_directory_path(): Path {
-        return Path("a/smlm_assessment")
-    }
-
     @Test
     fun can_parse_score()
     {
