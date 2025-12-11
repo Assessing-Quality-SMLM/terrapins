@@ -143,6 +143,9 @@ class CoreSettings private constructor(private var working_directory_: Path)
         if (widefield_ok != null && image_stack_ok != null)
         {
             val settings = new(working_directory_)
+            settings.set_n_threads(n_threads_)
+            if (settings_file_ != null)
+                settings.set_settings_file(settings_file_!!)
             settings.set_widefield_filename(widefield_ok.toString())
             settings.set_image_stack_filename(image_stack_ok.toString())
             return settings
