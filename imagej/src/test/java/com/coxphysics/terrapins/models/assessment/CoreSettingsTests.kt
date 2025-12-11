@@ -117,6 +117,6 @@ class CoreSettingsTests
         assertEquals(image_stack.filename(), "another_image.tiff")
         settings.set_image_stack(image_stack)
 
-        assertEquals(settings.to_disk_in(working_directory), true)
+        assertEquals(settings.to_disk_in(working_directory) != null, true)
     }
 }
