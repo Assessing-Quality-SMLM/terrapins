@@ -22,9 +22,10 @@ class Results private constructor(private val data_path_: Path)
         return data_path_.parent
     }
 
-    private fun widefield_path(): Path
+    private fun widefield_path(is_non_linear: Boolean): Path
     {
-        return assessment_data_dir().resolve("widefield.tiff")
+        val image_name = if (is_non_linear) "aof_widefield.tiff" else "widefield.tiff"
+        return assessment_data_dir().resolve(image_name)
     }
 
     private fun big_widefield_path(): Path
@@ -56,9 +57,9 @@ class Results private constructor(private val data_path_: Path)
         return map
     }
 
-    fun load_widefield(): ImagePlus?
+    fun load_widefield(is_non_linear: Boolean): ImagePlus?
     {
-        return IJUtils.load_image(widefield_path())
+        return IJUtils.load_image(widefield_path(is_non_linear))
     }
 
     fun load_big_widefield(): ImagePlus?

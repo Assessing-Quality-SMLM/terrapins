@@ -3,7 +3,9 @@ package com.coxphysics.terrapins.views.squirrel
 import com.coxphysics.terrapins.models.squirrel.external.Results
 import ij.ImagePlus
 
-class ResultsView private constructor(private val results_: Results)
+class ResultsView private constructor(
+    private val results_: Results,
+    private val is_non_linear_: Boolean)
 {
     private var error_map_ : ImagePlus? = null
     private var widefield_ : ImagePlus? = null
@@ -13,9 +15,21 @@ class ResultsView private constructor(private val results_: Results)
     companion object
     {
         @JvmStatic
-        fun from(results: Results): ResultsView
+        fun from(results: Results, is_non_linear : Boolean): ResultsView
         {
-            return ResultsView(results)
+            return ResultsView(results, is_non_linear)
+        }
+
+        @JvmStatic
+        fun non_linear(results: Results): ResultsView
+        {
+            return from(results, true)
+        }
+
+        @JvmStatic
+        fun true_widefield(results: Results): ResultsView
+        {
+            return from(results, false)
         }
     }
 
@@ -32,7 +46,7 @@ class ResultsView private constructor(private val results_: Results)
     {
         if (widefield_ == null)
         {
-            widefield_ = results_.load_widefield()
+            widefield_ = results_.load_widefield(is_non_linear_)
         }
         return widefield_
     }

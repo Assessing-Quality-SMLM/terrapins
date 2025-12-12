@@ -73,15 +73,15 @@ class ReportVM private constructor(
     fun average_of_frames_squirrel_results(): SQUIRRELVM
     {
         val title = "Average of Frames"
-        val results = model_.average_of_frames_results()?: return SQUIRRELVM.empty(title)
-        return SQUIRRELVM.from(title, results)
+        val results = model_.average_of_frames_data()?: return SQUIRRELVM.empty(title)
+        return SQUIRRELVM.from(title, results.first, results.second)
     }
 
     fun widefield_squirrel_results(): SQUIRRELVM
     {
         val title = "Widefield"
-        val results = model_.true_widefield_results()?: return SQUIRRELVM.empty(title)
-        return SQUIRRELVM.from(title, results)
+        val results = model_.true_widefield_data()?: return SQUIRRELVM.empty(title)
+        return SQUIRRELVM.from(title, results.first, results.second)
     }
 
     fun drift_assessment(): AssessmentVM

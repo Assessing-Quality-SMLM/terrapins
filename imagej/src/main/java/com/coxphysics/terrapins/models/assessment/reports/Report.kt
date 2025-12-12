@@ -195,9 +195,27 @@ class Report private constructor(private val results_: AssessmentResults)
         return average_of_frames_squirrel_results_
     }
 
+    fun average_of_frames_data(): Pair<SquirrelResults, SquirrelResultsView>?
+    {
+        if (average_of_frames_squirrel_results_ == null || average_of_frames_squirrel_results_view_ == null)
+        {
+            return null
+        }
+        return Pair(average_of_frames_squirrel_results_!!, average_of_frames_squirrel_results_view_!!)
+    }
+
     fun true_widefield_results(): SquirrelResults?
     {
         return true_widefield_squirrel_results_
+    }
+
+    fun true_widefield_data(): Pair<SquirrelResults, SquirrelResultsView>?
+    {
+        if (true_widefield_squirrel_results_ == null || true_widefield_squirrel_results_view_ == null)
+        {
+            return null
+        }
+        return Pair(true_widefield_squirrel_results_!!, true_widefield_squirrel_results_view_!!)
     }
 
     fun squirrel_assessment(): Assessment?
@@ -249,10 +267,10 @@ class Report private constructor(private val results_: AssessmentResults)
         hawkman_results_view_ = hawkman_results_?.let{ r -> HawkmanResultsView.from(r)}
 
         average_of_frames_squirrel_results_ = results_.average_of_frames_squirrel_results()
-        average_of_frames_squirrel_results_view_ = average_of_frames_squirrel_results_?.let{ r -> SquirrelResultsView.from(r)}
+        average_of_frames_squirrel_results_view_ = average_of_frames_squirrel_results_?.let{ r -> SquirrelResultsView.non_linear(r)}
 
         true_widefield_squirrel_results_ = results_.true_widefield_squirrel_results()
-        true_widefield_squirrel_results_view_ = true_widefield_squirrel_results_?.let{ r -> SquirrelResultsView.from(r)}
+        true_widefield_squirrel_results_view_ = true_widefield_squirrel_results_?.let{ r -> SquirrelResultsView.true_widefield(r)}
 
         calibration_view_ = CalibrationView.from(results_.calibration_data());
     }
