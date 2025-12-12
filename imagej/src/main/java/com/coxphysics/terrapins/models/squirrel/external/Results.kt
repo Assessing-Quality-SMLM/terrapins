@@ -22,28 +22,29 @@ class Results private constructor(private val data_path_: Path)
         return data_path_.parent
     }
 
-    private fun widefield_path(is_non_linear: Boolean): Path
+    // only public for tests
+    fun widefield_path(is_non_linear: Boolean): Path
     {
         val image_name = if (is_non_linear) "aof_widefield.tiff" else "widefield.tiff"
         return assessment_data_dir().resolve(image_name)
     }
 
-    private fun big_widefield_path(): Path
+    fun big_widefield_path(): Path
     {
         return data_path_.resolve("big_widefield.tiff")
     }
 
-    private fun sr_transform_path(): Path
+    fun sr_transform_path(): Path
     {
         return data_path_.resolve("sr_affine_blurred.tiff")
     }
 
-    private fun error_map_path(): Path
+    fun error_map_path(): Path
     {
         return data_path_.resolve("error_map.tiff")
     }
 
-    private fun optimiser_data_path(): Path
+    fun optimiser_data_path(): Path
     {
         return data_path_.resolve("optimiser_data")
     }
