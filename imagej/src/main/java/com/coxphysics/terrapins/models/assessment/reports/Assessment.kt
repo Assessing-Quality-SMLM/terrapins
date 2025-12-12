@@ -13,19 +13,19 @@ enum class Outcome
 class Assessment private constructor(
     private val name_: String,
     private val score_: Double?,
-    private val result_: Outcome,
+    private val result_: Pair<Outcome, String>,
     private val message_: String
     )
 {
     companion object
     {
         @JvmStatic
-        fun decompose(line: String) : Pair<String, String>?
+        fun decompose(line: String, delim: Char) : Pair<String, String>?
         {
-            val splits = line.split(",")
+            val splits = line.split(delim)
             if (splits.size < 2)
                 return null
-            val tail = splits.asSequence().drop(1).joinToString(separator = ",")
+            val tail = splits.asSequence().drop(1).joinToString(separator = delim.toString())
             return Pair(splits[0], tail)
         }
 
@@ -36,24 +36,34 @@ class Assessment private constructor(
         }
 
         @JvmStatic
-        fun parse_result(result: String) : Outcome?
+        fun parse_result(result: String) : Pair<Outcome, String>?
         {
-            if (result == "passed")
-                return Outcome.PASS
-            if (result == "failed")
-                return Outcome.FAIL
-            if (result == "-")
-                return Outcome.INDETERMINATE
+            val values = decompose(result, ',')
+            var outcome = result
+            var label = result
+            if (values != null)
+            {
+                outcome = values.first
+                label = values.second
+            }
+            if (outcome == "passed")
+                return Pair(Outcome.PASS, label)
+            if (outcome == "failed")
+                return Pair(Outcome.FAIL, label)
+            if (outcome == "indeterminate")
+                return Pair(Outcome.INDETERMINATE, label)
             return null
         }
 
         @JvmStatic
         fun from_lines(lines: List<String>): Assessment?
         {
-            val name = decompose(lines[0])?.second
-            val score = decompose(lines[1])?.second?.let { parse_score(it) }
-            val result = decompose(lines[2])?.second?.let { parse_result(it) }
-            val message = decompose(lines[3])?.second
+            if (lines.size < 4)
+                return null
+            val name = decompose(lines[0], ',')?.second
+            val score = decompose(lines[1], ',')?.second?.let { parse_score(it) }
+            val result = decompose(lines[2], ',')?.second?.let { parse_result(it) }
+            val message = decompose(lines[3], ',')?.second
             if (name == null || result == null || message == null)
                 return null
             return Assessment(name, score, result, message)
@@ -86,19 +96,29 @@ class Assessment private constructor(
         return score_
     }
 
+    private fun outcome() : Outcome
+    {
+        return result_.first
+    }
+
     fun passed(): Boolean
     {
-        return result_ == Outcome.PASS
+        return outcome() == Outcome.PASS
     }
 
     fun failed(): Boolean
     {
-        return result_ == Outcome.FAIL
+        return outcome() == Outcome.FAIL
     }
 
     fun indeterminate(): Boolean
     {
-        return result_ == Outcome.INDETERMINATE
+        return outcome() == Outcome.INDETERMINATE
+    }
+
+    fun outcome_label() : String
+    {
+        return result_.second
     }
 
     fun message(): String
