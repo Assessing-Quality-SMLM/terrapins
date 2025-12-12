@@ -12,9 +12,9 @@ class SQUIRRELVM private constructor(
     companion object
     {
         @JvmStatic
-        fun from(title: String, model: Results) : SQUIRRELVM
+        fun from(title: String, model: Results, view: ResultsView) : SQUIRRELVM
         {
-            return SQUIRRELVM(title, model, ResultsView.from(model))
+            return SQUIRRELVM(title, model, view)
         }
 
         @JvmStatic

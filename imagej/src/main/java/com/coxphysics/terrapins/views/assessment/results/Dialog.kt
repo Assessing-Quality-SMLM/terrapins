@@ -163,7 +163,7 @@ class Dialog private constructor() : NonBlockingGenericDialog("Results"), Action
         zip_split_results_ = results_?.zip_split_results()?.results()?.let { r -> FrcResultsView.with(r, "Zip Split") }
         drift_split_results_ = results_?.drift_split_results()?.results()?.let { r -> FrcResultsView.with(r, "Drift Split") }
         hawkman_results_ = results_?.hawkman_results()?.let { r -> HawkmanResultsView.from(r) }
-        squirrel_results_ = results_?.average_of_frames_squirrel_results()?.let { r -> SquirrelResultsView.from(r) }
+        squirrel_results_ = results_?.average_of_frames_squirrel_results()?.let { r -> SquirrelResultsView.true_widefield(r) }
     }
 
     private fun results(): AssessmentResults?
