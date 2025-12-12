@@ -2,9 +2,12 @@ package com.coxphysics.terrapins.models.assessment
 
 import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.non_null
+import com.coxphysics.terrapins.models.processing.WidefieldGenerator
 import com.coxphysics.terrapins.models.utils.FsUtils
 import com.coxphysics.terrapins.models.utils.IJUtils
+import ij.ImagePlus
 import ij.Prefs
+import ij.process.FloatProcessor
 import java.nio.file.Path
 
 class CoreSettings private constructor(private var working_directory_: Path)
@@ -128,26 +131,45 @@ class CoreSettings private constructor(private var working_directory_: Path)
 
     fun to_disk_in(directory: Path) : CoreSettings?
     {
-        var widefield_ok : Path? = null
-        var image_stack_ok : Path? = null
+        var widefield_ok = true
+        var widefield_path : Path? = null
+        var image_stack_ok = true
+        var image_stack_path : Path? = null
         if (widefield_.has_data())
         {
-            val widefield_path = widefield_path_in(directory)?.let { p -> widefield().to_disk_with(p) }
-            widefield_ok = widefield_path
+            val new_widefield_path = widefield_path_in(directory)?.let { p -> widefield().to_disk_with(p) }
+            widefield_path = new_widefield_path
+            widefield_ok = new_widefield_path != null
         }
         if (image_stack_.has_data())
         {
-            val image_stack_path = image_stack_path_in(directory)?.let{p -> image_stack().to_disk_with(p)}
-            image_stack_ok = image_stack_path
+            if (image_stack_.use_image())
+            {
+                val p = image_stack_path_in(directory)
+                if (p != null)
+                {
+                    val image_stack = image_stack_.image()?.stack
+                    if (image_stack != null)
+                    {
+                        val aof = WidefieldGenerator.average_of_frames(image_stack)
+                        val aof_image = ImagePlus("average_of_frames", aof)
+                        image_stack_path = DiskOrImage.from_image(aof_image).to_disk_with(p)
+                        image_stack_ok = image_stack_path != null
+                    }
+                }
+            }
         }
-        if (widefield_ok != null && image_stack_ok != null)
+        if (widefield_ok && image_stack_ok)
         {
             val settings = new(working_directory_)
-            settings.set_n_threads(n_threads_)
-            if (settings_file_ != null)
-                settings.set_settings_file(settings_file_!!)
-            settings.set_widefield_filename(widefield_ok.toString())
-            settings.set_image_stack_filename(image_stack_ok.toString())
+            settings.n_threads_ = n_threads_
+            settings.settings_file_ = settings_file_
+            settings.widefield_ = widefield_
+            settings.image_stack_ = image_stack_
+            if (widefield_path != null)
+                settings.set_widefield_filename(widefield_path.toString())
+            if (image_stack_path != null)
+                settings.set_image_stack_filename(image_stack_path.toString())
             return settings
         }
         return null
