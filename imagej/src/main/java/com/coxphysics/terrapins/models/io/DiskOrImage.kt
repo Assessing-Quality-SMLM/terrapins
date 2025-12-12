@@ -28,6 +28,12 @@ class DiskOrImage private constructor(
         }
 
         @JvmStatic
+        fun from_image(image: ImagePlus) : DiskOrImage
+        {
+            return new(null, image, true)
+        }
+
+        @JvmStatic
         fun default() : DiskOrImage
         {
             return new(null, null, false)
