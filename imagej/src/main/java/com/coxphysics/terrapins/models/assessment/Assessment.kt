@@ -57,20 +57,21 @@ class Assessment private constructor(private val exe_location_: Path)
 
     fun run_images(runner : Runner, images: ImagesSettings): AssessmentResults?
     {
-        if (!images.prepare_images_for_analysis())
+        val new_core_settings = images.prepare_images_for_analysis()
+        if (new_core_settings == null)
         {
             IJ.log("Failed to prepare images for analysis")
             return null
         }
         val data_name = generate_data_name()
-        val arguments = get_images_arguments(images, data_name)
+        val arguments = get_images_arguments(new_core_settings, images, data_name)
         return run_arguments(runner, arguments, images.working_directory(), data_name)
     }
 
-    fun get_images_arguments(images: ImagesSettings, data_name: String?): List<String>
+    fun get_images_arguments(adjusted_core_settings: CoreSettings, images: ImagesSettings, data_name: String?): List<String>
     {
         val commands = get_commands()
-        add_core_commands(images.core_settings(), data_name, commands)
+        add_core_commands(adjusted_core_settings, data_name, commands)
         add_equipment(images.equipment_settings(), commands)
         add_image_commands_to(commands, images)
         return commands

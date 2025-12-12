@@ -261,14 +261,14 @@ class Settings private constructor(
     }
 
     /// METHODS
-    fun prepare_images_for_analysis(): Boolean
+    fun prepare_images_for_analysis(): CoreSettings?
     {
         return prepare_images_for_analysis_in(working_directory())
     }
 
-    private fun prepare_images_for_analysis_in(working_directory: Path): Boolean
+    private fun prepare_images_for_analysis_in(working_directory: Path): CoreSettings?
     {
-        val core_ok = core_settings_.to_disk_in(working_directory) != null
+        val new_core_settings = core_settings_.to_disk_in(working_directory)
         var reference_ok = true
         if (reference_image_.has_data())
         {
@@ -284,9 +284,12 @@ class Settings private constructor(
 
         val half_split_ok = half_split_.to_disk_in(half_split_images_directory_in(working_directory))
         val zip_split_ok = zip_split_.to_disk_in(zip_split_images_directory_in(working_directory))
-        return core_ok && reference_ok &&
-                hawk_ok &&
-                half_split_ok &&
-                zip_split_ok
+        val all_ok = reference_ok &&
+                     hawk_ok &&
+                     half_split_ok &&
+                     zip_split_ok
+        if (all_ok)
+            return new_core_settings
+        return null
     }
 }
