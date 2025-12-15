@@ -47,15 +47,7 @@ class AssessmentVM private constructor(
 
     fun outcome_text(): String
     {
-        if (is_empty())
-            return ""
-        if (model_!!.passed())
-            return "Passed"
-        else if (model_.failed())
-            return "Failed"
-        else if (model_.indeterminate())
-            return "Indeterminate"
-        return ""
+        return model_?.outcome_label() ?: ""
     }
 
     fun background_colour(): Color?
