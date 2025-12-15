@@ -26,7 +26,7 @@ class AssessmentTests
         assertEquals(assessment!!.name(), "something")
         assertEquals(assessment.score(), 123.0)
         assertEquals(assessment.passed(), true)
-        assertEquals(assessment.outcome_label(), "passed")
+        assertEquals(assessment.outcome_label(), "Passed")
         assertEquals(assessment.message(), "else")
     }
 
