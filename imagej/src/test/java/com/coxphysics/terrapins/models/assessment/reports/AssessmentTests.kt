@@ -116,4 +116,23 @@ class AssessmentTests
         assertEquals(assessment.outcome_label(), "thing")
         assertEquals(assessment.message(), "else")
     }
+
+    @Test
+    fun if_outcome_label_missing_use_outcome_as_label()
+    {
+        var lines = listOf("name,something","score,-","result,indeterminate","message,else")
+        var assessment = Assessment.from_lines(lines)
+        assertEquals(assessment!!.indeterminate(), true)
+        assertEquals(assessment.outcome_label(), "Indeterminate")
+
+        lines = listOf("name,something","score,-","result,passed","message,else")
+        assessment = Assessment.from_lines(lines)
+        assertEquals(assessment!!.passed(), true)
+        assertEquals(assessment.outcome_label(), "Passed")
+
+        lines = listOf("name,something","score,-","result,failed","message,else")
+        assessment = Assessment.from_lines(lines)
+        assertEquals(assessment!!.failed(), true)
+        assertEquals(assessment.outcome_label(), "Failed")
+    }
 }

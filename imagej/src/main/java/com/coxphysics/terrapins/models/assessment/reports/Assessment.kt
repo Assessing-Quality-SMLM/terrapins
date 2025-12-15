@@ -38,9 +38,9 @@ class Assessment private constructor(
         @JvmStatic
         fun parse_result(result: String) : Pair<Outcome, String>?
         {
-            val values = decompose(result, ',')
             var outcome = result
-            var label = result
+            var label = result.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+            val values = decompose(result, ',')
             if (values != null)
             {
                 outcome = values.first
