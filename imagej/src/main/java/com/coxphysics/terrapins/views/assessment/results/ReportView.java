@@ -129,6 +129,7 @@ public class ReportView extends JFrame {
     private HawkmanView hawkman_results_view_;
     private SQUIRRELView average_of_frames_squirrel_;
     private SQUIRRELView widefield_squirrel_;
+    private AssessmentView limiting_resolution_assessment_;
 
     private ReportView(ReportVM view_model) {
         view_model_ = view_model;
@@ -238,6 +239,7 @@ public class ReportView extends JFrame {
         update_frc_resolution_assessment();
         update_bias_assessment();
         update_squirrel_assessment();
+        update_limiting_resolution_assessment();
     }
 
     private void update_drift_assessment() {
@@ -282,6 +284,11 @@ public class ReportView extends JFrame {
         squirrel_assessment_.set_view_model(view_model);
     }
 
+    private void update_limiting_resolution_assessment() {
+        AssessmentVM view_model = view_model_.limiting_resolution_assessment();
+        limiting_resolution_assessment_.set_view_model(view_model);
+    }
+
     public void set_data_path(Path value) {
         view_model_.set_data_path(value);
         reset_data_path();
@@ -322,7 +329,7 @@ public class ReportView extends JFrame {
         scroll_panel_ = new JScrollPane();
         panel1.add(scroll_panel_, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         scrolling_panel_ = new JPanel();
-        scrolling_panel_.setLayout(new GridLayoutManager(8, 1, new Insets(0, 0, 0, 0), -1, -1));
+        scrolling_panel_.setLayout(new GridLayoutManager(9, 1, new Insets(0, 0, 0, 0), -1, -1));
         scroll_panel_.setViewportView(scrolling_panel_);
         localisation_assessment_ = new AssessmentView();
         scrolling_panel_.add(localisation_assessment_.$$$getRootComponent$$$(), new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -340,6 +347,8 @@ public class ReportView extends JFrame {
         scrolling_panel_.add(sampling_assessment_.$$$getRootComponent$$$(), new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         magnification_assessment_ = new AssessmentView();
         scrolling_panel_.add(magnification_assessment_.$$$getRootComponent$$$(), new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        limiting_resolution_assessment_ = new AssessmentView();
+        scrolling_panel_.add(limiting_resolution_assessment_.$$$getRootComponent$$$(), new GridConstraints(8, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         tabbed_panel_.addTab("Results", panel2);
