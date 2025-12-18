@@ -21,6 +21,7 @@ class Report private constructor(private val results_: AssessmentResults)
     private var frc_resolution_assessment_ : Assessment? = null
     private var bias_assessment_ : Assessment? = null
     private var squirrel_assessment_ : Assessment? = null
+    private var limiting_resolution_assessment_ : Assessment? = null
 
     private var half_results_ : FRC? = null
     private var half_view_: ResultsView? = null
@@ -235,6 +236,11 @@ class Report private constructor(private val results_: AssessmentResults)
         true_widefield_squirrel_results_view_?.show_error_map(false)
     }
 
+    fun limiting_resolution_assessment(): Assessment?
+    {
+        return limiting_resolution_assessment_
+    }
+
     private fun cache_data()
     {
         drift_assessment_ = results_.drift_assessment()
@@ -245,6 +251,7 @@ class Report private constructor(private val results_: AssessmentResults)
         frc_resolution_assessment_ = results_.frc_resolution_assessment()
         bias_assessment_ = results_.bias_assessment()
         squirrel_assessment_ = results_.squirrel_assessment()
+        limiting_resolution_assessment_ = results_.limiting_resolution_assessment()
 
         half_results_ = results_.half_split_results()
         val half_results = half_results_?.results()

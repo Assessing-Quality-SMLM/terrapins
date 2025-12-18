@@ -189,4 +189,10 @@ class ReportVM private constructor(
         else
             model_.hide_squirrel_details()
     }
+
+    fun limiting_resolution_assessment(): AssessmentVM
+    {
+        val assessment = model_.limiting_resolution_assessment() ?: return AssessmentVM.empty("Limiting Resolution")
+        return AssessmentVM.from(assessment)
+    }
 }
