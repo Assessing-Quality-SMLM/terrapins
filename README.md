@@ -1,6 +1,6 @@
 # TERRAPINS - TEsting Resolution, Reliability And Performance IN SMLM 
 
-Latest ImageJ plugin can be found [here](https://github.com/Assessing-Quality-SMLM/terrapins/releases/tag/terrapins_0.2.0)
+Latest ImageJ plugin can be found [here](https://github.com/Assessing-Quality-SMLM/terrapins/releases/tag/terrapins_0.3.0)
 
 
 # What's the point / Scope? 
