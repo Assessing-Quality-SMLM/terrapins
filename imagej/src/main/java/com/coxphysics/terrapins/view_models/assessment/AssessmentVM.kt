@@ -1,6 +1,7 @@
 package com.coxphysics.terrapins.view_models.assessment
 
 import com.coxphysics.terrapins.models.assessment.reports.Assessment
+import com.coxphysics.terrapins.models.assessment.reports.Outcome
 import java.awt.Color
 
 class AssessmentVM private constructor(
@@ -54,15 +55,14 @@ class AssessmentVM private constructor(
     {
         if (is_empty())
             return null
-        if (model_!!.passed())
+        val colour = model_!!.colour()
+        return when (colour)
         {
-            return Color.GREEN
+            Outcome.PASS -> Color.GREEN
+            Outcome.FAIL -> Color.RED
+            Outcome.INDETERMINATE -> Color.orange
+            else -> null
         }
-        else if (model_.failed())
-            return Color.RED
-        else if (model_.indeterminate())
-            return Color.orange
-        return null
     }
 
     fun message(): String

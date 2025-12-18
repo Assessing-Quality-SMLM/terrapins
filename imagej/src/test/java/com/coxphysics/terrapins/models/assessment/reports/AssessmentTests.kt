@@ -135,4 +135,47 @@ class AssessmentTests
         assertEquals(assessment!!.failed(), true)
         assertEquals(assessment.outcome_label(), "Failed")
     }
+
+    @Test
+    fun can_parse_colour_if_present()
+    {
+        var lines = listOf("name,something","score,-","result,passed,Pass","colour,passed","message,else")
+        var assessment = Assessment.from_lines(lines)
+        assertEquals(assessment!!.passed(), true)
+        assertEquals(assessment.outcome_label(), "Pass")
+        assertEquals(assessment.message(), "else")
+        assertEquals(assessment.colour(), Outcome.PASS)
+    }
+
+    @Test
+    fun colour_can_differ_from_outcome()
+    {
+        var lines = listOf("name,something","score,-","result,passed,Pass","colour,failed","message,else")
+        var assessment = Assessment.from_lines(lines)
+        assertEquals(assessment!!.passed(), true)
+        assertEquals(assessment.outcome_label(), "Pass")
+        assertEquals(assessment.message(), "else")
+        assertEquals(assessment.colour(), Outcome.FAIL)
+    }
+
+    @Test
+    fun colour_defaults_to_result()
+    {
+        var lines = listOf("name,something","score,-","result,passed,Pass","message,else")
+        var assessment = Assessment.from_lines(lines)
+        assertEquals(assessment!!.passed(), true)
+        assertEquals(assessment.outcome_label(), "Pass")
+        assertEquals(assessment.message(), "else")
+        assertEquals(assessment.colour(), Outcome.PASS)
+    }
+
+    @Test
+    fun messages_can_be_multiline()
+    {
+        var lines = listOf("name,something","score,-","result,passed,Pass","message,a\nnother\nthing")
+        var assessment = Assessment.from_lines(lines)
+        assertEquals(assessment!!.passed(), true)
+        assertEquals(assessment.outcome_label(), "Pass")
+        assertEquals(assessment.message(), "a\nnother\nthing")
+    }
 }

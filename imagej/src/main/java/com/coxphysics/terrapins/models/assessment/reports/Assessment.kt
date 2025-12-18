@@ -14,6 +14,7 @@ class Assessment private constructor(
     private val name_: String,
     private val score_: Double?,
     private val result_: Pair<Outcome, String>,
+    private val colour_: Outcome?,
     private val message_: String
     )
 {
@@ -55,6 +56,19 @@ class Assessment private constructor(
             return null
         }
 
+        fun get_message(lines: List<String>) : String?
+        {
+            val first = decompose(lines[0], ',')
+            if (first == null)
+                return null
+            var sb = StringBuilder()
+            sb.append(first.second)
+            for (line in lines.drop(1))
+            {
+                sb.append(line)
+            }
+            return sb.toString()
+        }
         @JvmStatic
         fun from_lines(lines: List<String>): Assessment?
         {
@@ -63,10 +77,24 @@ class Assessment private constructor(
             val name = decompose(lines[0], ',')?.second
             val score = decompose(lines[1], ',')?.second?.let { parse_score(it) }
             val result = decompose(lines[2], ',')?.second?.let { parse_result(it) }
-            val message = decompose(lines[3], ',')?.second
+            val line_3 = decompose(lines[3], ',')
+            if (line_3 == null)
+                return null
+            var colour : Outcome? = null
+            var message : String? = null
+            if (line_3.first == "colour")
+            {
+                colour = parse_result(line_3.second)?.first
+                message = get_message(lines.subList(4, lines.size))
+            }
+            else
+            {
+                message = get_message(lines.subList(3, lines.size))
+            }
+
             if (name == null || result == null || message == null)
                 return null
-            return Assessment(name, score, result, message)
+            return Assessment(name, score, result, colour, message)
 
         }
         @JvmStatic
@@ -124,6 +152,10 @@ class Assessment private constructor(
     fun message(): String
     {
         return message_
+    }
 
+    fun colour(): Outcome
+    {
+        return colour_ ?: outcome()
     }
 }
