@@ -160,6 +160,16 @@ class AssessmentResults private constructor(private var data_path: Path)
         return Assessment.from_disk(squirrel_assessment_path())
     }
 
+    private fun limiting_resolution_assessment_path() : Path
+    {
+        return reports_path().resolve("limiting_resolution")
+    }
+
+    fun limiting_resolution_assessment(): Assessment?
+    {
+        return Assessment.from_disk(limiting_resolution_assessment_path())
+    }
+
     private fun half_split_results_path() : Path
     {
         return data_path.resolve(HALF_SPLIT_DATA)
