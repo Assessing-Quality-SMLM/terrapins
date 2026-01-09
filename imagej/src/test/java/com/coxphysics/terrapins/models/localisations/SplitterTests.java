@@ -122,13 +122,13 @@ class SplitterTests
         parse_method.set_n_headers(10);
         parse_method.set_x_pos(2);
         parse_method.set_y_pos(3);
-        parse_method.set_sigma_pos(5);
+        parse_method.set_psf_sigma_pos(5);
         settings.set_parse_method(parse_method);
         Path exe_path = Paths.get("/some/where/fake_split");
         String default_a = Paths.get("/some/where/splitter_data/localisations_split_a").toString();
         String default_b = Paths.get("/some/where/splitter_data/localisations_split_b").toString();
         List<String> commands = Splitter.custom(exe_path).get_commands("something", settings);
-        List<String> expected = Arrays.asList(exe_path.toString(), "--locs", "something", "-a", default_a,  "-b", default_b, "-m", "half", "--parse-method", "csv=10;,;2;3;5");
+        List<String> expected = Arrays.asList(exe_path.toString(), "--locs", "something", "-a", default_a,  "-b", default_b, "-m", "half", "--parse-method", "csv=10;,;2;3;5;-1;-1");
         assertEquals(expected, commands);
     }
 }
