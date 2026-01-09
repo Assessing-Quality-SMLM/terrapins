@@ -8,8 +8,13 @@ public class ParseMethod
         private int n_headers_ = 0;
         private char delimiter_ = ',';
         private int x_pos_ = 0;
-        private int y_pos_ = 0;
-        private int sigma_pos_ = 0;
+        private int y_pos_ = 1;
+
+        private int psf_sigma_pos_ = -1;
+
+        private int uncertainty_pos_ = -1;
+
+        private int frame_number_pos_ = -1;
 
         public CsvSettings()
         {
@@ -36,9 +41,19 @@ public class ParseMethod
             return y_pos_;
         }
 
-        public int sigma_position()
+        public int psf_sigma_position()
         {
-            return sigma_pos_;
+            return psf_sigma_pos_;
+        }
+
+        public int uncertainty_position()
+        {
+            return uncertainty_pos_;
+        }
+
+        public int frame_number_position()
+        {
+            return frame_number_pos_;
         }
 
         public void set_n_headers(int value)
@@ -61,14 +76,24 @@ public class ParseMethod
             y_pos_ = value;
         }
 
-        public void set_sigma_pos(int value)
+        public void set_psf_sigma_pos(int value)
         {
-            sigma_pos_ = value;
+            psf_sigma_pos_ = value;
+        }
+
+        public void set_uncertainty_pos(int value)
+        {
+            uncertainty_pos_ = value;
+        }
+
+        public void set_frame_number_pos(int value)
+        {
+            frame_number_pos_ = value;
         }
 
         public String to_parse_method()
         {
-            return String.format("csv=%d;%c;%d;%d;%d", n_headers_, delimiter_, x_pos_, y_pos_, sigma_pos_);
+            return String.format("csv=%d;%c;%d;%d;%d;%d;%d", n_headers_, delimiter_, x_pos_, y_pos_, psf_sigma_pos_, uncertainty_pos_, frame_number_pos_);
         }
 
     }
@@ -114,9 +139,19 @@ public class ParseMethod
         return csv_settings_.y_position();
     }
 
-    public int sigma_position()
+    public int psf_sigma_position()
     {
-        return csv_settings_.sigma_position();
+        return csv_settings_.psf_sigma_position();
+    }
+
+    public int uncertainty_position()
+    {
+        return csv_settings_.uncertainty_position();
+    }
+
+    public int frame_number_position()
+    {
+        return csv_settings_.frame_number_position();
     }
 
     public String parse_method()
@@ -156,8 +191,18 @@ public class ParseMethod
         csv_settings_.set_y_pos(value);
     }
 
-    public void set_sigma_pos(int value)
+    public void set_psf_sigma_pos(int value)
     {
-        csv_settings_.set_sigma_pos(value);
+        csv_settings_.set_psf_sigma_pos(value);
+    }
+
+    public void set_uncertainty_pos(int value)
+    {
+        csv_settings_.set_uncertainty_pos(value);
+    }
+
+    public void set_frame_number_pos(int value)
+    {
+        csv_settings_.set_frame_number_pos(value);
     }
 }

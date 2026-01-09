@@ -21,7 +21,9 @@ public class ParseMethodsUI
     private final StringField delimiter_;
     private final NumericField x_pos_;
     private final NumericField y_pos_;
-    private final NumericField sigma_pos_;
+    private final NumericField psf_sigma_pos_;
+    private final NumericField uncertainty_pos_;
+    private final NumericField frame_number_pos_;
 
     private ParseMethodsUI(GenericDialog dialog,
                            Message message,
@@ -31,7 +33,9 @@ public class ParseMethodsUI
                            StringField delimiter,
                            NumericField x_pos,
                            NumericField y_pos,
-                           NumericField sigma_pos)
+                           NumericField psf_sigma_pos,
+                           NumericField uncertainty_pos,
+                           NumericField frame_number_pos)
     {
         dialog_ = dialog;
         this.message_ = message;
@@ -41,7 +45,9 @@ public class ParseMethodsUI
         delimiter_ = delimiter;
         x_pos_ = x_pos;
         y_pos_ = y_pos;
-        sigma_pos_ = sigma_pos;
+        psf_sigma_pos_ = psf_sigma_pos;
+        uncertainty_pos_ = uncertainty_pos;
+        frame_number_pos_ = frame_number_pos;
     }
 
     public static ParseMethodsUI add_to_dialog(GenericDialog dialog, ParseMethod settings)
@@ -52,8 +58,10 @@ public class ParseMethodsUI
         StringField delimiter = add_string_field(dialog, "Delimiter", String.valueOf(settings.delimiter()));
         NumericField x_pos = add_numeric_field(dialog, "X position", settings.x_position(), 0);
         NumericField y_pos = add_numeric_field(dialog, "Y position", settings.y_position(), 0);
-        NumericField sigma_pos = add_numeric_field(dialog, "Sigma position", settings.sigma_position(), 0);
-        ParseMethodsUI ui = new ParseMethodsUI(dialog, message, settings, ts_checkbox, header_lines, delimiter, x_pos, y_pos, sigma_pos);
+        NumericField psf_sigma_pos = add_numeric_field(dialog, "PSF sigma position", settings.psf_sigma_position(), 0);
+        NumericField uncertainty_sigma_pos = add_numeric_field(dialog, "Uncertainty position", settings.uncertainty_position(), 0);
+        NumericField frame_number_pos = add_numeric_field(dialog, "Frame number position", settings.frame_number_position(), 0);
+        ParseMethodsUI ui = new ParseMethodsUI(dialog, message, settings, ts_checkbox, header_lines, delimiter, x_pos, y_pos, psf_sigma_pos, uncertainty_sigma_pos, frame_number_pos);
         ui.synchronise_csv_visibility();
         ts_checkbox.add_item_listener(new IsThunderStormListener(ui));
         return ui;
@@ -90,7 +98,13 @@ public class ParseMethodsUI
         int y_pos = Utils.extract_numeric_field_as_int(dialog);
         parse_method.set_y_pos(y_pos);
         int sigma_pos = Utils.extract_numeric_field_as_int(dialog);
-        parse_method.set_sigma_pos(sigma_pos);
+        parse_method.set_psf_sigma_pos(sigma_pos);
+
+        int uncertainty_pos = Utils.extract_numeric_field_as_int(dialog);
+        parse_method.set_uncertainty_pos(uncertainty_pos);
+
+        int frame_number_pos = Utils.extract_numeric_field_as_int(dialog);
+        parse_method.set_frame_number_pos(frame_number_pos);
     }
 
 
@@ -132,11 +146,18 @@ public class ParseMethodsUI
         if (y_pos != null)
             settings.set_y_pos(y_pos);
 
-        Integer sigma_pos = sigma_pos_.get_nullable_value();
-        if (sigma_pos != null)
-            settings.set_sigma_pos(sigma_pos);
-    }
+        Integer psf_sigma_pos = psf_sigma_pos_.get_nullable_value();
+        if (psf_sigma_pos != null)
+            settings.set_psf_sigma_pos(psf_sigma_pos);
 
+        Integer uncertainty_pos = uncertainty_pos_.get_nullable_value();
+        if (uncertainty_pos != null)
+            settings.set_uncertainty_pos(uncertainty_pos);
+
+        Integer frame_number_pos = frame_number_pos_.get_nullable_value();
+        if (frame_number_pos != null)
+            settings.set_frame_number_pos(frame_number_pos);
+    }
 
     private void synchronise_csv_visibility()
     {
@@ -150,7 +171,9 @@ public class ParseMethodsUI
         delimiter_.set_visible(value);
         x_pos_.set_visible(value);
         y_pos_.set_visible(value);
-        sigma_pos_.set_visible(value);
+        psf_sigma_pos_.set_visible(value);
+        uncertainty_pos_.set_visible(value);
+        frame_number_pos_.set_visible(value);
     }
 
     // this is for tests do not use
