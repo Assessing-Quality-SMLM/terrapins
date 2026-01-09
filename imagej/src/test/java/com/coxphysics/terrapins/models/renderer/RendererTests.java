@@ -83,7 +83,7 @@ public class RendererTests
         parse_method.set_y_pos(2);
         parse_method.set_psf_sigma_pos(3);
         List<String> commands = r.get_commands("file.txt", settings);
-        List<String> expected = Arrays.asList(exe_path.toString(), "-i", "file.txt", "-o", output_path, "-c", "100.0", "-m", "10", "-g", "0,0,256,256", "-s", "3.0", "-n", "1", "--f32",  "--parse-method", "csv=2;,;1;2;3");
+        List<String> expected = Arrays.asList(exe_path.toString(), "-i", "file.txt", "-o", output_path, "-c", "100.0", "-m", "10", "-g", "0,0,256,256", "-s", "3.0", "-n", "1", "--f32",  "--parse-method", "csv=2;,;1;2;3;-1;-1");
         assertEquals(commands, expected);
     }
 }

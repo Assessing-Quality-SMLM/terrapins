@@ -128,7 +128,7 @@ class SplitterTests
         String default_a = Paths.get("/some/where/splitter_data/localisations_split_a").toString();
         String default_b = Paths.get("/some/where/splitter_data/localisations_split_b").toString();
         List<String> commands = Splitter.custom(exe_path).get_commands("something", settings);
-        List<String> expected = Arrays.asList(exe_path.toString(), "--locs", "something", "-a", default_a,  "-b", default_b, "-m", "half", "--parse-method", "csv=10;,;2;3;5");
+        List<String> expected = Arrays.asList(exe_path.toString(), "--locs", "something", "-a", default_a,  "-b", default_b, "-m", "half", "--parse-method", "csv=10;,;2;3;5;-1;-1");
         assertEquals(expected, commands);
     }
 }
