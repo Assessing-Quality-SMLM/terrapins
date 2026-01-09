@@ -36,4 +36,69 @@ public class ParseMethodTests
         assertEquals(ui.n_headers().text(), "junk");
         assertEquals(settings.n_header_lines(), 2);
     }
+    
+    @Test
+    void minimal_csv_settings()
+    {
+        ParseMethod parse_method = ParseMethod.default_();
+        parse_method.set_parse_method_csv();
+        assertEquals(parse_method.parse_method(), "csv=0;,;0;1;-1;-1;-1");
+    }
+
+    @Test
+    void csv_settings_set_header_position()
+    {
+        ParseMethod parse_method = ParseMethod.default_();
+        parse_method.set_parse_method_csv();
+        parse_method.set_n_headers(10);
+        assertEquals(parse_method.parse_method(), "csv=10;,;0;1;-1;-1;-1");
+    }
+
+    @Test
+    void csv_settings_set_psf_sigma()
+    {
+        ParseMethod parse_method = ParseMethod.default_();
+        parse_method.set_parse_method_csv();
+        parse_method.set_psf_sigma_pos(2);
+        assertEquals(parse_method.parse_method(), "csv=0;,;0;1;2;-1;-1");
+    }
+
+    @Test
+    void csv_settings_set_uncertainty()
+    {
+        ParseMethod parse_method = ParseMethod.default_();
+        parse_method.set_parse_method_csv();
+        parse_method.set_uncertainty_pos(2);
+        assertEquals(parse_method.parse_method(), "csv=0;,;0;1;-1;2;-1");
+    }
+
+    @Test
+    void csv_settings_set_frame_number()
+    {
+        ParseMethod parse_method = ParseMethod.default_();
+        parse_method.set_parse_method_csv();
+        parse_method.set_frame_number_pos(2);
+        assertEquals(parse_method.parse_method(), "csv=0;,;0;1;-1;-1;2");
+    }
+
+    @Test
+    void csv_settings_set_psf_sigma_and_uncertainty()
+    {
+        ParseMethod parse_method = ParseMethod.default_();
+        parse_method.set_parse_method_csv();
+        parse_method.set_psf_sigma_pos(2);
+        parse_method.set_uncertainty_pos(3);
+        assertEquals(parse_method.parse_method(), "csv=0;,;0;1;2;3;-1");
+    }
+
+    @Test
+    void csv_settings_set_psf_sigma_and_uncertainty_and_frame_number()
+    {
+        ParseMethod parse_method = ParseMethod.default_();
+        parse_method.set_parse_method_csv();
+        parse_method.set_psf_sigma_pos(2);
+        parse_method.set_uncertainty_pos(3);
+        parse_method.set_frame_number_pos(4);
+        assertEquals(parse_method.parse_method(), "csv=0;,;0;1;2;3;4");
+    }
 }
