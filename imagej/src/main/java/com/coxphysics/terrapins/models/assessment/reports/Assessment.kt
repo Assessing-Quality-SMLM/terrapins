@@ -10,6 +10,10 @@ enum class Outcome
     PASS, FAIL, INDETERMINATE
 }
 
+const val PASSED = "passed"
+const val INDERTERMINATE = "indeterminate"
+const val FAILED = "failed"
+
 class Assessment private constructor(
     private val name_: String,
     private val score_: Double?,
@@ -47,11 +51,11 @@ class Assessment private constructor(
                 outcome = values.first
                 label = values.second
             }
-            if (outcome == "passed")
+            if (outcome == PASSED)
                 return Pair(Outcome.PASS, label)
-            if (outcome == "failed")
+            if (outcome == FAILED)
                 return Pair(Outcome.FAIL, label)
-            if (outcome == "indeterminate")
+            if (outcome == INDERTERMINATE)
                 return Pair(Outcome.INDETERMINATE, label)
             return null
         }
