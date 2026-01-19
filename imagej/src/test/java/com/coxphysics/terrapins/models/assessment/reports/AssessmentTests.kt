@@ -178,4 +178,15 @@ class AssessmentTests
         assertEquals(assessment.outcome_label(), "Pass")
         assertEquals(assessment.message(), "a\nnother\nthing")
     }
+
+        @Test
+    fun can_parse_magnification_assessment()
+    {
+        var lines = listOf("name,something","score,-","result,indeterminate,Too High","colour,intermediate","message,else")
+        var assessment = Assessment.from_lines(lines)
+        assertEquals(assessment!!.indeterminate(), true)
+        assertEquals(assessment.outcome_label(), "Too High")
+        assertEquals(assessment.message(), "else")
+        assertEquals(assessment.colour(), Outcome.INDETERMINATE)
+    }
 }
