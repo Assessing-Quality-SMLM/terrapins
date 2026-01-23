@@ -26,3 +26,5 @@ hawkman_and_squirrel_artifacts/*
 renderer_artifacts/*
 splitter_artifacts/*
 jhawk/artifacts/*
+
+imagej/pom.xml.versionsBackup
