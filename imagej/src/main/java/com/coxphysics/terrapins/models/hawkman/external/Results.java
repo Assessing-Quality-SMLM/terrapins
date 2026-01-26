@@ -15,9 +15,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
 
 public class Results
@@ -144,9 +142,9 @@ public class Results
 
     public Plot score_plot_generator()
     {
-        Pair<double[], double[]> global_scores = global_scores();
-        Pair<double[], double[]> sharpening_scores = sharpening_scores();
-        Pair<double[], double[]> structure_scores = structure_scores();
+        Pair<double[], double[]> global_scores = add_zero_to_scores(global_scores());
+        Pair<double[], double[]> sharpening_scores = add_zero_to_scores(sharpening_scores());
+        Pair<double[], double[]> structure_scores = add_zero_to_scores(structure_scores());
         if (is_empty(global_scores) && is_empty(sharpening_scores) && is_empty(structure_scores))
         {
             return null;
@@ -159,7 +157,35 @@ public class Results
         p.setColor(Color.GREEN);
         p.addPoints(structure_scores.component1(), structure_scores.component2(), 7);
         p.addLegend("Score\tSharpening\tStructure");
+
+        int n = global_scores.component1().length;
+        double start_level = 0.0;
+        double end_level = global_scores.component1()[n - 1];
+
+        double min_score = -0.05;
+        double max_score = 1.05;
+        p.setLimits(start_level - 0.15, end_level + 0.15, min_score, max_score);
         return p;
+    }
+
+    private Pair<double[], double[]> add_zero_to_scores(Pair<double[], double[]> scores)
+    {
+        int n = scores.component1().length;
+        double[] old_x = scores.component1();
+        double[] old_y = scores.component2();
+
+        double[] levels = new double[n + 1];
+        double[] new_scores = new double[n + 1];
+        levels[0] = 0.0;
+        new_scores[0] = 0.0;
+
+
+        for (int idx = 0; idx < n; idx++)
+        {
+            levels[idx + 1] = old_x[idx];
+            new_scores[idx + 1] = old_y[idx];
+        }
+        return new Pair<>(levels, new_scores);
     }
 
     private boolean is_empty(Pair<double[], double[]> scores)
