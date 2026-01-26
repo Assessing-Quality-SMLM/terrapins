@@ -77,6 +77,10 @@ public class HawkmanView {
         view.view_model_.show_combined_resolution_map(view.combined_resolution_map_.isSelected());
     }
 
+    private static void update_scores(HawkmanView view) {
+        view.view_model_.show_scores(view.scores_.isSelected());
+    }
+
     private static void update_confidence_map(HawkmanView view) {
         view.view_model_.show_confidence_map(view.confidence_map_.isSelected());
     }
