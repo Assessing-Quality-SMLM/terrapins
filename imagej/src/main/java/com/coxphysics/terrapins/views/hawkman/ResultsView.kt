@@ -3,6 +3,7 @@ package com.coxphysics.terrapins.views.hawkman
 import com.coxphysics.terrapins.models.hawkman.external.Results
 import com.coxphysics.terrapins.models.utils.FsUtils
 import com.coxphysics.terrapins.models.utils.IJUtils
+import com.coxphysics.terrapins.views.assessment.PlotManager
 import ij.ImagePlus
 import ij.gui.PlotWindow
 import java.nio.file.Path
@@ -17,7 +18,7 @@ class ResultsView private constructor(private val results_: Results )
     private var sharpening_map_ : ImagePlus? = null
     private var skeleton_map_ : ImagePlus? = null
     private var structure_map_ : ImagePlus? = null
-    private var scores_: PlotWindow? = null
+    private var scores_: PlotManager? = PlotManager.with { results_.score_plot_generator() }
 
     companion object
     {
@@ -78,11 +79,6 @@ class ResultsView private constructor(private val results_: Results )
         return structure_map_;
     }
 
-    private fun generate_scores()
-    {
-        scores_ = results_.plot_scores()
-    }
-
     fun show_core()
     {
         show_combined_resolution_map()
@@ -96,13 +92,13 @@ class ResultsView private constructor(private val results_: Results )
     fun show_details()
     {
         show_combined_resolution_map()
-        generate_scores()
+        show_scores()
     }
 
     fun hide_details()
     {
         hide_combined_resolution_map()
-        scores_?.close()
+        hide_scores()
     }
 
     fun show_combined_resolution_map()
@@ -113,6 +109,16 @@ class ResultsView private constructor(private val results_: Results )
     fun hide_combined_resolution_map()
     {
         resolution_image()?.hide()
+    }
+
+    fun show_scores()
+    {
+        scores_?.show()
+    }
+
+    fun hide_scores()
+    {
+        scores_?.hide()
     }
 
     fun show_confidence_map()

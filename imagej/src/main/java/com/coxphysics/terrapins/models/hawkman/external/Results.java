@@ -6,8 +6,6 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.gui.Plot;
-import ij.gui.PlotWindow;
-import ij.process.ImageProcessor;
 import kotlin.Pair;
 import org.jetbrains.annotations.Nullable;
 
@@ -132,7 +130,7 @@ public class Results
     public void display_core_results()
     {
         show_image(combined_resolution_map_path());
-        plot_scores();
+        score_plot_generator().show();
     }
 
     public void display()
@@ -144,7 +142,7 @@ public class Results
         structure_map_generator().show();
     }
 
-    public PlotWindow plot_scores()
+    public Plot score_plot_generator()
     {
         Pair<double[], double[]> global_scores = global_scores();
         Pair<double[], double[]> sharpening_scores = sharpening_scores();
@@ -161,7 +159,7 @@ public class Results
         p.setColor(Color.GREEN);
         p.add("line", structure_scores.component1(), structure_scores.component2());
         p.addLegend("Score\tSharpening\tStructure");
-        return p.show();
+        return p;
     }
 
     private boolean is_empty(Pair<double[], double[]> scores)

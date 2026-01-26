@@ -36,6 +36,18 @@ class HAWMANVM private constructor(
         }
     }
 
+    fun show_scores(show_scores: Boolean)
+    {
+        if (show_scores)
+        {
+            results_view_?.show_scores()
+        }
+        else
+        {
+            results_view_?.hide_scores()
+        }
+    }
+
     fun show_confidence_map(show_map: Boolean)
     {
         if (show_map)
