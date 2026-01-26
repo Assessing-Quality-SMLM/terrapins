@@ -152,12 +152,12 @@ public class Results
             return null;
         }
         Plot p = new Plot("HAWKMAN scores", "Level", "Correlation");
-        p.setColor(Color.RED);
-        p.add("line", global_scores.component1(), global_scores.component2());
         p.setColor(Color.BLUE);
-        p.add("line", sharpening_scores.component1(), sharpening_scores.component2());
+        p.addPoints(global_scores.component1(), global_scores.component2(), 7);
+        p.setColor(Color.RED);
+        p.addPoints(sharpening_scores.component1(), sharpening_scores.component2(), 7);
         p.setColor(Color.GREEN);
-        p.add("line", structure_scores.component1(), structure_scores.component2());
+        p.addPoints(structure_scores.component1(), structure_scores.component2(), 7);
         p.addLegend("Score\tSharpening\tStructure");
         return p;
     }
