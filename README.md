@@ -47,7 +47,7 @@ What do I need to do/steps
 # Everything Report
 
 # How to get the plugin
-Latest ImageJ plugin can be found [here](https://github.com/Assessing-Quality-SMLM/terrapins/releases/tag/terrapins_0.3.0)
+Latest ImageJ plugin can be found [here](https://github.com/Assessing-Quality-SMLM/terrapins/releases/latest)
 
 <!-- # What's the point / Scope? 
 A number of techniqeus exist for assessing the quality of data produced in a super resolution experiment however, they all measure something slightly different. Alongside this in order to fully intepret their results sometimes information from other tools are required. This means they should be used together to provide a fuller picture of any issues that may be present in your data. 
