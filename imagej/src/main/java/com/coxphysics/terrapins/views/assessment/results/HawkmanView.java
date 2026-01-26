@@ -47,11 +47,13 @@ public class HawkmanView {
     private JPanel panel_;
     private JCheckBox skeleton_map_;
     private JLabel title_;
+    private JCheckBox scores_;
 
     private HAWMANVM view_model_;
 
     public HawkmanView() {
         combined_resolution_map_.addActionListener(HAWKMANViewListener.from(this, HawkmanView::update_combined_resolution_map));
+        scores_.addActionListener(HAWKMANViewListener.from(this, HawkmanView::update_scores));
         confidence_map_.addActionListener(HAWKMANViewListener.from(this, HawkmanView::update_confidence_map));
         sharpening_map_.addActionListener(HAWKMANViewListener.from(this, HawkmanView::update_sharpening_map));
         structure_map_.addActionListener(HAWKMANViewListener.from(this, HawkmanView::update_structure_map));
@@ -107,29 +109,32 @@ public class HawkmanView {
      */
     private void $$$setupUI$$$() {
         panel_ = new JPanel();
-        panel_.setLayout(new GridLayoutManager(2, 5, new Insets(0, 0, 0, 0), -1, -1));
+        panel_.setLayout(new GridLayoutManager(2, 6, new Insets(0, 0, 0, 0), -1, -1));
         combined_resolution_map_ = new JCheckBox();
         combined_resolution_map_.setText("Combined Resolution Map");
         panel_.add(combined_resolution_map_, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         confidence_map_ = new JCheckBox();
         confidence_map_.setText("Confidence Map");
-        panel_.add(confidence_map_, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        panel_.add(confidence_map_, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
         sharpening_map_ = new JCheckBox();
         sharpening_map_.setText("Sharpening Map");
-        panel_.add(sharpening_map_, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel_.add(sharpening_map_, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         structure_map_ = new JCheckBox();
         structure_map_.setText("Structure Map");
-        panel_.add(structure_map_, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel_.add(structure_map_, new GridConstraints(1, 4, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         skeleton_map_ = new JCheckBox();
         skeleton_map_.setText("Skeleton Map");
-        panel_.add(skeleton_map_, new GridConstraints(1, 4, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel_.add(skeleton_map_, new GridConstraints(1, 5, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         title_ = new JLabel();
         Font title_Font = this.$$$getFont$$$(null, Font.BOLD, -1, title_.getFont());
         if (title_Font != null) title_.setFont(title_Font);
         title_.setText("HAWKMAN");
         panel_.add(title_, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
-        panel_.add(spacer1, new GridConstraints(0, 1, 1, 4, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        panel_.add(spacer1, new GridConstraints(0, 2, 1, 4, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        scores_ = new JCheckBox();
+        scores_.setText("Scores");
+        panel_.add(scores_, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
     }
 
     /**
