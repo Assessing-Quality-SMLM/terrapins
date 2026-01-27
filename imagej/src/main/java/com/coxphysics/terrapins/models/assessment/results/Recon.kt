@@ -16,6 +16,11 @@ class Recon private constructor(private val path: Path)
         }
     }
 
+    private fun prefix(): String
+    {
+        return path.fileName.toString()
+    }
+
     private fun image_path(): Path
     {
         return path.resolve("image.tiff")
@@ -23,7 +28,7 @@ class Recon private constructor(private val path: Path)
 
     fun image(): ImagePlus?
     {
-        return IJUtils.load_image(image_path())
+        return IJUtils.load_image_with_prefix(image_path(), prefix())
     }
 
     private fun data_path(): Path
