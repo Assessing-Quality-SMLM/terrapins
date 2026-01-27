@@ -6,9 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 
 public class FsUtils
 {
@@ -102,5 +101,25 @@ public class FsUtils
             IJ.log(message);
             return null;
         }
+    }
+
+    public static void copy_folder(Path source, Path target, CopyOption... options) throws IOException
+    {
+        Files.walkFileTree(source, new SimpleFileVisitor<Path>()
+        {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException
+            {
+                Files.createDirectories(target.resolve(source.relativize(dir).toString()));
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException
+            {
+                Files.copy(file, target.resolve(source.relativize(file).toString()), options);
+                return FileVisitResult.CONTINUE;
+            }
+        });
     }
 }
