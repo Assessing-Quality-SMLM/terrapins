@@ -70,6 +70,8 @@ public class AssessmentView {
         content_panel_.add(score_, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         details_ = new JTextArea();
         details_.setEditable(false);
+        details_.setLineWrap(true);
+        details_.setWrapStyleWord(true);
         content_panel_.add(details_, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
         passed_panel_ = new JPanel();
         passed_panel_.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
