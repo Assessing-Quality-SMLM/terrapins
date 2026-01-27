@@ -241,6 +241,16 @@ class Report private constructor(private val results_: AssessmentResults)
         return limiting_resolution_assessment_
     }
 
+    fun move_results(new_location: Path): Boolean
+    {
+        return results_.move_to(new_location)
+    }
+
+    fun copy_results(new_location: Path): Boolean
+    {
+        return results_.copy_to(new_location)
+    }
+
     private fun cache_data()
     {
         drift_assessment_ = results_.drift_assessment()

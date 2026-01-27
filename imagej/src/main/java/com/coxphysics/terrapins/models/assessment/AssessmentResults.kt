@@ -1,13 +1,15 @@
 package com.coxphysics.terrapins.models.assessment
 
 import com.coxphysics.terrapins.models.assessment.reports.Assessment
+import com.coxphysics.terrapins.models.assessment.results.FRC
+import com.coxphysics.terrapins.models.assessment.results.Recon
 import com.coxphysics.terrapins.models.frc.FRCResult
 import com.coxphysics.terrapins.models.utils.FsUtils
 import com.coxphysics.terrapins.models.utils.StringUtils
 import java.io.File
+import java.io.IOException
+import java.nio.file.Files
 import java.nio.file.Path
-import com.coxphysics.terrapins.models.assessment.results.FRC
-import com.coxphysics.terrapins.models.assessment.results.Recon
 import com.coxphysics.terrapins.models.hawkman.external.Results as HawkmanResults
 import com.coxphysics.terrapins.models.squirrel.external.Results as SquirrelResults
 
@@ -42,6 +44,32 @@ class AssessmentResults private constructor(private var data_path: Path)
         fun empty(): AssessmentResults
         {
             return AssessmentResults(File(StringUtils.EMPTY_STRING).toPath())
+        }
+    }
+
+    fun move_to(new_location: Path): Boolean
+    {
+        try
+        {
+            Files.move(data_path, new_location)
+            return true
+        }
+        catch (e: IOException)
+        {
+            return false
+        }
+    }
+
+    fun copy_to(new_location: Path): Boolean
+    {
+        try
+        {
+            FsUtils.copy_folder(data_path, new_location)
+            return true
+        }
+        catch (e: IOException)
+        {
+            return false
         }
     }
 
@@ -310,7 +338,7 @@ class AssessmentResults private constructor(private var data_path: Path)
         return path.toFile().readText()
     }
 
-    fun report_path(): Path
+    private fun report_path(): Path
     {
         return data_path.resolve(REPORT)
     }

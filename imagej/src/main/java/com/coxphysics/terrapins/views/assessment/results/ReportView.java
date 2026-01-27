@@ -104,6 +104,52 @@ class ShowDetailsAssessmentListener implements ActionListener
     }
 }
 
+class MoveDataListener implements ActionListener
+{
+    private final ReportView view_;
+
+    public MoveDataListener(ReportView view)
+    {
+        view_ = view;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        JFileChooser jfc = new JFileChooser();
+        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        jfc.setCurrentDirectory(view_.data_path().toFile());
+        int result = jfc.showOpenDialog(null);
+        if (result != JFileChooser.APPROVE_OPTION)
+            return;
+        File current_directory = jfc.getSelectedFile();
+        view_.move_results(current_directory.toPath());
+    }
+}
+
+class CopyDataListener implements ActionListener
+{
+    private final ReportView view_;
+
+    public CopyDataListener(ReportView view)
+    {
+        view_ = view;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        JFileChooser jfc = new JFileChooser();
+        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        jfc.setCurrentDirectory(view_.data_path().toFile());
+        int result = jfc.showOpenDialog(null);
+        if (result != JFileChooser.APPROVE_OPTION)
+            return;
+        File current_directory = jfc.getSelectedFile();
+        view_.copy_results(current_directory.toPath());
+    }
+}
+
 public class ReportView extends JFrame {
     private final ReportVM view_model_;
     private JPanel content_panel_;
@@ -131,6 +177,9 @@ public class ReportView extends JFrame {
     private SQUIRRELView widefield_squirrel_;
     private AssessmentView limiting_resolution_assessment_;
 
+    private JMenuItem move_data_;
+    private JMenuItem copy_data_;
+
     private ReportView(ReportVM view_model) {
         view_model_ = view_model;
         data_path_btn_.addActionListener(FileDialogAction.from(this));
@@ -139,6 +188,8 @@ public class ReportView extends JFrame {
 
     public static ReportView from(ReportVM view_model) {
         ReportView view = new ReportView(view_model);
+        add_menus(view);
+
         view.setTitle("Results View");
         view.add(view.content_panel_);
         view.reset_data_path();
@@ -150,11 +201,25 @@ public class ReportView extends JFrame {
         view.frc_resolution_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.frc_resolution_assessment_, view_model::display_frc_resolution_details));
         view.bias_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.bias_assessment_, view_model::display_bias_details));
         view.squirrel_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.squirrel_assessment_, view_model::display_squirrel_details));
+
+        view.move_data_.addActionListener(new MoveDataListener(view));
+        view.copy_data_.addActionListener(new CopyDataListener(view));
         return view;
     }
 
     public Path data_path() {
         return view_model_.data_path();
+    }
+
+    public void move_results(Path new_location)
+    {
+        view_model_.move_results(new_location);
+        reset_data_path();
+    }
+
+    public void copy_results(Path new_location)
+    {
+        view_model_.copy_results(new_location);
     }
 
     public void update_data_path_from_view() {
@@ -292,6 +357,23 @@ public class ReportView extends JFrame {
     public void set_data_path(Path value) {
         view_model_.set_data_path(value);
         reset_data_path();
+    }
+
+    private static void add_menus(ReportView view)
+    {
+        JMenuBar menu_bar = new JMenuBar();
+        JMenu menu = new JMenu("Copy/Move Data");
+        menu_bar.add(menu);
+
+        view.move_data_ = new JMenuItem("Move Data");
+        view.move_data_.getAccessibleContext().setAccessibleDescription("Move the current data to a new location");
+        menu.add(view.move_data_);
+
+        view.copy_data_ = new JMenuItem("Copy Data");
+        view.copy_data_.getAccessibleContext().setAccessibleDescription("Copy the current data to a new location");
+        menu.add(view.copy_data_);
+
+        view.setJMenuBar(menu_bar);
     }
 
     {
