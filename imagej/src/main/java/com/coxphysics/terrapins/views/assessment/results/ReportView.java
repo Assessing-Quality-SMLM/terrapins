@@ -131,6 +131,9 @@ public class ReportView extends JFrame {
     private SQUIRRELView widefield_squirrel_;
     private AssessmentView limiting_resolution_assessment_;
 
+    private JMenuItem move_data_;
+    private JMenuItem copy_data_;
+
     private ReportView(ReportVM view_model) {
         view_model_ = view_model;
         data_path_btn_.addActionListener(FileDialogAction.from(this));
@@ -139,6 +142,8 @@ public class ReportView extends JFrame {
 
     public static ReportView from(ReportVM view_model) {
         ReportView view = new ReportView(view_model);
+        add_menus(view);
+
         view.setTitle("Results View");
         view.add(view.content_panel_);
         view.reset_data_path();
@@ -292,6 +297,23 @@ public class ReportView extends JFrame {
     public void set_data_path(Path value) {
         view_model_.set_data_path(value);
         reset_data_path();
+    }
+
+    private static void add_menus(ReportView view)
+    {
+        JMenuBar menu_bar = new JMenuBar();
+        JMenu menu = new JMenu("Copy/Move Data");
+        menu_bar.add(menu);
+
+        view.move_data_ = new JMenuItem("Move Data");
+        view.move_data_.getAccessibleContext().setAccessibleDescription("Move the current data to a new location");
+        menu.add(view.move_data_);
+
+        view.copy_data_ = new JMenuItem("Copy Data");
+        view.copy_data_.getAccessibleContext().setAccessibleDescription("Copy the current data to a new location");
+        menu.add(view.copy_data_);
+
+        view.setJMenuBar(menu_bar);
     }
 
     {
