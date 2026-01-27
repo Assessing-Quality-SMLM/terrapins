@@ -310,7 +310,7 @@ class AssessmentResults private constructor(private var data_path: Path)
         return path.toFile().readText()
     }
 
-    fun report_path(): Path
+    private fun report_path(): Path
     {
         return data_path.resolve(REPORT)
     }
