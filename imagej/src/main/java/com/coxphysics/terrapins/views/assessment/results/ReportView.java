@@ -104,6 +104,52 @@ class ShowDetailsAssessmentListener implements ActionListener
     }
 }
 
+class MoveDataListener implements ActionListener
+{
+    private final ReportView view_;
+
+    public MoveDataListener(ReportView view)
+    {
+        view_ = view;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        JFileChooser jfc = new JFileChooser();
+        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        jfc.setCurrentDirectory(view_.data_path().toFile());
+        int result = jfc.showOpenDialog(null);
+        if (result != JFileChooser.APPROVE_OPTION)
+            return;
+        File current_directory = jfc.getSelectedFile();
+        view_.move_results(current_directory.toPath());
+    }
+}
+
+class CopyDataListener implements ActionListener
+{
+    private final ReportView view_;
+
+    public CopyDataListener(ReportView view)
+    {
+        view_ = view;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        JFileChooser jfc = new JFileChooser();
+        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        jfc.setCurrentDirectory(view_.data_path().toFile());
+        int result = jfc.showOpenDialog(null);
+        if (result != JFileChooser.APPROVE_OPTION)
+            return;
+        File current_directory = jfc.getSelectedFile();
+        view_.copy_results(current_directory.toPath());
+    }
+}
+
 public class ReportView extends JFrame {
     private final ReportVM view_model_;
     private JPanel content_panel_;
@@ -155,11 +201,25 @@ public class ReportView extends JFrame {
         view.frc_resolution_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.frc_resolution_assessment_, view_model::display_frc_resolution_details));
         view.bias_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.bias_assessment_, view_model::display_bias_details));
         view.squirrel_assessment_.add_details_listener(new ShowDetailsAssessmentListener(view_model, view.squirrel_assessment_, view_model::display_squirrel_details));
+
+        view.move_data_.addActionListener(new MoveDataListener(view));
+        view.copy_data_.addActionListener(new CopyDataListener(view));
         return view;
     }
 
     public Path data_path() {
         return view_model_.data_path();
+    }
+
+    public void move_results(Path new_location)
+    {
+        view_model_.move_results(new_location);
+        reset_data_path();
+    }
+
+    public void copy_results(Path new_location)
+    {
+        view_model_.copy_results(new_location);
     }
 
     public void update_data_path_from_view() {
