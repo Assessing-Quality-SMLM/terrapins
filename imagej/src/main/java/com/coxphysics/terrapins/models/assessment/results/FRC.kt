@@ -17,6 +17,11 @@ class FRC private constructor(private val path: Path)
         }
     }
 
+    private fun name_prefix(): String
+    {
+        return path.fileName.toString()
+    }
+
     private fun images_path(): Path
     {
         return path.resolve("image")
@@ -34,7 +39,7 @@ class FRC private constructor(private val path: Path)
 
     fun image_a(): ImagePlus?
     {
-        return IJUtils.load_image(image_a_path())
+        return IJUtils.load_image_with_prefix(image_a_path(), name_prefix())
     }
 
     private fun image_a_data(): String?
@@ -54,7 +59,7 @@ class FRC private constructor(private val path: Path)
 
     fun image_b(): ImagePlus?
     {
-        return IJUtils.load_image(image_b_path())
+        return IJUtils.load_image_with_prefix(image_b_path(), name_prefix())
     }
 
     private fun image_b_data(): String?
