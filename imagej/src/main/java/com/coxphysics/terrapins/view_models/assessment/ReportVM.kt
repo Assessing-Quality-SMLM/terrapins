@@ -26,6 +26,19 @@ class ReportVM private constructor(
         }
     }
 
+    fun move_results(new_location: Path)
+    {
+        if (model_.move_results(new_location))
+        {
+            set_data_path(new_location)
+        }
+    }
+
+    fun copy_results(new_location: Path): Boolean
+    {
+        return model_.copy_results(new_location)
+    }
+
     fun data_path(): Path
     {
         return model_.data_path()
