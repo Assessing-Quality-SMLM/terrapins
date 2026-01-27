@@ -33,6 +33,17 @@ public class IJUtils
         return null;
     }
 
+    public static ImagePlus load_image_with_prefix(Path image_path, String prefix)
+    {
+        ImagePlus image = load_image(image_path);
+        if (image == null)
+            return null;
+        String image_name = image.getTitle();
+        String new_name = String.format("%s-%s", prefix, image_name);
+        image.setTitle(new_name);
+        return image;
+    }
+
     public static Path write_to_disk(ImagePlus image, Path image_path)
     {
         Path parent = image_path.getParent();
