@@ -44,7 +44,9 @@ input the localisation file into the field and select how you would like to pars
 
 This is enough input to get an idea of how your experiment is setup. If you have taken a widefield there is no harm in adding for SQUIRREL output (also true for the image stack).
 
-With the data input select run and check the logs for what is going on. 
+With the data input select run and check the logs for what is going on. When the proces has finished the results viewer should appear
+
+[Refer to the results viewer on how to use the outputs](#the-results-viewer) 
 
 ## Assess my images to help inform my experimental setup using image data
 
