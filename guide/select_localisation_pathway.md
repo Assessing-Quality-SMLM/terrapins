@@ -6,3 +6,4 @@ Tell the workflow localisation data has been created
 And select the localisation pathway
 
 ![Select the Localisation pathway](./guide/images/select_localisation_pathway.png)
+
