@@ -57,10 +57,20 @@ And select the localisation pathway
 ![Select the Localisation
 pathway](./guide/images/select_localisation_pathway.png)
 
-input the localisation file into the field and select how you would like
+Input the localisation file into the field and select how you would like
 to parse it. There is an in built reader for Thunderstorm files
 otherwise we can treat it as a csv and you can select appropriate
 parsing parameters.
+
+Tell the workflow localisation data has been created
+
+![Tell the workflow localisation data has been
+created](./guide/images/localisation_files_created.png)
+
+And select the localisation pathway
+
+![Select the Localisation
+pathway](./guide/images/select_localisation_pathway.png)
 
 This is enough input to get an idea of how your experiment is setup. If
 you have taken a widefield there is no harm in adding for SQUIRREL
@@ -70,13 +80,108 @@ With the data input select run and check the logs for what is going on.
 When the proces has finished the results viewer should appear
 
 [Refer to the results viewer on how to use the
-outputs](#the-results-viewer)
+outputs](#the-results-viewer).
 
 ## Assess my images to help inform my experimental setup using image data
 
+Generate your reconstruction(s) using whichever tools you like and load
+them into ImageJ. Then open the workflow
+
+Tell the workflow localisation data has been created
+
+![Tell the workflow localisation data has been
+created](./guide/images/localisation_files_created.png)
+
+And select the localisation pathway
+
+![Select the Localisation
+pathway](./guide/images/select_localisation_pathway.png)
+
+If you opened the workflow before you loaded your images click the reset
+images button to refresh the dropdown menus. Then select which images
+are which from the appropriate menu.
+
+A minimal set of results can be obtained with just a single
+reconstruction image derived from the raw data. All other images are
+optional but more output will be obtained with the more you supply.
+
+With the data input select run and check the logs for what is going on.
+When the proces has finished the results viewer should appear
+
+[Refer to the results viewer on how to use the
+outputs](#the-results-viewer).
+
 ## Assess my images for a limiting precision score using localisation data
 
+Generate localisation data for the raw image stack using whichever tool
+you like. Then run HAWK on the image stack and localise again. HAWK
+inputs are required to assess bias and we need to know the bias to
+dissambiguate sources of error for other outputs.
+
+Once this is done open the workflow
+
+Tell the workflow localisation data has been created
+
+![Tell the workflow localisation data has been
+created](./guide/images/localisation_files_created.png)
+
+And select the localisation pathway
+
+![Select the Localisation
+pathway](./guide/images/select_localisation_pathway.png)
+
+Input the localisation files into the field and select how you would
+like to parse it. There is an in built reader for Thunderstorm files
+otherwise we can treat it as a csv and you can select appropriate
+parsing parameters.
+
+Tell the workflow localisation data has been created
+
+![Tell the workflow localisation data has been
+created](./guide/images/localisation_files_created.png)
+
+And select the localisation pathway
+
+![Select the Localisation
+pathway](./guide/images/select_localisation_pathway.png)
+
+If you have taken a widefield load it into ImageJ, click reset images,
+and select it from the drop down menu. Do the same for the raw image
+data to. These inputs are for the SQUIRREL analysis and the slightly
+different reference images will tell us about about different sources of
+error.
+
+With the data input select run and check the logs for what is going on.
+When the proces has finished the results viewer should appear
+
+[Refer to the results viewer on how to use the
+outputs](#the-results-viewer).
+
 ## Assess my images for a limiting precision score using image data
+
+Generate your reconstruction(s) using whichever tools you like and load
+them into ImageJ along with the widefield (if you have it) and the raw
+data stack. Then open the workflow
+
+Tell the workflow localisation data has been created
+
+![Tell the workflow localisation data has been
+created](./guide/images/localisation_files_created.png)
+
+And select the localisation pathway
+
+![Select the Localisation
+pathway](./guide/images/select_localisation_pathway.png)
+
+If you opened the workflow before you loaded your images click the reset
+images button to refresh the dropdown menus. Then select which images
+are which from the appropriate menu.
+
+With the data input select run and check the logs for what is going on.
+When the proces has finished the results viewer should appear
+
+[Refer to the results viewer on how to use the
+outputs](#the-results-viewer).
 
 # The Results Viewer
 
