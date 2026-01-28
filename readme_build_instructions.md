@@ -1,7 +1,5 @@
-install [pandoc](https://pandoc.org/installing.html)
-create a new python environment 
-load it
-'pip install panflute'
-
-from repo/root run
-'pandoc --from markdown --to markdown --filter ./guide/include_filter.py -s -o README.md ./guide/guide.md'
+- install [pandoc](https://pandoc.org/installing.html)
+- create a new python environment 
+- load it
+- ```pip install panflute```
+- from repo/root run <br> ```pandoc --from markdown --to markdown --filter ./guide/include_filter.py -s -o README.md ./guide/guide.md```
