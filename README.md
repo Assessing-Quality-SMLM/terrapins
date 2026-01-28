@@ -87,14 +87,14 @@ outputs](#the-results-viewer).
 Generate your reconstruction(s) using whichever tools you like and load
 them into ImageJ. Then open the workflow
 
-Tell the workflow localisation data has been created
+Tell the workflow the data has been created
 
-![Tell the workflow localisation data has been
+![Tell the workflow data has been
 created](./guide/images/localisation_files_created.png)
 
-And select the localisation pathway
+And select the images pathway
 
-![Select the Localisation
+![Select the images
 pathway](./guide/images/select_localisation_pathway.png)
 
 If you opened the workflow before you loaded your images click the reset
@@ -163,14 +163,14 @@ Generate your reconstruction(s) using whichever tools you like and load
 them into ImageJ along with the widefield (if you have it) and the raw
 data stack. Then open the workflow
 
-Tell the workflow localisation data has been created
+Tell the workflow the data has been created
 
-![Tell the workflow localisation data has been
+![Tell the workflow data has been
 created](./guide/images/localisation_files_created.png)
 
-And select the localisation pathway
+And select the images pathway
 
-![Select the Localisation
+![Select the images
 pathway](./guide/images/select_localisation_pathway.png)
 
 If you opened the workflow before you loaded your images click the reset
