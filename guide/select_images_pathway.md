@@ -1,9 +1,9 @@
-Tell the workflow localisation data has been created
+Tell the workflow the data has been created
 
-![Tell the workflow localisation data has been created](./guide/images/localisation_files_created.png)
+![Tell the workflow data has been created](./guide/images/localisation_files_created.png)
 
 
-And select the localisation pathway
+And select the images pathway
 
-![Select the Localisation pathway](./guide/images/select_localisation_pathway.png)
+![Select the images pathway](./guide/images/select_localisation_pathway.png)
 
