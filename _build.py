@@ -9,6 +9,41 @@ DEFAULT_ARTIFACT_NAME = "artifacts"
 DEFAULT_ARTIFACT_FILE = "artifacts.zip"
 
 
+def rust_ffi_toml() -> str:
+    return "./rust_ffi/Cargo.toml"
+
+
+def rust_jni_toml() -> str:
+    return "./rust_jni/Cargo.toml"
+
+
+def image_j_directory() -> str:
+    return path.join(".", "imagej")
+
+
+def imagej_pom() -> str:
+    return path.join(image_j_directory(), "pom.xml")
+
+
+def imagej_target() -> str:
+    return path.join(image_j_directory(), "target")
+
+
+def image_j_artifact_name(project: str, version_number: str) -> str:
+    return f"{project}-{version_number}"
+
+
+def dependency_build_of(project: str, version_number: str) -> str:
+    jar_path = f"{project}-{version_number}-jar-with-dependencies.jar"
+    return path.join(imagej_target(), jar_path)
+
+
+def image_j_deployment_path(project: str, version_number: str) -> str:
+    name = image_j_artifact_name(project, version_number)
+    artifatct = f"{name}.jar"
+    return path.join(".", artifatct)
+
+
 def _merge(resources_dir: str, download_folder: str, repo: str, tag: str) -> bool:
     artifact_path = path.join(".", download_folder, DEFAULT_ARTIFACT_NAME)
     if not fs.create_directory(download_folder):

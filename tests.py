@@ -6,24 +6,12 @@ import argparse
 import sys
 
 
-def rust_ffi_toml() -> str:
-    return "./rust_ffi/Cargo.toml"
-
-
-def rust_jni_toml() -> str:
-    return "./rust_jni/Cargo.toml"
-
-
-def imagej_pom() -> str:
-    return "./imagej/pom.xml"
-
-
 def rust_ffi_tests() -> bool:
-    return cargo.test(rust_ffi_toml())
+    return cargo.test(_build.rust_ffi_toml())
 
 
 def rust_jni_tests() -> bool:
-    return cargo.test(rust_jni_toml())
+    return cargo.test(_build.rust_jni_toml())
 
 
 def rust_tests() -> bool:
@@ -33,7 +21,7 @@ def rust_tests() -> bool:
 def java_tests(use_local_ffi_bindings: bool) -> bool:
     if not _build.build_imagej(use_local_ffi_bindings):
         return False
-    return maven.test(imagej_pom())
+    return maven.test(_build.imagej_pom())
 
 
 def python_tests(use_local_ffi_bindings: bool) -> bool:
