@@ -13,21 +13,24 @@ def bump_imagej_version_number(pom: str) -> bool:
 
 
 def run(dry_run: bool) -> bool:
-    use_bleeding_edge_dll = False
     # test framework with non local settings will assemble the package
     # and run the tests
     # after this we can bump the version number, re-run tests?
     # tag the repo and sling to upload site (manually?).
-    pom = _build.imagej_pom()
+    use_bleeding_edge_dll = False
     build_ok = _build.build_imagej(use_bleeding_edge_dll)
     if not build_ok:
         return False
 
+    pom = _build.imagej_pom()
     new_version_number = bump_imagej_version_number(pom)
     if new_version_number is None:
         return False
 
     if not fs.remove_directory(_build.imagej_target()):
+        return False
+
+    if not maven.clean(pom):
         return False
 
     if not maven.install(pom):
