@@ -27,6 +27,9 @@ def run(dry_run: bool) -> bool:
     if new_version_number is None:
         return False
 
+    if not fs.remove_directory(_build.imagej_target()):
+        return False
+
     if not maven.install(pom):
         return False
 
