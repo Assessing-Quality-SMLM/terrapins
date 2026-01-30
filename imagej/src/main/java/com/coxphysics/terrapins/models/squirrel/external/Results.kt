@@ -22,6 +22,11 @@ class Results private constructor(private val data_path_: Path)
         return data_path_.parent
     }
 
+    private fun image_prefix(): String
+    {
+        return data_path_.fileName.toString()
+    }
+
     // only public for tests
     fun widefield_path(is_non_linear: Boolean): Path
     {
