@@ -1,5 +1,7 @@
 package com.coxphysics.terrapins.models.squirrel.external
 
+import com.coxphysics.terrapins.models.assessment.NON_LINEAR_SQUIRREL_DATA
+import com.coxphysics.terrapins.models.assessment.SQUIRREL_DATA
 import com.coxphysics.terrapins.models.squirrel.utils.StackHelper
 import com.coxphysics.terrapins.models.utils.FsUtils
 import com.coxphysics.terrapins.models.utils.IJUtils
@@ -20,6 +22,11 @@ class Results private constructor(private val data_path_: Path)
     private fun assessment_data_dir(): Path
     {
         return data_path_.parent
+    }
+
+    private fun image_prefix(): String
+    {
+        return data_path_.fileName.toString()
     }
 
     // only public for tests
@@ -51,7 +58,7 @@ class Results private constructor(private val data_path_: Path)
 
     fun load_error_map(): ImagePlus?
     {
-        val map = IJUtils.load_image(error_map_path())
+        val map = IJUtils.load_image_with_prefix(error_map_path(), image_prefix())
         if (map == null)
             return null
         StackHelper.applyLUT(map,"SQUIRREL-Errors.lut");
@@ -60,17 +67,18 @@ class Results private constructor(private val data_path_: Path)
 
     fun load_widefield(is_non_linear: Boolean): ImagePlus?
     {
-        return IJUtils.load_image(widefield_path(is_non_linear))
+        val prefix = if (is_non_linear) {NON_LINEAR_SQUIRREL_DATA} else{ SQUIRREL_DATA}
+        return IJUtils.load_image_with_prefix(widefield_path(is_non_linear), prefix)
     }
 
     fun load_big_widefield(): ImagePlus?
     {
-        return IJUtils.load_image(big_widefield_path())
+        return IJUtils.load_image_with_prefix(big_widefield_path(), image_prefix())
     }
 
     fun load_sr_transform(): ImagePlus?
     {
-        return IJUtils.load_image(sr_transform_path())
+        return IJUtils.load_image_with_prefix(sr_transform_path(), image_prefix())
     }
 
     fun display_error_map()
