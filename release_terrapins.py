@@ -27,6 +27,9 @@ def run(dry_run: bool) -> bool:
     if new_version_number is None:
         return False
 
+    if not fs.remove_directory(_build.imagej_target()):
+        return False
+
     if not maven.install(pom):
         return False
 
@@ -34,7 +37,11 @@ def run(dry_run: bool) -> bool:
     deployment_location = _build.image_j_deployment_path(PROJECT, new_version_number)
     fs.copy_file(new_artifact, deployment_location)
 
-    return gh.commit_version_bump(PROJECT, new_version_number, pom, deployment_location, dry_run)
+    if not gh.commit_version_bump(PROJECT, new_version_number, pom, deployment_location, dry_run):
+        return False
+
+    fs.remove_file(deployment_location)
+    return True
 
 
 parser = argparse.ArgumentParser(prog="release_terrapins", description=f"Release the TERRAPINS package")
