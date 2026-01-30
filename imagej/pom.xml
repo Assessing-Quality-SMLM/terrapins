@@ -14,7 +14,7 @@
 
 	<groupId>com.coxphysics</groupId>        <!-- FIXME: Your organization groupId here -->
 	<artifactId>TERRAPINS</artifactId> <!-- FIXME: Your project artifactId here   -->
-	<version>0.4.0</version>
+	<version>0.5.0</version>
 
 	<name>TERRAPINS</name>                                                   <!-- FIXME: Your project name here          -->
 	<description>TEsting Resolution, Reliability And Performance IN SMLM - ImageJ 1.x plugin.</description> <!-- FIXME: Your project description here   -->
