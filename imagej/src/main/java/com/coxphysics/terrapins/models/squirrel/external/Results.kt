@@ -1,5 +1,7 @@
 package com.coxphysics.terrapins.models.squirrel.external
 
+import com.coxphysics.terrapins.models.assessment.NON_LINEAR_SQUIRREL_DATA
+import com.coxphysics.terrapins.models.assessment.SQUIRREL_DATA
 import com.coxphysics.terrapins.models.squirrel.utils.StackHelper
 import com.coxphysics.terrapins.models.utils.FsUtils
 import com.coxphysics.terrapins.models.utils.IJUtils
@@ -65,7 +67,8 @@ class Results private constructor(private val data_path_: Path)
 
     fun load_widefield(is_non_linear: Boolean): ImagePlus?
     {
-        return IJUtils.load_image(widefield_path(is_non_linear))
+        val prefix = if (is_non_linear) {NON_LINEAR_SQUIRREL_DATA} else{ SQUIRREL_DATA}
+        return IJUtils.load_image_with_prefix(widefield_path(is_non_linear), prefix)
     }
 
     fun load_big_widefield(): ImagePlus?
