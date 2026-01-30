@@ -56,7 +56,7 @@ class Results private constructor(private val data_path_: Path)
 
     fun load_error_map(): ImagePlus?
     {
-        val map = IJUtils.load_image(error_map_path())
+        val map = IJUtils.load_image_with_prefix(error_map_path(), image_prefix())
         if (map == null)
             return null
         StackHelper.applyLUT(map,"SQUIRREL-Errors.lut");
@@ -70,12 +70,12 @@ class Results private constructor(private val data_path_: Path)
 
     fun load_big_widefield(): ImagePlus?
     {
-        return IJUtils.load_image(big_widefield_path())
+        return IJUtils.load_image_with_prefix(big_widefield_path(), image_prefix())
     }
 
     fun load_sr_transform(): ImagePlus?
     {
-        return IJUtils.load_image(sr_transform_path())
+        return IJUtils.load_image_with_prefix(sr_transform_path(), image_prefix())
     }
 
     fun display_error_map()
