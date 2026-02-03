@@ -289,7 +289,7 @@ class Settings private constructor(
 
     fun set_drift_split_b(value: String)
     {
-        zip_split_.set_image_2_filename(value)
+        drift_split_.set_image_2_filename(value)
     }
 
     private fun drift_split_images_directory(): Path
