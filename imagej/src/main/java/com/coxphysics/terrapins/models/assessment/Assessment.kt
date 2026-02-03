@@ -91,8 +91,8 @@ class Assessment private constructor(private val exe_location_: Path)
 //      --half-split-b <HALF_SPLIT_B>        Rendering of second part of data split in half
 //      --zip-split-a <ZIP_SPLIT_A>          Rendering of first part of data zip split
 //      --zip-split-b <ZIP_SPLIT_B>          Rendering of second part of data zip split
-//      --pixel-size-nm <PIXEL_SIZE_NM>      Pixel size (nm) in images
-//      --psf-px <PSF_PX>                    PSF size (px) in images
+//      --drift-split-a <DRIFT_SPLIT_A>      Rendering of first part of data drift split
+//      --drift-split-b <DRIFT_SPLIT_B>      Rendering of second part of data drift split
         commands.add("--magnification")
         commands.add(settings.magnification().toString())
         commands.add("image")
