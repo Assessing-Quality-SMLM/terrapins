@@ -24,3 +24,5 @@ If you opened the workflow before you loaded your image click reset images in th
 Do the same for the image stack if you have it. N.B if the image stack is large leave it on disk rather than load it to ImageJ.
 
 Repeat this for the HAWK image and the FRC splits if you have them.
+
+The FRC splits are really important, particularly the drift / section split, for generating most of the reports. Without them all we can do is HAWKMAN and SQUIRREL.
