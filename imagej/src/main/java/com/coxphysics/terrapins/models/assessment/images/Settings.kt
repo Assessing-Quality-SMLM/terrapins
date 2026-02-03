@@ -17,6 +17,7 @@ class Settings private constructor(
     private var hawk_image_ = DiskOrImage.default()
     private var half_split_ = JointImages.default()
     private var zip_split_ = JointImages.default()
+    private var drift_split_ = JointImages.default()
 
     companion object
     {
@@ -169,7 +170,7 @@ class Settings private constructor(
     /// FRC MODEL
     fun frc_model(): FrcImages
     {
-        return FrcImages.new(half_split_model(), zip_split_model())
+        return FrcImages.new(half_split_model(), zip_split_model(), drift_split_model())
     }
 
     fun set_frc_images(value: FrcImages)
@@ -260,6 +261,47 @@ class Settings private constructor(
         return working_directory.resolve("zip_split_images")
     }
 
+    /// DRIIT SPLIT
+    private fun drift_split_model(): JointImages
+    {
+        return drift_split_
+    }
+
+    fun drift_split_valid(): Boolean
+    {
+        return drift_split_.is_valid()
+    }
+
+    fun drift_split_image_a_filepath(): Path?
+    {
+        return drift_split_.image_1_filepath(drift_split_images_directory())
+    }
+
+    fun drift_split_image_b_filepath(): Path?
+    {
+        return drift_split_.image_2_filepath(drift_split_images_directory())
+    }
+
+    fun set_drift_split_a(value: String)
+    {
+        drift_split_.set_image_1_filename(value)
+    }
+
+    fun set_drift_split_b(value: String)
+    {
+        zip_split_.set_image_2_filename(value)
+    }
+
+    private fun drift_split_images_directory(): Path
+    {
+        return drift_split_images_directory_in(working_directory())
+    }
+
+    private fun drift_split_images_directory_in(working_directory: Path): Path
+    {
+        return working_directory.resolve("drift_split_images")
+    }
+
     /// METHODS
     fun prepare_images_for_analysis(): CoreSettings?
     {
@@ -284,10 +326,12 @@ class Settings private constructor(
 
         val half_split_ok = half_split_.to_disk_in(half_split_images_directory_in(working_directory))
         val zip_split_ok = zip_split_.to_disk_in(zip_split_images_directory_in(working_directory))
+        val drift_split_ok = drift_split_.to_disk_in(drift_split_images_directory_in(working_directory))
         val all_ok = reference_ok &&
                      hawk_ok &&
                      half_split_ok &&
-                     zip_split_ok
+                     zip_split_ok &&
+                     drift_split_ok
         if (all_ok)
             return new_core_settings
         return null
