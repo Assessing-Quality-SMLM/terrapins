@@ -7,6 +7,12 @@ import kotlin.test.assertEquals
 class MacroOptionsTests
 {
     @Test
+    fun is_empty_test()
+    {
+        assertEquals(MacroOptions.empty(), true)
+    }
+
+    @Test
     fun get_value_test()
     {
         Recorder.recordOption("some", "thing")
@@ -15,8 +21,10 @@ class MacroOptionsTests
     }
 
     @Test
-    fun is_empty_test()
+    fun get_missing_test()
     {
-        assertEquals(MacroOptions.empty(), true)
+        Recorder.recordOption("some", "thing")
+        val options = MacroOptions.from_recorder_command_options()
+        assertEquals(options.get("else"), null)
     }
 }
