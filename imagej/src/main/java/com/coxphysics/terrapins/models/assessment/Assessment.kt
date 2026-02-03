@@ -141,6 +141,19 @@ class Assessment private constructor(private val exe_location_: Path)
                 commands.add(zip_split_b_path.toString())
             }
         }
+
+        if (settings.drift_split_valid())
+        {
+            val drift_split_a_path = settings.drift_split_image_a_filepath()
+            val drift_split_b_path = settings.drift_split_image_b_filepath()
+            if (drift_split_a_path != null && drift_split_b_path != null)
+            {
+                commands.add("--drift-split-a")
+                commands.add(drift_split_a_path.toString())
+                commands.add("--drift-split-b")
+                commands.add(drift_split_b_path.toString())
+            }
+        }
 //        add_equipment(true, settings.equipment_settings(), commands)
     }
 
