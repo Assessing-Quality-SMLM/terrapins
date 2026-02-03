@@ -47,6 +47,8 @@ What do I need to do/steps
 Generate your localisation data using whichever tool you like. Then open
 the workflow
 
+Select the workflow option from the TERRRAPINS plugin drop down mentu.
+
 Tell the workflow localisation data has been created
 
 ![Tell the workflow localisation data has been
@@ -56,6 +58,9 @@ And select the localisation pathway
 
 ![Select the Localisation
 pathway](./guide/images/select_localisation_pathway.png)
+
+Fill in the instrumentation details and the magnification you would like
+your data to be rendered to.
 
 Input the localisation file into the field and select how you would like
 to parse it. There is an in built reader for Thunderstorm files
@@ -72,6 +77,9 @@ And select the localisation pathway
 ![Select the Localisation
 pathway](./guide/images/select_localisation_pathway.png)
 
+Fill in the instrumentation details and the magnification you would like
+your data to be rendered to.
+
 This is enough input to get an idea of how your experiment is setup. If
 you have taken a widefield there is no harm in adding for SQUIRREL
 output (also true for the image stack).
@@ -87,6 +95,8 @@ outputs](#the-results-viewer).
 Generate your reconstruction(s) using whichever tools you like and load
 them into ImageJ. Then open the workflow
 
+Select the workflow option from the TERRRAPINS plugin drop down mentu.
+
 Tell the workflow the data has been created
 
 ![Tell the workflow data has been
@@ -94,8 +104,33 @@ created](./guide/images/localisation_files_created.png)
 
 And select the images pathway
 
-![Select the images
-pathway](./guide/images/select_localisation_pathway.png)
+![Select the images pathway](./guide/images/select_images_pathway.png)
+
+If you want your results to go to a specific directory fill in the
+working directory information
+
+Fill in the instrumentation details and the magnification your images
+are rendered at.
+
+If you have a true widefield image either fill in its file path or click
+use image and select it from the drop down.
+
+![Select a widefield](./guide/images/select_widefield_image.png)
+
+If you opened the workflow before you loaded your image click reset
+images in the bottom left corner to re-populate the dropdown.
+
+![Select a widefield with the
+dropdown](./guide/images/select_widefield_loaded_into_image_j)
+
+Do the same for the image stack if you have it. N.B if the image stack
+is large leave it on disk rather than load it to ImageJ.
+
+Repeat this for the HAWK image and the FRC splits if you have them.
+
+The FRC splits are really important, particularly the drift / section
+split, for generating most of the reports. Without them all we can do is
+HAWKMAN and SQUIRREL.
 
 If you opened the workflow before you loaded your images click the reset
 images button to refresh the dropdown menus. Then select which images
@@ -120,6 +155,8 @@ dissambiguate sources of error for other outputs.
 
 Once this is done open the workflow
 
+Select the workflow option from the TERRRAPINS plugin drop down mentu.
+
 Tell the workflow localisation data has been created
 
 ![Tell the workflow localisation data has been
@@ -129,6 +166,9 @@ And select the localisation pathway
 
 ![Select the Localisation
 pathway](./guide/images/select_localisation_pathway.png)
+
+Fill in the instrumentation details and the magnification you would like
+your data to be rendered to.
 
 Input the localisation files into the field and select how you would
 like to parse it. There is an in built reader for Thunderstorm files
@@ -144,6 +184,9 @@ And select the localisation pathway
 
 ![Select the Localisation
 pathway](./guide/images/select_localisation_pathway.png)
+
+Fill in the instrumentation details and the magnification you would like
+your data to be rendered to.
 
 If you have taken a widefield load it into ImageJ, click reset images,
 and select it from the drop down menu. Do the same for the raw image
@@ -163,6 +206,8 @@ Generate your reconstruction(s) using whichever tools you like and load
 them into ImageJ along with the widefield (if you have it) and the raw
 data stack. Then open the workflow
 
+Select the workflow option from the TERRRAPINS plugin drop down mentu.
+
 Tell the workflow the data has been created
 
 ![Tell the workflow data has been
@@ -170,8 +215,33 @@ created](./guide/images/localisation_files_created.png)
 
 And select the images pathway
 
-![Select the images
-pathway](./guide/images/select_localisation_pathway.png)
+![Select the images pathway](./guide/images/select_images_pathway.png)
+
+If you want your results to go to a specific directory fill in the
+working directory information
+
+Fill in the instrumentation details and the magnification your images
+are rendered at.
+
+If you have a true widefield image either fill in its file path or click
+use image and select it from the drop down.
+
+![Select a widefield](./guide/images/select_widefield_image.png)
+
+If you opened the workflow before you loaded your image click reset
+images in the bottom left corner to re-populate the dropdown.
+
+![Select a widefield with the
+dropdown](./guide/images/select_widefield_loaded_into_image_j)
+
+Do the same for the image stack if you have it. N.B if the image stack
+is large leave it on disk rather than load it to ImageJ.
+
+Repeat this for the HAWK image and the FRC splits if you have them.
+
+The FRC splits are really important, particularly the drift / section
+split, for generating most of the reports. Without them all we can do is
+HAWKMAN and SQUIRREL.
 
 If you opened the workflow before you loaded your images click the reset
 images button to refresh the dropdown menus. Then select which images
@@ -184,6 +254,11 @@ When the proces has finished the results viewer should appear
 outputs](#the-results-viewer).
 
 # The Results Viewer
+
+The results viewer will appear after running the workflow tool but can
+also run independently. To load a different dataset just change the data
+path field - you can freely type in this box and data will be loaded
+automatically if it is valid.
 
 To demonstrate this we will use [Super-resolution fight club
 data\[\^1\]](https://www.nature.com/articles/s41592-019-0364-4) \[\^1\]:
