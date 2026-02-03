@@ -11,6 +11,7 @@ class FrcImagesUI private constructor(
     private val view_model_: FrcImagesVM,
     private val half_split_ui_: JointImagesUI,
     private val zip_split_ui_: JointImagesUI,
+    private val drift_split_ui_: JointImagesUI,
     ): Recordable<FrcImages>, UIElement, RecordableElement<FrcImages>
 {
     companion object
@@ -20,7 +21,8 @@ class FrcImagesUI private constructor(
         {
             val half_split_ui = JointImagesUI.add_to_dialog(dialog, view_model.half_split_vm())
             val zip_split_ui = JointImagesUI.add_to_dialog(dialog, view_model.zip_split_vm())
-            return FrcImagesUI(view_model, half_split_ui, zip_split_ui)
+            val drift_split_ui = JointImagesUI.add_to_dialog(dialog, view_model.drift_split_vm())
+            return FrcImagesUI(view_model, half_split_ui, zip_split_ui, drift_split_ui)
         }
     }
 
@@ -28,18 +30,21 @@ class FrcImagesUI private constructor(
     {
         val half_split = half_split_ui_.extract_from(dialog)
         val zip_split = zip_split_ui_.extract_from(dialog)
-        return FrcImages.new(half_split, zip_split)
+        val drift_split = drift_split_ui_.extract_from(dialog)
+        return FrcImages.new(half_split, zip_split, drift_split)
     }
 
     override fun set_visibility(value: Boolean)
     {
         half_split_ui_.set_visibility(value)
         zip_split_ui_.set_visibility(value)
+        drift_split_ui_.set_visibility(value)
     }
 
     fun reset_images()
     {
         half_split_ui_.reset_images()
         zip_split_ui_.reset_images()
+        drift_split_ui_.reset_images()
     }
 }
