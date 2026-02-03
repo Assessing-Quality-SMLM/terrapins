@@ -7,6 +7,7 @@ class FrcImagesVM private constructor(
     private val model_: FrcImages,
     private val half_split_: JointImagesVM,
     private val zip_split_: JointImagesVM,
+    private val drift_split_: JointImagesVM,
     )
 {
     companion object
@@ -24,7 +25,13 @@ class FrcImagesVM private constructor(
             zip_split_vm.set_group_name("Zip split")
             zip_split_vm.set_image_1_name("Split A")
             zip_split_vm.set_image_2_name("Split B")
-            return FrcImagesVM(model, half_split_vm, zip_split_vm)
+
+            val drift_split_model = model.drift_split()
+            val drift_split_vm = JointImagesVM.from(drift_split_model)
+            drift_split_vm.set_group_name("Drift split")
+            drift_split_vm.set_image_1_name("Split A")
+            drift_split_vm.set_image_2_name("Split B")
+            return FrcImagesVM(model, half_split_vm, zip_split_vm, drift_split_vm)
         }
     }
 
@@ -36,5 +43,10 @@ class FrcImagesVM private constructor(
     fun zip_split_vm(): JointImagesVM
     {
         return zip_split_
+    }
+
+    fun drift_split_vm(): JointImagesVM
+    {
+        return drift_split_
     }
 }

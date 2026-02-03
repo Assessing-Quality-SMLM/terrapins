@@ -91,8 +91,8 @@ class Assessment private constructor(private val exe_location_: Path)
 //      --half-split-b <HALF_SPLIT_B>        Rendering of second part of data split in half
 //      --zip-split-a <ZIP_SPLIT_A>          Rendering of first part of data zip split
 //      --zip-split-b <ZIP_SPLIT_B>          Rendering of second part of data zip split
-//      --pixel-size-nm <PIXEL_SIZE_NM>      Pixel size (nm) in images
-//      --psf-px <PSF_PX>                    PSF size (px) in images
+//      --drift-split-a <DRIFT_SPLIT_A>      Rendering of first part of data drift split
+//      --drift-split-b <DRIFT_SPLIT_B>      Rendering of second part of data drift split
         commands.add("--magnification")
         commands.add(settings.magnification().toString())
         commands.add("image")
@@ -139,6 +139,19 @@ class Assessment private constructor(private val exe_location_: Path)
                 commands.add(zip_split_a_path.toString())
                 commands.add("--zip-split-b")
                 commands.add(zip_split_b_path.toString())
+            }
+        }
+
+        if (settings.drift_split_valid())
+        {
+            val drift_split_a_path = settings.drift_split_image_a_filepath()
+            val drift_split_b_path = settings.drift_split_image_b_filepath()
+            if (drift_split_a_path != null && drift_split_b_path != null)
+            {
+                commands.add("--drift-split-a")
+                commands.add(drift_split_a_path.toString())
+                commands.add("--drift-split-b")
+                commands.add(drift_split_b_path.toString())
             }
         }
 //        add_equipment(true, settings.equipment_settings(), commands)

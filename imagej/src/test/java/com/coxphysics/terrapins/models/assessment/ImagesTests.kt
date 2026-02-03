@@ -125,6 +125,18 @@ class ImagesTests
     }
 
     @Test
+    fun can_use_drift_split()
+    {
+        val settings = Settings.with(working_directory_path())
+        settings.set_n_threads(4)
+        settings.set_drift_split_a("some.thing")
+        settings.set_drift_split_b("some.thing.else")
+        val commands = Assessment.custom(exe_path()).get_images_arguments(settings.core_settings(), settings, null)
+        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--n-threads", "4", "--extract", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0", "--magnification", "10.0", "image", "--drift-split-a", "some.thing", "--drift-split-b", "some.thing.else")
+        assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
+    }
+
+    @Test
     fun can_use_widefield()
     {
         val settings = Settings.with(working_directory_path())
