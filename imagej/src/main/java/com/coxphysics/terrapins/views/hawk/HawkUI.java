@@ -64,7 +64,7 @@ public class HawkUI implements ItemListener {
         boolean save_to_disk = Utils.extract_checkbox_value(dialog);
         String filename = Utils.extract_file_field(dialog);
 
-        Settings settings = Settings.from(n_levels, negative_handling, output_style);
+        Settings settings = Settings.from(n_levels, Settings.to_negative_value(negative_handling), Settings.to_output_style(output_style));
         if (save_to_disk)
             settings.set_filename(filename);
         return Config.from(settings);
@@ -80,7 +80,7 @@ public class HawkUI implements ItemListener {
     private Settings read_into_settings()
     {
         String filename = output_filename_.filepath();
-        Settings settings = Settings.from(n_levels(), negative_handling(), output_style());
+        Settings settings = Settings.from(n_levels(), Settings.to_negative_value(negative_handling()), Settings.to_output_style(output_style()));
         if (save_to_disk_.is_checked())
             settings.set_filename(filename);
         return settings;
