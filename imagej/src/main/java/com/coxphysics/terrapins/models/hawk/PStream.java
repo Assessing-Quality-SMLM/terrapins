@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.models.hawk;
 
+import ij.ImagePlus;
 import ij.ImageStack;
 import ij.process.FloatProcessor;
 import ij.process.ImageProcessor;
@@ -23,6 +24,20 @@ public class PStream extends ImageStack implements AutoCloseable{
     {
         long config_ptr = NativeHAWK.config_new(config.n_levels(), config.negative_handling(), config.output_style());
         return new PStream(stack, config_ptr, output_size, n_pixels);
+    }
+
+    public static PStream from(Settings settings)
+    {
+        Config config = Config.from(settings);
+        ImagePlus image = settings.image();
+        if (image == null)
+            return null;
+        Integer n_frames = settings.n_frames();
+        if (n_frames == null)
+            return null;
+        int output_size = config.get_output_size(n_frames);
+        int n_pixels = image.getWidth() * image.getHeight();
+        return from(image.getStack(), config, output_size, n_pixels);
     }
 
     public String get_metadata()
