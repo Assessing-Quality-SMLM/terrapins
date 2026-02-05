@@ -40,18 +40,18 @@ class ImageNameListener implements ItemListener
     }
 }
 
-class OUtputStyleListener implements ItemListener
+class OutputStyleListener implements ItemListener
 {
     private final HAWKView view_;
 
-    private OUtputStyleListener(HAWKView view)
+    private OutputStyleListener(HAWKView view)
     {
         view_ = view;
     }
 
-    public static OUtputStyleListener from(HAWKView view)
+    public static OutputStyleListener from(HAWKView view)
     {
-        return new OUtputStyleListener(view);
+        return new OutputStyleListener(view);
     }
 
     @Override
@@ -184,7 +184,7 @@ public class HAWKView extends JDialog {
         super((Dialog) null, "HAWK", true);
         add(content_panel_);
         image_name_combo_box_.addItemListener(ImageNameListener.from(this));
-        output_order_combo_box_.addItemListener(OUtputStyleListener.from(this));
+        output_order_combo_box_.addItemListener(OutputStyleListener.from(this));
         negative_values_combo_box_.addItemListener(NegativeValuePolicyListener.from(this));
         n_levels_field_.getDocument().addDocumentListener(NLevelsListener.from(this));
         run_btn_.addActionListener(RunListener.from(this));
