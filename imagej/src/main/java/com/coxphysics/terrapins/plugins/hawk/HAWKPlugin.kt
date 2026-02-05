@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.plugins.hawk
 
+import com.coxphysics.terrapins.models.hawk.HAWK
 import com.coxphysics.terrapins.models.hawk.PStream
 import com.coxphysics.terrapins.models.hawk.Settings
 import com.coxphysics.terrapins.models.macros.MacroUtils
@@ -56,10 +57,7 @@ class HAWKPlugin : ExtendedPlugInFilter
     {
         if(cancelled_)
             return
-        val view = get_new_image();
-        if (view == null)
-            return
-        view.show()
+        HAWK.from(settings_).get_hawk_image() ?.show()
     }
 
     override fun showDialog(p0: ImagePlus?, p1: String?, p2: PlugInFilterRunner?): Int
@@ -86,33 +84,6 @@ class HAWKPlugin : ExtendedPlugInFilter
             }
         }
         return FLAGS
-    }
-
-    private fun get_new_image(): ImagePlus?
-    {
-        val p_stream = create_p_stream()
-        if (p_stream == null)
-            return null
-        val view = ImagePlus("JHAWK pstream", p_stream)
-        view.calibration = get_calibration(settings_)
-        val metadata = p_stream._metadata;
-        view.setProp("hawk_metadata", metadata)
-        return view
-    }
-
-    private fun create_p_stream(): PStream?
-    {
-        return PStream.from(settings_)
-    }
-
-    private fun get_calibration(settings: Settings): Calibration?
-    {
-        val image = settings.image()
-        if (image == null)
-            return null
-        val base = image.getCalibration().copy()
-        base.frameInterval = 0.0
-        return base;
     }
 
     override fun setNPasses(p0: Int)
