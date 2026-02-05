@@ -175,27 +175,33 @@ public class HAWKView extends JDialog {
     private JLabel n_levels_label_;
     private JTextField n_levels_field_;
 
-    private final HAWKVM view_model_;
+    private HAWKVM view_model_;
 
     private boolean ok_ = false;
 
-    private HAWKView(HAWKVM view_model) {
+    public HAWKView()
+    {
         super((Dialog) null, "HAWK", true);
-        view_model_ = view_model;
+        add(content_panel_);
+        image_name_combo_box_.addItemListener(ImageNameListener.from(this));
+        output_order_combo_box_.addItemListener(OUtputStyleListener.from(this));
+        negative_values_combo_box_.addItemListener(NegativeValuePolicyListener.from(this));
+        n_levels_field_.getDocument().addDocumentListener(NLevelsListener.from(this));
+        run_btn_.addActionListener(RunListener.from(this));
+        cancel_btn_.addActionListener(CancelListener.from(this));
     }
 
     public static HAWKView from(HAWKVM view_model) {
-        HAWKView view = new HAWKView(view_model);
+        HAWKView view = new HAWKView();
         view_model.set_n_levels_default_colour(view.n_levels_field_.getBackground());
-        view.image_name_combo_box_.addItemListener(ImageNameListener.from(view));
-        view.output_order_combo_box_.addItemListener(OUtputStyleListener.from(view));
-        view.negative_values_combo_box_.addItemListener(NegativeValuePolicyListener.from(view));
-        view.n_levels_field_.getDocument().addDocumentListener(NLevelsListener.from(view));
-        view.run_btn_.addActionListener(RunListener.from(view));
-        view.cancel_btn_.addActionListener(CancelListener.from(view));
-        view.add(view.content_panel_);
-        view.draw();
+        view.set_view_model(view_model);
         return view;
+    }
+
+    public void set_view_model(HAWKVM view_model)
+    {
+        view_model_ = view_model;
+        draw();
     }
 
     public boolean ok()
