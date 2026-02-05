@@ -15,8 +15,6 @@ class TERRAPINSPlugin : PlugIn
 {
     private var settings_ : Settings = Settings.default()
 
-    private var cancelled_ : Boolean = true
-
     companion object
     {
         @JvmStatic
@@ -51,8 +49,7 @@ class TERRAPINSPlugin : PlugIn
             view.pack()
             // show the window - its modal - see ctor
             view.isVisible = true
-            cancelled_ = view.cancelled()
-            if (cancelled_)
+            if (view.cancelled())
                 return
             // executes when window is closed
             if (MacroUtils.is_recording())
