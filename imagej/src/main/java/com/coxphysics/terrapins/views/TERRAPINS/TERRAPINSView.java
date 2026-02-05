@@ -15,6 +15,8 @@ public class TERRAPINSView extends JDialog {
     private JTextField working_directory_;
     private JButton file_dialog_btn_;
     private JCheckBox pre_processings_cb_;
+    private JCheckBox localisationsCheckBox;
+    private JCheckBox Images;
 
     private TERRAPINSView(TERRAPINSVM view_model) {
         super((Dialog) null, "TERRAPINS", true);
@@ -46,14 +48,14 @@ public class TERRAPINSView extends JDialog {
      */
     private void $$$setupUI$$$() {
         final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(4, 4, new Insets(5, 5, 5, 5), -1, -1));
+        panel1.setLayout(new GridLayoutManager(6, 4, new Insets(5, 5, 5, 5), -1, -1));
         final JLabel label1 = new JLabel();
         label1.setText("Working Directory");
         panel1.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         panel1.add(spacer1, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
-        panel1.add(spacer2, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel1.add(spacer2, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         working_directory_ = new JTextField();
         panel1.add(working_directory_, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         file_dialog_btn_ = new JButton();
@@ -64,5 +66,10 @@ public class TERRAPINSView extends JDialog {
         panel1.add(pre_processings_cb_, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final PreProcessingView nestedForm1 = new PreProcessingView();
         panel1.add(nestedForm1.$$$getRootComponent$$$(), new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        final LocalisationView nestedForm2 = new LocalisationView();
+        panel1.add(nestedForm2.$$$getRootComponent$$$(), new GridConstraints(4, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        localisationsCheckBox = new JCheckBox();
+        localisationsCheckBox.setText("Localisations");
+        panel1.add(localisationsCheckBox, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 }
