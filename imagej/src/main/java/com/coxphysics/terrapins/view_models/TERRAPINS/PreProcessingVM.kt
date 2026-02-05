@@ -20,6 +20,13 @@ class PreProcessingVM private constructor(private var settings_: Settings)
         {
             return from(Settings.default())
         }
+
+        // for calls from Java
+        @JvmStatic
+        fun default_() : PreProcessingVM
+        {
+            return default()
+        }
     }
 
     fun hawk_vm() : HAWKVM

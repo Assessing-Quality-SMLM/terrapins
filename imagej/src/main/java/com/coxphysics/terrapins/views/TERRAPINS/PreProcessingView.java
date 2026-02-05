@@ -13,21 +13,19 @@ public class PreProcessingView {
     private JPanel root_panel_;
     private HAWKView hawk_view_;
 
-    private PreProcessingVM view_model_;
+    private PreProcessingVM view_model_ = PreProcessingVM.default_();
 
-    public PreProcessingView()
-    {
+    public PreProcessingView() {
         hawk_view_.set_view_model(view_model_.hawk_vm());
     }
 
-    public void set_view_model(PreProcessingVM view_model)
-    {
+    public void set_view_model(PreProcessingVM view_model) {
+        view_model_ = view_model;
         hawk_view_.set_view_model(view_model.hawk_vm());
         draw();
     }
 
-    private void draw()
-    {
+    private void draw() {
 
     }
 
@@ -48,8 +46,8 @@ public class PreProcessingView {
     private void $$$setupUI$$$() {
         root_panel_ = new JPanel();
         root_panel_.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
-        final HAWKView nestedForm1 = new HAWKView();
-        root_panel_.add(nestedForm1.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        hawk_view_ = new HAWKView();
+        root_panel_.add(hawk_view_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         root_panel_.add(spacer1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();

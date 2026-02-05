@@ -46,7 +46,7 @@ class TERRAPINSPlugin : PlugIn
         }
         else
         {
-            val view = TERRAPINSView.from(TERRAPINSVM())
+            val view = TERRAPINSView.from(TERRAPINSVM.from(settings_))
             view.preferredSize = Dimension(400, 400)
             view.pack()
             // show the window - its modal - see ctor
