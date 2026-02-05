@@ -150,7 +150,7 @@ class Settings private constructor(
         return image_!!.title
     }
 
-    fun set_image(image: ImagePlus)
+    fun set_image(image: ImagePlus?)
     {
         image_ = image
     }
