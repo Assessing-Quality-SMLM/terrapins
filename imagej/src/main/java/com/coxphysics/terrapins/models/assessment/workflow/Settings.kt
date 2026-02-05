@@ -9,6 +9,7 @@ class Settings private constructor(image_selector_setttings: ImageSelectorSettti
 {
     private val hawk_stack_image_selector_settings_ = image_selector_setttings
     private val hawk_settings_ = HawkSettings.default()
+    private val use_localisations_ = true
     private var localisation_settings_ = AssessmentSettings.default()
     private var images_settings_ = ImagesSettings.default()
 
@@ -28,6 +29,11 @@ class Settings private constructor(image_selector_setttings: ImageSelectorSettti
         {
             return default()
         }
+    }
+
+    fun use_localisations(): Boolean
+    {
+        return use_localisations_
     }
 
     fun hawk_stack_image_selector_settings(): ImageSelectorSetttings

@@ -27,7 +27,7 @@ class Assessment private constructor(private val exe_location_: Path)
         }
 
         @JvmStatic
-        fun default_(): Assessment
+        fun default(): Assessment
         {
             FRC.extract_dependencies()
             Hawkman.extract_default_tool()
@@ -35,6 +35,13 @@ class Assessment private constructor(private val exe_location_: Path)
             val name = ffi.os_exe_name(EXE_NAME)
             val exe_path = ffi.extract_resource_to_temp(this::class.java, name, true, true)
             return custom(exe_path);
+        }
+
+        // For Java
+        @JvmStatic
+        fun default_(): Assessment
+        {
+            return default()
         }
     }
 
