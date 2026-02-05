@@ -55,6 +55,18 @@ public class PathSelectorView {
         return view;
     }
 
+    public void set_view_model(PathSelectorVM view_model)
+    {
+        view_model_ = view_model;
+        draw();
+    }
+
+    public void draw()
+    {
+        label_.setText(view_model_.title());
+        filename_txt_field_.setText(view_model_.current_path().toString());
+    }
+
     public void find_path() {
         Path new_path = view_model_.find_path();
         filename_txt_field_.setText(new_path.toString());
