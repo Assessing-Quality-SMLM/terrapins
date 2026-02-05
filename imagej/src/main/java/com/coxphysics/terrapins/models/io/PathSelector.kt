@@ -7,8 +7,8 @@ import javax.swing.JFileChooser
 
 class PathSelector private constructor(
     private var current_path_: Path,
-    private val is_both_: Boolean,
-    private val is_files_: Boolean)
+    private var is_both_: Boolean,
+    private var is_files_: Boolean)
 {
     companion object
     {
@@ -32,6 +32,23 @@ class PathSelector private constructor(
             return default()
         }
     }
+
+    fun current_path(): Path
+    {
+        return current_path_
+    }
+
+    fun set_current_path(path: Path)
+    {
+        current_path_ = path
+    }
+
+    fun set_is_files_only(value: Boolean)
+    {
+        is_both_ = !value;
+        is_files_ = value;
+    }
+
     private fun is_files_and_directories(): Boolean
     {
         return is_both_
@@ -45,16 +62,6 @@ class PathSelector private constructor(
     private fun is_directories(): Boolean
     {
         return !is_files_and_directories() && !is_files()
-    }
-
-    fun current_path(): Path
-    {
-        return current_path_
-    }
-
-    fun set_current_path(path: Path)
-    {
-        current_path_ = path
     }
 
     fun find()
