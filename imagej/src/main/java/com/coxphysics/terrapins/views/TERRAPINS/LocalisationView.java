@@ -1,6 +1,7 @@
 package com.coxphysics.terrapins.views.TERRAPINS;
 
 import com.coxphysics.terrapins.view_models.TERRAPINS.LocalisationVM;
+import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 
 import javax.swing.*;
@@ -8,11 +9,25 @@ import java.awt.*;
 
 public class LocalisationView {
     private JPanel root_panel_;
+    private LocalisationFileView hawk_localisation_file_selector_ctrl_;
+    private LocalisationFileView localisation_file_selector_ctrl_;
 
     private LocalisationVM view_model_ = LocalisationVM.default_();
-    public LocalisationView()
-    {
 
+    public LocalisationView() {
+        draw();
+    }
+
+    public void set_view_model(LocalisationVM view_model) {
+        view_model_ = view_model;
+        localisation_file_selector_ctrl_.set_view_model(view_model_.localisation_file_vm());
+        hawk_localisation_file_selector_ctrl_.set_view_model(view_model_.hawk_localisation_file_vm());
+        draw();
+    }
+
+    private void draw() {
+        localisation_file_selector_ctrl_.draw();
+        hawk_localisation_file_selector_ctrl_.draw();
     }
 
     {
@@ -31,7 +46,11 @@ public class LocalisationView {
      */
     private void $$$setupUI$$$() {
         root_panel_ = new JPanel();
-        root_panel_.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        root_panel_.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        localisation_file_selector_ctrl_ = new LocalisationFileView();
+        root_panel_.add(localisation_file_selector_ctrl_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        hawk_localisation_file_selector_ctrl_ = new LocalisationFileView();
+        root_panel_.add(hawk_localisation_file_selector_ctrl_.$$$getRootComponent$$$(), new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
     }
 
     /**
@@ -40,4 +59,5 @@ public class LocalisationView {
     public JComponent $$$getRootComponent$$$() {
         return root_panel_;
     }
+
 }
