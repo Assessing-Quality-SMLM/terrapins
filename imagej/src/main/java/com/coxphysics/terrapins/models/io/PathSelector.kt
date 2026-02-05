@@ -56,7 +56,7 @@ class PathSelector private constructor(
 
     private fun is_files(): Boolean
     {
-        return !is_files_and_directories() && is_files()
+        return !is_files_and_directories() && is_files_
     }
 
     private fun is_directories(): Boolean
