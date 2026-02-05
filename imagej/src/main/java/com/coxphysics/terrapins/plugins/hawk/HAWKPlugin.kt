@@ -22,7 +22,7 @@ private const val FLAGS =  STACK_REQUIRED or NO_CHANGES or DOES_16 or DOES_32 or
 class HAWKPlugin : ExtendedPlugInFilter
 {
     private var settings_ : Settings = Settings.default()
-    private var cancelled_: Boolean = false;
+    private var cancelled_: Boolean = false
 
     companion object
     {
