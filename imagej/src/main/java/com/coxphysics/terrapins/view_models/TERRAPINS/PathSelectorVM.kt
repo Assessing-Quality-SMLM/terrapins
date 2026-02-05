@@ -39,6 +39,11 @@ class PathSelectorVM private constructor(
         return settings_.current_path()
     }
 
+    fun set_current_path(value: Path)
+    {
+        settings_.set_current_path(value)
+    }
+
     fun find_path(): Path
     {
         settings_.find()
