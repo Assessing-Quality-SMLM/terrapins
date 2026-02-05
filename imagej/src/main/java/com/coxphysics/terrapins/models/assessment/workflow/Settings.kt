@@ -22,6 +22,12 @@ class Settings private constructor(image_selector_setttings: ImageSelectorSettti
             image_selector_settings.set_image_names(listOf("Image").toTypedArray());
             return Settings(image_selector_settings)
         }
+
+        @JvmStatic
+        fun extract_from_macro(): Settings
+        {
+            return default()
+        }
     }
 
     fun hawk_stack_image_selector_settings(): ImageSelectorSetttings
@@ -52,5 +58,10 @@ class Settings private constructor(image_selector_setttings: ImageSelectorSettti
     fun set_images(value: ImagesSettings)
     {
         images_settings_ = value
+    }
+
+    fun record_values()
+    {
+
     }
 }
