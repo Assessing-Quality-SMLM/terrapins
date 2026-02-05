@@ -50,7 +50,7 @@
           <text value="Pre-Processing"/>
         </properties>
       </component>
-      <nested-form id="da93e" form-file="com/coxphysics/terrapins/views/TERRAPINS/PreProcessingView.form">
+      <nested-form id="da93e" form-file="com/coxphysics/terrapins/views/TERRAPINS/PreProcessingView.form" binding="pre_processing_view_">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>

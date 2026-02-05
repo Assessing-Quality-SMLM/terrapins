@@ -17,6 +17,7 @@ public class TERRAPINSView extends JDialog {
     private JCheckBox pre_processings_cb_;
     private JCheckBox localisationsCheckBox;
     private JCheckBox Images;
+    private PreProcessingView pre_processing_view_;
 
     private TERRAPINSView(TERRAPINSVM view_model) {
         super((Dialog) null, "TERRAPINS", true);
