@@ -67,6 +67,7 @@ class HAWKPlugin : ExtendedPlugInFilter
         if (MacroUtils.is_ran_from_macro())
         {
             settings_ = Settings.extract_from_macro()
+            cancelled_ = false
         }
         else
         {
