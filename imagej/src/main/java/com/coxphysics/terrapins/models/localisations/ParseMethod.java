@@ -191,7 +191,7 @@ public class ParseMethod
         csv_settings_.set_y_pos(value);
     }
 
-    public void set_psf_sigma_pos(int value)
+    public void set_uncertainty_sigma_pos(int value)
     {
         csv_settings_.set_psf_sigma_pos(value);
     }
