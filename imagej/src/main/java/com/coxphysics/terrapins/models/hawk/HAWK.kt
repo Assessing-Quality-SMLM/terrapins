@@ -19,11 +19,16 @@ class HAWK private constructor(private var settings_: Settings)
         val p_stream = PStream.from(settings_)
         if (p_stream == null)
             return null
-        val view = ImagePlus("JHAWK pstream", p_stream)
+        val view = ImagePlus(get_hawk_image_name(), p_stream)
         view.calibration = get_calibration(settings_)
         val metadata = p_stream._metadata;
         view.setProp("hawk_metadata", metadata)
         return view
+    }
+
+    private fun get_hawk_image_name(): String
+    {
+        return String.format("%s-HAWK-stream", settings_.image_name())
     }
 
     private fun get_calibration(settings: Settings): Calibration?
