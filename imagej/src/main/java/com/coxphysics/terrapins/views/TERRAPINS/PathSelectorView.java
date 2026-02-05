@@ -112,7 +112,6 @@ public class PathSelectorView {
     private void update_view_data_path()
     {
         update_view_data_path_with(view_model_.current_path());
-
     }
 
     private void update_view_data_path_with(Path new_path)
