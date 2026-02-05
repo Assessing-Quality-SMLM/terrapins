@@ -46,6 +46,7 @@ class HAWKPlugin : ExtendedPlugInFilter
 
     override fun setup(s: String?, image: ImagePlus?): Int
     {
+        cancelled_ = true
         if (image != null)
             settings_.set_image(image)
         return FLAGS;
