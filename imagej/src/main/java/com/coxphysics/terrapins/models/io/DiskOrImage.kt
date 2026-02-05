@@ -69,6 +69,11 @@ class DiskOrImage private constructor(
         set_use_image(!value)
     }
 
+    fun flip_mode()
+    {
+        set_use_image(!use_image_)
+    }
+
     fun filename_nn(): String
     {
         return filename_.non_null()
