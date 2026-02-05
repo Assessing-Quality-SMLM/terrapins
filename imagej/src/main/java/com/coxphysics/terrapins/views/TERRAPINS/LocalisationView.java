@@ -25,6 +25,12 @@ public class LocalisationView {
         draw();
     }
 
+    public void finalise_settings()
+    {
+        localisation_file_selector_ctrl_.finalise_settings();
+        hawk_localisation_file_selector_ctrl_.finalise_settings();
+    }
+
     private void draw() {
         localisation_file_selector_ctrl_.draw();
         hawk_localisation_file_selector_ctrl_.draw();
@@ -48,9 +54,9 @@ public class LocalisationView {
         root_panel_ = new JPanel();
         root_panel_.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         localisation_file_selector_ctrl_ = new LocalisationFileView();
-        root_panel_.add(localisation_file_selector_ctrl_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        root_panel_.add(localisation_file_selector_ctrl_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         hawk_localisation_file_selector_ctrl_ = new LocalisationFileView();
-        root_panel_.add(hawk_localisation_file_selector_ctrl_.$$$getRootComponent$$$(), new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        root_panel_.add(hawk_localisation_file_selector_ctrl_.$$$getRootComponent$$$(), new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
     }
 
     /**

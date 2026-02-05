@@ -74,11 +74,17 @@ public class LocalisationFileView {
         y_pos_field_.getDocument().addDocumentListener(ActionableListener.from(this, LocalisationFileView::update_y_pos));
         uncertainty_sigma_field_.getDocument().addDocumentListener(ActionableListener.from(this, LocalisationFileView::update_uncertainty_sigma_pos));
         frame_number_pos_field_.getDocument().addDocumentListener(ActionableListener.from(this, LocalisationFileView::update_frame_number_pos));
+//        path_selector_ctrl_.add_listener_to_filename_change(ActionableListener.from(this, LocalisationFileView::update_filepath));
     }
 
     public void set_view_model(LocalisationFileVM view_model)
     {
         view_model_ = view_model;
+    }
+
+    public void finalise_settings()
+    {
+        update_model_filepath();
     }
 
     public void draw()
@@ -114,6 +120,11 @@ public class LocalisationFileView {
     private void update_frame_number_pos()
     {
         view_model_.set_frame_number_pos(frame_number_pos_field_.getText());
+    }
+
+    private void update_model_filepath()
+    {
+        view_model_.update_model_path();
     }
 
     {
