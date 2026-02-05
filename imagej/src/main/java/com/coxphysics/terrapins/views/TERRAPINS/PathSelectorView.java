@@ -4,12 +4,49 @@ import com.coxphysics.terrapins.view_models.TERRAPINS.PathSelectorVM;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import ij.IJ;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+
+class DataPathListener implements DocumentListener
+{
+    private final PathSelectorView view_;
+
+    private DataPathListener(PathSelectorView view)
+    {
+        view_ = view;
+    }
+
+    public static DataPathListener from(PathSelectorView view)
+    {
+        return new DataPathListener(view);
+    }
+
+    @Override
+    public void insertUpdate(DocumentEvent e)
+    {
+        view_.update_data_path_from_view();
+    }
+
+    @Override
+    public void removeUpdate(DocumentEvent e)
+    {
+        view_.update_data_path_from_view();
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent e)
+    {
+        view_.update_data_path_from_view();
+    }
+}
 
 class FindListener implements ActionListener
 {
@@ -40,36 +77,67 @@ public class PathSelectorView {
 
     private PathSelectorVM view_model_ = PathSelectorVM.default_();
 
-    public PathSelectorView() {
+    public PathSelectorView()
+    {
+        filename_txt_field_.getDocument().addDocumentListener(DataPathListener.from(this));
         find_btn_.addActionListener(FindListener.from(this));
     }
 
     private PathSelectorView(PathSelectorVM view_model) {
         super();
         view_model_ = view_model;
-
     }
 
     public static PathSelectorView from(PathSelectorVM view_model) {
         PathSelectorView view = new PathSelectorView(view_model);
         return view;
     }
-
     public void set_view_model(PathSelectorVM view_model)
     {
         view_model_ = view_model;
         draw();
     }
 
+    public void add_listener_to_filename_change(DocumentListener listener)
+    {
+        filename_txt_field_.getDocument().addDocumentListener(listener);
+    }
+
     public void draw()
     {
         label_.setText(view_model_.title());
-        filename_txt_field_.setText(view_model_.current_path().toString());
+        update_view_data_path();
+    }
+
+    private void update_view_data_path()
+    {
+        update_view_data_path_with(view_model_.current_path());
+
+    }
+
+    private void update_view_data_path_with(Path new_path)
+    {
+        filename_txt_field_.setText(new_path.toString());
+    }
+
+    public void update_data_path_from_view()
+    {
+        String new_path_text = filename_txt_field_.getText();
+        try
+        {
+            Path new_path = Paths.get(new_path_text);
+            view_model_.set_current_path(new_path);
+        }
+        catch (Exception e)
+        {
+            String message = "Could not load path " + new_path_text + " due to " + e;
+            IJ.log(message);
+        }
     }
 
     public void find_path() {
         Path new_path = view_model_.find_path();
-        filename_txt_field_.setText(new_path.toString());
+        update_view_data_path_with(new_path);
     }
 
     public void set_enabled(boolean value)
