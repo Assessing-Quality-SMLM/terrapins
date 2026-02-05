@@ -1,12 +1,50 @@
 package com.coxphysics.terrapins.views.TERRAPINS;
 
 import com.coxphysics.terrapins.view_models.TERRAPINS.LocalisationFileVM;
+import com.coxphysics.terrapins.view_models.TERRAPINS.LocalisationVM;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.util.function.Consumer;
+
+class ActionableListener implements DocumentListener
+{
+    private LocalisationFileView view_;
+    private final Consumer<LocalisationFileView> action_;
+
+    private ActionableListener(LocalisationFileView view, Consumer<LocalisationFileView> action)
+    {
+        view_ = view;
+        action_ = action;
+    }
+
+    public static ActionableListener from(LocalisationFileView view, Consumer<LocalisationFileView> action)
+    {
+        return new ActionableListener(view, action);
+    }
+    @Override
+    public void insertUpdate(DocumentEvent e)
+    {
+        action_.accept(view_);
+    }
+
+    @Override
+    public void removeUpdate(DocumentEvent e)
+    {
+        action_.accept(view_);
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent e)
+    {
+        action_.accept(view_);
+    }
+}
 
 public class LocalisationFileView {
     private JPanel root_;
@@ -30,12 +68,52 @@ public class LocalisationFileView {
     public LocalisationFileView()
     {
         path_selector_ctrl_.set_view_model(view_model_.path_selector_vm());
+        delimiter_field_.getDocument().addDocumentListener(ActionableListener.from(this, LocalisationFileView::update_delimeter));
+        n_headers_field_.getDocument().addDocumentListener(ActionableListener.from(this, LocalisationFileView::update_n_header_lines));
+        x_pos_field_.getDocument().addDocumentListener(ActionableListener.from(this, LocalisationFileView::update_x_pos));
+        y_pos_field_.getDocument().addDocumentListener(ActionableListener.from(this, LocalisationFileView::update_y_pos));
+        uncertainty_sigma_field_.getDocument().addDocumentListener(ActionableListener.from(this, LocalisationFileView::update_uncertainty_sigma_pos));
+        frame_number_pos_field_.getDocument().addDocumentListener(ActionableListener.from(this, LocalisationFileView::update_frame_number_pos));
+    }
 
+    public void set_view_model(LocalisationFileVM view_model)
+    {
+        view_model_ = view_model;
     }
 
     public void draw()
     {
 
+    }
+
+    private void update_delimeter()
+    {
+        view_model_.set_delimeter(delimiter_field_.getText());
+    }
+
+    private void update_n_header_lines()
+    {
+        view_model_.set_n_header_lines(n_headers_field_.getText());
+    }
+
+    private void update_x_pos()
+    {
+        view_model_.set_x_pos(x_pos_field_.getText());
+    }
+
+    private void update_y_pos()
+    {
+        view_model_.set_y_pos(y_pos_field_.getText());
+    }
+
+    private void update_uncertainty_sigma_pos()
+    {
+        view_model_.set_uncertainty_sigma_pos(uncertainty_sigma_field_.getText());
+    }
+
+    private void update_frame_number_pos()
+    {
+        view_model_.set_frame_number_pos(frame_number_pos_field_.getText());
     }
 
     {
