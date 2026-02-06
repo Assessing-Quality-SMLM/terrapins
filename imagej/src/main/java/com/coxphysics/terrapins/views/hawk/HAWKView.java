@@ -154,12 +154,14 @@ public class HAWKView extends JDialog {
     private JTextField n_levels_field_;
     private ImageSelectorView image_selector_ctrl_;
 
-    private HAWKVM view_model_;
+    private HAWKVM view_model_ = HAWKVM.default_();
 
     private boolean ok_ = false;
 
-    public HAWKView() {
+    public HAWKView()
+    {
         super((Dialog) null, "HAWK", true);
+        view_model_.set_n_levels_default_colour(n_levels_field_.getBackground());
         add(content_panel_);
         output_order_combo_box_.addItemListener(OutputStyleListener.from(this));
         negative_values_combo_box_.addItemListener(NegativeValuePolicyListener.from(this));
@@ -170,13 +172,15 @@ public class HAWKView extends JDialog {
 
     public static HAWKView from(HAWKVM view_model) {
         HAWKView view = new HAWKView();
-        view_model.set_n_levels_default_colour(view.n_levels_field_.getBackground());
         view.set_view_model(view_model);
         return view;
     }
 
-    public void set_view_model(HAWKVM view_model) {
+    public void set_view_model(HAWKVM view_model)
+    {
+        Color default_bg_colour = view_model_.n_levels_default_colour();
         view_model_ = view_model;
+        view_model_.set_n_levels_default_colour(default_bg_colour);
         image_selector_ctrl_.set_view_model(view_model_.image_selector_vm());
         draw();
     }
@@ -186,12 +190,15 @@ public class HAWKView extends JDialog {
     }
 
     public void update_n_levels_value() {
-        boolean ok = view_model_.set_n_levels(n_levels_field_.getText());
-        if (!ok)
-            n_levels_field_.setBackground(view_model_.n_levels_error_colour());
-        else {
-            n_levels_field_.setBackground(view_model_.n_levels_colour());
-        }
+        String text = n_levels_field_.getText();
+        boolean ok = view_model_.set_n_levels(text);
+        set_n_levels_background_colour(ok);
+    }
+
+    private void set_n_levels_background_colour(boolean ok)
+    {
+        Color background_colour = ok ? view_model_.n_levels_colour() : view_model_.n_levels_error_colour();
+        n_levels_field_.setBackground(background_colour);
     }
 
     public void extract_output_style() {
@@ -216,6 +223,7 @@ public class HAWKView extends JDialog {
     private void draw_n_levels() {
         String value = Integer.toString(view_model_.n_levels());
         n_levels_field_.setText(value);
+        set_n_levels_background_colour(true);
     }
 
     private void draw_negative_value_options() {
