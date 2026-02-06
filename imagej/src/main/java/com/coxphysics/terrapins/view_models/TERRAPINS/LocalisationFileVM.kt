@@ -40,6 +40,16 @@ class LocalisationFileVM private constructor(private var model_: LocalisationFil
         model_.set_filename(path_vm_.current_path().toString())
     }
 
+    fun use_thunderstorm(): Boolean
+    {
+        return model_.use_thunderstorm()
+    }
+
+    fun set_use_thunderstorm(value: Boolean)
+    {
+        model_.set_use_thunderstorm(value)
+    }
+
     fun delimeter(): Char
     {
         return model_.delimeter()
