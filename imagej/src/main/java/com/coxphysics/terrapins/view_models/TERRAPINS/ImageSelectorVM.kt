@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.view_models.TERRAPINS
 
+import com.coxphysics.terrapins.models.Image
 import com.coxphysics.terrapins.models.ij_wrapping.ImageSelector
 import ij.ImagePlus
 
@@ -11,6 +12,13 @@ class ImageSelectorVM private constructor(private val selector_: ImageSelector)
         fun from(selector: ImageSelector): ImageSelectorVM
         {
             return ImageSelectorVM(selector)
+        }
+
+        @JvmStatic
+        fun with_image(image: Image): ImageSelectorVM
+        {
+            val selector = ImageSelector.from(image)
+            return from(selector)
         }
 
         @JvmStatic
