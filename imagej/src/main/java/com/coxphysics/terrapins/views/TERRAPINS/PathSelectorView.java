@@ -116,7 +116,8 @@ public class PathSelectorView {
 
     private void update_view_data_path_with(Path new_path)
     {
-        filename_txt_field_.setText(new_path.toString());
+        String text = new_path == null ? "" : new_path.toString();
+        filename_txt_field_.setText(text);
     }
 
     public void update_data_path_from_view()

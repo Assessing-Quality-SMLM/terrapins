@@ -3,7 +3,7 @@ package com.coxphysics.terrapins.view_models.TERRAPINS
 import com.coxphysics.terrapins.models.assessment.localisation.AssessmentSettings
 
 
-class LocalisationVM private constructor(private var settings_: AssessmentSettings)
+class LocalisationVM private constructor(private val settings_: AssessmentSettings)
 {
     private var localisation_file_vm_: LocalisationFileVM = LocalisationFileVM.default()
     private var hawk_loc_file_vm_: LocalisationFileVM = LocalisationFileVM.default()
@@ -15,7 +15,8 @@ class LocalisationVM private constructor(private var settings_: AssessmentSettin
         }
 
         @JvmStatic
-        fun default(): LocalisationVM {
+        fun default(): LocalisationVM
+        {
             return from(AssessmentSettings.default())
         }
 

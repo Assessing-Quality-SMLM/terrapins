@@ -4,7 +4,8 @@ import com.coxphysics.terrapins.models.localisations.LocalisationFile
 
 class LocalisationFileVM private constructor(private var model_: LocalisationFile)
 {
-    private var path_vm_: PathSelectorVM = PathSelectorVM.default_()
+    private var path_vm_: PathSelectorVM = PathSelectorVM.with(model_.path())
+
     companion object
     {
         @JvmStatic

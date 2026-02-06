@@ -1,10 +1,9 @@
 package com.coxphysics.terrapins.models.localisations
 
-import com.coxphysics.terrapins.models.non_null
-import com.coxphysics.terrapins.models.utils.StringUtils
+import com.coxphysics.terrapins.models.PathWrapper
 
 class LocalisationFile private constructor(
-    private var localisation_file_: String?,
+    private var localisation_file_: PathWrapper,
     private val parse_method_: ParseMethod)
 {
     companion object
@@ -12,29 +11,34 @@ class LocalisationFile private constructor(
         @JvmStatic
         fun new(filename: String, parse_method: ParseMethod): LocalisationFile
         {
-            return LocalisationFile(filename, parse_method)
+            return LocalisationFile(PathWrapper.from_string(filename), parse_method)
         }
 
         @JvmStatic
         fun default(): LocalisationFile
         {
-            return LocalisationFile(null, ParseMethod.default_())
+            return LocalisationFile(PathWrapper.empty(), ParseMethod.default_())
         }
+    }
+
+    fun path(): PathWrapper
+    {
+        return localisation_file_
     }
 
     fun is_set(): Boolean
     {
-        return localisation_file_ != null && localisation_file_ != StringUtils.EMPTY_STRING
+        return localisation_file_.has_data()
     }
 
     fun filename_nn() : String
     {
-        return localisation_file_.non_null()
+        return localisation_file_.to_string()
     }
 
     fun set_filename(value: String)
     {
-        localisation_file_ = value
+        localisation_file_.set_path_from_string(value)
     }
 
     fun parse_method(): ParseMethod

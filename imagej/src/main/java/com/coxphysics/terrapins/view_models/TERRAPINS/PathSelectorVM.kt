@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.view_models.TERRAPINS
 
+import com.coxphysics.terrapins.models.PathWrapper
 import com.coxphysics.terrapins.models.io.PathSelector
 import java.nio.file.Path
 
@@ -13,6 +14,12 @@ class PathSelectorVM private constructor(
         fun from(title: String, settings: PathSelector) : PathSelectorVM
         {
             return PathSelectorVM(title, settings)
+        }
+
+        @JvmStatic
+        fun with(path: PathWrapper) : PathSelectorVM
+        {
+            return from("File", PathSelector.default_with(path))
         }
 
         @JvmStatic
@@ -34,7 +41,7 @@ class PathSelectorVM private constructor(
         return title_
     }
 
-    fun current_path(): Path
+    fun current_path(): Path?
     {
         return settings_.current_path()
     }
@@ -44,7 +51,7 @@ class PathSelectorVM private constructor(
         settings_.set_current_path(value)
     }
 
-    fun find_path(): Path
+    fun find_path(): Path?
     {
         settings_.find()
         return current_path()

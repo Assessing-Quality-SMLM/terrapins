@@ -1,28 +1,34 @@
 package com.coxphysics.terrapins.models.io
 
-import java.nio.file.FileSystem
+import com.coxphysics.terrapins.models.PathWrapper
 import java.nio.file.FileSystems
 import java.nio.file.Path
 import javax.swing.JFileChooser
 
 class PathSelector private constructor(
-    private var current_path_: Path,
+    private var current_path_: PathWrapper,
     private var is_both_: Boolean,
     private var is_files_: Boolean)
 {
     companion object
     {
         @JvmStatic
-        fun from(path: Path, is_both: Boolean, is_files: Boolean) : PathSelector
+        fun from(path: PathWrapper, is_both: Boolean, is_files: Boolean) : PathSelector
         {
             return PathSelector(path, is_both, is_files)
+        }
+
+        @JvmStatic
+        fun default_with(path: PathWrapper) : PathSelector
+        {
+            return from(path, true, false)
         }
 
         @JvmStatic
         fun default() : PathSelector
         {
             val default_path = FileSystems.getDefault().getPath("")
-            return from(default_path, true, false)
+            return default_with(PathWrapper.from(default_path))
         }
 
         // for calls from Java
@@ -33,14 +39,14 @@ class PathSelector private constructor(
         }
     }
 
-    fun current_path(): Path
+    fun current_path(): Path?
     {
-        return current_path_
+        return current_path_.path()
     }
 
     fun set_current_path(path: Path)
     {
-        current_path_ = path
+        current_path_.set_path(path)
     }
 
     fun set_is_files_only(value: Boolean)
@@ -74,7 +80,9 @@ class PathSelector private constructor(
         else if (is_directories())
             jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY)
 
-        jfc.setCurrentDirectory(current_path().toFile())
+        val file = current_path()?.toFile()
+        if(file != null)
+            jfc.setCurrentDirectory(file)
         val result = jfc.showOpenDialog(null)
         if (result != JFileChooser.APPROVE_OPTION)
             return;
