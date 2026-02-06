@@ -51,6 +51,18 @@ class LocalisationFile private constructor(
         return parse_method_.parse_method()
     }
 
+    fun use_thunderstorm(): Boolean
+    {
+        return parse_method().use_thunderstorm()
+    }
+
+    fun set_use_thunderstorm(value: Boolean)
+    {
+        if (value)
+            parse_method_.set_parse_method_thunderstorm()
+        else
+            parse_method_.set_parse_method_csv()
+    }
     fun delimeter(): Char
     {
         return parse_method_.delimiter()
