@@ -9,14 +9,14 @@ import java.nio.file.Paths
 
 class DiskOrImage private constructor(
     private var filename_: String?,
-    private var image_: ImagePlus?,
+    private var image_: Image,
     private var use_image_: Boolean
 )
 {
     companion object
     {
         @JvmStatic
-        fun new(filename: String?, image: ImagePlus?, use_image: Boolean) : DiskOrImage
+        fun new(filename: String?, image: Image, use_image: Boolean) : DiskOrImage
         {
             return DiskOrImage(filename, image, use_image)
         }
@@ -24,11 +24,11 @@ class DiskOrImage private constructor(
         @JvmStatic
         fun from_filename(filename: String?) : DiskOrImage
         {
-            return new(filename, null, false)
+            return new(filename, Image.empty(), false)
         }
 
         @JvmStatic
-        fun from_image(image: ImagePlus) : DiskOrImage
+        fun from_image(image: Image) : DiskOrImage
         {
             return new(null, image, true)
         }
@@ -36,7 +36,7 @@ class DiskOrImage private constructor(
         @JvmStatic
         fun default() : DiskOrImage
         {
-            return new(null, null, false)
+            return new(null, Image.empty(), false)
         }
     }
 
@@ -45,7 +45,7 @@ class DiskOrImage private constructor(
         if (use_disk())
             return StringUtils.path_set(filename_)
         if (use_image())
-            return image_ != null
+            return image_.has_data()
         return false
     }
 
@@ -104,7 +104,7 @@ class DiskOrImage private constructor(
     {
         if(use_image())
         {
-            return image_
+            return image_.to_image_plus()
         }
         return null
     }
@@ -112,7 +112,7 @@ class DiskOrImage private constructor(
     fun load_image(): ImagePlus?
     {
         if (use_image())
-            return image_
+            return image_.to_image_plus()
         return filename_path()?.let{p -> IJUtils.load_image(p)}
     }
 
@@ -130,7 +130,7 @@ class DiskOrImage private constructor(
 
     fun set_image(image: ImagePlus)
     {
-        image_ = image
+        image_.set_inner(image)
     }
 
     fun to_disk_with(image_path: Path): Path?
@@ -148,12 +148,7 @@ class DiskOrImage private constructor(
         }
         if (use_image())
         {
-            if (image_ == null)
-                return null
-            else
-            {
-                return IJUtils.write_to_disk(image_, image_path)
-            }
+            return image_.write_to_disk(image_path)
         }
         return null
     }

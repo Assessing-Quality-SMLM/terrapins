@@ -1,6 +1,7 @@
 package com.coxphysics.terrapins.models.assessment
 
 import com.coxphysics.terrapins.models.DiskOrImage
+import com.coxphysics.terrapins.models.Image
 import com.coxphysics.terrapins.models.non_null
 import com.coxphysics.terrapins.models.processing.WidefieldGenerator
 import com.coxphysics.terrapins.models.utils.FsUtils
@@ -152,7 +153,7 @@ class CoreSettings private constructor(private var working_directory_: Path)
                     if (image_stack != null)
                     {
                         val aof = WidefieldGenerator.average_of_frames(image_stack)
-                        val aof_image = ImagePlus("average_of_frames", aof)
+                        val aof_image = Image.from(ImagePlus("average_of_frames", aof))
                         image_stack_path = DiskOrImage.from_image(aof_image).to_disk_with(p)
                         image_stack_ok = image_stack_path != null
                     }

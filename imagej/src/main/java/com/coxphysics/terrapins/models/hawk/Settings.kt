@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.models.hawk
 
+import com.coxphysics.terrapins.models.Image
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.macros.MacroUtils
 import com.coxphysics.terrapins.models.non_null
@@ -20,7 +21,7 @@ enum class NegativeValuesPolicy
 }
 
 class Settings private constructor(
-    private var image_: ImagePlus?,
+    private var image_: Image,
     private var filename_: String?,
     private var n_levels_: Int,
     private var negative_handling_: NegativeValuesPolicy,
@@ -31,7 +32,7 @@ class Settings private constructor(
         @JvmStatic
         fun from(n_levels: Int, negative_handling: NegativeValuesPolicy, output_style: OutputStyle) : Settings
         {
-            return Settings(null, null, n_levels, negative_handling, output_style)
+            return Settings(Image.empty(), null, n_levels, negative_handling, output_style)
         }
 
         @JvmStatic
@@ -128,6 +129,11 @@ class Settings private constructor(
         }
     }
 
+    fun inner_image(): Image
+    {
+        return image_
+    }
+
     fun filename(): String?
     {
         return filename_
@@ -140,19 +146,18 @@ class Settings private constructor(
 
     fun image(): ImagePlus?
     {
-        return image_
+        return image_.to_image_plus()
     }
 
     fun image_name(): String
     {
-        if (image_ == null)
-            return ""
-        return image_!!.title
+        val ip = image()
+        return if (ip == null) "" else ip.title
     }
 
     fun set_image(image: ImagePlus?)
     {
-        image_ = image
+        image_.set_inner(image)
     }
 
     fun n_levels(): Int
@@ -216,7 +221,7 @@ class Settings private constructor(
 
     fun n_frames(): Int?
     {
-        return image_?.stack?.size
+        return image_.to_image_plus()?.stack?.size
     }
 
     fun record_values()

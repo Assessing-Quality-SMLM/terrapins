@@ -1,6 +1,7 @@
 package com.coxphysics.terrapins.views
 
 import com.coxphysics.terrapins.models.DiskOrImage
+import com.coxphysics.terrapins.models.Image
 import com.coxphysics.terrapins.view_models.DiskOrImageVM
 import ij.WindowManager
 import ij.gui.GenericDialog
@@ -45,7 +46,7 @@ class DiskOrImageUI(
         val use_image = Utils.extract_checkbox_value(dialog)
         val image_name = image_selector_.extract_image_names_recorded(dialog)
         val image  = WindowManager.getImage(image_name[0])
-        return DiskOrImage.new(file, image, use_image)
+        return DiskOrImage.new(file, Image.from(image), use_image)
     }
 
     override fun set_visibility(value: Boolean)
