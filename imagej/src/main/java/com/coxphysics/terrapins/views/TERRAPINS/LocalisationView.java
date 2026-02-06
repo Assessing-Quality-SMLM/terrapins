@@ -18,7 +18,8 @@ public class LocalisationView {
         draw();
     }
 
-    public void set_view_model(LocalisationVM view_model) {
+    public void set_view_model(LocalisationVM view_model)
+    {
         view_model_ = view_model;
         localisation_file_selector_ctrl_.set_view_model(view_model_.localisation_file_vm());
         hawk_localisation_file_selector_ctrl_.set_view_model(view_model_.hawk_localisation_file_vm());

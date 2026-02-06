@@ -6,7 +6,7 @@ import java.nio.file.Path
 
 class PathSelectorVM private constructor(
     private var title_: String,
-    private var settings_: PathSelector)
+    private var path_: PathSelector)
 {
     companion object
     {
@@ -43,22 +43,22 @@ class PathSelectorVM private constructor(
 
     fun current_path(): Path?
     {
-        return settings_.current_path()
+        return path_.current_path()
     }
 
     fun set_current_path(value: Path)
     {
-        settings_.set_current_path(value)
+        path_.set_current_path(value)
     }
 
     fun find_path(): Path?
     {
-        settings_.find()
+        path_.find()
         return current_path()
     }
 
     fun set_is_files_only(value: Boolean)
     {
-        settings_.set_is_files_only(value)
+        path_.set_is_files_only(value)
     }
 }

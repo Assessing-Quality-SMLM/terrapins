@@ -5,8 +5,8 @@ import com.coxphysics.terrapins.models.assessment.localisation.AssessmentSetting
 
 class LocalisationVM private constructor(private val settings_: AssessmentSettings)
 {
-    private var localisation_file_vm_: LocalisationFileVM = LocalisationFileVM.default()
-    private var hawk_loc_file_vm_: LocalisationFileVM = LocalisationFileVM.default()
+    private var localisation_file_vm_: LocalisationFileVM = LocalisationFileVM.from(settings_.localisation_file())
+    private var hawk_loc_file_vm_: LocalisationFileVM = LocalisationFileVM.from(settings_.hawk_localisation_file())
     companion object {
         @JvmStatic
         fun from(settings: AssessmentSettings): LocalisationVM

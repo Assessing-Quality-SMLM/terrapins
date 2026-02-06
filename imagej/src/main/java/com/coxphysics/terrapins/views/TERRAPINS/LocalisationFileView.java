@@ -103,6 +103,7 @@ public class LocalisationFileView {
     public void set_view_model(LocalisationFileVM view_model)
     {
         view_model_ = view_model;
+        path_selector_ctrl_.set_view_model(view_model_.path_selector_vm());
         draw();
     }
 
