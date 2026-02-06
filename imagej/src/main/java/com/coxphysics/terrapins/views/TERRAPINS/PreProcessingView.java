@@ -15,7 +15,8 @@ public class PreProcessingView {
 
     private PreProcessingVM view_model_ = PreProcessingVM.default_();
 
-    public PreProcessingView() {
+    public PreProcessingView()
+    {
         hawk_view_.set_view_model(view_model_.hawk_vm());
     }
 
