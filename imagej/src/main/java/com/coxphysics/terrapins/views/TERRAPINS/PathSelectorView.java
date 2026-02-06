@@ -98,11 +98,6 @@ public class PathSelectorView {
         draw();
     }
 
-    public void add_listener_to_filename_change(DocumentListener listener)
-    {
-        filename_txt_field_.getDocument().addDocumentListener(listener);
-    }
-
     public void draw()
     {
         label_.setText(view_model_.title());
