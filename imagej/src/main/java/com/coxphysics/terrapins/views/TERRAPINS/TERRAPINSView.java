@@ -84,7 +84,7 @@ public class TERRAPINSView extends JDialog {
     private void set_view_model(TERRAPINSVM view_model) {
         view_model_ = view_model;
         pre_processing_view_.set_view_model(view_model_.pre_processing_vm());
-
+        localisations_ctrl_.set_view_model(view_model.localisation_vm());
     }
 
     public boolean cancelled() {
