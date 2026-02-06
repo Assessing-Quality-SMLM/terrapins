@@ -1,6 +1,7 @@
 package com.coxphysics.terrapins.models.io
 
 import com.coxphysics.terrapins.models.DiskOrImage
+import com.coxphysics.terrapins.models.Image
 import ij.ImagePlus
 import ij.process.FloatProcessor
 import org.junit.jupiter.api.Test
@@ -34,7 +35,7 @@ class DiskOrImageTests
     @Test
     fun filename_set_have_data()
     {
-        val disk_or_image = DiskOrImage.new("something", null, false)
+        val disk_or_image = DiskOrImage.new("something", Image.empty(), false)
         assertEquals(disk_or_image.has_data(), true)
     }
 
@@ -60,14 +61,14 @@ class DiskOrImageTests
     {
         val processor = FloatProcessor(0, 0)
         val image = ImagePlus("An image", processor)
-        val disk_or_image = DiskOrImage.new(null, image, true)
+        val disk_or_image = DiskOrImage.new(null, Image.from(image), true)
         assertEquals(disk_or_image.has_data(), true)
     }
 
     @Test
     fun set_use_disk_test()
     {
-        val disk_or_image = DiskOrImage.new(null, null, true)
+        val disk_or_image = DiskOrImage.new(null, Image.empty(), true)
         assertEquals(disk_or_image.use_image(), true)
         assertEquals(disk_or_image.use_disk(), false)
 
@@ -79,7 +80,7 @@ class DiskOrImageTests
     @Test
     fun set_use_image_test()
     {
-        val disk_or_image = DiskOrImage.new(null, null, true)
+        val disk_or_image = DiskOrImage.new(null, Image.empty(), true)
         assertEquals(disk_or_image.use_image(), true)
         assertEquals(disk_or_image.use_disk(), false)
 
@@ -91,7 +92,7 @@ class DiskOrImageTests
     @Test
     fun usage_is_not_switched_on_filename_change()
     {
-        val disk_or_image = DiskOrImage.new(null, null, true)
+        val disk_or_image = DiskOrImage.new(null, Image.empty(), true)
         assertEquals(disk_or_image.use_image(), true)
         assertEquals(disk_or_image.use_disk(), false)
 
@@ -103,7 +104,7 @@ class DiskOrImageTests
     @Test
     fun change_usage_on_filename_setting()
     {
-        val disk_or_image = DiskOrImage.new(null, null, true)
+        val disk_or_image = DiskOrImage.new(null, Image.empty(), true)
         assertEquals(disk_or_image.use_image(), true)
         assertEquals(disk_or_image.use_disk(), false)
 

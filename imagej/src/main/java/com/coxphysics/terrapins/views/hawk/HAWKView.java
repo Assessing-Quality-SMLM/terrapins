@@ -3,6 +3,7 @@ package com.coxphysics.terrapins.views.hawk;
 import com.coxphysics.terrapins.models.hawk.NegativeValuesPolicy;
 import com.coxphysics.terrapins.models.hawk.OutputStyle;
 import com.coxphysics.terrapins.view_models.hawk.HAWKVM;
+import com.coxphysics.terrapins.views.TERRAPINS.ImageSelectorView;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -18,40 +19,19 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-class ImageNameListener implements ItemListener
+
+class OutputStyleListener implements ItemListener
 {
     private final HAWKView view_;
-    private ImageNameListener(HAWKView view)
+
+    private OutputStyleListener(HAWKView view)
     {
         view_ = view;
     }
 
-    public static ImageNameListener from(HAWKView view)
+    public static OutputStyleListener from(HAWKView view)
     {
-        return new ImageNameListener(view);
-    }
-
-    @Override
-    public void itemStateChanged(ItemEvent e)
-    {
-        if (e == null)
-            return;
-        view_.extract_image();
-    }
-}
-
-class OUtputStyleListener implements ItemListener
-{
-    private final HAWKView view_;
-
-    private OUtputStyleListener(HAWKView view)
-    {
-        view_ = view;
-    }
-
-    public static OUtputStyleListener from(HAWKView view)
-    {
-        return new OUtputStyleListener(view);
+        return new OutputStyleListener(view);
     }
 
     @Override
@@ -164,8 +144,6 @@ class CancelListener implements ActionListener
 }
 
 public class HAWKView extends JDialog {
-    private JComboBox<String> image_name_combo_box_;
-    private JLabel image_label_;
     private JComboBox<OutputStyle> output_order_combo_box_;
     private JComboBox<NegativeValuesPolicy> negative_values_combo_box_;
     private JLabel negative_values_label_;
@@ -174,51 +152,53 @@ public class HAWKView extends JDialog {
     private JPanel content_panel_;
     private JLabel n_levels_label_;
     private JTextField n_levels_field_;
+    private ImageSelectorView image_selector_ctrl_;
 
-    private final HAWKVM view_model_;
+    private HAWKVM view_model_ = HAWKVM.default_();
 
     private boolean ok_ = false;
 
-    private HAWKView(HAWKVM view_model) {
+    public HAWKView()
+    {
         super((Dialog) null, "HAWK", true);
-        view_model_ = view_model;
+        view_model_.set_n_levels_default_colour(n_levels_field_.getBackground());
+        add(content_panel_);
+        output_order_combo_box_.addItemListener(OutputStyleListener.from(this));
+        negative_values_combo_box_.addItemListener(NegativeValuePolicyListener.from(this));
+        n_levels_field_.getDocument().addDocumentListener(NLevelsListener.from(this));
+        run_btn_.addActionListener(RunListener.from(this));
+        cancel_btn_.addActionListener(CancelListener.from(this));
     }
 
     public static HAWKView from(HAWKVM view_model) {
-        HAWKView view = new HAWKView(view_model);
-        view_model.set_n_levels_default_colour(view.n_levels_field_.getBackground());
-        view.image_name_combo_box_.addItemListener(ImageNameListener.from(view));
-        view.output_order_combo_box_.addItemListener(OUtputStyleListener.from(view));
-        view.negative_values_combo_box_.addItemListener(NegativeValuePolicyListener.from(view));
-        view.n_levels_field_.getDocument().addDocumentListener(NLevelsListener.from(view));
-        view.run_btn_.addActionListener(RunListener.from(view));
-        view.cancel_btn_.addActionListener(CancelListener.from(view));
-        view.add(view.content_panel_);
-        view.draw();
+        HAWKView view = new HAWKView();
+        view.set_view_model(view_model);
         return view;
     }
 
-    public boolean ok()
+    public void set_view_model(HAWKVM view_model)
     {
+        Color default_bg_colour = view_model_.n_levels_default_colour();
+        view_model_ = view_model;
+        view_model_.set_n_levels_default_colour(default_bg_colour);
+        image_selector_ctrl_.set_view_model(view_model_.image_selector_vm());
+        draw();
+    }
+
+    public boolean ok() {
         return ok_;
     }
 
-    public void update_n_levels_value()
-    {
-        boolean ok = view_model_.set_n_levels(n_levels_field_.getText());
-        if (!ok)
-            n_levels_field_.setBackground(view_model_.n_levels_error_colour());
-        else
-        {
-            n_levels_field_.setBackground(view_model_.n_levels_colour());
-        }
+    public void update_n_levels_value() {
+        String text = n_levels_field_.getText();
+        boolean ok = view_model_.set_n_levels(text);
+        set_n_levels_background_colour(ok);
     }
 
-    public void extract_image() {
-        int selected_image = image_name_combo_box_.getSelectedIndex();
-        int id = WindowManager.getNthImageID(selected_image + 1);
-        ImagePlus image = WindowManager.getImage(id);
-        view_model_.set_image(image);
+    private void set_n_levels_background_colour(boolean ok)
+    {
+        Color background_colour = ok ? view_model_.n_levels_colour() : view_model_.n_levels_error_colour();
+        n_levels_field_.setBackground(background_colour);
     }
 
     public void extract_output_style() {
@@ -234,43 +214,44 @@ public class HAWKView extends JDialog {
     }
 
     private void draw() {
-        draw_image_names();
+        image_selector_ctrl_.draw();
         draw_n_levels();
         draw_output_style_options();
         draw_negative_value_options();
     }
 
-    private void draw_image_names() {
-        for (String value : WindowManager.getImageTitles()) {
-            image_name_combo_box_.addItem(value);
-        }
-    }
-
     private void draw_n_levels() {
         String value = Integer.toString(view_model_.n_levels());
         n_levels_field_.setText(value);
+        set_n_levels_background_colour(true);
     }
 
     private void draw_negative_value_options() {
+        negative_values_combo_box_.removeAllItems();
         for (NegativeValuesPolicy value : NegativeValuesPolicy.getEntries()) {
             negative_values_combo_box_.addItem(value);
         }
     }
 
     private void draw_output_style_options() {
+        output_order_combo_box_.removeAllItems();
         for (OutputStyle value : OutputStyle.getEntries()) {
             output_order_combo_box_.addItem(value);
         }
     }
 
-    public void close_ok()
-    {
+    private void propogate_image_selection() {
+        view_model_.propogate_image_selection();
+    }
+
+    public void close_ok() {
+        propogate_image_selection();
         ok_ = true;
         dispose();
     }
 
-    public void close_cancel()
-    {
+    public void close_cancel() {
+        propogate_image_selection();
         ok_ = false;
         dispose();
     }
@@ -291,35 +272,32 @@ public class HAWKView extends JDialog {
      */
     private void $$$setupUI$$$() {
         content_panel_ = new JPanel();
-        content_panel_.setLayout(new GridLayoutManager(7, 3, new Insets(5, 5, 5, 5), -1, -1));
-        image_name_combo_box_ = new JComboBox();
-        content_panel_.add(image_name_combo_box_, new GridConstraints(0, 1, 2, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        image_label_ = new JLabel();
-        image_label_.setText("Image");
-        content_panel_.add(image_label_, new GridConstraints(0, 0, 2, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        content_panel_.setLayout(new GridLayoutManager(6, 3, new Insets(5, 5, 5, 5), -1, -1));
         final JLabel label1 = new JLabel();
         label1.setText("Output Order");
-        content_panel_.add(label1, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        content_panel_.add(label1, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         output_order_combo_box_ = new JComboBox();
-        content_panel_.add(output_order_combo_box_, new GridConstraints(3, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        content_panel_.add(output_order_combo_box_, new GridConstraints(2, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         negative_values_label_ = new JLabel();
         negative_values_label_.setText("Negative Values");
-        content_panel_.add(negative_values_label_, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        content_panel_.add(negative_values_label_, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         negative_values_combo_box_ = new JComboBox();
-        content_panel_.add(negative_values_combo_box_, new GridConstraints(4, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        content_panel_.add(negative_values_combo_box_, new GridConstraints(3, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         run_btn_ = new JButton();
         run_btn_.setText("Apply");
-        content_panel_.add(run_btn_, new GridConstraints(5, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        content_panel_.add(run_btn_, new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         cancel_btn_ = new JButton();
         cancel_btn_.setText("Cancel");
-        content_panel_.add(cancel_btn_, new GridConstraints(5, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        content_panel_.add(cancel_btn_, new GridConstraints(4, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
-        content_panel_.add(spacer1, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        content_panel_.add(spacer1, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         n_levels_label_ = new JLabel();
         n_levels_label_.setText("Number of levels");
-        content_panel_.add(n_levels_label_, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        content_panel_.add(n_levels_label_, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         n_levels_field_ = new JTextField();
-        content_panel_.add(n_levels_field_, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        content_panel_.add(n_levels_field_, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        image_selector_ctrl_ = new ImageSelectorView();
+        content_panel_.add(image_selector_ctrl_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
     }
 
     /**

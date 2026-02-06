@@ -1,0 +1,49 @@
+package com.coxphysics.terrapins.models
+
+import com.coxphysics.terrapins.models.utils.IJUtils
+import ij.ImagePlus
+import java.nio.file.Path
+
+class Image private constructor(private var image_: ImagePlus?)
+{
+    companion object
+    {
+        @JvmStatic
+        fun with(image: ImagePlus?) : Image
+        {
+            return Image(image)
+        }
+
+        @JvmStatic
+        fun from(image: ImagePlus) : Image
+        {
+            return with(image)
+        }
+
+        @JvmStatic
+        fun empty() : Image
+        {
+            return Image(null)
+        }
+    }
+
+    fun has_data(): Boolean
+    {
+        return image_ != null
+    }
+
+    fun to_image_plus(): ImagePlus?
+    {
+        return image_
+    }
+
+    fun set_inner(ij_image: ImagePlus?)
+    {
+        image_ = ij_image
+    }
+
+    fun write_to_disk(image_path: Path): Path?
+    {
+        return if (image_ == null) null else IJUtils.write_to_disk(image_, image_path)
+    }
+}

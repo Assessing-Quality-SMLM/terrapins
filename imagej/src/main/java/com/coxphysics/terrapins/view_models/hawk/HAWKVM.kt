@@ -3,13 +3,15 @@ package com.coxphysics.terrapins.view_models.hawk
 import com.coxphysics.terrapins.models.hawk.NegativeValuesPolicy
 import com.coxphysics.terrapins.models.hawk.OutputStyle
 import com.coxphysics.terrapins.models.hawk.Settings
+import com.coxphysics.terrapins.view_models.TERRAPINS.ImageSelectorVM
 import ij.ImagePlus
 import java.awt.Color
 
 class HAWKVM private constructor(private var settings_: Settings)
 {
-    private var n_levels_default_colour: Color? = null
-    private var n_levels_error_colour: Color = Color.RED
+    private var image_selector_vm_ : ImageSelectorVM = ImageSelectorVM.with_image(settings_.inner_image())
+    private var n_levels_default_colour_: Color? = null
+    private var n_levels_error_colour_: Color = Color.RED
 
     companion object
     {
@@ -24,16 +26,23 @@ class HAWKVM private constructor(private var settings_: Settings)
         {
             return from(Settings.default())
         }
+
+        // For Java
+        @JvmStatic
+        fun default_(): HAWKVM
+        {
+            return default()
+        }
+    }
+
+    fun image_selector_vm(): ImageSelectorVM
+    {
+        return image_selector_vm_
     }
 
     fun image_name() : String
     {
         return settings_.image_name()
-    }
-
-    fun set_image(image: ImagePlus)
-    {
-        settings_.set_image(image)
     }
 
     fun n_levels() : Int
@@ -66,19 +75,30 @@ class HAWKVM private constructor(private var settings_: Settings)
     {
         val error_string = settings_.error_string()
         if (error_string == null)
-            return n_levels_default_colour
+            return n_levels_default_colour()
         if (error_string == "")
-            return n_levels_default_colour
-        return n_levels_error_colour
+            return n_levels_default_colour()
+        return n_levels_error_colour()
     }
 
     fun n_levels_error_colour(): Color
     {
-        return n_levels_error_colour
+        return n_levels_error_colour_
     }
 
-    fun set_n_levels_default_colour(colour: Color)
+    fun n_levels_default_colour(): Color?
     {
-        n_levels_default_colour = colour
+        return n_levels_default_colour_
+    }
+
+    fun set_n_levels_default_colour(colour: Color?)
+    {
+        n_levels_default_colour_ = colour
+    }
+
+    fun propogate_image_selection()
+    {
+        val image = image_selector_vm_.get_image();
+        settings_.set_image(image)
     }
 }

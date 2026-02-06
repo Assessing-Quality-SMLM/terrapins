@@ -1,9 +1,6 @@
 package com.coxphysics.terrapins.models.localisations;
 
 import com.coxphysics.terrapins.models.fs.FakeFileSystem;
-import com.coxphysics.terrapins.models.localisations.ParseMethod;
-import com.coxphysics.terrapins.models.localisations.SplitSettings;
-import com.coxphysics.terrapins.models.localisations.Splitter;
 import com.coxphysics.terrapins.models.process.FakeRunner;
 import org.junit.jupiter.api.Test;
 
@@ -122,7 +119,7 @@ class SplitterTests
         parse_method.set_n_headers(10);
         parse_method.set_x_pos(2);
         parse_method.set_y_pos(3);
-        parse_method.set_psf_sigma_pos(5);
+        parse_method.set_uncertainty_sigma_pos(5);
         settings.set_parse_method(parse_method);
         Path exe_path = Paths.get("/some/where/fake_split");
         String default_a = Paths.get("/some/where/splitter_data/localisations_split_a").toString();

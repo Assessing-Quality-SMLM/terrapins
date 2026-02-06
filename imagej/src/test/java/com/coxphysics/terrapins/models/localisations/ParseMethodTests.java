@@ -59,7 +59,7 @@ public class ParseMethodTests
     {
         ParseMethod parse_method = ParseMethod.default_();
         parse_method.set_parse_method_csv();
-        parse_method.set_psf_sigma_pos(2);
+        parse_method.set_uncertainty_sigma_pos(2);
         assertEquals(parse_method.parse_method(), "csv=0;,;0;1;2;-1;-1");
     }
 
@@ -86,7 +86,7 @@ public class ParseMethodTests
     {
         ParseMethod parse_method = ParseMethod.default_();
         parse_method.set_parse_method_csv();
-        parse_method.set_psf_sigma_pos(2);
+        parse_method.set_uncertainty_sigma_pos(2);
         parse_method.set_uncertainty_pos(3);
         assertEquals(parse_method.parse_method(), "csv=0;,;0;1;2;3;-1");
     }
@@ -96,7 +96,7 @@ public class ParseMethodTests
     {
         ParseMethod parse_method = ParseMethod.default_();
         parse_method.set_parse_method_csv();
-        parse_method.set_psf_sigma_pos(2);
+        parse_method.set_uncertainty_sigma_pos(2);
         parse_method.set_uncertainty_pos(3);
         parse_method.set_frame_number_pos(4);
         assertEquals(parse_method.parse_method(), "csv=0;,;0;1;2;3;4");
