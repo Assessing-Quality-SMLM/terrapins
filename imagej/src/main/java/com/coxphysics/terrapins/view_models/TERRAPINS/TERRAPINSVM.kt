@@ -2,7 +2,7 @@ package com.coxphysics.terrapins.view_models.TERRAPINS
 
 import com.coxphysics.terrapins.models.assessment.workflow.Settings
 
-class TERRAPINSVM private constructor(private var settings_: Settings)
+class TERRAPINSVM private constructor(private val settings_: Settings)
 {
     private val pre_processing_vm_: PreProcessingVM = PreProcessingVM.from(settings_)
     companion object
