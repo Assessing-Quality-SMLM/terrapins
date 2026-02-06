@@ -47,9 +47,19 @@ class LocalisationFile private constructor(
         return parse_method_.parse_method()
     }
 
+    fun delimeter(): Char
+    {
+        return parse_method_.delimiter()
+    }
+
     fun set_delimeter(value: Char)
     {
         parse_method_.set_delimiter(value)
+    }
+
+    fun n_header_lines(): Int
+    {
+        return parse_method_.n_header_lines()
     }
 
     fun set_n_header_lines(value: Int)
@@ -57,9 +67,19 @@ class LocalisationFile private constructor(
         parse_method_.set_n_headers(value)
     }
 
+    fun x_pos(): Int
+    {
+        return parse_method_.x_position()
+    }
+
     fun set_x_pos(value: Int)
     {
         parse_method_.set_x_pos(value)
+    }
+
+    fun y_pos(): Int
+    {
+        return parse_method_.y_position()
     }
 
     fun set_y_pos(value: Int)
@@ -67,9 +87,19 @@ class LocalisationFile private constructor(
         parse_method_.set_y_pos(value)
     }
 
+    fun uncertainty_sigma_pos(): Int
+    {
+        return parse_method_.uncertainty_position()
+    }
+
     fun set_uncertainty_sigma_pos(value: Int)
     {
         parse_method_.set_uncertainty_sigma_pos(value)
+    }
+
+    fun frame_number_pos(): Int
+    {
+        return parse_method_.frame_number_position()
     }
 
     fun set_frame_number_pos(value: Int)

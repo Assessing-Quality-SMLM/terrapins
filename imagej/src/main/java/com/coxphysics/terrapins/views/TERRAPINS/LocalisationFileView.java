@@ -80,6 +80,7 @@ public class LocalisationFileView {
     public void set_view_model(LocalisationFileVM view_model)
     {
         view_model_ = view_model;
+        draw();
     }
 
     public void finalise_settings()
@@ -89,7 +90,13 @@ public class LocalisationFileView {
 
     public void draw()
     {
-
+        path_selector_ctrl_.draw();
+        delimiter_field_.setText(Character.toString(view_model_.delimeter()));
+        n_headers_field_.setText(Integer.toString(view_model_.n_header_lines()));
+        x_pos_field_.setText(Integer.toString(view_model_.x_pos()));
+        y_pos_field_.setText(Integer.toString(view_model_.y_pos()));
+        uncertainty_sigma_field_.setText(Integer.toString(view_model_.uncertainty_sigma_pos()));
+        frame_number_pos_field_.setText(Integer.toString(view_model_.frame_number_pos()));
     }
 
     private void update_delimeter()
