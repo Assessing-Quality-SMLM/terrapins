@@ -1,7 +1,6 @@
 package com.coxphysics.terrapins.views.TERRAPINS;
 
 import com.coxphysics.terrapins.view_models.TERRAPINS.LocalisationFileVM;
-import com.coxphysics.terrapins.view_models.TERRAPINS.LocalisationVM;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -10,6 +9,8 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.function.Consumer;
 
 class ActionableListener implements DocumentListener
@@ -46,6 +47,27 @@ class ActionableListener implements DocumentListener
     }
 }
 
+class ThunderstormListener implements ActionListener
+{
+    private LocalisationFileView view_;
+
+    private ThunderstormListener(LocalisationFileView view)
+    {
+        view_ = view;
+    }
+
+    public static ThunderstormListener from(LocalisationFileView view)
+    {
+        return new ThunderstormListener(view);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        view_.thunderstorm_updated();
+    }
+}
+
 public class LocalisationFileView {
     private JPanel root_;
     private JCheckBox use_thunderstorm_;
@@ -60,7 +82,7 @@ public class LocalisationFileView {
     private JTextField y_pos_field_;
     private JLabel uncertainty_sigma_lbl_;
     private JTextField uncertainty_sigma_field_;
-    private JLabel frame_numbeR_pos_lbl_;
+    private JLabel frame_number_pos_lbl_;
     private JTextField frame_number_pos_field_;
 
     private LocalisationFileVM view_model_ = LocalisationFileVM.default_();
@@ -74,6 +96,7 @@ public class LocalisationFileView {
         y_pos_field_.getDocument().addDocumentListener(ActionableListener.from(this, LocalisationFileView::update_y_pos));
         uncertainty_sigma_field_.getDocument().addDocumentListener(ActionableListener.from(this, LocalisationFileView::update_uncertainty_sigma_pos));
         frame_number_pos_field_.getDocument().addDocumentListener(ActionableListener.from(this, LocalisationFileView::update_frame_number_pos));
+        use_thunderstorm_.addActionListener(ThunderstormListener.from(this));
 //        path_selector_ctrl_.add_listener_to_filename_change(ActionableListener.from(this, LocalisationFileView::update_filepath));
     }
 
@@ -88,6 +111,35 @@ public class LocalisationFileView {
         update_model_filepath();
     }
 
+    public void thunderstorm_updated()
+    {
+        boolean value = use_thunderstorm_.isSelected();
+        view_model_.set_use_thunderstorm(value);
+        csv_visible(!value);
+    }
+
+
+    private void csv_visible(boolean value)
+    {
+        delimiter_lbl_.setVisible(value);
+        delimiter_field_.setVisible(value);
+
+        n_headers_lbl_.setVisible(value);
+        n_headers_field_.setVisible(value);
+
+        x_pos_lbl_.setVisible(value);
+        x_pos_field_.setVisible(value);
+
+        y_pos_lbl_.setVisible(value);
+        y_pos_field_.setVisible(value);
+
+        uncertainty_sigma_lbl_.setVisible(value);
+        uncertainty_sigma_field_.setVisible(value);
+
+        frame_number_pos_lbl_.setVisible(value);
+        frame_number_pos_field_.setVisible(value);
+    }
+
     public void draw()
     {
         path_selector_ctrl_.draw();
@@ -97,6 +149,9 @@ public class LocalisationFileView {
         y_pos_field_.setText(Integer.toString(view_model_.y_pos()));
         uncertainty_sigma_field_.setText(Integer.toString(view_model_.uncertainty_sigma_pos()));
         frame_number_pos_field_.setText(Integer.toString(view_model_.frame_number_pos()));
+        boolean use_thunderstorm = view_model_.use_thunderstorm();
+        use_thunderstorm_.setSelected(use_thunderstorm);
+        csv_visible(!use_thunderstorm);
     }
 
     private void update_delimeter()
@@ -185,9 +240,9 @@ public class LocalisationFileView {
         root_.add(uncertainty_sigma_lbl_, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         uncertainty_sigma_field_ = new JTextField();
         root_.add(uncertainty_sigma_field_, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        frame_numbeR_pos_lbl_ = new JLabel();
-        frame_numbeR_pos_lbl_.setText("Fram Number");
-        root_.add(frame_numbeR_pos_lbl_, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        frame_number_pos_lbl_ = new JLabel();
+        frame_number_pos_lbl_.setText("Fram Number");
+        root_.add(frame_number_pos_lbl_, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         frame_number_pos_field_ = new JTextField();
         root_.add(frame_number_pos_field_, new GridConstraints(7, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
     }
