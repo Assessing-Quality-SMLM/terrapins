@@ -29,7 +29,7 @@ class ImageNameListener implements ItemListener
     {
         if (e == null)
             return;
-        view_.extract_image();
+        view_.update_selected_image();
     }
 }
 
@@ -71,6 +71,7 @@ public class ImageSelectorView {
     public void set_view_model(ImageSelectorVM view_model) {
         view_model_ = view_model;
         draw_image_names();
+        update_selected_image();
     }
 
     public void draw() {
@@ -88,8 +89,9 @@ public class ImageSelectorView {
         }
     }
 
-    public void extract_image() {
-        view_model_.set_image(images_combo_box_.getSelectedIndex());
+    public void update_selected_image() {
+        int selected_index = images_combo_box_.getSelectedIndex();
+        view_model_.set_image(selected_index);
     }
 
     public void set_enabled(boolean value)
