@@ -139,14 +139,7 @@ class DiskOrImage private constructor(
     {
         if (use_disk())
         {
-            if (filename_.path_valid())
-            {
-                return filename_path()
-            }
-            else
-            {
-                return null
-            }
+            return filename_path()
         }
         if (use_image())
         {

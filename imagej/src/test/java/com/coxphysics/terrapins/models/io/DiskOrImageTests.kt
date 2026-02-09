@@ -2,6 +2,7 @@ package com.coxphysics.terrapins.models.io
 
 import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.Image
+import com.coxphysics.terrapins.models.utils.StringUtils
 import ij.ImagePlus
 import ij.process.FloatProcessor
 import org.junit.jupiter.api.Test
@@ -26,10 +27,11 @@ class DiskOrImageTests
     }
 
     @Test
-    fun filename_is_null()
+    fun filename_is_not_null_on_default()
     {
         val disk_or_image = DiskOrImage.default()
-        assertEquals(disk_or_image.filename(), null)
+        assertEquals(disk_or_image.use_image(), false)
+        assertEquals(disk_or_image.filename(), StringUtils.EMPTY_STRING)
     }
 
     @Test
