@@ -108,6 +108,7 @@ public class TERRAPINSView extends JFrame {
         localisations_ctrl_.set_view_model(view_model.localisation_vm());
         images_ctrl_.set_view_model(view_model.images_vm());
         localisation_cb_.setSelected(view_model.use_localisations());
+        set_use_localisations();
     }
 
     public boolean cancelled() {
