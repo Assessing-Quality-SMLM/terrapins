@@ -52,6 +52,27 @@ class RunListener implements ActionListener
     }
 }
 
+class LocalisationListener implements ActionListener
+{
+    private TERRAPINSView view_;
+
+    private LocalisationListener(TERRAPINSView view)
+    {
+        view_ = view;
+    }
+
+    public static LocalisationListener from(TERRAPINSView view)
+    {
+        return new LocalisationListener(view);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        view_.set_use_localisations();
+    }
+}
+
 public class TERRAPINSView extends JDialog {
     private TERRAPINSVM view_model_;
 
@@ -59,8 +80,7 @@ public class TERRAPINSView extends JDialog {
     private JTextField working_directory_;
     private JButton file_dialog_btn_;
     private JCheckBox pre_processings_cb_;
-    private JCheckBox localisationsCheckBox;
-    private JCheckBox images_cb_;
+    private JCheckBox localisation_cb_;
     private PreProcessingView pre_processing_view_;
     private JPanel root_;
     private LocalisationView localisations_ctrl_;
@@ -71,6 +91,7 @@ public class TERRAPINSView extends JDialog {
     private TERRAPINSView() {
         super((Dialog) null, "TERRAPINS", true);
         add(root_);
+        localisation_cb_.addActionListener(LocalisationListener.from(this));
         run_btn_.addActionListener(RunListener.from(this));
         cancel_btn_.addActionListener(CancelListener.from(this));
     }
@@ -85,10 +106,24 @@ public class TERRAPINSView extends JDialog {
         view_model_ = view_model;
         pre_processing_view_.set_view_model(view_model_.pre_processing_vm());
         localisations_ctrl_.set_view_model(view_model.localisation_vm());
+        images_ctrl_.set_view_model(view_model.images_vm());
+        localisation_cb_.setSelected(view_model.use_localisations());
     }
 
     public boolean cancelled() {
         return cancelled_;
+    }
+
+    public void set_use_localisations() {
+        boolean use_localisations = localisation_cb_.isSelected();
+        view_model_.set_use_localisations(use_localisations);
+        if (use_localisations) {
+            localisations_ctrl_.set_visible(true);
+            images_ctrl_.set_visible(false);
+        } else {
+            images_ctrl_.set_visible(true);
+            localisations_ctrl_.set_visible(false);
+        }
     }
 
     public void run() {
@@ -123,12 +158,12 @@ public class TERRAPINSView extends JDialog {
      */
     private void $$$setupUI$$$() {
         root_ = new JPanel();
-        root_.setLayout(new GridLayoutManager(8, 3, new Insets(5, 5, 5, 5), -1, -1));
+        root_.setLayout(new GridLayoutManager(7, 3, new Insets(5, 5, 5, 5), -1, -1));
         final JLabel label1 = new JLabel();
         label1.setText("Working Directory");
         root_.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
-        root_.add(spacer1, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        root_.add(spacer1, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         working_directory_ = new JTextField();
         root_.add(working_directory_, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         file_dialog_btn_ = new JButton();
@@ -141,20 +176,17 @@ public class TERRAPINSView extends JDialog {
         root_.add(pre_processing_view_.$$$getRootComponent$$$(), new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         localisations_ctrl_ = new LocalisationView();
         root_.add(localisations_ctrl_.$$$getRootComponent$$$(), new GridConstraints(4, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        localisationsCheckBox = new JCheckBox();
-        localisationsCheckBox.setText("Localisations");
-        root_.add(localisationsCheckBox, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        images_cb_ = new JCheckBox();
-        images_cb_.setText("CheckBox");
-        root_.add(images_cb_, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        localisation_cb_ = new JCheckBox();
+        localisation_cb_.setText("Localisations");
+        root_.add(localisation_cb_, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         images_ctrl_ = new ImagesView();
-        root_.add(images_ctrl_.$$$getRootComponent$$$(), new GridConstraints(6, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        root_.add(images_ctrl_.$$$getRootComponent$$$(), new GridConstraints(5, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         run_btn_ = new JButton();
         run_btn_.setText("Run");
-        root_.add(run_btn_, new GridConstraints(7, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        root_.add(run_btn_, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
         cancel_btn_ = new JButton();
         cancel_btn_.setText("Cancel");
-        root_.add(cancel_btn_, new GridConstraints(7, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        root_.add(cancel_btn_, new GridConstraints(6, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**

@@ -1,14 +1,11 @@
 package com.coxphysics.terrapins.models
 
 import com.coxphysics.terrapins.models.utils.IJUtils
-import com.coxphysics.terrapins.models.utils.StringUtils
 import ij.ImagePlus
-import java.io.File
 import java.nio.file.Path
-import java.nio.file.Paths
 
 class DiskOrImage private constructor(
-    private var filename_: String?,
+    private var filename_: PathWrapper,
     private var image_: Image,
     private var use_image_: Boolean
 )
@@ -18,7 +15,7 @@ class DiskOrImage private constructor(
         @JvmStatic
         fun new(filename: String?, image: Image, use_image: Boolean) : DiskOrImage
         {
-            return DiskOrImage(filename, image, use_image)
+            return DiskOrImage(PathWrapper.from_optional_string(filename), image, use_image)
         }
 
         @JvmStatic
@@ -40,10 +37,20 @@ class DiskOrImage private constructor(
         }
     }
 
+    fun path_wrapper(): PathWrapper
+    {
+        return filename_
+    }
+
+    fun image_wrapper(): Image
+    {
+        return image_
+    }
+
     fun has_data(): Boolean
     {
         if (use_disk())
-            return StringUtils.path_set(filename_)
+            return filename_.has_data()
         if (use_image())
             return image_.has_data()
         return false
@@ -69,21 +76,16 @@ class DiskOrImage private constructor(
         set_use_image(!value)
     }
 
-    fun flip_mode()
-    {
-        set_use_image(!use_image_)
-    }
-
     fun filename_nn(): String
     {
-        return filename_.non_null()
+        return filename_.to_string()
     }
 
     fun filename(): String?
     {
         if (use_disk())
         {
-            return filename_
+            return filename_nn()
         }
         return null
     }
@@ -97,7 +99,7 @@ class DiskOrImage private constructor(
 
     private fun filename_path(): Path?
     {
-        return filename()?.let{s -> Paths.get(s) }
+        return filename_.path()
     }
 
     fun image(): ImagePlus?
@@ -125,7 +127,7 @@ class DiskOrImage private constructor(
 
     fun set_filename(filename: String)
     {
-        filename_ = filename
+        filename_.set_path_from_string(filename)
     }
 
     fun set_image(image: ImagePlus)
@@ -137,7 +139,7 @@ class DiskOrImage private constructor(
     {
         if (use_disk())
         {
-            if (StringUtils.path_set(filename_))
+            if (filename_.path_valid())
             {
                 return filename_path()
             }

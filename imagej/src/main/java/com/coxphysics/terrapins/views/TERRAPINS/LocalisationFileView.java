@@ -116,11 +116,18 @@ public class LocalisationFileView {
     {
         boolean value = use_thunderstorm_.isSelected();
         view_model_.set_use_thunderstorm(value);
-        csv_visible(!value);
+        set_csv_visible(!value);
+    }
+
+    public void set_visible(boolean value)
+    {
+        use_thunderstorm_.setVisible(value);
+        path_selector_ctrl_.set_visible(value);
+        set_csv_visible(value);
     }
 
 
-    private void csv_visible(boolean value)
+    private void set_csv_visible(boolean value)
     {
         delimiter_lbl_.setVisible(value);
         delimiter_field_.setVisible(value);
@@ -152,7 +159,7 @@ public class LocalisationFileView {
         frame_number_pos_field_.setText(Integer.toString(view_model_.frame_number_pos()));
         boolean use_thunderstorm = view_model_.use_thunderstorm();
         use_thunderstorm_.setSelected(use_thunderstorm);
-        csv_visible(!use_thunderstorm);
+        set_csv_visible(!use_thunderstorm);
     }
 
     private void update_delimeter()

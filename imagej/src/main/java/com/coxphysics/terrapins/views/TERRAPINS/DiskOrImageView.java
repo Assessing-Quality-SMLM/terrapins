@@ -43,16 +43,30 @@ public class DiskOrImageView {
         draw();
     }
 
+    public void set_view_model(DiskOrImageVM view_model)
+    {
+        view_model_ = view_model;
+        paths_selector_ctrl_.set_view_model(view_model_.path_selector_vm());
+        image_selector_ctrl_.set_view_model(view_model_.image_selector_vm());
+        use_disk_cb_.setSelected(view_model_.use_image());
+    }
 
     public void use_disk_clicked() {
-        view_model_.flip_mode();
+        view_model_.set_use_images(use_disk_cb_.isSelected());
         draw();
     }
 
-    private void draw() {
-        boolean path_selector_enabled = view_model_.use_image();
-        paths_selector_ctrl_.set_enabled(path_selector_enabled);
-        image_selector_ctrl_.set_enabled(!path_selector_enabled);
+    private void draw()
+    {
+        boolean use_image = view_model_.use_image();
+        paths_selector_ctrl_.set_enabled(!use_image);
+        image_selector_ctrl_.set_enabled(use_image);
+    }
+
+    public void set_visible(boolean value)
+    {
+        paths_selector_ctrl_.set_visible(value);
+        image_selector_ctrl_.set_visible(value);
     }
 
     {
