@@ -14,3 +14,6 @@ const val HAWK_OUTPUT_STYLE_TEMPORAL = "temporal"
 
 const val HAWK_SAVE_TO_DISK = "save_to_disk"
 
+const val EQUIPMENT_SETTINGS_MAGNIFICATION = "magnification"
+const val EQUIPMENT_SETTINGS_CAMERA_PIXEL_SIZE_NM = "camera_pixel_size_nm"
+const val EQUIPMENT_INSTRUMENT_PSF_FWHM_NM = "instrument_psf_fwhm_nm"
