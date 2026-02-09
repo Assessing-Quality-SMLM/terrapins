@@ -89,7 +89,7 @@ public class TERRAPINSView extends JFrame {
     private JButton cancel_btn_;
 
     private TERRAPINSView() {
-        super();
+        super("TERRAPINS");
         add(root_);
         localisation_cb_.addActionListener(LocalisationListener.from(this));
         run_btn_.addActionListener(RunListener.from(this));
