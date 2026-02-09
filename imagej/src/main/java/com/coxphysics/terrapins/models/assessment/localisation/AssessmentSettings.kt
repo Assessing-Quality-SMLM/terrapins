@@ -165,4 +165,9 @@ class AssessmentSettings private constructor(
     {
         return core_settings_.to_disk_in(working_directory)
     }
+
+    fun record_to_macro()
+    {
+        equipment_.record_to_macro()
+    }
 }
