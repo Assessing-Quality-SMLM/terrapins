@@ -45,9 +45,9 @@ class DiskOrImageVM private constructor(private var model_: DiskOrImage)
         return model_.use_image()
     }
 
-    fun flip_mode()
+    fun set_use_images(value: Boolean)
     {
-        model_.flip_mode()
+        model_.set_use_image(value)
     }
 
 }
