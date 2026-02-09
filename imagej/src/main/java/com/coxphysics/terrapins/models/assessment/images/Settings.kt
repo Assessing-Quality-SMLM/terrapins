@@ -180,7 +180,7 @@ class Settings private constructor(
     }
 
     /// HALF SPLIT
-    private fun half_split_model(): JointImages
+    fun half_split_model(): JointImages
     {
         return half_split_
     }
@@ -221,7 +221,7 @@ class Settings private constructor(
     }
 
     /// ZIP SPLIT
-    private fun zip_split_model(): JointImages
+    fun zip_split_model(): JointImages
     {
         return zip_split_
     }
@@ -262,7 +262,7 @@ class Settings private constructor(
     }
 
     /// DRIIT SPLIT
-    private fun drift_split_model(): JointImages
+    fun drift_split_model(): JointImages
     {
         return drift_split_
     }
