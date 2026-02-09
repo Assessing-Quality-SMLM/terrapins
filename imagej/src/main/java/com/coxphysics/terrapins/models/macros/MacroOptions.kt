@@ -41,4 +41,14 @@ class MacroOptions private constructor(private var options: String)
     {
         return Macro.getValue(options, key, null)
     }
+
+    fun get_int(key: String): Int?
+    {
+        return get(key)?.toIntOrNull()
+    }
+
+    fun get_double(key: String): Double?
+    {
+        return get(key)?.toDoubleOrNull()
+    }
 }

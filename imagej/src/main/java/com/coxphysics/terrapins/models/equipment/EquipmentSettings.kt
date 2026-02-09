@@ -1,5 +1,11 @@
 package com.coxphysics.terrapins.models.equipment
 
+import com.coxphysics.terrapins.models.macros.MacroOptions
+import com.coxphysics.terrapins.plugins.EQUIPMENT_INSTRUMENT_PSF_FWHM_NM
+import com.coxphysics.terrapins.plugins.EQUIPMENT_SETTINGS_CAMERA_PIXEL_SIZE_NM
+import com.coxphysics.terrapins.plugins.EQUIPMENT_SETTINGS_MAGNIFICATION
+import ij.plugin.frame.Recorder
+
 class EquipmentSettings private constructor(
     private var instrument_psf_fwmn_nm: Double,
     private var camera_pixel_size_nm: Double,
@@ -10,6 +16,35 @@ class EquipmentSettings private constructor(
         fun default() : EquipmentSettings
         {
             return EquipmentSettings(270.0, 160.0, 10.0)
+        }
+
+        @JvmStatic
+        fun from_macro_options(options: MacroOptions): EquipmentSettings
+        {
+            val settings = default()
+
+            val instrument_psf_fwmn_nm = options.get_double(EQUIPMENT_INSTRUMENT_PSF_FWHM_NM)
+            if (instrument_psf_fwmn_nm != null)
+                settings.set_instrument_psf_fwhm_nm(instrument_psf_fwmn_nm)
+
+            val camera_pixel_size_nm = options.get_double(EQUIPMENT_SETTINGS_CAMERA_PIXEL_SIZE_NM)
+            if (camera_pixel_size_nm != null)
+                settings.set_camera_pixel_size_nm(camera_pixel_size_nm)
+
+            val magnification = options.get_double(EQUIPMENT_SETTINGS_MAGNIFICATION)
+            if (magnification != null)
+                settings.set_magnification(magnification)
+            return settings
+        }
+
+        @JvmStatic
+        fun from_macro_recorder(): EquipmentSettings
+        {
+            val settings = default()
+            val options = MacroOptions.default_()
+            if (options == null)
+                return settings
+            return from_macro_options(options)
         }
     }
 
@@ -41,5 +76,12 @@ class EquipmentSettings private constructor(
     fun set_magnification(value: Double)
     {
         magnification = value
+    }
+
+    fun record_to_macro()
+    {
+        Recorder.recordOption(EQUIPMENT_SETTINGS_CAMERA_PIXEL_SIZE_NM, camera_pixel_size_nm.toString())
+        Recorder.recordOption(EQUIPMENT_SETTINGS_MAGNIFICATION, magnification.toString())
+        Recorder.recordOption(EQUIPMENT_INSTRUMENT_PSF_FWHM_NM, instrument_psf_fwmn_nm.toString())
     }
 }

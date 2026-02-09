@@ -1,7 +1,9 @@
 package com.coxphysics.terrapins.models.assessment.workflow
 
 import com.coxphysics.terrapins.models.assessment.localisation.AssessmentSettings
+import com.coxphysics.terrapins.plugins.WORKFLOW_SETTINGS_USE_LOCALISATIONS
 import com.coxphysics.terrapins.views.ImageSelectorSetttings
+import ij.plugin.frame.Recorder
 import com.coxphysics.terrapins.models.assessment.images.Settings as ImagesSettings
 import com.coxphysics.terrapins.models.hawk.Settings as HawkSettings
 
@@ -71,8 +73,15 @@ class Settings private constructor(image_selector_setttings: ImageSelectorSettti
         images_settings_ = value
     }
 
-    fun record_values()
+    fun record_to_macro()
     {
-
+        hawk_settings_.record_values()
+        Recorder.recordOption(WORKFLOW_SETTINGS_USE_LOCALISATIONS, use_localisations_.toString())
+        if (use_localisations())
+            localisation_settings_.record_to_macro()
+        else
+        {
+            images_settings_.record_to_macro()
+        }
     }
 }

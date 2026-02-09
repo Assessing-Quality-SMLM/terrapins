@@ -61,7 +61,7 @@ class TERRAPINSPlugin : PlugIn
                 return
             if (MacroUtils.is_recording())
             {
-                settings_.record_values()
+                settings_.record_to_macro()
             }
             val results = run_assessment(settings_)
             if (results == null)

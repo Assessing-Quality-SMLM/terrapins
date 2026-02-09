@@ -336,4 +336,9 @@ class Settings private constructor(
             return new_core_settings
         return null
     }
+
+    fun record_to_macro()
+    {
+        equipment.record_to_macro()
+    }
 }
