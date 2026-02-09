@@ -73,7 +73,7 @@ class LocalisationListener implements ActionListener
     }
 }
 
-public class TERRAPINSView extends JDialog {
+public class TERRAPINSView extends JFrame {
     private TERRAPINSVM view_model_;
 
     private boolean cancelled_ = true;
@@ -89,7 +89,7 @@ public class TERRAPINSView extends JDialog {
     private JButton cancel_btn_;
 
     private TERRAPINSView() {
-        super((Dialog) null, "TERRAPINS", true);
+        super();
         add(root_);
         localisation_cb_.addActionListener(LocalisationListener.from(this));
         run_btn_.addActionListener(RunListener.from(this));
