@@ -9,6 +9,11 @@ class PathWrapper private constructor(private var path_: Path?)
     companion object
     {
         @JvmStatic
+        fun empty(): PathWrapper
+        {
+            return PathWrapper(null)
+        }
+        @JvmStatic
         fun from(path: Path): PathWrapper
         {
             return PathWrapper(path)
@@ -21,9 +26,11 @@ class PathWrapper private constructor(private var path_: Path?)
         }
 
         @JvmStatic
-        fun empty(): PathWrapper
+        fun from_optional_string(path: String?): PathWrapper
         {
-            return PathWrapper(null)
+            if (path == null)
+                return empty()
+            return PathWrapper(Paths.get(path))
         }
     }
 
