@@ -1,6 +1,7 @@
 package com.coxphysics.terrapins.models.localisations
 
 import com.coxphysics.terrapins.models.PathWrapper
+import com.coxphysics.terrapins.models.macros.MacroOptions
 import ij.plugin.frame.Recorder
 
 class LocalisationFile private constructor(
@@ -19,6 +20,14 @@ class LocalisationFile private constructor(
         fun default(): LocalisationFile
         {
             return LocalisationFile(PathWrapper.empty(), ParseMethod.default_())
+        }
+
+        @JvmStatic
+        fun from_macro_options(path_key: String, parse_key: String, options: MacroOptions) : LocalisationFile?
+        {
+            val filename = options.get(path_key) ?: return null
+            val parse_method = ParseMethod.from_macro_options(parse_key, options) ?: return null
+            return new(filename, parse_method)
         }
     }
 
@@ -111,7 +120,7 @@ class LocalisationFile private constructor(
 
     fun set_uncertainty_sigma_pos(value: Int)
     {
-        parse_method_.set_uncertainty_sigma_pos(value)
+        parse_method_.set_psf_sigma_pos(value)
     }
 
     fun frame_number_pos(): Int
