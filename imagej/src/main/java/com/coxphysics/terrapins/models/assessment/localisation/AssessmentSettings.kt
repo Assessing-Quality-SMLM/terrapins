@@ -20,7 +20,7 @@ class AssessmentSettings private constructor(
         @JvmStatic
         fun with(working_directory: Path): AssessmentSettings
         {
-            return AssessmentSettings(CoreSettings.new(working_directory))
+            return AssessmentSettings(CoreSettings.from(working_directory))
         }
 
         @JvmStatic

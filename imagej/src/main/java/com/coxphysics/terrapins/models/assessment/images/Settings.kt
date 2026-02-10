@@ -24,7 +24,7 @@ class Settings private constructor(
         @JvmStatic
         fun with(working_directory: Path): Settings
         {
-            return Settings(CoreSettings.new(working_directory))
+            return Settings(CoreSettings.from(working_directory))
         }
 
         @JvmStatic
