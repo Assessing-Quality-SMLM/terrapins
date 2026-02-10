@@ -81,4 +81,10 @@ class JointImages private constructor(
         }
         return image_1_ok && image_2_ok
     }
+
+    fun record_to_macro_with(key_1: String, key_2: String)
+    {
+        image_1_.record_to_macro_with(key_1)
+        image_2_.record_to_macro_with(key_2)
+    }
 }
