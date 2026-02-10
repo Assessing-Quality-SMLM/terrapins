@@ -1,7 +1,9 @@
 package com.coxphysics.terrapins.models
 
+import com.coxphysics.terrapins.models.utils.StringUtils
 import ij.process.FloatProcessor
 import org.junit.jupiter.api.Test
+import java.nio.file.Paths
 import kotlin.test.assertEquals
 
 class UtilsKtTest
@@ -40,5 +42,26 @@ class UtilsKtTest
         assertEquals(pixel_values[3], 1f)
         assertEquals(pixel_values[4], 3f)
         assertEquals(pixel_values[5], 5f)
+    }
+
+    @Test
+    fun nullable_string_test()
+    {
+        val s : String? = null
+        assertEquals(s.non_null(), StringUtils.EMPTY_STRING)
+    }
+
+    @Test
+    fun string_nullable_path()
+    {
+        val s = "something"
+        assertEquals(s.to_nullable_path(), Paths.get("something"))
+    }
+
+    @Test
+    fun null_string_to_path()
+    {
+        val s : String? = null
+        assertEquals(s.to_nullable_path(), null)
     }
 }
