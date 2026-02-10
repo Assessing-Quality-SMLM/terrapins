@@ -2,8 +2,10 @@ package com.coxphysics.terrapins.models.io
 
 import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.Image
+import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.utils.StringUtils
 import ij.ImagePlus
+import ij.ImageStack
 import ij.process.FloatProcessor
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
@@ -37,7 +39,7 @@ class DiskOrImageTests
     @Test
     fun filename_set_have_data()
     {
-        val disk_or_image = DiskOrImage.new("something", Image.empty(), false)
+        val disk_or_image = DiskOrImage.from_filename("something")
         assertEquals(disk_or_image.has_data(), true)
     }
 
@@ -63,14 +65,14 @@ class DiskOrImageTests
     {
         val processor = FloatProcessor(0, 0)
         val image = ImagePlus("An image", processor)
-        val disk_or_image = DiskOrImage.new(null, Image.from(image), true)
+        val disk_or_image = DiskOrImage.from_image(Image.from(image))
         assertEquals(disk_or_image.has_data(), true)
     }
 
     @Test
     fun set_use_disk_test()
     {
-        val disk_or_image = DiskOrImage.new(null, Image.empty(), true)
+        val disk_or_image = DiskOrImage.from_image(Image.empty())
         assertEquals(disk_or_image.use_image(), true)
         assertEquals(disk_or_image.use_disk(), false)
 
@@ -82,7 +84,7 @@ class DiskOrImageTests
     @Test
     fun set_use_image_test()
     {
-        val disk_or_image = DiskOrImage.new(null, Image.empty(), true)
+        val disk_or_image = DiskOrImage.from_image(Image.empty())
         assertEquals(disk_or_image.use_image(), true)
         assertEquals(disk_or_image.use_disk(), false)
 
@@ -94,7 +96,7 @@ class DiskOrImageTests
     @Test
     fun usage_is_not_switched_on_filename_change()
     {
-        val disk_or_image = DiskOrImage.new(null, Image.empty(), true)
+        val disk_or_image = DiskOrImage.from_image(Image.empty())
         assertEquals(disk_or_image.use_image(), true)
         assertEquals(disk_or_image.use_disk(), false)
 
@@ -106,12 +108,32 @@ class DiskOrImageTests
     @Test
     fun change_usage_on_filename_setting()
     {
-        val disk_or_image = DiskOrImage.new(null, Image.empty(), true)
+        val disk_or_image = DiskOrImage.from_image(Image.empty())
         assertEquals(disk_or_image.use_image(), true)
         assertEquals(disk_or_image.use_disk(), false)
 
         disk_or_image.set_filename_and_switch_usage("something")
         assertEquals(disk_or_image.use_image(), false)
         assertEquals(disk_or_image.use_disk(), true)
+    }
+
+    @Test
+    fun use_image_title_for_recording()
+    {
+        val data = listOf(1.0)
+        val image = ImagePlus("some", FloatProcessor(1, 1, data.toDoubleArray()))
+        val disk_or_image = DiskOrImage.from_image(Image.from(image))
+        disk_or_image.record_to_macro_with("thing")
+        val options = MacroOptions.from_recorder_command_options()
+        assertEquals(options.get("thing"), "some")
+    }
+
+    @Test
+    fun use_filepath_for_recording()
+    {
+        val disk_or_image = DiskOrImage.from_filename("some")
+        disk_or_image.record_to_macro_with("thing")
+        val options = MacroOptions.from_recorder_command_options()
+        assertEquals(options.get("thing"), "some")
     }
 }

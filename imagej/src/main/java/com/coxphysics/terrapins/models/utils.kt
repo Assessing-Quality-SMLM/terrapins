@@ -2,6 +2,9 @@ package com.coxphysics.terrapins.models
 
 import com.coxphysics.terrapins.models.utils.StringUtils
 import ij.process.ImageProcessor
+import java.nio.file.InvalidPathException
+import java.nio.file.Path
+import java.nio.file.Paths
 
 fun <T: ImageProcessor> immutable_clone(image_processor: T): T
 {
@@ -35,6 +38,22 @@ fun String?.non_null(): String
         return StringUtils.EMPTY_STRING
     }
     return this
+}
+
+fun String?.to_nullable_path(): Path?
+{
+    if (this == null)
+    {
+        return null
+    }
+    try
+    {
+        return Paths.get(this)
+    }
+    catch (e: InvalidPathException)
+    {
+        return null
+    }
 }
 
 //fun ImagePlus.write_to_disk(image_path: Path): Path

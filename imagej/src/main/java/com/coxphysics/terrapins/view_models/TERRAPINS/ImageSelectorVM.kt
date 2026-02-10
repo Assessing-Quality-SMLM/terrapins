@@ -37,7 +37,7 @@ class ImageSelectorVM private constructor(private val selector_: ImageSelector)
 
     fun image_titles(): Array<String>?
     {
-        return selector_.image_titles()
+        return selector_.get_image_titles()
     }
 
     fun get_image(): ImagePlus?
