@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.models
 
+import com.coxphysics.terrapins.models.utils.FsUtils
 import com.coxphysics.terrapins.models.utils.StringUtils
 import ij.process.ImageProcessor
 import java.nio.file.InvalidPathException
@@ -54,6 +55,16 @@ fun String?.to_nullable_path(): Path?
     {
         return null
     }
+}
+
+fun String?.to_path_or_temp(): Path
+{
+    return to_path_or_default(FsUtils.temp_directory())
+}
+
+fun String?.to_path_or_default(default: Path): Path
+{
+    return to_nullable_path() ?: default
 }
 
 //fun ImagePlus.write_to_disk(image_path: Path): Path
