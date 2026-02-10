@@ -1,6 +1,7 @@
 package com.coxphysics.terrapins.models.localisations;
 
 
+import com.coxphysics.terrapins.models.macros.MacroOptions;
 import ij.plugin.frame.Recorder;
 
 public class ParseMethod
@@ -116,6 +117,55 @@ public class ParseMethod
         return new ParseMethod();
     }
 
+    private static Integer nullable_parse(String desc)
+    {
+        try
+        {
+            return Integer.parseInt(desc);
+        }
+        catch (NumberFormatException e)
+        {
+            return null;
+        }
+    }
+    public static ParseMethod from_macro_options(String key, MacroOptions options)
+    {
+        String description = options.get(key);
+        if (description == null)
+            return null;
+        ParseMethod method = default_();
+        if (description.equals("ts"))
+        {
+            method.set_parse_method_thunderstorm();
+            return method;
+        }
+        String[] splits = description.split(",");
+        if (splits.length < 5)
+            return null;
+        Integer n_header_lines = nullable_parse(splits[0]);
+        if (n_header_lines == null)
+            return null;
+        Integer frame_number =nullable_parse(splits[1]);
+        if (frame_number == null)
+            return null;
+        Integer x_pos =nullable_parse(splits[2]);
+        if (x_pos == null)
+            return null;
+        Integer y_pos =nullable_parse(splits[3]);
+        if (y_pos == null)
+            return null;
+        Integer uncertainty_sigma =nullable_parse(splits[4]);
+        if (uncertainty_sigma == null)
+            return null;
+        method.set_parse_method_csv();
+        method.set_n_headers(n_header_lines);
+        method.set_frame_number_pos(frame_number);
+        method.set_x_pos(x_pos);
+        method.set_y_pos(y_pos);
+        method.set_uncertainty_pos(uncertainty_sigma);
+        return method;
+    }
+
     public boolean use_thunderstorm()
     {
         return is_thunderstorm_;
@@ -222,10 +272,10 @@ public class ParseMethod
     {
         String[] data = new String[]{
             String.valueOf(n_header_lines()),
-                String.valueOf(frame_number_position()),
-                String.valueOf(x_position()),
-                String.valueOf(y_position()),
-                String.valueOf(uncertainty_position())
+            String.valueOf(frame_number_position()),
+            String.valueOf(x_position()),
+            String.valueOf(y_position()),
+            String.valueOf(uncertainty_position())
         };
         return String.join(",", data);
     }
