@@ -54,6 +54,18 @@ class ImageSelector private constructor(
                 return ImageSelector(INVALID_INDEX, image)
             return ImageSelector(idx, image)
         }
+
+        @JvmStatic
+        fun image_titles(): Array<String>?
+        {
+            return WindowManager.getImageTitles()
+        }
+
+        @JvmStatic
+        fun get_image_from_title(title: String): ImagePlus?
+        {
+            return WindowManager.getImage(title)
+        }
     }
 
     fun set_current_image_index(index: Int)
@@ -63,9 +75,9 @@ class ImageSelector private constructor(
         image_.set_inner(ip)
     }
 
-    fun image_titles(): Array<String>?
+    fun get_image_titles(): Array<String>?
     {
-        return WindowManager.getImageTitles()
+        return ImageSelector.image_titles()
     }
 
     fun get_image(): ImagePlus?
