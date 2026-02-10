@@ -1,8 +1,12 @@
 package com.coxphysics.terrapins.models
 
+import com.coxphysics.terrapins.models.ij_wrapping.ImageSelector
+import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.utils.IJUtils
 import ij.ImagePlus
+import ij.plugin.frame.Recorder
 import java.nio.file.Path
+import kotlin.io.path.exists
 
 class DiskOrImage private constructor(
     private var filename_: PathWrapper,
@@ -13,28 +17,56 @@ class DiskOrImage private constructor(
     companion object
     {
         @JvmStatic
-        fun new(filename: String?, image: Image, use_image: Boolean) : DiskOrImage
+        fun new(filepath: PathWrapper, image: Image, use_image: Boolean) : DiskOrImage
         {
-            return DiskOrImage(PathWrapper.from_optional_string(filename), image, use_image)
+            return DiskOrImage(filepath, image, use_image)
+        }
+
+        @JvmStatic
+        fun from_filepath(path_wrapper: PathWrapper) : DiskOrImage
+        {
+            return new(path_wrapper, Image.empty(), false)
         }
 
         @JvmStatic
         fun from_filename(filename: String?) : DiskOrImage
         {
-            return new(filename, Image.empty(), false)
+            return from_filepath(PathWrapper.from_optional_string(filename))
+        }
+
+        @JvmStatic
+        fun from_path(path: Path) : DiskOrImage
+        {
+            return from_filepath(PathWrapper.from(path))
         }
 
         @JvmStatic
         fun from_image(image: Image) : DiskOrImage
         {
-            return new(null, image, true)
+            return new(PathWrapper.empty(), image, true)
         }
 
         @JvmStatic
         fun default() : DiskOrImage
         {
-            return new(null, Image.empty(), false)
+            return new(PathWrapper.empty(), Image.empty(), false)
         }
+
+        @JvmStatic
+        fun from_macro_options_with(key: String, options: MacroOptions) : DiskOrImage?
+        {
+            val name = options.get(key)
+            if (name == null)
+                return null
+            val name_as_path = name.to_nullable_path()
+            if (name_as_path != null && name_as_path.exists())
+                return from_path(name_as_path)
+            val name_as_title = ImageSelector.get_image_from_title(name)
+            if(name_as_title != null)
+                return from_image(Image.from(name_as_title))
+            return null
+        }
+
     }
 
     fun path_wrapper(): PathWrapper
@@ -146,5 +178,15 @@ class DiskOrImage private constructor(
             return image_.write_to_disk(image_path)
         }
         return null
+    }
+
+    fun macro_string() : String
+    {
+        return if (use_disk()) filename_nn() else image_.title_nn()
+    }
+
+    fun record_to_macro_with(key: String)
+    {
+        Recorder.recordOption(key, macro_string() )
     }
 }
