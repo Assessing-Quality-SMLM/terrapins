@@ -152,4 +152,15 @@ class DiskOrImageTests
             assertEquals(options.get("thing"), "some")
         }
     }
+
+    @Test
+    fun strings_that_can_be_paths_are_treated_as_disk_images()
+    {
+        executor.submit {
+            val options = MacroOptions.from("a=thing")
+            val disk_or_image = DiskOrImage.from_macro_options_with("a", options)
+            assertEquals(disk_or_image!!.filename_nn(), "thing")
+        }
+    }
+
 }

@@ -32,3 +32,15 @@ const val LOCALISATION_SETTINGS_RAW_LOCALISATIONS_PARSER = "locs_parse"
 const val LOCALISATION_SETTINGS_HAWK_LOCALISATIONS = "hawk_locs"
 const val LOCALISATION_SETTINGS_HAWK_LOCALISATIONS_PARSER = "hawk_locs_parse"
 
+// IMAGES SETTINGS
+const val IMAGES_SETTINGS_RECON_IMAGE = "recon"
+const val IMAGES_SETTINGS_HAWK_IMAGE = "hawk_recon"
+
+const val IMAGES_SETTINGS_HALF_SPLIT_1 = "half_split_1"
+const val IMAGES_SETTINGS_HALF_SPLIT_2 = "half_split_2"
+
+const val IMAGES_SETTINGS_DRIFT_SPLIT_1 = "drift_split_1"
+const val IMAGES_SETTINGS_DRIFT_SPLIT_2 = "drift_split_2"
+
+const val IMAGES_SETTINGS_ZIP_SPLIT_1 = "zip_split_1"
+const val IMAGES_SETTINGS_ZIP_SPLIT_2 = "zip_split_2"

@@ -5,6 +5,8 @@ import com.coxphysics.terrapins.models.assessment.CoreSettings
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import com.coxphysics.terrapins.models.io.FrcImages
 import com.coxphysics.terrapins.models.io.JointImages
+import com.coxphysics.terrapins.models.macros.MacroOptions
+import com.coxphysics.terrapins.plugins.*
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -31,6 +33,49 @@ class Settings private constructor(
         fun default(): Settings
         {
             return Settings(CoreSettings.default())
+        }
+
+        @JvmStatic
+        fun from_macro_options(options: MacroOptions) : Settings?
+        {
+            val core_settings = CoreSettings.from_macro_options(options)
+            if (core_settings == null)
+                return null
+
+            val equipment_settings = EquipmentSettings.from_macro_options(options)
+            if (equipment_settings == null)
+                return null
+
+            val reference_image = DiskOrImage.from_macro_options_with(IMAGES_SETTINGS_RECON_IMAGE, options)
+            if (reference_image == null)
+                return null
+
+            val hawk_image = DiskOrImage.from_macro_options_with(IMAGES_SETTINGS_HAWK_IMAGE, options)
+            if (hawk_image == null)
+                return null
+
+            val half_split = JointImages.from_macro_options_with(IMAGES_SETTINGS_HALF_SPLIT_1, IMAGES_SETTINGS_HALF_SPLIT_2, options)
+            if (half_split == null)
+                return null
+
+            val drift_split = JointImages.from_macro_options_with(IMAGES_SETTINGS_DRIFT_SPLIT_1, IMAGES_SETTINGS_DRIFT_SPLIT_2, options)
+            if (drift_split == null)
+                return null
+
+            val zip_split = JointImages.from_macro_options_with(IMAGES_SETTINGS_ZIP_SPLIT_1, IMAGES_SETTINGS_ZIP_SPLIT_2, options)
+            if (zip_split == null)
+                return null
+
+            val settings = default()
+            settings.core_settings_ = core_settings
+            settings.equipment = equipment_settings
+            settings.reference_image_ = reference_image
+            settings.hawk_image_ = hawk_image
+            settings.half_split_ = half_split
+            settings.drift_split_ = drift_split
+            settings.zip_split_ = zip_split
+
+            return settings
         }
     }
 
@@ -339,6 +384,12 @@ class Settings private constructor(
 
     fun record_to_macro()
     {
+        core_settings_.record_to_macro()
         equipment.record_to_macro()
+        reference_image_.record_to_macro_with(IMAGES_SETTINGS_RECON_IMAGE)
+        hawk_image_.record_to_macro_with(IMAGES_SETTINGS_HAWK_IMAGE)
+        half_split_.record_to_macro_with(IMAGES_SETTINGS_HALF_SPLIT_1, IMAGES_SETTINGS_HALF_SPLIT_2)
+        zip_split_.record_to_macro_with(IMAGES_SETTINGS_DRIFT_SPLIT_1, IMAGES_SETTINGS_DRIFT_SPLIT_2)
+        drift_split_.record_to_macro_with(IMAGES_SETTINGS_ZIP_SPLIT_1, IMAGES_SETTINGS_ZIP_SPLIT_2)
     }
 }

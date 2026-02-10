@@ -1,6 +1,7 @@
 package com.coxphysics.terrapins.models.io
 
 import com.coxphysics.terrapins.models.DiskOrImage
+import com.coxphysics.terrapins.models.macros.MacroOptions
 import java.nio.file.Path
 
 class JointImages private constructor(
@@ -19,6 +20,14 @@ class JointImages private constructor(
         fun default() : JointImages
         {
             return new(DiskOrImage.default(), DiskOrImage.default())
+        }
+
+        @JvmStatic
+        fun from_macro_options_with(key_1: String, key_2: String, options: MacroOptions) : JointImages?
+        {
+            val image_1 = DiskOrImage.from_macro_options_with(key_1, options) ?: return null
+            val image_2 = DiskOrImage.from_macro_options_with(key_2, options) ?: return null
+            return new(image_1, image_2)
         }
     }
 
@@ -80,5 +89,11 @@ class JointImages private constructor(
             image_2_ok = image_2_.to_disk_with(image_2_name_in(directory)) != null
         }
         return image_1_ok && image_2_ok
+    }
+
+    fun record_to_macro_with(key_1: String, key_2: String)
+    {
+        image_1_.record_to_macro_with(key_1)
+        image_2_.record_to_macro_with(key_2)
     }
 }
