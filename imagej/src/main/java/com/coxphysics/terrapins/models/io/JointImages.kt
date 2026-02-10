@@ -25,15 +25,9 @@ class JointImages private constructor(
         @JvmStatic
         fun from_macro_options_with(key_1: String, key_2: String, options: MacroOptions) : JointImages?
         {
-            val image_1 = DiskOrImage.from_macro_options_with(key_1, options)
-            if(image_1 == null)
-                return null
-
-            val image_2 = DiskOrImage.from_macro_options_with(key_2, options)
-            if (image_2 == null)
-                return null
-
-            return JointImages.new(image_1, image_2)
+            val image_1 = DiskOrImage.from_macro_options_with(key_1, options) ?: return null
+            val image_2 = DiskOrImage.from_macro_options_with(key_2, options) ?: return null
+            return new(image_1, image_2)
         }
     }
 

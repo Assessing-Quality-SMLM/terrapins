@@ -1,12 +1,25 @@
 package com.coxphysics.terrapins.models.io
 
 import com.coxphysics.terrapins.models.DiskOrImage
+import com.coxphysics.terrapins.models.macros.MacroOptions
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
 
 class JointImagesTests
 {
+    private var executor = Executors.newSingleThreadExecutor();
+
+    @AfterEach
+    fun cleanUp()
+    {
+        executor.shutdown();
+        while (!executor.awaitTermination(100, TimeUnit.MICROSECONDS));
+    }
+
     @Test
     fun setting_image_1_filename_changes_filepath()
     {
@@ -78,5 +91,23 @@ class JointImagesTests
         val settings = JointImages.new(image_1, image_2)
         val result = settings.to_disk_in(Paths.get("some", "thing"))
         assertEquals(result, true)
+    }
+
+    @Test
+    fun macro_recording_tests()
+    {
+        executor.submit {
+            val image_1 = DiskOrImage.from_filename("some")
+            val image_2 = DiskOrImage.from_filename("thing")
+            val images = JointImages.new(image_1, image_2)
+
+            images.record_to_macro_with("a", "b")
+
+            val options = MacroOptions.from_recorder_command_options()
+
+            val new_images = JointImages.from_macro_options_with("a", "b", options)
+            assertEquals(new_images!!.image_1().filename_nn(), "some")
+            assertEquals(new_images.image_2().filename_nn(), "thing")
+        }
     }
 }
