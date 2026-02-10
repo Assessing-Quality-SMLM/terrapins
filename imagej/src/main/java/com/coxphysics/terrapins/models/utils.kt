@@ -57,6 +57,12 @@ fun String?.to_nullable_path(): Path?
     }
 }
 
+
+fun Path?.to_string_non_null(): String
+{
+    return if(this == null) StringUtils.EMPTY_STRING else this.toString()
+}
+
 fun String?.to_path_or_temp(): Path
 {
     return to_path_or_default(FsUtils.temp_directory())

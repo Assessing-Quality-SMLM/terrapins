@@ -63,6 +63,6 @@ class PathWrapper private constructor(private var path_: Path?)
 
     fun to_string(): String
     {
-        return if (path_ != null) return path_.toString() else StringUtils.EMPTY_STRING
+        return path_.to_string_non_null()
     }
 }

@@ -4,6 +4,12 @@ import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.assessment.CoreSettings
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import com.coxphysics.terrapins.models.localisations.LocalisationFile
+import com.coxphysics.terrapins.models.macros.MacroOptions
+import com.coxphysics.terrapins.models.reports.EqualSettings
+import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_HAWK_LOCALISATIONS
+import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_HAWK_LOCALISATIONS_PARSER
+import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_RAW_LOCALISATIONS
+import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_RAW_LOCALISATIONS_PARSER
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -27,6 +33,33 @@ class AssessmentSettings private constructor(
         fun default(): AssessmentSettings
         {
             return AssessmentSettings(CoreSettings.default())
+        }
+
+        @JvmStatic
+        fun from_macro_options(options: MacroOptions) : AssessmentSettings?
+        {
+            val core_settings = CoreSettings.from_macro_options(options)
+            if (core_settings == null)
+                return null
+
+            val equipment_settings = EquipmentSettings.from_macro_options(options)
+            if (equipment_settings == null)
+                return null
+
+            val localisation_file = LocalisationFile.from_macro_options(LOCALISATION_SETTINGS_RAW_LOCALISATIONS, LOCALISATION_SETTINGS_RAW_LOCALISATIONS_PARSER, options)
+            if (localisation_file == null)
+                return null
+
+            val hawk_localisation_file = LocalisationFile.from_macro_options(LOCALISATION_SETTINGS_HAWK_LOCALISATIONS, LOCALISATION_SETTINGS_HAWK_LOCALISATIONS_PARSER, options)
+            if (hawk_localisation_file == null)
+                return null
+
+            val settings = default()
+            settings.core_settings_ = core_settings
+            settings.equipment_ = equipment_settings
+            settings.localisation_file_ = localisation_file
+            settings.hawk_localisation_file_ = hawk_localisation_file
+            return settings
         }
     }
 
@@ -168,6 +201,9 @@ class AssessmentSettings private constructor(
 
     fun record_to_macro()
     {
+        core_settings_.record_to_macro()
         equipment_.record_to_macro()
+        localisation_file_.record_to_macro(LOCALISATION_SETTINGS_RAW_LOCALISATIONS, LOCALISATION_SETTINGS_RAW_LOCALISATIONS_PARSER)
+        hawk_localisation_file_.record_to_macro(LOCALISATION_SETTINGS_HAWK_LOCALISATIONS, LOCALISATION_SETTINGS_HAWK_LOCALISATIONS_PARSER)
     }
 }

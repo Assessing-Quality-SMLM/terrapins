@@ -1,13 +1,19 @@
 package com.coxphysics.terrapins.models.localisations;
 
+import com.coxphysics.terrapins.models.macros.MacroOptions;
 import com.coxphysics.terrapins.views.localisations.ParseMethodsUI;
 import ij.gui.GenericDialog;
 import org.junit.jupiter.api.Test;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ParseMethodTests
 {
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
+
     @Test
     void populate_settings_picks_up_thunderstorm_checkbox()
     {
@@ -59,7 +65,7 @@ public class ParseMethodTests
     {
         ParseMethod parse_method = ParseMethod.default_();
         parse_method.set_parse_method_csv();
-        parse_method.set_uncertainty_sigma_pos(2);
+        parse_method.set_psf_sigma_pos(2);
         assertEquals(parse_method.parse_method(), "csv=0;,;0;1;2;-1;-1");
     }
 
@@ -86,7 +92,7 @@ public class ParseMethodTests
     {
         ParseMethod parse_method = ParseMethod.default_();
         parse_method.set_parse_method_csv();
-        parse_method.set_uncertainty_sigma_pos(2);
+        parse_method.set_psf_sigma_pos(2);
         parse_method.set_uncertainty_pos(3);
         assertEquals(parse_method.parse_method(), "csv=0;,;0;1;2;3;-1");
     }
@@ -96,9 +102,68 @@ public class ParseMethodTests
     {
         ParseMethod parse_method = ParseMethod.default_();
         parse_method.set_parse_method_csv();
-        parse_method.set_uncertainty_sigma_pos(2);
+        parse_method.set_psf_sigma_pos(2);
         parse_method.set_uncertainty_pos(3);
         parse_method.set_frame_number_pos(4);
         assertEquals(parse_method.parse_method(), "csv=0;,;0;1;2;3;4");
+    }
+
+    @Test
+    void thunderstorm_macro_record()
+    {
+        executor.submit(() -> {
+            ParseMethod parse_method = ParseMethod.default_();
+            parse_method.set_parse_method_thunderstorm();
+
+            MacroOptions options = MacroOptions.from_recorder_command_options();
+            String desc = options.get("something");
+            assertEquals(desc, "ts");
+
+        });
+    }
+
+    @Test
+    void csv_macro_record()
+    {
+        executor.submit(() -> {
+            ParseMethod parse_method = ParseMethod.default_();
+            parse_method.set_parse_method_csv();
+            parse_method.set_n_headers(1);
+            parse_method.set_psf_sigma_pos(2);
+            parse_method.set_uncertainty_pos(3);
+            parse_method.set_frame_number_pos(4);
+            parse_method.set_x_pos(5);
+            parse_method.set_y_pos(6);
+
+            parse_method.record_to_macro("something");
+
+            MacroOptions options = MacroOptions.from_recorder_command_options();
+            String desc = options.get("something");
+            assertEquals(desc, "1,4,5,6,2");
+        }
+        );
+    }
+
+    @Test
+    void read_ts_settings_macro()
+    {
+        MacroOptions options = MacroOptions.from("something=ts");
+        ParseMethod method = ParseMethod.from_macro_options("something", options);
+
+        assertEquals(method.use_thunderstorm(), true);
+    }
+
+    @Test
+    void read_csv_settings_from_macro()
+    {
+        MacroOptions options = MacroOptions.from("something=1,4,5,6,2");
+        ParseMethod method = ParseMethod.from_macro_options("something", options);
+
+        assertEquals(method.use_thunderstorm(), false);
+        assertEquals(method.n_header_lines(), 1);
+        assertEquals(method.frame_number_position(), 4);
+        assertEquals(method.x_position(), 5);
+        assertEquals(method.y_position(), 6);
+        assertEquals(method.uncertainty_position(), 2);
     }
 }

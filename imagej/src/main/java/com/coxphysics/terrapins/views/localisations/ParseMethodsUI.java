@@ -98,7 +98,7 @@ public class ParseMethodsUI
         int y_pos = Utils.extract_numeric_field_as_int(dialog);
         parse_method.set_y_pos(y_pos);
         int sigma_pos = Utils.extract_numeric_field_as_int(dialog);
-        parse_method.set_uncertainty_sigma_pos(sigma_pos);
+        parse_method.set_psf_sigma_pos(sigma_pos);
 
         int uncertainty_pos = Utils.extract_numeric_field_as_int(dialog);
         parse_method.set_uncertainty_pos(uncertainty_pos);
@@ -148,7 +148,7 @@ public class ParseMethodsUI
 
         Integer psf_sigma_pos = psf_sigma_pos_.get_nullable_value();
         if (psf_sigma_pos != null)
-            settings.set_uncertainty_sigma_pos(psf_sigma_pos);
+            settings.set_psf_sigma_pos(psf_sigma_pos);
 
         Integer uncertainty_pos = uncertainty_pos_.get_nullable_value();
         if (uncertainty_pos != null)

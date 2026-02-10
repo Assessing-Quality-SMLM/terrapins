@@ -8,13 +8,25 @@ import com.coxphysics.terrapins.plugins.CORE_SETTINGS_IMAGE_STACK
 import com.coxphysics.terrapins.plugins.CORE_SETTINGS_SETTINGS_FILE
 import com.coxphysics.terrapins.plugins.CORE_SETTINGS_WIDEFIELD
 import com.coxphysics.terrapins.plugins.CORE_SETTINGS_WORKING_DIRECTORY
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
 class CoreSettingsTests
 {
+    private var executor = Executors.newSingleThreadExecutor();
+
+    @AfterEach
+    fun cleanUp()
+    {
+        executor.shutdown();
+        while (!executor.awaitTermination(100, TimeUnit.MICROSECONDS));
+    }
+
     @Test
     fun can_set_working_directory()
     {
@@ -129,49 +141,57 @@ class CoreSettingsTests
     @Test
     fun macro_recording_records_working_directory()
     {
-        val working_directory = Paths.get("something")
-        val settings = CoreSettings.from(working_directory)
-        settings.record_to_macro()
+        executor.submit{
+            val working_directory = Paths.get("something")
+            val settings = CoreSettings.from(working_directory)
+            settings.record_to_macro()
 
-        val options = MacroOptions.from_recorder_command_options()
-        assertEquals(options.get(CORE_SETTINGS_WORKING_DIRECTORY), "something")
+            val options = MacroOptions.from_recorder_command_options()
+            assertEquals(options.get(CORE_SETTINGS_WORKING_DIRECTORY), "something")
+        }
     }
 
     @Test
     fun macro_recording_records_settings_file()
     {
-        val working_directory = Paths.get("something")
-        val settings = CoreSettings.from(working_directory)
-        settings.set_settings_file("else")
-        settings.record_to_macro()
+        executor.submit {
+            val working_directory = Paths.get("something")
+            val settings = CoreSettings.from(working_directory)
+            settings.set_settings_file("else")
+            settings.record_to_macro()
 
-        val options = MacroOptions.from_recorder_command_options()
-        assertEquals(options.get(CORE_SETTINGS_SETTINGS_FILE), "else")
+            val options = MacroOptions.from_recorder_command_options()
+            assertEquals(options.get(CORE_SETTINGS_SETTINGS_FILE), "else")
+        }
     }
 
     @Test
     fun macro_recording_records_widefield()
     {
-        val working_directory = Paths.get("something")
-        val settings = CoreSettings.from(working_directory)
-        settings.set_widefield(DiskOrImage.from_filename("else"))
+        executor.submit {
+            val working_directory = Paths.get("something")
+            val settings = CoreSettings.from(working_directory)
+            settings.set_widefield(DiskOrImage.from_filename("else"))
 
-        settings.record_to_macro()
+            settings.record_to_macro()
 
-        val options = MacroOptions.from_recorder_command_options()
-        assertEquals(options.get(CORE_SETTINGS_WIDEFIELD), "else")
+            val options = MacroOptions.from_recorder_command_options()
+            assertEquals(options.get(CORE_SETTINGS_WIDEFIELD), "else")
+        }
     }
 
     @Test
     fun macro_recording_records_image_stack()
     {
-        val working_directory = Paths.get("something")
-        val settings = CoreSettings.from(working_directory)
-        settings.set_image_stack(DiskOrImage.from_filename("else"))
+        executor.submit {
+            val working_directory = Paths.get("something")
+            val settings = CoreSettings.from(working_directory)
+            settings.set_image_stack(DiskOrImage.from_filename("else"))
 
-        settings.record_to_macro()
+            settings.record_to_macro()
 
-        val options = MacroOptions.from_recorder_command_options()
-        assertEquals(options.get(CORE_SETTINGS_IMAGE_STACK), "else")
+            val options = MacroOptions.from_recorder_command_options()
+            assertEquals(options.get(CORE_SETTINGS_IMAGE_STACK), "else")
+        }
     }
 }
