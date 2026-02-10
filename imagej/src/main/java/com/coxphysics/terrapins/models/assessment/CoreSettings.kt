@@ -1,35 +1,61 @@
 package com.coxphysics.terrapins.models.assessment
 
-import com.coxphysics.terrapins.models.DiskOrImage
-import com.coxphysics.terrapins.models.Image
-import com.coxphysics.terrapins.models.non_null
+import com.coxphysics.terrapins.models.*
+import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.processing.WidefieldGenerator
 import com.coxphysics.terrapins.models.utils.FsUtils
-import com.coxphysics.terrapins.models.utils.IJUtils
+import com.coxphysics.terrapins.plugins.CORE_SETTINGS_IMAGE_STACK
+import com.coxphysics.terrapins.plugins.CORE_SETTINGS_SETTINGS_FILE
+import com.coxphysics.terrapins.plugins.CORE_SETTINGS_WIDEFIELD
+import com.coxphysics.terrapins.plugins.CORE_SETTINGS_WORKING_DIRECTORY
 import ij.ImagePlus
 import ij.Prefs
-import ij.process.FloatProcessor
+import ij.plugin.frame.Recorder
 import java.nio.file.Path
 
-class CoreSettings private constructor(private var working_directory_: Path)
+class CoreSettings private constructor(
+    private var working_directory_: Path,
+    private var widefield_: DiskOrImage,
+    private var image_stack_: DiskOrImage,
+    private var settings_file_: String?
+    )
 {
-    private var widefield_: DiskOrImage = DiskOrImage.default()
-    private var image_stack_: DiskOrImage = DiskOrImage.default()
     private var n_threads_ = Prefs.getThreads();
-    private var settings_file_: String? = null
 
     companion object
     {
         @JvmStatic
-        fun new(working_directory: Path): CoreSettings
+        fun new(working_directory: Path, widefield: DiskOrImage, image_stack: DiskOrImage, settings_file: String?): CoreSettings
         {
-            return CoreSettings(working_directory)
+            return CoreSettings(working_directory, widefield, image_stack, settings_file)
+        }
+
+        @JvmStatic
+        fun from(working_directory: Path): CoreSettings
+        {
+            return new(working_directory, DiskOrImage.default(), DiskOrImage.default(), null)
         }
 
         @JvmStatic
         fun default(): CoreSettings
         {
-            return new(FsUtils.temp_directory().resolve("smlm_assessment"))
+            return from(default_working_directory())
+        }
+
+        private fun default_working_directory(): Path = FsUtils.temp_directory().resolve("smlm_assessment")
+
+        fun from_macro_options(options: MacroOptions): CoreSettings?
+        {
+            val widefield = DiskOrImage.from_macro_options_with(CORE_SETTINGS_WIDEFIELD, options)
+            if (widefield == null)
+                return null
+            val image_stack = DiskOrImage.from_macro_options_with(CORE_SETTINGS_IMAGE_STACK, options)
+            if (image_stack == null)
+                return null
+            val working_directory = options.get(CORE_SETTINGS_WORKING_DIRECTORY)
+            val working_directory_path = working_directory.to_path_or_default(default_working_directory())
+            val settings_file = options.get(CORE_SETTINGS_SETTINGS_FILE)
+            return new(working_directory_path, widefield, image_stack, settings_file)
         }
     }
 
@@ -162,7 +188,7 @@ class CoreSettings private constructor(private var working_directory_: Path)
         }
         if (widefield_ok && image_stack_ok)
         {
-            val settings = new(working_directory_)
+            val settings = from(working_directory_)
             settings.n_threads_ = n_threads_
             settings.settings_file_ = settings_file_
             settings.widefield_ = widefield_
@@ -174,5 +200,14 @@ class CoreSettings private constructor(private var working_directory_: Path)
             return settings
         }
         return null
+    }
+
+    fun record_to_macro()
+    {
+        Recorder.recordOption(CORE_SETTINGS_WORKING_DIRECTORY, working_directory_.toString())
+        widefield_.record_to_macro_with(CORE_SETTINGS_WIDEFIELD)
+        image_stack_.record_to_macro_with(CORE_SETTINGS_IMAGE_STACK)
+        if(settings_file_ != null)
+            Recorder.recordOption(CORE_SETTINGS_SETTINGS_FILE, settings_file_)
     }
 }

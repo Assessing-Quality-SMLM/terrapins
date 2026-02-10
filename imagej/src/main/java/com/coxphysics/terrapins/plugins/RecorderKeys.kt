@@ -18,7 +18,12 @@ const val EQUIPMENT_SETTINGS_MAGNIFICATION = "magnification"
 const val EQUIPMENT_SETTINGS_CAMERA_PIXEL_SIZE_NM = "camera_pixel_size_nm"
 const val EQUIPMENT_INSTRUMENT_PSF_FWHM_NM = "instrument_psf_fwhm_nm"
 
-
 const val WORKFLOW_SETTINGS_USE_LOCALISATIONS = "localisation_workflow"
+
+// CORE SETTINGS
+const val CORE_SETTINGS_WIDEFIELD = "widefield"
+const val CORE_SETTINGS_IMAGE_STACK = "image_stack"
+const val CORE_SETTINGS_SETTINGS_FILE = "settings_file"
+const val CORE_SETTINGS_WORKING_DIRECTORY = "working_directory"
 
 

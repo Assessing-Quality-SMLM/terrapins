@@ -106,7 +106,7 @@ class AssessmentTests
         settings.set_n_threads(4)
         settings.set_magnification(123.0)
 
-        val core_settings = CoreSettings.new(working_directory_path())
+        val core_settings = CoreSettings.from(working_directory_path())
         core_settings.set_n_threads(4)
         val commands = Assessment.custom(exe_path()).get_localisations_arguments(core_settings, settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--n-threads", "4", "--extract", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0", "--magnification", "123.0", "localisation")
