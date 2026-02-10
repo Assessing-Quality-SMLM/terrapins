@@ -1,6 +1,8 @@
 package com.coxphysics.terrapins.models.localisations;
 
 
+import ij.plugin.frame.Recorder;
+
 public class ParseMethod
 {
     private static class CsvSettings
@@ -204,5 +206,27 @@ public class ParseMethod
     public void set_frame_number_pos(int value)
     {
         csv_settings_.set_frame_number_pos(value);
+    }
+
+    public void record_to_macro(String key)
+    {
+        if (is_thunderstorm_)
+            Recorder.recordOption(key, "ts");
+        else
+        {
+            Recorder.recordOption(key, csv_macro_string());
+        }
+    }
+
+    private String csv_macro_string()
+    {
+        String[] data = new String[]{
+            String.valueOf(n_header_lines()),
+                String.valueOf(frame_number_position()),
+                String.valueOf(x_position()),
+                String.valueOf(y_position()),
+                String.valueOf(uncertainty_position())
+        };
+        return String.join(",", data);
     }
 }
