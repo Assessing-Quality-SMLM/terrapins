@@ -5,10 +5,8 @@ import com.coxphysics.terrapins.models.Image
 import com.coxphysics.terrapins.models.non_null
 import com.coxphysics.terrapins.models.processing.WidefieldGenerator
 import com.coxphysics.terrapins.models.utils.FsUtils
-import com.coxphysics.terrapins.models.utils.IJUtils
 import ij.ImagePlus
 import ij.Prefs
-import ij.process.FloatProcessor
 import java.nio.file.Path
 
 class CoreSettings private constructor(private var working_directory_: Path)
