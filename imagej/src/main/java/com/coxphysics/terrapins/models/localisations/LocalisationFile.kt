@@ -1,6 +1,7 @@
 package com.coxphysics.terrapins.models.localisations
 
 import com.coxphysics.terrapins.models.PathWrapper
+import ij.plugin.frame.Recorder
 
 class LocalisationFile private constructor(
     private var localisation_file_: PathWrapper,
@@ -121,5 +122,12 @@ class LocalisationFile private constructor(
     fun set_frame_number_pos(value: Int)
     {
         parse_method_.set_frame_number_pos(value)
+    }
+
+    fun record_to_macro(key: String, parse_key: String)
+    {
+        val filename = filename_nn()
+        Recorder.recordOption(key, filename)
+        parse_method_.record_to_macro(parse_key)
     }
 }
