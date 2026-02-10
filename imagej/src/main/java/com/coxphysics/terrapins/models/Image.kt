@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.models
 
+import com.coxphysics.terrapins.models.ij_wrapping.ImageSelector
 import com.coxphysics.terrapins.models.utils.IJUtils
 import ij.ImagePlus
 import java.nio.file.Path
@@ -21,6 +22,13 @@ class Image private constructor(private var image_: ImagePlus?)
         }
 
         @JvmStatic
+        fun from_title(title: String) : Image
+        {
+            val image = ImageSelector.get_image_from_title(title)
+            return if (image == null) empty() else  with(image)
+        }
+
+        @JvmStatic
         fun empty() : Image
         {
             return Image(null)
@@ -35,6 +43,16 @@ class Image private constructor(private var image_: ImagePlus?)
     fun to_image_plus(): ImagePlus?
     {
         return image_
+    }
+
+    fun title(): String?
+    {
+        return image_?.title
+    }
+
+    fun title_nn(): String
+    {
+        return title().non_null()
     }
 
     fun set_inner(ij_image: ImagePlus?)
