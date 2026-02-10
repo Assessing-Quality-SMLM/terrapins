@@ -63,7 +63,7 @@ class DiskOrImage private constructor(
                 return from_image(Image.from(name_as_title))
 
             val name_as_path = name.to_nullable_path()
-            if (name_as_path != null)
+            if (name_as_path != null) // && name_as_path.exists()) -> can fix with filesystem interface - this exists needs adapting
                 return from_path(name_as_path)
             return null
         }
