@@ -7,13 +7,25 @@ import com.coxphysics.terrapins.models.utils.StringUtils
 import ij.ImagePlus
 import ij.ImageStack
 import ij.process.FloatProcessor
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
 
 class DiskOrImageTests
 {
+    private var executor = Executors.newSingleThreadExecutor();
+
+    @AfterEach
+    fun cleanUp()
+    {
+        executor.shutdown();
+        while (!executor.awaitTermination(100, TimeUnit.MICROSECONDS));
+    }
+
     @Test
     fun nothing_set_means_no_data()
     {
@@ -120,20 +132,24 @@ class DiskOrImageTests
     @Test
     fun use_image_title_for_recording()
     {
-        val data = listOf(1.0)
-        val image = ImagePlus("some", FloatProcessor(1, 1, data.toDoubleArray()))
-        val disk_or_image = DiskOrImage.from_image(Image.from(image))
-        disk_or_image.record_to_macro_with("thing")
-        val options = MacroOptions.from_recorder_command_options()
-        assertEquals(options.get("thing"), "some")
+        executor.submit{
+            val data = listOf(1.0)
+            val image = ImagePlus("some", FloatProcessor(1, 1, data.toDoubleArray()))
+            val disk_or_image = DiskOrImage.from_image(Image.from(image))
+            disk_or_image.record_to_macro_with("thing")
+            val options = MacroOptions.from_recorder_command_options()
+            assertEquals(options.get("thing"), "some")
+        }
     }
 
     @Test
     fun use_filepath_for_recording()
     {
-        val disk_or_image = DiskOrImage.from_filename("some")
-        disk_or_image.record_to_macro_with("thing")
-        val options = MacroOptions.from_recorder_command_options()
-        assertEquals(options.get("thing"), "some")
+        executor.submit {
+            val disk_or_image = DiskOrImage.from_filename("some")
+            disk_or_image.record_to_macro_with("thing")
+            val options = MacroOptions.from_recorder_command_options()
+            assertEquals(options.get("thing"), "some")
+        }
     }
 }
