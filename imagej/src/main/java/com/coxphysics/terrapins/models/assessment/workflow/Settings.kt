@@ -1,6 +1,8 @@
 package com.coxphysics.terrapins.models.assessment.workflow
 
 import com.coxphysics.terrapins.models.assessment.localisation.AssessmentSettings
+import com.coxphysics.terrapins.models.equipment.EquipmentSettings
+import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.plugins.WORKFLOW_SETTINGS_USE_LOCALISATIONS
 import com.coxphysics.terrapins.views.ImageSelectorSetttings
 import ij.plugin.frame.Recorder
@@ -10,7 +12,7 @@ import com.coxphysics.terrapins.models.hawk.Settings as HawkSettings
 class Settings private constructor(image_selector_setttings: ImageSelectorSetttings)
 {
     private val hawk_stack_image_selector_settings_ = image_selector_setttings
-    private val hawk_settings_ = HawkSettings.default()
+    private var hawk_settings_ = HawkSettings.default()
     private var use_localisations_ = true
     private var localisation_settings_ = AssessmentSettings.default()
     private var images_settings_ = ImagesSettings.default()
@@ -27,9 +29,29 @@ class Settings private constructor(image_selector_setttings: ImageSelectorSettti
         }
 
         @JvmStatic
-        fun extract_from_macro(): Settings
+        fun extract_from_macro_options(options: MacroOptions): Settings
         {
-            return default()
+            val settings = default()
+            val hawk_settings = HawkSettings.from_macro_options(options)
+            settings.hawk_settings_ = hawk_settings
+
+            val equipment = EquipmentSettings.from_macro_options(options)
+
+            val localisation_settings = AssessmentSettings.from_macro_options(options)
+            if (localisation_settings != null)
+            {
+                localisation_settings.set_equipment_settings(equipment)
+                settings.localisation_settings_ = localisation_settings
+            }
+            val images_settings = ImagesSettings.from_macro_options(options)
+            if (images_settings != null)
+            {
+                images_settings.set_equipment_settings(equipment)
+                settings.images_settings_ = images_settings
+            }
+            val use_localisations = localisation_settings != null
+            settings.use_localisations_ = use_localisations
+            return settings
         }
     }
 

@@ -3,7 +3,6 @@ package com.coxphysics.terrapins.models.hawk
 import com.coxphysics.terrapins.models.Image
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.macros.MacroUtils
-import com.coxphysics.terrapins.models.non_null
 import com.coxphysics.terrapins.plugins.*
 import ij.ImagePlus
 import ij.WindowManager
@@ -77,16 +76,14 @@ class Settings private constructor(
         }
 
         @JvmStatic
-        fun extract_from_macro(): Settings
+        fun from_macro_options(options: MacroOptions): Settings
         {
             val settings = default()
-            val options = MacroOptions.default_()
-            if (options == null)
-                return settings
+
             val image_name = options.get(HAWK_IMAGE_NAME)
             val image = WindowManager.getImage(image_name)
             settings.set_image(image)
-            
+
             val n_level_s = options.get(HAWK_N_LEVELS)
             val n_levels = n_level_s?.toIntOrNull()
             if (n_levels != null)
@@ -106,6 +103,13 @@ class Settings private constructor(
             if (maybe_filename_s != null)
                 settings.set_filename(maybe_filename_s)
             return settings
+        }
+
+        @JvmStatic
+        fun extract_from_macro(): Settings
+        {
+            val options = MacroOptions.default()
+            return if (options == null)  default() else from_macro_options(options)
         }
 
         @JvmStatic

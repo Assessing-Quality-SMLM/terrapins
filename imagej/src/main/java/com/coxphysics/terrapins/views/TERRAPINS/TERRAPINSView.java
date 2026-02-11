@@ -88,6 +88,7 @@ public class TERRAPINSView extends JDialog {
     private ImagesView images_ctrl_;
     private JButton run_btn_;
     private JButton cancel_btn_;
+    private EqupimentSettingsView equipment_settings_ctrl_;
 
     private TERRAPINSView() {
         super((Dialog) null, "TERRAPINS", true);
@@ -106,6 +107,7 @@ public class TERRAPINSView extends JDialog {
     private void set_view_model(TERRAPINSVM view_model) {
         view_model_ = view_model;
         pre_processing_view_.set_view_model(view_model_.pre_processing_vm());
+        equipment_settings_ctrl_.set_view_model(view_model.equipment_settings_vm());
         localisations_ctrl_.set_view_model(view_model.localisation_vm());
         images_ctrl_.set_view_model(view_model.images_vm());
         localisation_cb_.setSelected(view_model.use_localisations());
@@ -160,12 +162,12 @@ public class TERRAPINSView extends JDialog {
      */
     private void $$$setupUI$$$() {
         root_ = new JPanel();
-        root_.setLayout(new GridLayoutManager(7, 3, new Insets(5, 5, 5, 5), -1, -1));
+        root_.setLayout(new GridLayoutManager(8, 3, new Insets(5, 5, 5, 5), -1, -1));
         final JLabel label1 = new JLabel();
         label1.setText("Working Directory");
         root_.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
-        root_.add(spacer1, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        root_.add(spacer1, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         working_directory_ = new JTextField();
         root_.add(working_directory_, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         file_dialog_btn_ = new JButton();
@@ -177,18 +179,20 @@ public class TERRAPINSView extends JDialog {
         pre_processing_view_ = new PreProcessingView();
         root_.add(pre_processing_view_.$$$getRootComponent$$$(), new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         localisations_ctrl_ = new LocalisationView();
-        root_.add(localisations_ctrl_.$$$getRootComponent$$$(), new GridConstraints(4, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        root_.add(localisations_ctrl_.$$$getRootComponent$$$(), new GridConstraints(5, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         localisation_cb_ = new JCheckBox();
         localisation_cb_.setText("Localisations");
-        root_.add(localisation_cb_, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        root_.add(localisation_cb_, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         images_ctrl_ = new ImagesView();
-        root_.add(images_ctrl_.$$$getRootComponent$$$(), new GridConstraints(5, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        root_.add(images_ctrl_.$$$getRootComponent$$$(), new GridConstraints(6, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         run_btn_ = new JButton();
         run_btn_.setText("Run");
-        root_.add(run_btn_, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        root_.add(run_btn_, new GridConstraints(7, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
         cancel_btn_ = new JButton();
         cancel_btn_.setText("Cancel");
-        root_.add(cancel_btn_, new GridConstraints(6, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        root_.add(cancel_btn_, new GridConstraints(7, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        equipment_settings_ctrl_ = new EqupimentSettingsView();
+        root_.add(equipment_settings_ctrl_.$$$getRootComponent$$$(), new GridConstraints(3, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
     }
 
     /**

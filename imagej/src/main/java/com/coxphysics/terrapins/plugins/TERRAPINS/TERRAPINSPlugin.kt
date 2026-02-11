@@ -3,6 +3,7 @@ package com.coxphysics.terrapins.plugins.TERRAPINS
 import com.coxphysics.terrapins.models.assessment.AssessmentResults
 import com.coxphysics.terrapins.models.assessment.TERRAPINS
 import com.coxphysics.terrapins.models.assessment.workflow.Settings
+import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.macros.MacroUtils
 import com.coxphysics.terrapins.models.squirrel.tools.SQUIRREL_GetFileFromResource
 import com.coxphysics.terrapins.view_models.TERRAPINS.TERRAPINSVM
@@ -44,7 +45,14 @@ class TERRAPINSPlugin : PlugIn
     {
         if (MacroUtils.is_ran_from_macro())
         {
-            settings_ = Settings.extract_from_macro()
+            val options = MacroOptions.default()
+            if (options == null)
+            {
+                // maybe dont do this as in macro land - what happens in headless mode
+                IJ.log("Could not construct macro options")
+                return
+            }
+            settings_ = Settings.extract_from_macro_options(options)
             val results = run_assessment(settings_) // has side-effects to disk
             // we are in a macro so don't display the results viewer
         }
