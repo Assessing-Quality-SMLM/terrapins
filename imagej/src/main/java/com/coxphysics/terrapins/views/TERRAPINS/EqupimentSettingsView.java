@@ -37,6 +37,14 @@ public class EqupimentSettingsView {
     public void set_view_model(EquipmentSettingsVM view_model)
     {
         view_model_ = view_model;
+        populate_fields();
+    }
+
+    private void populate_fields()
+    {
+        camera_pixel_size_nm_field_.setText(String.valueOf(view_model_.camera_pixel_size_nm()));
+        fwhm_field_.setText(String.valueOf(view_model_.instrument_psf_fwhm_nm()));
+        magnification_field_.setText(String.valueOf(view_model_.magnification()));
     }
 
     public void update_camera_pixel_size()
