@@ -1,10 +1,10 @@
 package com.coxphysics.terrapins.plugins.TERRAPINS
 
 import com.coxphysics.terrapins.models.assessment.AssessmentResults
+import com.coxphysics.terrapins.models.assessment.TERRAPINS
 import com.coxphysics.terrapins.models.assessment.workflow.Settings
 import com.coxphysics.terrapins.models.macros.MacroUtils
 import com.coxphysics.terrapins.models.squirrel.tools.SQUIRREL_GetFileFromResource
-import com.coxphysics.terrapins.models.assessment.TERRAPINS
 import com.coxphysics.terrapins.view_models.TERRAPINS.TERRAPINSVM
 import com.coxphysics.terrapins.view_models.assessment.ReportVM
 import com.coxphysics.terrapins.views.TERRAPINS.TERRAPINSView
