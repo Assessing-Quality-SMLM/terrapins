@@ -1,7 +1,5 @@
-package com.coxphysics.terrapins.plugins.assessment
+package com.coxphysics.terrapins.models.assessment
 
-import com.coxphysics.terrapins.models.assessment.Assessment
-import com.coxphysics.terrapins.models.assessment.AssessmentResults
 import com.coxphysics.terrapins.models.assessment.workflow.Settings
 import com.coxphysics.terrapins.models.process.ImageJLoggingRunner
 
