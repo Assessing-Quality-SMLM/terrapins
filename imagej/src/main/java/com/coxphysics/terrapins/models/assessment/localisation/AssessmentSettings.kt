@@ -39,10 +39,8 @@ class AssessmentSettings private constructor(
         fun from_macro_options(options: MacroOptions) : AssessmentSettings?
         {
             val core_settings = CoreSettings.from_macro_options(options)
-            
+
             val equipment_settings = EquipmentSettings.from_macro_options(options)
-            if (equipment_settings == null)
-                return null
 
             val localisation_file = LocalisationFile.from_macro_options(LOCALISATION_SETTINGS_RAW_LOCALISATIONS, LOCALISATION_SETTINGS_RAW_LOCALISATIONS_PARSER, options)
             if (localisation_file == null)
