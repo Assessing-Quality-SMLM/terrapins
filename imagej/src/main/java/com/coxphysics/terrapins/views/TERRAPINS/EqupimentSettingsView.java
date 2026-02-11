@@ -34,7 +34,7 @@ public class EqupimentSettingsView {
         return view;
     }
 
-    private void set_view_model(EquipmentSettingsVM view_model)
+    public void set_view_model(EquipmentSettingsVM view_model)
     {
         view_model_ = view_model;
     }
