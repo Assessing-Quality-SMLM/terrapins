@@ -20,14 +20,16 @@ class MacroOptions private constructor(private var options: String)
         }
 
         @JvmStatic
-        fun default_() : MacroOptions?
+        fun default() : MacroOptions?
         {
             val options = Macro.getOptions()
-            if (options == null)
-            {
-                return null
-            }
-            return from(options)
+            return if (options == null) null else from(options)
+        }
+
+        @JvmStatic
+        fun default_() : MacroOptions?
+        {
+            return default()
         }
 
         @JvmStatic
