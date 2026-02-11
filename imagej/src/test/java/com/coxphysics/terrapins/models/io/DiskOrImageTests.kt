@@ -163,4 +163,16 @@ class DiskOrImageTests
         }
     }
 
+    @Test
+    fun empty_strings_are_not_recorded()
+    {
+        executor.submit {
+            val disk_or_image = DiskOrImage.default()
+            assertEquals(disk_or_image.filename_nn(), StringUtils.EMPTY_STRING)
+            disk_or_image.record_to_macro_with("a")
+            val options = MacroOptions.from_recorder_command_options()
+            assertEquals(options.get("a"), null)
+        }
+    }
+
 }
