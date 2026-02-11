@@ -52,6 +52,7 @@ class TERRAPINSPlugin : PlugIn
         {
             val view_model = TERRAPINSVM.from(settings_)
             val view = TERRAPINSView.from(view_model)
+
             view.preferredSize = Dimension(400, 400)
             view.pack()
             // show the window - its modal - see ctor
