@@ -69,7 +69,8 @@ class HAWKPlugin : ExtendedPlugInFilter
         }
         else
         {
-            val view = HAWKView.from(HAWKVM.from(settings_))
+            val view_model = HAWKVM.from(settings_)
+            val view = HAWKView.from(view_model)
             view.preferredSize = Dimension(400, 400)
             view.pack()
             // show the window - its modal - see ctor
