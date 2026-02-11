@@ -5,6 +5,7 @@ import com.coxphysics.terrapins.models.assessment.workflow.Settings
 class TERRAPINSVM private constructor(private val settings_: Settings)
 {
     private val pre_processing_vm_: PreProcessingVM = PreProcessingVM.from(settings_)
+    private val equipment_settings_vm_: EquipmentSettingsVM = EquipmentSettingsVM.from(settings_.localisation_settings().equipment())
     private val localisation_vm_ : LocalisationVM = LocalisationVM.from(settings_.localisation_settings())
     private val images_vm_ : ImagesVM = ImagesVM.from(settings_.images_settings())
     companion object
@@ -25,6 +26,11 @@ class TERRAPINSVM private constructor(private val settings_: Settings)
     fun pre_processing_vm(): PreProcessingVM
     {
         return pre_processing_vm_
+    }
+
+    fun equipment_settings_vm(): EquipmentSettingsVM
+    {
+        return equipment_settings_vm_
     }
 
     fun localisation_vm(): LocalisationVM
