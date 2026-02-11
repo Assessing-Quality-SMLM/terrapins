@@ -1,6 +1,10 @@
 package com.coxphysics.terrapins.view_models.TERRAPINS
 
 import com.coxphysics.terrapins.models.assessment.workflow.Settings
+import com.coxphysics.terrapins.models.to_nullable_path
+import java.awt.Color
+import javax.swing.JTextField
+import kotlin.io.path.exists
 
 class TERRAPINSVM private constructor(private val settings_: Settings)
 {
@@ -22,6 +26,26 @@ class TERRAPINSVM private constructor(private val settings_: Settings)
             return from(Settings.default())
         }
     }
+
+    fun working_directory(): String
+    {
+        return settings_.working_directory().toString()
+    }
+
+    fun set_working_directory(value: String): Color
+    {
+        val path = value.to_nullable_path()
+        if (path == null)
+            return error_colour()
+        if (!path.exists())
+            return error_colour()
+        settings_.set_working_directory(path)
+        return default_background_colour()
+    }
+
+    private fun default_background_colour(): Color = JTextField().background
+
+    private fun error_colour(): Color = Color.RED
 
     fun pre_processing_vm(): PreProcessingVM
     {

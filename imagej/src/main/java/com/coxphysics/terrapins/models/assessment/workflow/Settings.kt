@@ -1,11 +1,13 @@
 package com.coxphysics.terrapins.models.assessment.workflow
 
+import com.coxphysics.terrapins.models.assessment.CoreSettings
 import com.coxphysics.terrapins.models.assessment.localisation.AssessmentSettings
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.plugins.WORKFLOW_SETTINGS_USE_LOCALISATIONS
 import com.coxphysics.terrapins.views.ImageSelectorSetttings
 import ij.plugin.frame.Recorder
+import java.nio.file.Path
 import com.coxphysics.terrapins.models.assessment.images.Settings as ImagesSettings
 import com.coxphysics.terrapins.models.hawk.Settings as HawkSettings
 
@@ -53,6 +55,24 @@ class Settings private constructor(image_selector_setttings: ImageSelectorSettti
             settings.use_localisations_ = use_localisations
             return settings
         }
+    }
+
+    fun core_settings(): CoreSettings
+    {
+        if(use_localisations())
+            return localisation_settings_.core_settings()
+        return images_settings_.core_settings()
+    }
+
+    fun working_directory() : Path
+    {
+        return core_settings().working_directory()
+    }
+
+    fun set_working_directory(value: Path)
+    {
+        localisation_settings_.set_working_directory(value)
+        images_settings_.set_working_directory(value)
     }
 
     fun use_localisations(): Boolean

@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.views.TERRAPINS;
 
+import com.coxphysics.terrapins.models.utils.ActionableDocumentListener;
 import com.coxphysics.terrapins.view_models.TERRAPINS.PathSelectorVM;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -79,7 +80,7 @@ public class PathSelectorView {
 
     public PathSelectorView()
     {
-        filename_txt_field_.getDocument().addDocumentListener(DataPathListener.from(this));
+        filename_txt_field_.getDocument().addDocumentListener(ActionableDocumentListener.from(this, PathSelectorView::update_data_path_from_view));
         find_btn_.addActionListener(FindListener.from(this));
     }
 
@@ -118,16 +119,8 @@ public class PathSelectorView {
     public void update_data_path_from_view()
     {
         String new_path_text = filename_txt_field_.getText();
-        try
-        {
-            Path new_path = Paths.get(new_path_text);
-            view_model_.set_current_path(new_path);
-        }
-        catch (Exception e)
-        {
-            String message = "Could not load path " + new_path_text + " due to " + e;
-            IJ.log(message);
-        }
+        Color bg_colour = view_model_.set_current_path(new_path_text);
+        filename_txt_field_.setBackground(bg_colour);
     }
 
     public void find_path() {

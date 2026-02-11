@@ -32,7 +32,7 @@ class CoreSettingsTests
     {
         val settings = Settings.default()
         assertNotEquals(settings.working_directory(), Paths.get("something"))
-        settings.set_working_directory("something")
+        settings.set_working_directory(Paths.get("something"))
         assertEquals(settings.working_directory(), Paths.get("something"))
     }
 
