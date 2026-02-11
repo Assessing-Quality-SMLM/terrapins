@@ -39,12 +39,8 @@ class Settings private constructor(
         fun from_macro_options(options: MacroOptions) : Settings?
         {
             val core_settings = CoreSettings.from_macro_options(options)
-            if (core_settings == null)
-                return null
 
             val equipment_settings = EquipmentSettings.from_macro_options(options)
-            if (equipment_settings == null)
-                return null
 
             val reference_image = DiskOrImage.from_macro_options_with(IMAGES_SETTINGS_RECON_IMAGE, options)
             if (reference_image == null)

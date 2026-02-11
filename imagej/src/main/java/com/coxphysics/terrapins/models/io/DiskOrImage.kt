@@ -3,10 +3,10 @@ package com.coxphysics.terrapins.models
 import com.coxphysics.terrapins.models.ij_wrapping.ImageSelector
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.utils.IJUtils
+import com.coxphysics.terrapins.models.utils.StringUtils
 import ij.ImagePlus
 import ij.plugin.frame.Recorder
 import java.nio.file.Path
-import kotlin.io.path.exists
 
 class DiskOrImage private constructor(
     private var filename_: PathWrapper,
@@ -188,6 +188,11 @@ class DiskOrImage private constructor(
 
     fun record_to_macro_with(key: String)
     {
-        Recorder.recordOption(key, macro_string() )
+
+        val description = macro_string()
+        if (description != StringUtils.EMPTY_STRING)
+        {
+            Recorder.recordOption(key, description)
+        }
     }
 }
