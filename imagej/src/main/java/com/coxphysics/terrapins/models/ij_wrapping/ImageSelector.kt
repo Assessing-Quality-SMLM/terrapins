@@ -22,7 +22,9 @@ private fun get_image_index_from_manager(image: ImagePlus): Int?
     {
         val id = WindowManager.getNthImageID(idx)
         val test_image = WindowManager.getImage(id)
-        if (test_image.equals(image))
+        if (test_image == null)
+            continue
+        if (test_image == image)
             return idx
     }
     return null

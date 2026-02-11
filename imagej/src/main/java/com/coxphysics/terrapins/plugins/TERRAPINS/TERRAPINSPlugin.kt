@@ -1,10 +1,10 @@
 package com.coxphysics.terrapins.plugins.TERRAPINS
 
 import com.coxphysics.terrapins.models.assessment.AssessmentResults
+import com.coxphysics.terrapins.models.assessment.TERRAPINS
 import com.coxphysics.terrapins.models.assessment.workflow.Settings
 import com.coxphysics.terrapins.models.macros.MacroUtils
 import com.coxphysics.terrapins.models.squirrel.tools.SQUIRREL_GetFileFromResource
-import com.coxphysics.terrapins.plugins.assessment.TERRAPINS
 import com.coxphysics.terrapins.view_models.TERRAPINS.TERRAPINSVM
 import com.coxphysics.terrapins.view_models.assessment.ReportVM
 import com.coxphysics.terrapins.views.TERRAPINS.TERRAPINSView
@@ -52,6 +52,7 @@ class TERRAPINSPlugin : PlugIn
         {
             val view_model = TERRAPINSVM.from(settings_)
             val view = TERRAPINSView.from(view_model)
+
             view.preferredSize = Dimension(400, 400)
             view.pack()
             // show the window - its modal - see ctor
