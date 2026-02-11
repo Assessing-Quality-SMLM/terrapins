@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.views.TERRAPINS;
 
+import com.coxphysics.terrapins.models.utils.ActionableDocumentListener;
 import com.coxphysics.terrapins.view_models.TERRAPINS.TERRAPINSVM;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -93,6 +94,7 @@ public class TERRAPINSView extends JDialog {
     private TERRAPINSView() {
         super((Dialog) null, "TERRAPINS", true);
         add(root_);
+        working_directory_.getDocument().addDocumentListener(ActionableDocumentListener.from(this, TERRAPINSView::update_working_directory));
         localisation_cb_.addActionListener(LocalisationListener.from(this));
         run_btn_.addActionListener(RunListener.from(this));
         cancel_btn_.addActionListener(CancelListener.from(this));
@@ -106,6 +108,7 @@ public class TERRAPINSView extends JDialog {
 
     private void set_view_model(TERRAPINSVM view_model) {
         view_model_ = view_model;
+        working_directory_.setText(view_model.working_directory());
         pre_processing_view_.set_view_model(view_model_.pre_processing_vm());
         equipment_settings_ctrl_.set_view_model(view_model.equipment_settings_vm());
         localisations_ctrl_.set_view_model(view_model.localisation_vm());
@@ -116,6 +119,15 @@ public class TERRAPINSView extends JDialog {
 
     public boolean cancelled() {
         return cancelled_;
+    }
+
+    public void update_working_directory()
+    {
+        String new_value = working_directory_.getText();
+        Color bg_colour = view_model_.set_working_directory(new_value);
+        working_directory_.setBackground(bg_colour);
+
+
     }
 
     public void set_use_localisations() {
