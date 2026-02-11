@@ -42,25 +42,25 @@ class Settings private constructor(
 
             val equipment_settings = EquipmentSettings.from_macro_options(options)
 
-            val reference_image = DiskOrImage.from_macro_options_with(IMAGES_SETTINGS_RECON_IMAGE, options)
+            var reference_image = DiskOrImage.from_macro_options_with(IMAGES_SETTINGS_RECON_IMAGE, options)
             if (reference_image == null)
-                return null
+                reference_image = DiskOrImage.default()
 
-            val hawk_image = DiskOrImage.from_macro_options_with(IMAGES_SETTINGS_HAWK_IMAGE, options)
+            var hawk_image = DiskOrImage.from_macro_options_with(IMAGES_SETTINGS_HAWK_IMAGE, options)
             if (hawk_image == null)
-                return null
+                hawk_image = DiskOrImage.default()
 
-            val half_split = JointImages.from_macro_options_with(IMAGES_SETTINGS_HALF_SPLIT_1, IMAGES_SETTINGS_HALF_SPLIT_2, options)
+            var half_split = JointImages.from_macro_options_with(IMAGES_SETTINGS_HALF_SPLIT_1, IMAGES_SETTINGS_HALF_SPLIT_2, options)
             if (half_split == null)
-                return null
+                half_split = JointImages.default()
 
-            val drift_split = JointImages.from_macro_options_with(IMAGES_SETTINGS_DRIFT_SPLIT_1, IMAGES_SETTINGS_DRIFT_SPLIT_2, options)
+            var drift_split = JointImages.from_macro_options_with(IMAGES_SETTINGS_DRIFT_SPLIT_1, IMAGES_SETTINGS_DRIFT_SPLIT_2, options)
             if (drift_split == null)
-                return null
+                drift_split = JointImages.default()
 
-            val zip_split = JointImages.from_macro_options_with(IMAGES_SETTINGS_ZIP_SPLIT_1, IMAGES_SETTINGS_ZIP_SPLIT_2, options)
+            var zip_split = JointImages.from_macro_options_with(IMAGES_SETTINGS_ZIP_SPLIT_1, IMAGES_SETTINGS_ZIP_SPLIT_2, options)
             if (zip_split == null)
-                return null
+                zip_split = JointImages.default()
 
             val settings = default()
             settings.core_settings_ = core_settings
