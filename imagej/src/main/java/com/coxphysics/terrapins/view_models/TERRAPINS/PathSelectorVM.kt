@@ -2,7 +2,11 @@ package com.coxphysics.terrapins.view_models.TERRAPINS
 
 import com.coxphysics.terrapins.models.PathWrapper
 import com.coxphysics.terrapins.models.io.PathSelector
+import com.coxphysics.terrapins.models.to_nullable_path
+import java.awt.Color
 import java.nio.file.Path
+import javax.swing.JTextField
+import kotlin.io.path.exists
 
 class PathSelectorVM private constructor(
     private var title_: String,
@@ -46,10 +50,20 @@ class PathSelectorVM private constructor(
         return path_.current_path()
     }
 
-    fun set_current_path(value: Path)
+    fun set_current_path(value: String) : Color
     {
-        path_.set_current_path(value)
+        val path = value.to_nullable_path()
+        if (path == null)
+            return error_colour()
+        if (!path.exists())
+            return error_colour()
+        path_.set_current_path(path)
+        return default_background_colour()
     }
+
+    private fun error_colour(): Color = Color.RED
+
+    private fun default_background_colour(): Color = JTextField().background
 
     fun find_path(): Path?
     {
