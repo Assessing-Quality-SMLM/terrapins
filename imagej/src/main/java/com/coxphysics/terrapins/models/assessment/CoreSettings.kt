@@ -44,7 +44,7 @@ class CoreSettings private constructor(
 
         private fun default_working_directory(): Path = FsUtils.temp_directory().resolve("smlm_assessment")
 
-        fun from_macro_options(options: MacroOptions): CoreSettings?
+        fun from_macro_options(options: MacroOptions): CoreSettings
         {
             var widefield = DiskOrImage.from_macro_options_with(CORE_SETTINGS_WIDEFIELD, options)
             if (widefield == null)

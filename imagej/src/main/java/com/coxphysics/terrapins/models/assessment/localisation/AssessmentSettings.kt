@@ -39,9 +39,7 @@ class AssessmentSettings private constructor(
         fun from_macro_options(options: MacroOptions) : AssessmentSettings?
         {
             val core_settings = CoreSettings.from_macro_options(options)
-            if (core_settings == null)
-                return null
-
+            
             val equipment_settings = EquipmentSettings.from_macro_options(options)
             if (equipment_settings == null)
                 return null
