@@ -46,12 +46,14 @@ class CoreSettings private constructor(
 
         fun from_macro_options(options: MacroOptions): CoreSettings?
         {
-            val widefield = DiskOrImage.from_macro_options_with(CORE_SETTINGS_WIDEFIELD, options)
+            var widefield = DiskOrImage.from_macro_options_with(CORE_SETTINGS_WIDEFIELD, options)
             if (widefield == null)
-                return null
-            val image_stack = DiskOrImage.from_macro_options_with(CORE_SETTINGS_IMAGE_STACK, options)
+                widefield = DiskOrImage.default()
+
+            var image_stack = DiskOrImage.from_macro_options_with(CORE_SETTINGS_IMAGE_STACK, options)
             if (image_stack == null)
-                return null
+                image_stack = DiskOrImage.default()
+
             val working_directory = options.get(CORE_SETTINGS_WORKING_DIRECTORY)
             val working_directory_path = working_directory.to_path_or_default(default_working_directory())
             val settings_file = options.get(CORE_SETTINGS_SETTINGS_FILE)
