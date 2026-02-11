@@ -48,8 +48,8 @@ class TERRAPINSPlugin : PlugIn
             val options = MacroOptions.default()
             if (options == null)
             {
-                // maybe dont do this as in macro land - what happens in headless mode
-                IJ.log("Could not construct macro options")
+//                // maybe dont do this as in macro land - what happens in headless mode
+//                IJ.log("Could not construct macro options")
                 return
             }
             settings_ = Settings.extract_from_macro_options(options)
