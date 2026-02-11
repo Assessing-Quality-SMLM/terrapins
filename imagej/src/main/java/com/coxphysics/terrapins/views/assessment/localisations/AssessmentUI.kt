@@ -12,6 +12,7 @@ import com.coxphysics.terrapins.views.localisations.LocalisationFileUI
 import ij.gui.GenericDialog
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
+import java.nio.file.Paths
 
 private const val LOCALISATION_FILE = "Localisation File"
 private const val HAWKED_LOCALISATION_FILE = "HAWK Localisation File"
@@ -67,7 +68,7 @@ class AssessmentUI private constructor(
         val settings = AssessmentSettings.default()
 
         val working_directory = Utils.extract_directory_field(dialog)
-        settings.set_working_directory(working_directory)
+        settings.set_working_directory(Paths.get(working_directory))
 
         val equipment = EquipmentUI.create_settings_record(dialog)
         settings.set_equipment_settings(equipment)

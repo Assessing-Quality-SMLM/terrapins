@@ -114,9 +114,9 @@ class Settings private constructor(
         return core_settings_.working_directory()
     }
 
-    fun set_working_directory(value: String)
+    fun set_working_directory(value: Path)
     {
-        core_settings_.set_working_directory(Paths.get(value))
+        core_settings_.set_working_directory(value)
     }
 
     fun set_widefield_filename(value: String)

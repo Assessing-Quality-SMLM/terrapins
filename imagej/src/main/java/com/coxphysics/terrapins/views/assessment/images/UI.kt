@@ -18,6 +18,7 @@ import com.coxphysics.terrapins.views.io.*
 import ij.gui.GenericDialog
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
+import java.nio.file.Paths
 
 class UI private constructor(
     private val dialog_: GenericDialog,
@@ -92,7 +93,7 @@ class UI private constructor(
         val settings = Settings.default()
 
         val working_directory = Utils.extract_directory_field(dialog)
-        settings.set_working_directory(working_directory)
+        settings.set_working_directory(Paths.get(working_directory))
 
         val equipment = EquipmentUI.create_settings_record(dialog)
         settings.set_equipment_settings(equipment)
