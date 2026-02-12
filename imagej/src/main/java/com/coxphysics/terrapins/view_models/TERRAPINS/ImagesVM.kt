@@ -4,9 +4,9 @@ import com.coxphysics.terrapins.models.assessment.images.Settings
 
 class ImagesVM private constructor(private var settings_: Settings)
 {
-    private val drift_split_vm_ = JointImagesVM.from(settings_.drift_split_model())
-    private val half_split_vm_ = JointImagesVM.from(settings_.half_split_model())
-    private val zip_split_vm_ = JointImagesVM.from(settings_.zip_split_model())
+    private val drift_split_vm_ = JointImagesVM.from(settings_.drift_split_model(), "Section Split a", "Section Split b")
+    private val half_split_vm_ = JointImagesVM.from(settings_.half_split_model(), "Half Split a", "Half Split b")
+    private val zip_split_vm_ = JointImagesVM.from(settings_.zip_split_model(), "Zip Split a", "Zip Split b")
 
     companion object
     {
