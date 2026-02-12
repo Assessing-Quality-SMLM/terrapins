@@ -3,6 +3,7 @@ package com.coxphysics.terrapins.views.TERRAPINS;
 import com.coxphysics.terrapins.view_models.TERRAPINS.LocalisationVM;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +12,8 @@ public class LocalisationView {
     private JPanel root_panel_;
     private LocalisationFileView hawk_localisation_file_selector_ctrl_;
     private LocalisationFileView localisation_file_selector_ctrl_;
+    private JLabel raw_lbl_;
+    private JLabel hakw_lbl_;
 
     private LocalisationVM view_model_ = LocalisationVM.default_();
 
@@ -18,16 +21,14 @@ public class LocalisationView {
         draw();
     }
 
-    public void set_view_model(LocalisationVM view_model)
-    {
+    public void set_view_model(LocalisationVM view_model) {
         view_model_ = view_model;
         localisation_file_selector_ctrl_.set_view_model(view_model_.localisation_file_vm());
         hawk_localisation_file_selector_ctrl_.set_view_model(view_model_.hawk_localisation_file_vm());
         draw();
     }
 
-    public void finalise_settings()
-    {
+    public void finalise_settings() {
         localisation_file_selector_ctrl_.finalise_settings();
         hawk_localisation_file_selector_ctrl_.finalise_settings();
     }
@@ -37,8 +38,7 @@ public class LocalisationView {
         hawk_localisation_file_selector_ctrl_.draw();
     }
 
-    public void set_visible(boolean value)
-    {
+    public void set_visible(boolean value) {
         root_panel_.setVisible(value);
         hawk_localisation_file_selector_ctrl_.set_visible(value);
         localisation_file_selector_ctrl_.set_visible(value);
@@ -60,11 +60,19 @@ public class LocalisationView {
      */
     private void $$$setupUI$$$() {
         root_panel_ = new JPanel();
-        root_panel_.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
-        localisation_file_selector_ctrl_ = new LocalisationFileView();
-        root_panel_.add(localisation_file_selector_ctrl_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        root_panel_.setLayout(new GridLayoutManager(3, 2, new Insets(0, 0, 0, 0), -1, -1));
         hawk_localisation_file_selector_ctrl_ = new LocalisationFileView();
-        root_panel_.add(hawk_localisation_file_selector_ctrl_.$$$getRootComponent$$$(), new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        root_panel_.add(hawk_localisation_file_selector_ctrl_.$$$getRootComponent$$$(), new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        localisation_file_selector_ctrl_ = new LocalisationFileView();
+        root_panel_.add(localisation_file_selector_ctrl_.$$$getRootComponent$$$(), new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        raw_lbl_ = new JLabel();
+        raw_lbl_.setText("Raw Locaslisations");
+        root_panel_.add(raw_lbl_, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        hakw_lbl_ = new JLabel();
+        hakw_lbl_.setText("HAWK Localisations");
+        root_panel_.add(hakw_lbl_, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer1 = new Spacer();
+        root_panel_.add(spacer1, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
     }
 
     /**
