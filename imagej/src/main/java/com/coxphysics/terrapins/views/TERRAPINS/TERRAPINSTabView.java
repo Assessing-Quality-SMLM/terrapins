@@ -1,7 +1,11 @@
 package com.coxphysics.terrapins.views.TERRAPINS;
 
+import com.coxphysics.terrapins.models.assessment.AssessmentResults;
 import com.coxphysics.terrapins.models.utils.ActionableListener;
 import com.coxphysics.terrapins.view_models.TERRAPINS.TERRAPINSVM;
+import com.coxphysics.terrapins.view_models.assessment.ReportVM;
+import com.coxphysics.terrapins.views.assessment.results.ReportView;
+import com.coxphysics.terrapins.views.utils.Utils;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -48,11 +52,19 @@ public class TERRAPINSTabView extends JFrame {
     }
 
     private void run_localisations() {
-        view_model_.run_localisations();
+        AssessmentResults results = view_model_.run_localisations();
+        display_results(results);
     }
 
     private void run_images() {
-        view_model_.run_images();
+        AssessmentResults results = view_model_.run_images();
+        display_results(results);
+    }
+
+    private void display_results(AssessmentResults results) {
+        if (results == null)
+            return;
+        Utils.run_results_viewer(results);
     }
 
     {

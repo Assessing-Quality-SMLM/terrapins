@@ -11,6 +11,7 @@ import com.coxphysics.terrapins.view_models.assessment.ReportVM
 import com.coxphysics.terrapins.views.TERRAPINS.TERRAPINSTabView
 import com.coxphysics.terrapins.views.TERRAPINS.TERRAPINSView
 import com.coxphysics.terrapins.views.assessment.results.ReportView
+import com.coxphysics.terrapins.views.utils.Utils
 import ij.IJ
 import ij.ImageJ
 import ij.plugin.PlugIn
@@ -103,21 +104,11 @@ class TERRAPINSPlugin : PlugIn
             IJ.log("Assessment failed")
             return
         }
-        run_results_viewer(results)
+        Utils.run_results_viewer(results)
     }
 
     private fun run_assessment(settings: Settings): AssessmentResults?
     {
         return TERRAPINS.default().run(settings)
     }
-
-    private fun run_results_viewer(results: AssessmentResults)
-    {
-        val report_view_model = ReportVM.from_results(results)
-        val report_view = ReportView.from(report_view_model)
-        report_view.preferredSize = Dimension(400, 400)
-        report_view.pack()
-        report_view.isVisible = true
-    }
-
 }
