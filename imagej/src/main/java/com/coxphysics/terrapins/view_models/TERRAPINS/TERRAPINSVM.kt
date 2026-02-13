@@ -1,5 +1,7 @@
 package com.coxphysics.terrapins.view_models.TERRAPINS
 
+import com.coxphysics.terrapins.models.assessment.AssessmentResults
+import com.coxphysics.terrapins.models.assessment.TERRAPINS
 import com.coxphysics.terrapins.models.assessment.workflow.Settings
 import com.coxphysics.terrapins.models.to_nullable_path
 import java.awt.Color
@@ -87,5 +89,15 @@ class TERRAPINSVM private constructor(private val settings_: Settings)
     fun settings_vm(): PathSelectorVM
     {
         return settings_vm_
+    }
+
+    fun run_localisations() : AssessmentResults?
+    {
+        return TERRAPINS.default().run_localisations(settings_.localisation_settings())
+    }
+
+    fun run_images() : AssessmentResults?
+    {
+        return TERRAPINS.default().run_images(settings_.images_settings())
     }
 }
