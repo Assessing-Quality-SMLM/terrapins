@@ -37,6 +37,18 @@ class CoreSettingsTests
     }
 
     @Test
+    fun can_detect_settings_file()
+    {
+        val settings = CoreSettings.default()
+        assertEquals(settings.has_settings_file(), false)
+        assertEquals(settings.settings_file_nn(), "")
+
+        settings.set_settings_file("something")
+        assertEquals(settings.has_settings_file(), true)
+        assertEquals(settings.settings_file_nn(), "something")
+    }
+
+    @Test
     fun widefield_path()
     {
         val working_directory = Paths.get("some", "thing")

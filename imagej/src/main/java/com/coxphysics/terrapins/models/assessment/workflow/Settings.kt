@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.models.assessment.workflow
 
+import com.coxphysics.terrapins.models.PathWrapper
 import com.coxphysics.terrapins.models.assessment.CoreSettings
 import com.coxphysics.terrapins.models.assessment.localisation.AssessmentSettings
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
@@ -73,6 +74,11 @@ class Settings private constructor(image_selector_setttings: ImageSelectorSettti
     {
         localisation_settings_.set_working_directory(value)
         images_settings_.set_working_directory(value)
+    }
+
+    fun settings_file(): PathWrapper
+    {
+        return core_settings().settings_file()
     }
 
     fun use_localisations(): Boolean

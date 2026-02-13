@@ -21,9 +21,15 @@ class PathSelectorVM private constructor(
         }
 
         @JvmStatic
+        fun with_path_and_title(title: String, path: PathWrapper) : PathSelectorVM
+        {
+            return from(title, PathSelector.default_with(path))
+        }
+
+        @JvmStatic
         fun with(path: PathWrapper) : PathSelectorVM
         {
-            return from("File", PathSelector.default_with(path))
+            return with_path_and_title("File", path)
         }
 
         @JvmStatic

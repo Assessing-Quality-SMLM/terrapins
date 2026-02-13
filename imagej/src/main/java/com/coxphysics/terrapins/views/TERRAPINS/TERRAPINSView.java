@@ -110,7 +110,7 @@ public class TERRAPINSView extends JDialog {
         view_model_ = view_model;
         working_directory_.setText(view_model.working_directory());
         pre_processing_view_.set_view_model(view_model_.pre_processing_vm());
-        equipment_settings_ctrl_.set_view_model(view_model.equipment_settings_vm());
+        equipment_settings_ctrl_.set_view_model(view_model.localisation_equipment_settings_vm());
         localisations_ctrl_.set_view_model(view_model.localisation_vm());
         images_ctrl_.set_view_model(view_model.images_vm());
         localisation_cb_.setSelected(view_model.use_localisations());

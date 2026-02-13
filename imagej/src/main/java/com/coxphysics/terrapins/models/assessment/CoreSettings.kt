@@ -17,7 +17,7 @@ class CoreSettings private constructor(
     private var working_directory_: Path,
     private var widefield_: DiskOrImage,
     private var image_stack_: DiskOrImage,
-    private var settings_file_: String?
+    private var settings_file_: PathWrapper
     )
 {
     private var n_threads_ = Prefs.getThreads();
@@ -27,7 +27,7 @@ class CoreSettings private constructor(
         @JvmStatic
         fun new(working_directory: Path, widefield: DiskOrImage, image_stack: DiskOrImage, settings_file: String?): CoreSettings
         {
-            return CoreSettings(working_directory, widefield, image_stack, settings_file)
+            return CoreSettings(working_directory, widefield, image_stack, PathWrapper.from_optional_string(settings_file))
         }
 
         @JvmStatic
@@ -143,19 +143,24 @@ class CoreSettings private constructor(
         n_threads_ = value
     }
 
+    fun settings_file(): PathWrapper
+    {
+        return settings_file_
+    }
+
     fun has_settings_file(): Boolean
     {
-        return !settings_file_.isNullOrEmpty()
+        return settings_file_.has_data()
     }
 
     fun settings_file_nn(): String
     {
-        return settings_file_.non_null()
+        return settings_file_.to_string()
     }
 
     fun set_settings_file(value: String)
     {
-        settings_file_ = value
+        settings_file_.set_path_from_string(value)
     }
 
     fun to_disk_in(directory: Path) : CoreSettings?
@@ -209,7 +214,7 @@ class CoreSettings private constructor(
         Recorder.recordOption(CORE_SETTINGS_WORKING_DIRECTORY, working_directory_.toString())
         widefield_.record_to_macro_with(CORE_SETTINGS_WIDEFIELD)
         image_stack_.record_to_macro_with(CORE_SETTINGS_IMAGE_STACK)
-        if(settings_file_ != null)
-            Recorder.recordOption(CORE_SETTINGS_SETTINGS_FILE, settings_file_)
+        if(settings_file_.has_data())
+            Recorder.recordOption(CORE_SETTINGS_SETTINGS_FILE, settings_file_.to_string())
     }
 }

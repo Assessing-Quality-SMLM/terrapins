@@ -8,6 +8,7 @@ import com.coxphysics.terrapins.models.macros.MacroUtils
 import com.coxphysics.terrapins.models.squirrel.tools.SQUIRREL_GetFileFromResource
 import com.coxphysics.terrapins.view_models.TERRAPINS.TERRAPINSVM
 import com.coxphysics.terrapins.view_models.assessment.ReportVM
+import com.coxphysics.terrapins.views.TERRAPINS.TERRAPINSTabView
 import com.coxphysics.terrapins.views.TERRAPINS.TERRAPINSView
 import com.coxphysics.terrapins.views.assessment.results.ReportView
 import ij.IJ
@@ -58,28 +59,51 @@ class TERRAPINSPlugin : PlugIn
         }
         else
         {
-            val view_model = TERRAPINSVM.from(settings_)
-            val view = TERRAPINSView.from(view_model)
-
-            view.preferredSize = Dimension(400, 400)
-            view.pack()
-            // show the window - its modal - see ctor
-            view.isVisible = true
-            // view is modal dialog - executes when window is closed
-            if (view.cancelled())
-                return
-            if (MacroUtils.is_recording())
+            val run_linear = false
+            if (run_linear)
             {
-                settings_.record_to_macro()
+                run_linear_view()
             }
-            val results = run_assessment(settings_)
-            if (results == null)
+            else
             {
-                IJ.log("Assessment failed")
-                return
+                run_tabbed_view()
             }
-            run_results_viewer(results)
         }
+    }
+
+    private fun run_tabbed_view()
+    {
+        val view_model = TERRAPINSVM.from(settings_)
+        val view = TERRAPINSTabView.from(view_model)
+        view.preferredSize = Dimension(400, 400)
+        view.pack()
+        // show the window - its modal - see ctor
+        view.isVisible = true
+    }
+
+    private fun run_linear_view()
+    {
+        val view_model = TERRAPINSVM.from(settings_)
+        val view = TERRAPINSView.from(view_model)
+
+        view.preferredSize = Dimension(400, 400)
+        view.pack()
+        // show the window - its modal - see ctor
+        view.isVisible = true
+        // view is modal dialog - executes when window is closed
+        if (view.cancelled())
+            return
+        if (MacroUtils.is_recording())
+        {
+            settings_.record_to_macro()
+        }
+        val results = run_assessment(settings_)
+        if (results == null)
+        {
+            IJ.log("Assessment failed")
+            return
+        }
+        run_results_viewer(results)
     }
 
     private fun run_assessment(settings: Settings): AssessmentResults?
