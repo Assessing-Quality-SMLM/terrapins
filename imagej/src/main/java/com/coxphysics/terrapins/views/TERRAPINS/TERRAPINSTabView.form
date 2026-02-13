@@ -40,7 +40,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <nested-form id="cdb2d" form-file="com/coxphysics/terrapins/views/TERRAPINS/LocalisationView.form">
+              <nested-form id="cdb2d" form-file="com/coxphysics/terrapins/views/TERRAPINS/LocalisationView.form" binding="localisations_ctrl_">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -55,7 +55,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <nested-form id="f94bb" form-file="com/coxphysics/terrapins/views/TERRAPINS/ImagesView.form">
+              <nested-form id="f94bb" form-file="com/coxphysics/terrapins/views/TERRAPINS/ImagesView.form" binding="images_ctrl_">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -75,7 +75,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <nested-form id="7e82c" form-file="com/coxphysics/terrapins/views/TERRAPINS/PathSelectorView.form">
+              <nested-form id="7e82c" form-file="com/coxphysics/terrapins/views/TERRAPINS/PathSelectorView.form" binding="settings_view_">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>

@@ -14,6 +14,9 @@ public class TERRAPINSTabView extends JFrame {
     private JPanel pane_root_;
     private JPanel localisation_panel_;
     private JPanel images_panel_;
+    private LocalisationView localisations_ctrl_;
+    private ImagesView images_ctrl_;
+    private PathSelectorView settings_view_;
 
     private TERRAPINSVM view_model_;
 
@@ -31,6 +34,9 @@ public class TERRAPINSTabView extends JFrame {
 
     private void set_view_model(TERRAPINSVM view_model) {
         view_model_ = view_model;
+        localisations_ctrl_.set_view_model(view_model.localisation_vm());
+        images_ctrl_.set_view_model(view_model.images_vm());
+        settings_view_.set_view_model(view_model.settings_vm());
     }
 
     {
@@ -60,20 +66,20 @@ public class TERRAPINSTabView extends JFrame {
         localisation_panel_ = new JPanel();
         localisation_panel_.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         tab_pane_.addTab("Localisation Workflow", localisation_panel_);
-        final LocalisationView nestedForm2 = new LocalisationView();
-        localisation_panel_.add(nestedForm2.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        localisations_ctrl_ = new LocalisationView();
+        localisation_panel_.add(localisations_ctrl_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         images_panel_ = new JPanel();
         images_panel_.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         tab_pane_.addTab("Images Workflow", images_panel_);
-        final ImagesView nestedForm3 = new ImagesView();
-        images_panel_.add(nestedForm3.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        images_ctrl_ = new ImagesView();
+        images_panel_.add(images_ctrl_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         images_panel_.add(spacer1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         tab_pane_.addTab("Advanced", panel1);
-        final PathSelectorView nestedForm4 = new PathSelectorView();
-        panel1.add(nestedForm4.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        settings_view_ = new PathSelectorView();
+        panel1.add(settings_view_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
         panel1.add(spacer2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
     }
