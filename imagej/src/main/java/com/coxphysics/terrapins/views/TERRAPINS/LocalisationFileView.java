@@ -213,7 +213,7 @@ public class LocalisationFileView {
         uncertainty_sigma_field_ = new JTextField();
         root_.add(uncertainty_sigma_field_, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         frame_number_pos_lbl_ = new JLabel();
-        frame_number_pos_lbl_.setText("Fram Number");
+        frame_number_pos_lbl_.setText("Frame Number");
         root_.add(frame_number_pos_lbl_, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         frame_number_pos_field_ = new JTextField();
         root_.add(frame_number_pos_field_, new GridConstraints(7, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
@@ -225,4 +225,5 @@ public class LocalisationFileView {
     public JComponent $$$getRootComponent$$$() {
         return root_;
     }
+
 }
