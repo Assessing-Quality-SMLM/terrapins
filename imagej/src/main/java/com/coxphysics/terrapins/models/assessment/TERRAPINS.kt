@@ -2,6 +2,7 @@ package com.coxphysics.terrapins.models.assessment
 
 import com.coxphysics.terrapins.models.assessment.localisation.AssessmentSettings
 import com.coxphysics.terrapins.models.assessment.workflow.Settings
+import com.coxphysics.terrapins.models.macros.MacroUtils
 import com.coxphysics.terrapins.models.process.ImageJLoggingRunner
 import com.coxphysics.terrapins.models.assessment.images.Settings as ImagesSettings
 
@@ -21,6 +22,8 @@ class TERRAPINS private constructor(private val assessment_: Assessment)
         }
     }
 
+    private fun default_runner() = ImageJLoggingRunner()
+
     fun run(settings: Settings) : AssessmentResults?
     {
         return if (settings.use_localisations())
@@ -32,14 +35,32 @@ class TERRAPINS private constructor(private val assessment_: Assessment)
     fun run_localisations(settings: AssessmentSettings) : AssessmentResults?
     {
         val runner = default_runner()
-        return assessment_.run_localisations(runner, settings)
+        val results = assessment_.run_localisations(runner, settings)
+        record_localisations_macro(settings)
+        return results
     }
 
     fun run_images(settings: ImagesSettings) : AssessmentResults?
     {
         val runner = default_runner()
-        return assessment_.run_images(runner, settings)
+        val results = assessment_.run_images(runner, settings)
+        record_images_macro(settings)
+        return results
     }
 
-    private fun default_runner() = ImageJLoggingRunner()
+    fun record_localisations_macro(settings: AssessmentSettings)
+    {
+        if (MacroUtils.is_recording())
+        {
+            settings.record_to_macro()
+        }
+    }
+
+    fun record_images_macro(settings: ImagesSettings)
+    {
+        if (MacroUtils.is_recording())
+        {
+            settings.record_to_macro()
+        }
+    }
 }
