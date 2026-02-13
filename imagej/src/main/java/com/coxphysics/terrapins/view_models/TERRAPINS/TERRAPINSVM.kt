@@ -12,6 +12,7 @@ class TERRAPINSVM private constructor(private val settings_: Settings)
     private val equipment_settings_vm_: EquipmentSettingsVM = EquipmentSettingsVM.from(settings_.localisation_settings().equipment())
     private val localisation_vm_ : LocalisationVM = LocalisationVM.from(settings_.localisation_settings())
     private val images_vm_ : ImagesVM = ImagesVM.from(settings_.images_settings())
+    private val settings_vm_: PathSelectorVM = PathSelectorVM.with_path_and_title("Settings File", settings_.settings_file())
     companion object
     {
         @JvmStatic
@@ -75,5 +76,10 @@ class TERRAPINSVM private constructor(private val settings_: Settings)
     fun set_use_localisations(value: Boolean)
     {
         settings_.set_use_localisations(value)
+    }
+
+    fun settings_vm(): PathSelectorVM
+    {
+        return settings_vm_
     }
 }
