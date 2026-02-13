@@ -3,17 +3,17 @@ package com.coxphysics.terrapins.views.TERRAPINS;
 import com.coxphysics.terrapins.models.assessment.AssessmentResults;
 import com.coxphysics.terrapins.models.utils.ActionableListener;
 import com.coxphysics.terrapins.view_models.TERRAPINS.TERRAPINSVM;
-import com.coxphysics.terrapins.view_models.assessment.ReportVM;
-import com.coxphysics.terrapins.views.assessment.results.ReportView;
 import com.coxphysics.terrapins.views.utils.Utils;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import ij.IJ;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.concurrent.Semaphore;
 
-public class TERRAPINSTabView extends JFrame {
+public class TERRAPINSTabView extends JDialog {
     private JPanel root_;
     private JTabbedPane tab_pane_;
     private JPanel pane_root_;
@@ -27,10 +27,14 @@ public class TERRAPINSTabView extends JFrame {
     private JButton localistations_run_btn_;
     private JButton images_run_btn_;
 
+    private boolean cancelled_ = true;
+
+    private Semaphore semaphore_ = new Semaphore(0);
+
     private TERRAPINSVM view_model_;
 
     private TERRAPINSTabView() {
-        super("TERRAPINS");
+        super(IJ.getInstance(), "TERRAPINS");
         add(root_);
         localistations_run_btn_.addActionListener(ActionableListener.from(this, TERRAPINSTabView::run_localisations));
         images_run_btn_.addActionListener(ActionableListener.from(this, TERRAPINSTabView::run_images));
@@ -65,6 +69,21 @@ public class TERRAPINSTabView extends JFrame {
         if (results == null)
             return;
         Utils.run_results_viewer(results);
+    }
+
+    public boolean was_canceled() {
+        try {
+            semaphore_.acquire();
+        } catch (InterruptedException ex) {
+            IJ.handleException(ex);
+        }
+        return cancelled_;
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        semaphore_.release();
     }
 
     {
