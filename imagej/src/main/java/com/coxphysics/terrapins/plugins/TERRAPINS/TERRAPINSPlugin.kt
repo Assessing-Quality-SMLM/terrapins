@@ -17,6 +17,8 @@ import ij.ImageJ
 import ij.plugin.PlugIn
 import java.awt.Dimension
 import java.io.File
+import javax.swing.JFrame
+import javax.swing.SwingUtilities
 
 class TERRAPINSPlugin : PlugIn
 {
@@ -78,8 +80,9 @@ class TERRAPINSPlugin : PlugIn
         val view = TERRAPINSTabView.from(view_model)
         view.preferredSize = Dimension(400, 400)
         view.pack()
-        // show the window - its modal - see ctor
         view.isVisible = true
+        // wait on the semaphore
+        view.was_canceled()
     }
 
     private fun run_linear_view()
