@@ -87,7 +87,8 @@ public class LocalisationFileView {
     {
         use_thunderstorm_.setVisible(value);
         path_selector_ctrl_.set_visible(value);
-        set_csv_visible(value);
+        boolean csv_visible = !view_model_.use_thunderstorm();
+        set_csv_visible(csv_visible);
     }
 
 
