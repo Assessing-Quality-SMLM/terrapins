@@ -9,8 +9,9 @@ import kotlin.io.path.exists
 class TERRAPINSVM private constructor(private val settings_: Settings)
 {
     private val pre_processing_vm_: PreProcessingVM = PreProcessingVM.from(settings_)
-    private val equipment_settings_vm_: EquipmentSettingsVM = EquipmentSettingsVM.from(settings_.localisation_settings().equipment())
+    private val localisations_equipment_settings_vm_: EquipmentSettingsVM = EquipmentSettingsVM.from(settings_.localisation_settings().equipment())
     private val localisation_vm_ : LocalisationVM = LocalisationVM.from(settings_.localisation_settings())
+    private val images__equipment_settings_vm_: EquipmentSettingsVM = EquipmentSettingsVM.from(settings_.images_settings().equipment_settings())
     private val images_vm_ : ImagesVM = ImagesVM.from(settings_.images_settings())
     private val settings_vm_: PathSelectorVM = PathSelectorVM.with_path_and_title("Settings File", settings_.settings_file())
     companion object
@@ -53,14 +54,19 @@ class TERRAPINSVM private constructor(private val settings_: Settings)
         return pre_processing_vm_
     }
 
-    fun equipment_settings_vm(): EquipmentSettingsVM
+    fun localisation_equipment_settings_vm(): EquipmentSettingsVM
     {
-        return equipment_settings_vm_
+        return localisations_equipment_settings_vm_
     }
 
     fun localisation_vm(): LocalisationVM
     {
         return localisation_vm_
+    }
+
+    fun images_equipment_settings_vm(): EquipmentSettingsVM
+    {
+        return images__equipment_settings_vm_
     }
 
     fun images_vm(): ImagesVM
