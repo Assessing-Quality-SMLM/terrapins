@@ -61,10 +61,8 @@ class PathSelectorVM private constructor(
         val path = value.to_nullable_path()
         if (path == null)
             return error_colour()
-        if (!path.exists())
-            return error_colour()
         path_.set_current_path(path)
-        return default_background_colour()
+        return if(path.exists()) default_background_colour() else error_colour()
     }
 
     private fun error_colour(): Color = Color.RED
