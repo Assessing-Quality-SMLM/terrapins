@@ -16,6 +16,7 @@ class TERRAPINSVM private constructor(private val settings_: Settings)
     private val localisation_vm_ : LocalisationVM = LocalisationVM.from(settings_.localisation_settings())
     private val images__equipment_settings_vm_: EquipmentSettingsVM = EquipmentSettingsVM.from(settings_.images_settings().equipment_settings())
     private val images_vm_ : ImagesVM = ImagesVM.from(settings_.images_settings())
+    private val working_directory_vm_: PathSelectorVM = PathSelectorVM.with_directory_path_and_title("Working Directory", settings_.core_settings().working_directory())
     private val settings_vm_: PathSelectorVM = PathSelectorVM.with_path_and_title("Settings File", settings_.settings_file())
     companion object
     {
@@ -30,6 +31,11 @@ class TERRAPINSVM private constructor(private val settings_: Settings)
         {
             return from(Settings.default())
         }
+    }
+
+    fun working_directory_vm(): PathSelectorVM
+    {
+        return working_directory_vm_
     }
 
     fun working_directory(): String
