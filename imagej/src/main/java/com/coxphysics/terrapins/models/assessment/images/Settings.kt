@@ -109,9 +109,9 @@ class Settings private constructor(
         core_settings_ = value
     }
 
-    fun working_directory(): Path
+    fun working_directory(): Path?
     {
-        return core_settings_.working_directory()
+        return core_settings_.working_directory_path()
     }
 
     fun set_working_directory(value: Path)
@@ -157,7 +157,7 @@ class Settings private constructor(
 
     fun reference_image_path(): Path?
     {
-        return reference_image_path_in(working_directory())
+        return working_directory()?.let{p -> reference_image_path_in(p)}
     }
 
     private fun reference_image_path_in(directory: Path): Path?
@@ -189,7 +189,7 @@ class Settings private constructor(
 
     fun hawk_image_path(): Path?
     {
-        return hawk_image_path_in(working_directory())
+        return working_directory()?.let{p -> hawk_image_path_in(p)}
     }
 
     private fun hawk_image_path_in(directory: Path): Path?
@@ -233,7 +233,7 @@ class Settings private constructor(
 
     fun half_split_image_a_filepath(): Path?
     {
-        return half_split_.image_1_filepath(half_split_images_directory())
+        return half_split_images_directory()?.let{p -> half_split_.image_1_filepath(p)}
     }
 
     fun set_half_split_a(value: String)
@@ -243,7 +243,7 @@ class Settings private constructor(
 
     fun half_split_image_b_filepath(): Path?
     {
-        return half_split_.image_2_filepath(half_split_images_directory())
+        return half_split_images_directory()?.let{p -> half_split_.image_2_filepath(p)}
     }
 
     fun set_half_split_b(value: String)
@@ -251,9 +251,9 @@ class Settings private constructor(
         half_split_.set_image_2_filename(value)
     }
 
-    private fun half_split_images_directory(): Path
+    private fun half_split_images_directory(): Path?
     {
-        return half_split_images_directory_in(working_directory())
+        return working_directory()?.let{p -> half_split_images_directory_in(p)}
     }
 
     private fun half_split_images_directory_in(working_directory: Path): Path
@@ -274,12 +274,12 @@ class Settings private constructor(
 
     fun zip_split_image_a_filepath(): Path?
     {
-        return zip_split_.image_1_filepath(zip_split_images_directory())
+        return zip_split_images_directory()?.let{p -> zip_split_.image_1_filepath(p)}
     }
 
     fun zip_split_image_b_filepath(): Path?
     {
-        return zip_split_.image_2_filepath(zip_split_images_directory())
+        return zip_split_images_directory()?.let{p -> zip_split_.image_2_filepath(p)}
     }
 
     fun set_zip_split_a(value: String)
@@ -292,9 +292,9 @@ class Settings private constructor(
         zip_split_.set_image_2_filename(value)
     }
 
-    private fun zip_split_images_directory(): Path
+    private fun zip_split_images_directory(): Path?
     {
-        return zip_split_images_directory_in(working_directory())
+        return working_directory()?.let{p -> zip_split_images_directory_in(p)}
     }
 
     private fun zip_split_images_directory_in(working_directory: Path): Path
@@ -315,12 +315,12 @@ class Settings private constructor(
 
     fun drift_split_image_a_filepath(): Path?
     {
-        return drift_split_.image_1_filepath(drift_split_images_directory())
+        return drift_split_images_directory()?.let{p -> drift_split_.image_1_filepath(p)}
     }
 
     fun drift_split_image_b_filepath(): Path?
     {
-        return drift_split_.image_2_filepath(drift_split_images_directory())
+        return drift_split_images_directory()?.let{p -> drift_split_.image_2_filepath(p)}
     }
 
     fun set_drift_split_a(value: String)
@@ -333,9 +333,9 @@ class Settings private constructor(
         drift_split_.set_image_2_filename(value)
     }
 
-    private fun drift_split_images_directory(): Path
+    private fun drift_split_images_directory(): Path?
     {
-        return drift_split_images_directory_in(working_directory())
+        return working_directory()?.let{p -> drift_split_images_directory_in(p)}
     }
 
     private fun drift_split_images_directory_in(working_directory: Path): Path
@@ -346,7 +346,7 @@ class Settings private constructor(
     /// METHODS
     fun prepare_images_for_analysis(): CoreSettings?
     {
-        return prepare_images_for_analysis_in(working_directory())
+        return working_directory()?.let{p -> prepare_images_for_analysis_in(p)}
     }
 
     private fun prepare_images_for_analysis_in(working_directory: Path): CoreSettings?

@@ -14,7 +14,7 @@ import ij.plugin.frame.Recorder
 import java.nio.file.Path
 
 class CoreSettings private constructor(
-    private var working_directory_: Path,
+    private var working_directory_: PathWrapper,
     private var widefield_: DiskOrImage,
     private var image_stack_: DiskOrImage,
     private var settings_file_: PathWrapper
@@ -25,13 +25,13 @@ class CoreSettings private constructor(
     companion object
     {
         @JvmStatic
-        fun new(working_directory: Path, widefield: DiskOrImage, image_stack: DiskOrImage, settings_file: String?): CoreSettings
+        fun new(working_directory: Path?, widefield: DiskOrImage, image_stack: DiskOrImage, settings_file: String?): CoreSettings
         {
-            return CoreSettings(working_directory, widefield, image_stack, PathWrapper.from_optional_string(settings_file))
+            return CoreSettings(PathWrapper.from_optional(working_directory), widefield, image_stack, PathWrapper.from_optional_string(settings_file))
         }
 
         @JvmStatic
-        fun from(working_directory: Path): CoreSettings
+        fun from(working_directory: Path?): CoreSettings
         {
             return new(working_directory, DiskOrImage.default(), DiskOrImage.default(), null)
         }
@@ -61,14 +61,19 @@ class CoreSettings private constructor(
         }
     }
 
-    fun working_directory():Path
+    fun working_directory():PathWrapper
     {
         return working_directory_
     }
 
+    fun working_directory_path(): Path?
+    {
+        return working_directory_.path()
+    }
+
     fun set_working_directory(value: Path)
     {
-        working_directory_ = value
+        working_directory_.set_path(value)
     }
 
     fun has_widefield(): Boolean
@@ -83,12 +88,14 @@ class CoreSettings private constructor(
 
     fun widefield_path() : Path?
     {
-        return widefield_path_in(working_directory())
+        return widefield_path_in(working_directory_path())
     }
 
-    private fun widefield_path_in(directory: Path) : Path?
+    private fun widefield_path_in(directory: Path?) : Path?
     {
-        val image_path = directory.resolve("widefield.tiff")
+        val image_path = directory?.resolve("widefield.tiff")
+        if (image_path == null)
+            return null
         return widefield_.filepath(image_path)
     }
 
@@ -99,12 +106,14 @@ class CoreSettings private constructor(
 
     fun image_stack_path() : Path?
     {
-        return image_stack_path_in(working_directory())
+        return image_stack_path_in(working_directory_path())
     }
 
-    private fun image_stack_path_in(directory: Path) : Path?
+    private fun image_stack_path_in(directory: Path?) : Path?
     {
-        val image_path = directory.resolve("image_stack.tiff")
+        val image_path = directory?.resolve("image_stack.tiff")
+        if (image_path == null)
+            return null
         return image_stack_.filepath(image_path)
     }
 
@@ -195,7 +204,7 @@ class CoreSettings private constructor(
         }
         if (widefield_ok && image_stack_ok)
         {
-            val settings = from(working_directory_)
+            val settings = from(working_directory_path())
             settings.n_threads_ = n_threads_
             settings.settings_file_ = settings_file_
             settings.widefield_ = widefield_

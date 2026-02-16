@@ -19,6 +19,12 @@ class PathSelector private constructor(
         }
 
         @JvmStatic
+        fun directory_from(path: PathWrapper) : PathSelector
+        {
+            return from(path, false, false)
+        }
+
+        @JvmStatic
         fun default_with(path: PathWrapper) : PathSelector
         {
             return from(path, true, false)

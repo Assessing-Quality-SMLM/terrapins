@@ -28,6 +28,7 @@ public class TERRAPINSTabView extends JDialog {
     private JButton images_run_btn_;
     private SquirrelInputs localisations_squirrel_inputs_view_;
     private SquirrelInputs images_squirrel_inputs_view_;
+    private PathSelectorView working_directory_view_;
 
     private boolean cancelled_ = true;
 
@@ -56,6 +57,7 @@ public class TERRAPINSTabView extends JDialog {
         images_equipment_view_.set_view_model(view_model_.images_equipment_settings_vm());
         images_squirrel_inputs_view_.set_view_model(view_model.squirrel_inputs_vm());
         images_ctrl_.set_view_model(view_model_.images_vm());
+        working_directory_view_.set_view_model(view_model.working_directory_vm());
         settings_view_.set_view_model(view_model_.settings_vm());
     }
 
@@ -143,12 +145,14 @@ public class TERRAPINSTabView extends JDialog {
         images_squirrel_inputs_view_ = new SquirrelInputs();
         images_panel_.add(images_squirrel_inputs_view_.$$$getRootComponent$$$(), new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel1.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
         tab_pane_.addTab("Advanced", panel1);
         settings_view_ = new PathSelectorView();
-        panel1.add(settings_view_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel1.add(settings_view_.$$$getRootComponent$$$(), new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final Spacer spacer3 = new Spacer();
-        panel1.add(spacer3, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel1.add(spacer3, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        working_directory_view_ = new PathSelectorView();
+        panel1.add(working_directory_view_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
     }
 
     /**

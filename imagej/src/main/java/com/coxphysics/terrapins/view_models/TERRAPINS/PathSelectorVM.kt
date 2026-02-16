@@ -27,6 +27,12 @@ class PathSelectorVM private constructor(
         }
 
         @JvmStatic
+        fun with_directory_path_and_title(title: String, path: PathWrapper) : PathSelectorVM
+        {
+            return from(title, PathSelector.directory_from(path))
+        }
+
+        @JvmStatic
         fun with(path: PathWrapper) : PathSelectorVM
         {
             return with_path_and_title("File", path)

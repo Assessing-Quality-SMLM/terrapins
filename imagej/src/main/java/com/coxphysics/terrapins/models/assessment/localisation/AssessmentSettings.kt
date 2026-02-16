@@ -69,9 +69,9 @@ class AssessmentSettings private constructor(
         core_settings_ = value
     }
 
-    fun working_directory(): Path
+    fun working_directory(): Path?
     {
-        return core_settings_.working_directory()
+        return core_settings_.working_directory_path()
     }
 
     fun set_working_directory(value: Path)
@@ -187,7 +187,7 @@ class AssessmentSettings private constructor(
     /// METHODS
     fun prepare_images_for_analysis(): CoreSettings?
     {
-        return prepare_images_for_analysis_in(working_directory())
+        return working_directory()?.let{p -> prepare_images_for_analysis_in(p)}
     }
 
     private fun prepare_images_for_analysis_in(working_directory: Path): CoreSettings?
