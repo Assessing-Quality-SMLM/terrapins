@@ -26,6 +26,8 @@ public class TERRAPINSTabView extends JDialog {
     private EqupimentSettingsView images_equipment_view_;
     private JButton localistations_run_btn_;
     private JButton images_run_btn_;
+    private SquirrelInputs localisations_squirrel_inputs_view_;
+    private SquirrelInputs images_squirrel_inputs_view_;
 
     private boolean cancelled_ = true;
 
@@ -48,11 +50,13 @@ public class TERRAPINSTabView extends JDialog {
 
     private void set_view_model(TERRAPINSVM view_model) {
         view_model_ = view_model;
-        localisation_equipment_view_.set_view_model(view_model.localisation_equipment_settings_vm());
-        localisations_ctrl_.set_view_model(view_model.localisation_vm());
-        images_equipment_view_.set_view_model(view_model.images_equipment_settings_vm());
-        images_ctrl_.set_view_model(view_model.images_vm());
-        settings_view_.set_view_model(view_model.settings_vm());
+        localisations_squirrel_inputs_view_.set_view_model(view_model_.squirrel_inputs_vm());
+        localisation_equipment_view_.set_view_model(view_model_.localisation_equipment_settings_vm());
+        localisations_ctrl_.set_view_model(view_model_.localisation_vm());
+        images_equipment_view_.set_view_model(view_model_.images_equipment_settings_vm());
+        images_squirrel_inputs_view_.set_view_model(view_model.squirrel_inputs_vm());
+        images_ctrl_.set_view_model(view_model_.images_vm());
+        settings_view_.set_view_model(view_model_.settings_vm());
     }
 
     private void run_localisations() {
@@ -111,29 +115,33 @@ public class TERRAPINSTabView extends JDialog {
         final PreProcessingView nestedForm1 = new PreProcessingView();
         pane_root_.add(nestedForm1.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         localisation_panel_ = new JPanel();
-        localisation_panel_.setLayout(new GridLayoutManager(4, 1, new Insets(5, 5, 5, 5), -1, -1));
+        localisation_panel_.setLayout(new GridLayoutManager(5, 1, new Insets(5, 5, 5, 5), -1, -1));
         tab_pane_.addTab("Localisation Workflow", localisation_panel_);
         localisation_equipment_view_ = new EqupimentSettingsView();
         localisation_panel_.add(localisation_equipment_view_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        localisations_ctrl_ = new LocalisationView();
-        localisation_panel_.add(localisations_ctrl_.$$$getRootComponent$$$(), new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
-        localisation_panel_.add(spacer1, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        localisation_panel_.add(spacer1, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         localistations_run_btn_ = new JButton();
         localistations_run_btn_.setText("Run");
-        localisation_panel_.add(localistations_run_btn_, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        localisation_panel_.add(localistations_run_btn_, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        localisations_squirrel_inputs_view_ = new SquirrelInputs();
+        localisation_panel_.add(localisations_squirrel_inputs_view_.$$$getRootComponent$$$(), new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        localisations_ctrl_ = new LocalisationView();
+        localisation_panel_.add(localisations_ctrl_.$$$getRootComponent$$$(), new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         images_panel_ = new JPanel();
-        images_panel_.setLayout(new GridLayoutManager(4, 1, new Insets(5, 5, 5, 5), -1, -1));
+        images_panel_.setLayout(new GridLayoutManager(5, 1, new Insets(5, 5, 5, 5), -1, -1));
         tab_pane_.addTab("Images Workflow", images_panel_);
         images_ctrl_ = new ImagesView();
-        images_panel_.add(images_ctrl_.$$$getRootComponent$$$(), new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        images_panel_.add(images_ctrl_.$$$getRootComponent$$$(), new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
-        images_panel_.add(spacer2, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        images_panel_.add(spacer2, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         images_equipment_view_ = new EqupimentSettingsView();
         images_panel_.add(images_equipment_view_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         images_run_btn_ = new JButton();
         images_run_btn_.setText("Run");
-        images_panel_.add(images_run_btn_, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        images_panel_.add(images_run_btn_, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        images_squirrel_inputs_view_ = new SquirrelInputs();
+        images_panel_.add(images_squirrel_inputs_view_.$$$getRootComponent$$$(), new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         tab_pane_.addTab("Advanced", panel1);
