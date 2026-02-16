@@ -11,6 +11,7 @@ import kotlin.io.path.exists
 class TERRAPINSVM private constructor(private val settings_: Settings)
 {
     private val pre_processing_vm_: PreProcessingVM = PreProcessingVM.from(settings_)
+    private val squirrel_inputs_vm_: SquirrelInputsVM = SquirrelInputsVM.from(settings_.core_settings())
     private val localisations_equipment_settings_vm_: EquipmentSettingsVM = EquipmentSettingsVM.from(settings_.localisation_settings().equipment())
     private val localisation_vm_ : LocalisationVM = LocalisationVM.from(settings_.localisation_settings())
     private val images__equipment_settings_vm_: EquipmentSettingsVM = EquipmentSettingsVM.from(settings_.images_settings().equipment_settings())
@@ -54,6 +55,11 @@ class TERRAPINSVM private constructor(private val settings_: Settings)
     fun pre_processing_vm(): PreProcessingVM
     {
         return pre_processing_vm_
+    }
+
+    fun squirrel_inputs_vm(): SquirrelInputsVM
+    {
+        return squirrel_inputs_vm_
     }
 
     fun localisation_equipment_settings_vm(): EquipmentSettingsVM
