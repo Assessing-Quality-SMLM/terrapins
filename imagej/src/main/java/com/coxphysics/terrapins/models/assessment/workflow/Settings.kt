@@ -65,9 +65,9 @@ class Settings private constructor(image_selector_setttings: ImageSelectorSettti
         return images_settings_.core_settings()
     }
 
-    fun working_directory() : Path
+    fun working_directory() : Path?
     {
-        return core_settings().working_directory()
+        return core_settings().working_directory_path()
     }
 
     fun set_working_directory(value: Path)

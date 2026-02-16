@@ -7,6 +7,7 @@ import com.coxphysics.terrapins.models.frc.FRC
 import com.coxphysics.terrapins.models.hawkman.external.Hawkman
 import com.coxphysics.terrapins.models.process.Runner
 import com.coxphysics.terrapins.models.squirrel.external.Squirrel
+import com.coxphysics.terrapins.models.utils.FsUtils
 import ij.IJ
 import java.nio.file.Path
 import java.time.LocalDateTime
@@ -72,7 +73,10 @@ class Assessment private constructor(private val exe_location_: Path)
         }
         val data_name = generate_data_name()
         val arguments = get_images_arguments(new_core_settings, images, data_name)
-        return run_arguments(runner, arguments, images.working_directory(), data_name)
+        val working_directory = images.working_directory()
+        if (working_directory == null)
+            return null
+        return run_arguments(runner, arguments, working_directory, data_name)
     }
 
     fun get_images_arguments(adjusted_core_settings: CoreSettings, images: ImagesSettings, data_name: String?): List<String>
@@ -174,7 +178,10 @@ class Assessment private constructor(private val exe_location_: Path)
         }
         val data_name = generate_data_name()
         val arguments = get_localisations_arguments(core_settings, localisations, data_name)
-        return run_arguments(runner, arguments, localisations.working_directory(), data_name)
+        val working_directory = localisations.working_directory()
+        if (working_directory == null)
+            return null
+        return run_arguments(runner, arguments, working_directory, data_name)
     }
 
     fun get_localisations_arguments(adjusted_core_settings: CoreSettings, localisations: AssessmentSettings, data_name: String?): List<String>
@@ -243,7 +250,10 @@ class Assessment private constructor(private val exe_location_: Path)
     private fun add_core_commands(settings: CoreSettings, data_name: String?, commands: MutableList<String>)
     {
         commands.add("--working-directory")
-        commands.add(settings.working_directory().toString())
+        var working_directory = settings.working_directory_path()
+        if (working_directory == null)
+            working_directory = FsUtils.temp_directory()
+        commands.add(working_directory.toString())
 
         if (data_name != null)
         {
