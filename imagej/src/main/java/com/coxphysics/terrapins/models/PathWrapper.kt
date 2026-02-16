@@ -22,6 +22,12 @@ class PathWrapper private constructor(private var path_: Path?)
         }
 
         @JvmStatic
+        fun from_optional(path: Path?): PathWrapper
+        {
+            return PathWrapper(path)
+        }
+
+        @JvmStatic
         fun from_string(path: String): PathWrapper
         {
             return PathWrapper(Paths.get(path))
