@@ -66,14 +66,7 @@ public class TERRAPINSTabView extends JDialog {
     }
 
     private void run_images() {
-        AssessmentResults results = view_model_.run_images();
-        display_results(results);
-    }
-
-    private void display_results(AssessmentResults results) {
-        if (results == null)
-            return;
-        Utils.run_results_viewer(results);
+        view_model_.run_images();
     }
 
     public boolean was_canceled() {

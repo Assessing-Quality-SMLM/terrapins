@@ -107,11 +107,13 @@ class TERRAPINSVM private constructor(private val settings_: Settings)
 
     fun run_localisations()
     {
+        settings_.set_use_localisations(true)
         AssessmentWorker.from(IJLog.new(), settings_).execute()
     }
 
-    fun run_images() : AssessmentResults?
+    fun run_images()
     {
-        return TERRAPINS.default().run_images(settings_.images_settings())
+        settings_.set_use_localisations(false)
+        AssessmentWorker.from(IJLog.new(), settings_).execute()
     }
 }
