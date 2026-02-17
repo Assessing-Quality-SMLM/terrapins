@@ -1,6 +1,7 @@
 package com.coxphysics.terrapins.models.hawk
 
 import com.coxphysics.terrapins.models.Image
+import com.coxphysics.terrapins.models.PathWrapper
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.macros.MacroUtils
 import com.coxphysics.terrapins.plugins.*
@@ -21,7 +22,7 @@ enum class NegativeValuesPolicy
 
 class Settings private constructor(
     private var image_: Image,
-    private var filename_: String?,
+    private var filename_: PathWrapper,
     private var n_levels_: Int,
     private var negative_handling_: NegativeValuesPolicy,
     private var output_style_: OutputStyle)
@@ -31,7 +32,7 @@ class Settings private constructor(
         @JvmStatic
         fun from(n_levels: Int, negative_handling: NegativeValuesPolicy, output_style: OutputStyle) : Settings
         {
-            return Settings(Image.empty(), null, n_levels, negative_handling, output_style)
+            return Settings(Image.empty(), PathWrapper.empty(), n_levels, negative_handling, output_style)
         }
 
         @JvmStatic
@@ -138,14 +139,19 @@ class Settings private constructor(
         return image_
     }
 
-    fun filename(): String?
+    fun file_path_wrapper(): PathWrapper
     {
         return filename_
     }
 
+    fun filename(): String
+    {
+        return filename_.to_string()
+    }
+
     fun set_filename(value: String)
     {
-        filename_ = value
+        filename_.set_path_from_string(value)
     }
 
     fun image(): ImagePlus?
@@ -234,8 +240,8 @@ class Settings private constructor(
         MacroUtils.record(HAWK_N_LEVELS, n_levels().toString())
         MacroUtils.record(HAWK_NEGATIVE_VALUES, negative_values_recording_key())
         MacroUtils.record(HAWK_OUTPUT_STYLE, output_style_recording_key())
-        if (filename_ != null)
-            MacroUtils.record(HAWK_SAVE_TO_DISK, filename_!!)
+        if (filename_.has_data())
+            MacroUtils.record(HAWK_SAVE_TO_DISK, filename_.to_string())
     }
 
     private fun negative_values_recording_key(): String
