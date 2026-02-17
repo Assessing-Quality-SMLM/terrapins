@@ -29,6 +29,7 @@ public class TERRAPINSTabView extends JDialog {
     private SquirrelInputs localisations_squirrel_inputs_view_;
     private SquirrelInputs images_squirrel_inputs_view_;
     private PathSelectorView working_directory_view_;
+    private JScrollPane scroll_pane_;
 
     private boolean cancelled_ = true;
 
@@ -101,8 +102,10 @@ public class TERRAPINSTabView extends JDialog {
     private void $$$setupUI$$$() {
         root_ = new JPanel();
         root_.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        scroll_pane_ = new JScrollPane();
+        root_.add(scroll_pane_, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         tab_pane_ = new JTabbedPane();
-        root_.add(tab_pane_, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
+        scroll_pane_.setViewportView(tab_pane_);
         pane_root_ = new JPanel();
         pane_root_.setLayout(new GridLayoutManager(1, 1, new Insets(5, 5, 5, 5), -1, -1));
         tab_pane_.addTab("Pre-Processing", pane_root_);

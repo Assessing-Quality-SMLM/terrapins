@@ -3,138 +3,143 @@
   <grid id="27dc6" binding="root_" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="728" height="1090"/>
+      <xy x="20" y="20" width="728" height="1115"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <tabbedpane id="68cef" binding="tab_pane_">
+      <scrollpane id="d787f" binding="scroll_pane_">
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="200" height="200"/>
-          </grid>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="d03a0" binding="pane_root_" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="5" left="5" bottom="5" right="5"/>
-            <constraints>
-              <tabbedpane title="Pre-Processing"/>
-            </constraints>
+          <tabbedpane id="68cef" binding="tab_pane_">
+            <constraints/>
             <properties/>
             <border type="none"/>
             <children>
-              <nested-form id="65b2e" form-file="com/coxphysics/terrapins/views/TERRAPINS/PreProcessingView.form">
+              <grid id="d03a0" binding="pane_root_" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="5" left="5" bottom="5" right="5"/>
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <tabbedpane title="Pre-Processing"/>
                 </constraints>
-              </nested-form>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <nested-form id="65b2e" form-file="com/coxphysics/terrapins/views/TERRAPINS/PreProcessingView.form">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </nested-form>
+                </children>
+              </grid>
+              <grid id="309d8" binding="localisation_panel_" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="5" left="5" bottom="5" right="5"/>
+                <constraints>
+                  <tabbedpane title="Localisation Workflow"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <nested-form id="80873" form-file="com/coxphysics/terrapins/views/TERRAPINS/EqupimentSettingsView.form" binding="localisation_equipment_view_">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </nested-form>
+                  <vspacer id="8ac18">
+                    <constraints>
+                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </vspacer>
+                  <component id="8a41" class="javax.swing.JButton" binding="localistations_run_btn_">
+                    <constraints>
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Run"/>
+                    </properties>
+                  </component>
+                  <nested-form id="ab8e1" form-file="com/coxphysics/terrapins/views/TERRAPINS/SquirrelInputs.form" binding="localisations_squirrel_inputs_view_">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </nested-form>
+                  <nested-form id="cdb2d" form-file="com/coxphysics/terrapins/views/TERRAPINS/LocalisationView.form" binding="localisations_ctrl_">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </nested-form>
+                </children>
+              </grid>
+              <grid id="ae2f8" binding="images_panel_" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="5" left="5" bottom="5" right="5"/>
+                <constraints>
+                  <tabbedpane title="Images Workflow"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <nested-form id="f94bb" form-file="com/coxphysics/terrapins/views/TERRAPINS/ImagesView.form" binding="images_ctrl_">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </nested-form>
+                  <vspacer id="5fefd">
+                    <constraints>
+                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </vspacer>
+                  <nested-form id="15af7" form-file="com/coxphysics/terrapins/views/TERRAPINS/EqupimentSettingsView.form" binding="images_equipment_view_">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </nested-form>
+                  <component id="a333f" class="javax.swing.JButton" binding="images_run_btn_">
+                    <constraints>
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Run"/>
+                    </properties>
+                  </component>
+                  <nested-form id="c9681" form-file="com/coxphysics/terrapins/views/TERRAPINS/SquirrelInputs.form" binding="images_squirrel_inputs_view_">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </nested-form>
+                </children>
+              </grid>
+              <grid id="8f723" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <tabbedpane title="Advanced"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <nested-form id="7e82c" form-file="com/coxphysics/terrapins/views/TERRAPINS/PathSelectorView.form" binding="settings_view_">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </nested-form>
+                  <vspacer id="cabf7">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </vspacer>
+                  <nested-form id="e7191" form-file="com/coxphysics/terrapins/views/TERRAPINS/PathSelectorView.form" binding="working_directory_view_">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </nested-form>
+                </children>
+              </grid>
             </children>
-          </grid>
-          <grid id="309d8" binding="localisation_panel_" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="5" left="5" bottom="5" right="5"/>
-            <constraints>
-              <tabbedpane title="Localisation Workflow"/>
-            </constraints>
-            <properties/>
-            <border type="none"/>
-            <children>
-              <nested-form id="80873" form-file="com/coxphysics/terrapins/views/TERRAPINS/EqupimentSettingsView.form" binding="localisation_equipment_view_">
-                <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </nested-form>
-              <vspacer id="8ac18">
-                <constraints>
-                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </vspacer>
-              <component id="8a41" class="javax.swing.JButton" binding="localistations_run_btn_">
-                <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Run"/>
-                </properties>
-              </component>
-              <nested-form id="ab8e1" form-file="com/coxphysics/terrapins/views/TERRAPINS/SquirrelInputs.form" binding="localisations_squirrel_inputs_view_">
-                <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </nested-form>
-              <nested-form id="cdb2d" form-file="com/coxphysics/terrapins/views/TERRAPINS/LocalisationView.form" binding="localisations_ctrl_">
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </nested-form>
-            </children>
-          </grid>
-          <grid id="ae2f8" binding="images_panel_" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="5" left="5" bottom="5" right="5"/>
-            <constraints>
-              <tabbedpane title="Images Workflow"/>
-            </constraints>
-            <properties/>
-            <border type="none"/>
-            <children>
-              <nested-form id="f94bb" form-file="com/coxphysics/terrapins/views/TERRAPINS/ImagesView.form" binding="images_ctrl_">
-                <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </nested-form>
-              <vspacer id="5fefd">
-                <constraints>
-                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </vspacer>
-              <nested-form id="15af7" form-file="com/coxphysics/terrapins/views/TERRAPINS/EqupimentSettingsView.form" binding="images_equipment_view_">
-                <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </nested-form>
-              <component id="a333f" class="javax.swing.JButton" binding="images_run_btn_">
-                <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Run"/>
-                </properties>
-              </component>
-              <nested-form id="c9681" form-file="com/coxphysics/terrapins/views/TERRAPINS/SquirrelInputs.form" binding="images_squirrel_inputs_view_">
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </nested-form>
-            </children>
-          </grid>
-          <grid id="8f723" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
-            <constraints>
-              <tabbedpane title="Advanced"/>
-            </constraints>
-            <properties/>
-            <border type="none"/>
-            <children>
-              <nested-form id="7e82c" form-file="com/coxphysics/terrapins/views/TERRAPINS/PathSelectorView.form" binding="settings_view_">
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </nested-form>
-              <vspacer id="cabf7">
-                <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </vspacer>
-              <nested-form id="e7191" form-file="com/coxphysics/terrapins/views/TERRAPINS/PathSelectorView.form" binding="working_directory_view_">
-                <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </nested-form>
-            </children>
-          </grid>
+          </tabbedpane>
         </children>
-      </tabbedpane>
+      </scrollpane>
     </children>
   </grid>
 </form>
