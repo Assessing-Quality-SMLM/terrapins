@@ -3,6 +3,8 @@ package com.coxphysics.terrapins.view_models.TERRAPINS
 import com.coxphysics.terrapins.models.assessment.AssessmentResults
 import com.coxphysics.terrapins.models.assessment.TERRAPINS
 import com.coxphysics.terrapins.models.assessment.workflow.Settings
+import com.coxphysics.terrapins.models.log.IJLog
+import com.coxphysics.terrapins.views.AssessmentWorker
 import com.coxphysics.terrapins.models.to_nullable_path
 import java.awt.Color
 import javax.swing.JTextField
@@ -103,13 +105,15 @@ class TERRAPINSVM private constructor(private val settings_: Settings)
         return settings_vm_
     }
 
-    fun run_localisations() : AssessmentResults?
+    fun run_localisations()
     {
-        return TERRAPINS.default().run_localisations(settings_.localisation_settings())
+        settings_.set_use_localisations(true)
+        AssessmentWorker.from(IJLog.new(), settings_).execute()
     }
 
-    fun run_images() : AssessmentResults?
+    fun run_images()
     {
-        return TERRAPINS.default().run_images(settings_.images_settings())
+        settings_.set_use_localisations(false)
+        AssessmentWorker.from(IJLog.new(), settings_).execute()
     }
 }

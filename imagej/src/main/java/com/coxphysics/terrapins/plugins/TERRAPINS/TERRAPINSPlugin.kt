@@ -80,7 +80,9 @@ class TERRAPINSPlugin : PlugIn
         val view = TERRAPINSTabView.from(view_model)
         view.preferredSize = Dimension(400, 400)
         view.pack()
-        view.isVisible = true
+        SwingUtilities.invokeLater{
+            view.isVisible = true
+        }
         // wait on the semaphore
         view.was_canceled()
     }

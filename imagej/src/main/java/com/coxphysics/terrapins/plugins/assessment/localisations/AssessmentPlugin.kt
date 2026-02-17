@@ -41,7 +41,7 @@ class AssessmentPlugin : PlugIn
             IJ.log("Could not create settings")
             return
         }
-        val results = Assessment.default_().run_localisations(ImageJLoggingRunner(), settings)
+        val results = Assessment.default_().run_localisations(ImageJLoggingRunner.new(), settings)
         if (results == null)
         {
             IJ.log("Assessment failed")

@@ -1,17 +1,22 @@
 package com.coxphysics.terrapins.models.process
 
-import com.coxphysics.terrapins.models.utils.StreamUtils
-import ij.IJ
+import com.coxphysics.terrapins.models.log.IJLog
 
-class ImageJLoggingRunner: Runner
+class ImageJLoggingRunner private constructor() : Runner
 {
+    private val runner_ = LoggingRunner.from(IJLog.new())
+
+    companion object
+    {
+        @JvmStatic
+        fun new() : ImageJLoggingRunner
+        {
+            return ImageJLoggingRunner()
+        }
+    }
+
     override fun run(builder: ProcessBuilder): Int
     {
-        val process = builder.start()
-        for (line in StreamUtils.get_lines(process.inputStream))
-        {
-            IJ.log(line)
-        }
-        return process.waitFor()
+        return runner_.run(builder)
     }
 }
