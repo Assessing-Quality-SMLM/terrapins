@@ -73,7 +73,7 @@ class Plugin : PlugIn
     private fun get_results(settings: Settings) : AssessmentResults?
     {
         val assessment = Assessment.default_()
-        val runner = ImageJLoggingRunner()
+        val runner = ImageJLoggingRunner.new()
         val use_localisations = dialog_.use_localisations() ?: return null
         if (use_localisations)
         {

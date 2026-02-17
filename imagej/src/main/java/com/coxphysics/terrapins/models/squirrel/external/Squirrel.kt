@@ -77,7 +77,7 @@ class Squirrel private constructor(private val exe_path_: Path)
             IJ.log("exe path does not exist - contact the developer")
             return false
         }
-        val ok = run_with(ImageJLoggingRunner(), settings)
+        val ok = run_with(ImageJLoggingRunner.new(), settings)
         if (!ok)
         {
             IJ.log("SQUIRREL did not execute correctly - contact the developer")
