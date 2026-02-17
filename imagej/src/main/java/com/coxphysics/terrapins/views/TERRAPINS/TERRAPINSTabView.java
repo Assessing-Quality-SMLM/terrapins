@@ -62,8 +62,7 @@ public class TERRAPINSTabView extends JDialog {
     }
 
     private void run_localisations() {
-        AssessmentResults results = view_model_.run_localisations();
-        display_results(results);
+        view_model_.run_localisations();
     }
 
     private void run_images() {
