@@ -46,7 +46,7 @@ class AssessmentWorker private constructor(
     private fun display_results(results: AssessmentResults?)
     {
         if (results == null)
-            return;
+            return
         Utils.run_results_viewer(results);
     }
 }
