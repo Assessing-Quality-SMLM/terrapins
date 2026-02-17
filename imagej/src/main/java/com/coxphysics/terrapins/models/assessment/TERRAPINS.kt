@@ -2,27 +2,33 @@ package com.coxphysics.terrapins.models.assessment
 
 import com.coxphysics.terrapins.models.assessment.localisation.AssessmentSettings
 import com.coxphysics.terrapins.models.assessment.workflow.Settings
+import com.coxphysics.terrapins.models.log.IJLog
+import com.coxphysics.terrapins.models.log.Log
 import com.coxphysics.terrapins.models.macros.MacroUtils
-import com.coxphysics.terrapins.models.process.ImageJLoggingRunner
+import com.coxphysics.terrapins.models.process.LoggingRunner
 import com.coxphysics.terrapins.models.assessment.images.Settings as ImagesSettings
 
-class TERRAPINS private constructor(private val assessment_: Assessment)
+class TERRAPINS private constructor(
+    private val assessment_: Assessment,
+    private val logger_: Log<String>
+)
 {
     companion object
     {
         @JvmStatic
-        fun from(assessment: Assessment) : TERRAPINS
+        fun from(assessment: Assessment, logger: Log<String>) : TERRAPINS
         {
-            return TERRAPINS(assessment)
+            return TERRAPINS(assessment, logger)
         }
         @JvmStatic
         fun default(): TERRAPINS
         {
-            return from(Assessment.default())
+            return from(Assessment.default(), IJLog.new())
         }
     }
 
-    private fun default_runner() = ImageJLoggingRunner()
+//    private fun default_runner() = ImageJLoggingRunner()
+    private fun default_runner() = LoggingRunner.from(logger_)
 
     fun run(settings: Settings) : AssessmentResults?
     {
