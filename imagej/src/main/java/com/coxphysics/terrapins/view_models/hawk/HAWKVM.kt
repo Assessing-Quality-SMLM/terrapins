@@ -1,15 +1,16 @@
 package com.coxphysics.terrapins.view_models.hawk
 
-import com.coxphysics.terrapins.models.hawk.NegativeValuesPolicy
-import com.coxphysics.terrapins.models.hawk.OutputStyle
-import com.coxphysics.terrapins.models.hawk.Settings
+import com.coxphysics.terrapins.models.hawk.*
+import com.coxphysics.terrapins.models.io.PathSelector
 import com.coxphysics.terrapins.view_models.TERRAPINS.ImageSelectorVM
+import com.coxphysics.terrapins.view_models.TERRAPINS.PathSelectorVM
 import ij.ImagePlus
 import java.awt.Color
 
 class HAWKVM private constructor(private var settings_: Settings)
 {
     private var image_selector_vm_ : ImageSelectorVM = ImageSelectorVM.with_image(settings_.inner_image())
+    private var output_file_vm_: PathSelectorVM = PathSelectorVM.with(settings_.file_path_wrapper())
     private var n_levels_default_colour_: Color? = null
     private var n_levels_error_colour_: Color = Color.RED
 
@@ -100,5 +101,15 @@ class HAWKVM private constructor(private var settings_: Settings)
     {
         val image = image_selector_vm_.get_image();
         settings_.set_image(image)
+    }
+
+    fun output_file_vm(): PathSelectorVM
+    {
+        return output_file_vm_
+    }
+
+    fun save_to_disk(): Boolean
+    {
+        return HAWK.from(settings_).save_to_disk()
     }
 }

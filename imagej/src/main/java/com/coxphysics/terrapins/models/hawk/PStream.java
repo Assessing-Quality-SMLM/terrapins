@@ -47,6 +47,8 @@ public class PStream extends ImageStack implements AutoCloseable{
 
     public boolean write_to_disk(String filename)
     {
+        if (filename == null)
+            return false;
         StackWrapper wrapper = StackWrapper.from_stack(stack_);
         return NativeHAWK.hawk_to_file(wrapper, config_ptr_, stack_.getHeight(), stack_.getWidth(), filename);
     }

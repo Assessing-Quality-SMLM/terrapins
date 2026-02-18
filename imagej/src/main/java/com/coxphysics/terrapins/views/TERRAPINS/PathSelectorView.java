@@ -78,8 +78,7 @@ public class PathSelectorView {
 
     private PathSelectorVM view_model_ = PathSelectorVM.default_();
 
-    public PathSelectorView()
-    {
+    public PathSelectorView() {
         filename_txt_field_.getDocument().addDocumentListener(ActionableDocumentListener.from(this, PathSelectorView::update_data_path_from_view));
         find_btn_.addActionListener(FindListener.from(this));
     }
@@ -93,31 +92,27 @@ public class PathSelectorView {
         PathSelectorView view = new PathSelectorView(view_model);
         return view;
     }
-    public void set_view_model(PathSelectorVM view_model)
-    {
+
+    public void set_view_model(PathSelectorVM view_model) {
         view_model_ = view_model;
         draw();
     }
 
-    public void draw()
-    {
+    public void draw() {
         label_.setText(view_model_.title());
         update_view_data_path();
     }
 
-    private void update_view_data_path()
-    {
+    private void update_view_data_path() {
         update_view_data_path_with(view_model_.current_path());
     }
 
-    private void update_view_data_path_with(Path new_path)
-    {
+    private void update_view_data_path_with(Path new_path) {
         String text = new_path == null ? "" : new_path.toString();
         filename_txt_field_.setText(text);
     }
 
-    public void update_data_path_from_view()
-    {
+    public void update_data_path_from_view() {
         String new_path_text = filename_txt_field_.getText();
         Color bg_colour = view_model_.set_current_path(new_path_text);
         filename_txt_field_.setBackground(bg_colour);
@@ -128,16 +123,14 @@ public class PathSelectorView {
         update_view_data_path_with(new_path);
     }
 
-    public void set_enabled(boolean value)
-    {
+    public void set_enabled(boolean value) {
         root_.setEnabled(value);
         filename_txt_field_.setEnabled(value);
         find_btn_.setEnabled(value);
         label_.setEnabled(value);
     }
 
-    public void set_visible(boolean value)
-    {
+    public void set_visible(boolean value) {
         root_.setVisible(value);
         filename_txt_field_.setVisible(value);
         find_btn_.setVisible(value);
@@ -160,14 +153,12 @@ public class PathSelectorView {
      */
     private void $$$setupUI$$$() {
         root_ = new JPanel();
-        root_.setLayout(new GridLayoutManager(2, 4, new Insets(5, 5, 5, 5), -1, -1));
+        root_.setLayout(new GridLayoutManager(2, 3, new Insets(5, 5, 5, 5), -1, -1));
         label_ = new JLabel();
         label_.setText("File");
         root_.add(label_, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
-        root_.add(spacer1, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
-        final Spacer spacer2 = new Spacer();
-        root_.add(spacer2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        root_.add(spacer1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         filename_txt_field_ = new JTextField();
         root_.add(filename_txt_field_, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         find_btn_ = new JButton();
@@ -181,4 +172,5 @@ public class PathSelectorView {
     public JComponent $$$getRootComponent$$$() {
         return root_;
     }
+
 }

@@ -14,6 +14,14 @@ class HAWK private constructor(private var settings_: Settings)
         }
     }
 
+    fun save_to_disk(): Boolean
+    {
+        val p_stream = PStream.from(settings_)
+        if (p_stream == null)
+            return false
+        return p_stream.write_to_disk(settings_.filename())
+    }
+
     fun get_hawk_image() : ImagePlus?
     {
         val p_stream = PStream.from(settings_)
