@@ -20,7 +20,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <grid id="d03a0" binding="pane_root_" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="d03a0" binding="pre_processing_pane_" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="5" left="5" bottom="5" right="5"/>
                 <constraints>
                   <tabbedpane title="Pre-Processing"/>
@@ -28,7 +28,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <nested-form id="65b2e" form-file="com/coxphysics/terrapins/views/TERRAPINS/PreProcessingView.form">
+                  <nested-form id="65b2e" form-file="com/coxphysics/terrapins/views/TERRAPINS/PreProcessingView.form" binding="pre_processing_view_">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>

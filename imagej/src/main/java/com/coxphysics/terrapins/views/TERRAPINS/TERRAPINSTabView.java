@@ -1,9 +1,7 @@
 package com.coxphysics.terrapins.views.TERRAPINS;
 
-import com.coxphysics.terrapins.models.assessment.AssessmentResults;
 import com.coxphysics.terrapins.models.utils.ActionableListener;
 import com.coxphysics.terrapins.view_models.TERRAPINS.TERRAPINSVM;
-import com.coxphysics.terrapins.views.utils.Utils;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -16,7 +14,7 @@ import java.util.concurrent.Semaphore;
 public class TERRAPINSTabView extends JDialog {
     private JPanel root_;
     private JTabbedPane tab_pane_;
-    private JPanel pane_root_;
+    private JPanel pre_processing_pane_;
     private JPanel localisation_panel_;
     private JPanel images_panel_;
     private LocalisationView localisations_ctrl_;
@@ -30,6 +28,7 @@ public class TERRAPINSTabView extends JDialog {
     private SquirrelInputs images_squirrel_inputs_view_;
     private PathSelectorView working_directory_view_;
     private JScrollPane scroll_pane_;
+    private PreProcessingView pre_processing_view_;
 
     private boolean cancelled_ = true;
 
@@ -106,11 +105,11 @@ public class TERRAPINSTabView extends JDialog {
         root_.add(scroll_pane_, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         tab_pane_ = new JTabbedPane();
         scroll_pane_.setViewportView(tab_pane_);
-        pane_root_ = new JPanel();
-        pane_root_.setLayout(new GridLayoutManager(1, 1, new Insets(5, 5, 5, 5), -1, -1));
-        tab_pane_.addTab("Pre-Processing", pane_root_);
-        final PreProcessingView nestedForm1 = new PreProcessingView();
-        pane_root_.add(nestedForm1.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        pre_processing_pane_ = new JPanel();
+        pre_processing_pane_.setLayout(new GridLayoutManager(1, 1, new Insets(5, 5, 5, 5), -1, -1));
+        tab_pane_.addTab("Pre-Processing", pre_processing_pane_);
+        pre_processing_view_ = new PreProcessingView();
+        pre_processing_pane_.add(pre_processing_view_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         localisation_panel_ = new JPanel();
         localisation_panel_.setLayout(new GridLayoutManager(5, 1, new Insets(5, 5, 5, 5), -1, -1));
         tab_pane_.addTab("Localisation Workflow", localisation_panel_);
