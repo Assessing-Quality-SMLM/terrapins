@@ -5,11 +5,13 @@ import com.coxphysics.terrapins.models.hawk.OutputStyle;
 import com.coxphysics.terrapins.models.utils.ActionableListener;
 import com.coxphysics.terrapins.view_models.hawk.HAWKVM;
 import com.coxphysics.terrapins.views.TERRAPINS.ImageSelectorView;
+import com.coxphysics.terrapins.views.TERRAPINS.PathSelectorView;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
@@ -153,6 +155,7 @@ public class HAWKView extends JDialog {
     private JTextField n_levels_field_;
     private ImageSelectorView image_selector_ctrl_;
     private JButton save_to_disk_btn_;
+    private JPanel save_to_disk_panel_;
 
     private HAWKVM view_model_ = HAWKVM.default_();
 
@@ -281,7 +284,7 @@ public class HAWKView extends JDialog {
      */
     private void $$$setupUI$$$() {
         content_panel_ = new JPanel();
-        content_panel_.setLayout(new GridLayoutManager(6, 3, new Insets(5, 5, 5, 5), -1, -1));
+        content_panel_.setLayout(new GridLayoutManager(7, 3, new Insets(5, 5, 5, 5), -1, -1));
         final JLabel label1 = new JLabel();
         label1.setText("Output Order");
         content_panel_.add(label1, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -299,7 +302,7 @@ public class HAWKView extends JDialog {
         cancel_btn_.setText("Cancel");
         content_panel_.add(cancel_btn_, new GridConstraints(4, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
-        content_panel_.add(spacer1, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        content_panel_.add(spacer1, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         n_levels_label_ = new JLabel();
         n_levels_label_.setText("Number of levels");
         content_panel_.add(n_levels_label_, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -307,9 +310,15 @@ public class HAWKView extends JDialog {
         content_panel_.add(n_levels_field_, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         image_selector_ctrl_ = new ImageSelectorView();
         content_panel_.add(image_selector_ctrl_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        save_to_disk_panel_ = new JPanel();
+        save_to_disk_panel_.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        content_panel_.add(save_to_disk_panel_, new GridConstraints(5, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        save_to_disk_panel_.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(-16777216)), "Output for external fitter", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+        final PathSelectorView nestedForm1 = new PathSelectorView();
+        save_to_disk_panel_.add(nestedForm1.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         save_to_disk_btn_ = new JButton();
         save_to_disk_btn_.setText("Save To Disk");
-        content_panel_.add(save_to_disk_btn_, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        save_to_disk_panel_.add(save_to_disk_btn_, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
