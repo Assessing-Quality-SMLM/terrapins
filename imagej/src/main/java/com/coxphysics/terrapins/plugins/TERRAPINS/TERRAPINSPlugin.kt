@@ -7,17 +7,14 @@ import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.macros.MacroUtils
 import com.coxphysics.terrapins.models.squirrel.tools.SQUIRREL_GetFileFromResource
 import com.coxphysics.terrapins.view_models.TERRAPINS.TERRAPINSVM
-import com.coxphysics.terrapins.view_models.assessment.ReportVM
 import com.coxphysics.terrapins.views.TERRAPINS.TERRAPINSTabView
 import com.coxphysics.terrapins.views.TERRAPINS.TERRAPINSView
-import com.coxphysics.terrapins.views.assessment.results.ReportView
 import com.coxphysics.terrapins.views.utils.Utils
 import ij.IJ
 import ij.ImageJ
 import ij.plugin.PlugIn
 import java.awt.Dimension
 import java.io.File
-import javax.swing.JFrame
 import javax.swing.SwingUtilities
 
 class TERRAPINSPlugin : PlugIn
@@ -60,21 +57,12 @@ class TERRAPINSPlugin : PlugIn
             val results = run_assessment(settings_) // has side-effects to disk
             // we are in a macro so don't display the results viewer
         }
-        else
-        {
-            val run_linear = false
-            if (run_linear)
-            {
-                run_linear_view()
-            }
-            else
-            {
-                run_tabbed_view()
-            }
+        else {
+            val cancelled = run_tabbed_view()
         }
     }
 
-    private fun run_tabbed_view()
+    private fun run_tabbed_view(): Boolean
     {
         val view_model = TERRAPINSVM.from(settings_)
         val view = TERRAPINSTabView.from(view_model)
@@ -84,7 +72,7 @@ class TERRAPINSPlugin : PlugIn
             view.isVisible = true
         }
         // wait on the semaphore
-        view.was_canceled()
+        return view.was_canceled()
     }
 
     private fun run_linear_view()
