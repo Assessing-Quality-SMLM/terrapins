@@ -5,15 +5,17 @@ import com.coxphysics.terrapins.models.Image
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.utils.StringUtils
 import ij.ImagePlus
-import ij.ImageStack
+import ij.plugin.frame.Recorder
 import ij.process.FloatProcessor
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
-import java.nio.file.Files
 import java.nio.file.Paths
+import java.util.concurrent.CancellationException
+import java.util.concurrent.ExecutionException
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class DiskOrImageTests
 {
@@ -146,6 +148,7 @@ class DiskOrImageTests
     fun use_filepath_for_recording()
     {
         executor.submit {
+            Recorder.resetCommandOptions()
             val disk_or_image = DiskOrImage.from_filename("some")
             disk_or_image.record_to_macro_with("thing")
             val options = MacroOptions.from_recorder_command_options()
@@ -157,6 +160,7 @@ class DiskOrImageTests
     fun strings_that_can_be_paths_are_treated_as_disk_images()
     {
         executor.submit {
+            Recorder.resetCommandOptions()
             val options = MacroOptions.from("a=thing")
             val disk_or_image = DiskOrImage.from_macro_options_with("a", options)
             assertEquals(disk_or_image!!.filename_nn(), "thing")
@@ -167,13 +171,15 @@ class DiskOrImageTests
     fun empty_strings_are_not_recorded()
     {
         executor.submit {
+            Recorder.resetCommandOptions()
             val disk_or_image = DiskOrImage.default()
             assertEquals(disk_or_image.filename_nn(), StringUtils.EMPTY_STRING)
             disk_or_image.record_to_macro_with("a")
             val options = MacroOptions.from_recorder_command_options()
             val value = options.get("a")
-            assertEquals(value, null)
+            assertNull(value)
         }.get()
+
     }
 
 }
