@@ -110,7 +110,6 @@ class HAWKVM private constructor(private var settings_: Settings)
 
     fun save_to_disk(): Boolean
     {
-        PathSelectorVM.with(settings_.file_path_wrapper()).find_path()
         return HAWK.from(settings_).save_to_disk()
     }
 }
