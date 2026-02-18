@@ -159,8 +159,9 @@ class CoreSettingsTests
             settings.record_to_macro()
 
             val options = MacroOptions.from_recorder_command_options()
+
             assertEquals(options.get(CORE_SETTINGS_WORKING_DIRECTORY), "something")
-        }
+        }.get()
     }
 
     @Test
@@ -174,7 +175,7 @@ class CoreSettingsTests
 
             val options = MacroOptions.from_recorder_command_options()
             assertEquals(options.get(CORE_SETTINGS_SETTINGS_FILE), "else")
-        }
+        }.get()
     }
 
     @Test
@@ -189,7 +190,7 @@ class CoreSettingsTests
 
             val options = MacroOptions.from_recorder_command_options()
             assertEquals(options.get(CORE_SETTINGS_WIDEFIELD), "else")
-        }
+        }.get()
     }
 
     @Test
@@ -204,6 +205,6 @@ class CoreSettingsTests
 
             val options = MacroOptions.from_recorder_command_options()
             assertEquals(options.get(CORE_SETTINGS_IMAGE_STACK), "else")
-        }
+        }.get()
     }
 }

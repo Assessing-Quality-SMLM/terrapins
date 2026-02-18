@@ -3,12 +3,12 @@ package com.coxphysics.terrapins.models.macros
 import ij.Macro
 import ij.plugin.frame.Recorder
 
-class MacroOptions private constructor(private var options: String)
+class MacroOptions private constructor(private var options: String?)
 {
     companion object
     {
         @JvmStatic
-        fun from(options: String) : MacroOptions
+        fun from(options: String?) : MacroOptions
         {
             return MacroOptions(options)
         }
@@ -41,6 +41,8 @@ class MacroOptions private constructor(private var options: String)
 
     fun get(key: String) : String?
     {
+        if (options == null)
+            return null
         return Macro.getValue(options, key, null)
     }
 

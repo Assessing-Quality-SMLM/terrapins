@@ -108,6 +108,6 @@ class JointImagesTests
             val new_images = JointImages.from_macro_options_with("a", "b", options)
             assertEquals(new_images!!.image_1().filename_nn(), "some")
             assertEquals(new_images.image_2().filename_nn(), "thing")
-        }
+        }.get()
     }
 }

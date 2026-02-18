@@ -139,7 +139,7 @@ class DiskOrImageTests
             disk_or_image.record_to_macro_with("thing")
             val options = MacroOptions.from_recorder_command_options()
             assertEquals(options.get("thing"), "some")
-        }
+        }.get()
     }
 
     @Test
@@ -150,7 +150,7 @@ class DiskOrImageTests
             disk_or_image.record_to_macro_with("thing")
             val options = MacroOptions.from_recorder_command_options()
             assertEquals(options.get("thing"), "some")
-        }
+        }.get()
     }
 
     @Test
@@ -160,7 +160,7 @@ class DiskOrImageTests
             val options = MacroOptions.from("a=thing")
             val disk_or_image = DiskOrImage.from_macro_options_with("a", options)
             assertEquals(disk_or_image!!.filename_nn(), "thing")
-        }
+        }.get()
     }
 
     @Test
@@ -171,8 +171,9 @@ class DiskOrImageTests
             assertEquals(disk_or_image.filename_nn(), StringUtils.EMPTY_STRING)
             disk_or_image.record_to_macro_with("a")
             val options = MacroOptions.from_recorder_command_options()
-            assertEquals(options.get("a"), null)
-        }
+            val value = options.get("a")
+            assertEquals(value, null)
+        }.get()
     }
 
 }
