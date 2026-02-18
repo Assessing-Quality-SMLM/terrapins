@@ -9,8 +9,55 @@ import ij.IJ;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.concurrent.Semaphore;
 
+class CloseListener implements WindowListener
+{
+    private TERRAPINSTabView view_;
+
+    public CloseListener(TERRAPINSTabView view)
+    {
+        view_ = view;
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        view_.release_semaphore();
+
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
+    }
+}
 public class TERRAPINSTabView extends JDialog {
     private JPanel root_;
     private JTabbedPane tab_pane_;
@@ -41,6 +88,7 @@ public class TERRAPINSTabView extends JDialog {
         add(root_);
         localistations_run_btn_.addActionListener(ActionableListener.from(this, TERRAPINSTabView::run_localisations));
         images_run_btn_.addActionListener(ActionableListener.from(this, TERRAPINSTabView::run_images));
+        this.addWindowListener(new CloseListener(this));
     }
 
     public static TERRAPINSTabView from(TERRAPINSVM view_model) {
@@ -79,8 +127,14 @@ public class TERRAPINSTabView extends JDialog {
     }
 
     @Override
-    public void dispose() {
+    public void dispose()
+    {
         super.dispose();
+        release_semaphore();
+    }
+
+    public void release_semaphore()
+    {
         semaphore_.release();
     }
 
