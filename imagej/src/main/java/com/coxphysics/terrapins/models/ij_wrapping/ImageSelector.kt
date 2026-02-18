@@ -68,6 +68,12 @@ class ImageSelector private constructor(
         {
             return WindowManager.getImage(title)
         }
+
+        @JvmStatic
+        fun get_image_from_index(index: Int): ImagePlus?
+        {
+            return get_image_from_manager(index)
+        }
     }
 
     fun set_current_image_index(index: Int)
