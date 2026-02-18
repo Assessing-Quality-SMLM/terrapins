@@ -1,5 +1,7 @@
 package com.coxphysics.terrapins.models.hawk
 
+import com.coxphysics.terrapins.models.macros.MacroUtils
+import ij.IJ
 import ij.ImagePlus
 import ij.measure.Calibration
 
@@ -16,6 +18,11 @@ class HAWK private constructor(private var settings_: Settings)
 
     fun save_to_disk(): Boolean
     {
+        return recordable_action { inner_save_to_disk() }
+    }
+
+    private fun inner_save_to_disk(): Boolean
+    {
         val p_stream = PStream.from(settings_)
         if (p_stream == null)
             return false
@@ -23,6 +30,11 @@ class HAWK private constructor(private var settings_: Settings)
     }
 
     fun get_hawk_image() : ImagePlus?
+    {
+        return recordable_action { inner_get_hawk_image() }
+    }
+
+    private fun inner_get_hawk_image() : ImagePlus?
     {
         val p_stream = PStream.from(settings_)
         if (p_stream == null)
@@ -47,5 +59,15 @@ class HAWK private constructor(private var settings_: Settings)
         val base = image.getCalibration().copy()
         base.frameInterval = 0.0
         return base;
+    }
+
+    private fun<T> recordable_action(action: () -> T) : T
+    {
+        val value = action()
+        if (MacroUtils.is_recording())
+        {
+            settings_.record_values()
+        }
+        return value
     }
 }
