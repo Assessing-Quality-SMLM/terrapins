@@ -169,7 +169,7 @@ public class HAWKView extends JDialog {
         output_order_combo_box_.addItemListener(OutputStyleListener.from(this));
         negative_values_combo_box_.addItemListener(NegativeValuePolicyListener.from(this));
         n_levels_field_.getDocument().addDocumentListener(NLevelsListener.from(this));
-        run_btn_.addActionListener(RunListener.from(this));
+        run_btn_.addActionListener(ActionableListener.from(this, HAWKView::run_filter));
         cancel_btn_.addActionListener(CancelListener.from(this));
         save_to_disk_btn_.addActionListener(ActionableListener.from(this, HAWKView::save_to_disk));
     }
@@ -245,6 +245,12 @@ public class HAWKView extends JDialog {
 
     private void propogate_image_selection() {
         view_model_.propogate_image_selection();
+    }
+
+    public void run_filter()
+    {
+        view_model_.run_filter();
+        close_ok();
     }
 
     public void close_ok() {

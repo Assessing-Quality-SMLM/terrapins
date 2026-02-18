@@ -2,8 +2,10 @@ package com.coxphysics.terrapins.view_models.hawk
 
 import com.coxphysics.terrapins.models.hawk.*
 import com.coxphysics.terrapins.models.io.PathSelector
+import com.coxphysics.terrapins.models.macros.MacroUtils
 import com.coxphysics.terrapins.view_models.TERRAPINS.ImageSelectorVM
 import com.coxphysics.terrapins.view_models.TERRAPINS.PathSelectorVM
+import ij.IJ
 import ij.ImagePlus
 import java.awt.Color
 
@@ -106,6 +108,13 @@ class HAWKVM private constructor(private var settings_: Settings)
     fun output_file_vm(): PathSelectorVM
     {
         return output_file_vm_
+    }
+
+    fun run_filter()
+    {
+        val image = HAWK.from(settings_).get_hawk_image()
+        if (image != null)
+            image.show()
     }
 
     fun save_to_disk(): Boolean
