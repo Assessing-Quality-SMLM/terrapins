@@ -32,7 +32,7 @@ class Settings private constructor(
         @JvmStatic
         fun from(n_levels: Int, negative_handling: NegativeValuesPolicy, output_style: OutputStyle) : Settings
         {
-            return Settings(Image.empty(), PathWrapper.empty(), n_levels, negative_handling, output_style)
+            return Settings(Image.default_from_manager(), PathWrapper.empty(), n_levels, negative_handling, output_style)
         }
 
         @JvmStatic

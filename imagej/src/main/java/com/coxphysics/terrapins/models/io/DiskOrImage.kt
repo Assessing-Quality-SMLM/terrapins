@@ -181,7 +181,7 @@ class DiskOrImage private constructor(
         return null
     }
 
-    fun macro_string() : String
+    private fun macro_string() : String
     {
         return if (use_disk()) filename_nn() else image_.title_nn()
     }

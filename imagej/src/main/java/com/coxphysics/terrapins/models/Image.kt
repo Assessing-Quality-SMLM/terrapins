@@ -31,7 +31,14 @@ class Image private constructor(private var image_: ImagePlus?)
         @JvmStatic
         fun empty() : Image
         {
-            return Image(null)
+            return with(null)
+        }
+
+        @JvmStatic
+        fun default_from_manager() : Image
+        {
+            val image = ImageSelector.get_image_from_index(0)
+            return with(image)
         }
     }
 
