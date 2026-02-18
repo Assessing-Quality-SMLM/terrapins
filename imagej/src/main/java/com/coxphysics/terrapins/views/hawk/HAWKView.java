@@ -100,28 +100,6 @@ class NLevelsListener implements DocumentListener
     }
 }
 
-class RunListener implements ActionListener
-{
-   private final HAWKView view_;
-
-    private RunListener(HAWKView view)
-    {
-        view_ = view;
-    }
-
-    public static RunListener from(HAWKView view)
-    {
-        return new RunListener(view);
-    }
-
-
-    @Override
-    public void actionPerformed(ActionEvent e)
-    {
-        view_.close_ok();
-    }
-}
-
 class CancelListener implements ActionListener
 {
    private final HAWKView view_;
