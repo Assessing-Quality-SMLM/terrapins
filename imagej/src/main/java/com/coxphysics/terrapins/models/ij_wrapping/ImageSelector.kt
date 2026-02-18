@@ -79,7 +79,7 @@ class ImageSelector private constructor(
 
     fun get_image_titles(): Array<String>?
     {
-        return ImageSelector.image_titles()
+        return image_titles()
     }
 
     fun get_image(): ImagePlus?
