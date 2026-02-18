@@ -220,7 +220,7 @@ class CoreSettings private constructor(
 
     fun record_to_macro()
     {
-        Recorder.recordOption(CORE_SETTINGS_WORKING_DIRECTORY, working_directory_.toString())
+        Recorder.recordOption(CORE_SETTINGS_WORKING_DIRECTORY, working_directory_.to_string())
         widefield_.record_to_macro_with(CORE_SETTINGS_WIDEFIELD)
         image_stack_.record_to_macro_with(CORE_SETTINGS_IMAGE_STACK)
         if(settings_file_.has_data())
