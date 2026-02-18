@@ -185,6 +185,7 @@ public class HAWKView extends JDialog {
         view_model_ = view_model;
         view_model_.set_n_levels_default_colour(default_bg_colour);
         image_selector_ctrl_.set_view_model(view_model_.image_selector_vm());
+        path_selector_view_.set_view_model(view_model.output_file_vm());
         draw();
     }
 
