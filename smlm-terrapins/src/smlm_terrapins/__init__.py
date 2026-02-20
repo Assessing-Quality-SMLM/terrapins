@@ -218,11 +218,25 @@ class ImageSettings():
 
 class Settings():
     def __init__(self):
+        self.working_directory_ = "."
+        self.data_name_ = "something"
         self.core_settings_ = CoreSettings.default()
         self.settings_file_ = None
         self.use_localisations_ = True
         self.localisation_settings_ = LocalisationSettings.default()
         self.image_settings_ = ImageSettings.default()
+
+    def working_directory(self) -> str:
+        return self.working_directory_
+
+    def set_working_directory(self, value: str):
+        self.working_directory_ = value
+
+    def data_name(self) -> str:
+        return self.data_name_
+
+    def set_data_name(self, value: str):
+        self.data_name_ = value
 
     def settings_file(self) -> None | str:
         return self.settings_file_
