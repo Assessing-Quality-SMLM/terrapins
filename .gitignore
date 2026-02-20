@@ -28,3 +28,6 @@ splitter_artifacts/*
 jhawk/artifacts/*
 
 imagej/pom.xml.versionsBackup
+
+smlm-terrapins/src/smlm_terrapins/__pycache__/
+smlm-terrapins/src/smlm_terrapins/resources/

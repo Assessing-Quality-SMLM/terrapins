@@ -25,9 +25,9 @@ def java_tests(use_local_ffi_bindings: bool) -> bool:
 
 
 def python_tests(use_local_ffi_bindings: bool) -> bool:
-    if not _build.build_pyhawk(use_local_ffi_bindings):
+    if not _build.build_python_package(use_local_ffi_bindings):
         return False
-    return hatch.run_lint_and_test("./py-hawk")  #and hatch.run_lint_and_test("./nap-hawk")
+    return hatch.run_lint_and_test(_build.python_package_path())  #and hatch.run_lint_and_test("./nap-hawk")
 
 
 def run_local_tests() -> bool:
