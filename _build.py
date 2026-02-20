@@ -44,6 +44,10 @@ def image_j_deployment_path(project: str, version_number: str) -> str:
     return path.join(".", artifatct)
 
 
+def python_package_path() -> str: 
+    return path.join(".", "smlm-terrapins")
+
+
 def _merge(resources_dir: str, download_folder: str, repo: str, tag: str) -> bool:
     artifact_path = path.join(".", download_folder, DEFAULT_ARTIFACT_NAME)
     if not fs.create_directory(download_folder):
@@ -209,20 +213,20 @@ def _gather_tools_into(directory: str) -> bool:
 
 
 def _merge_local_hawk_ffi(resources_dir: str) -> bool:
-    if not cargo.build("./hawk_ffi/Cargo.toml"):
+    if not cargo.build("./rust_ffi/Cargo.toml"):
         return False
     artifact_name = None
     if utils.is_windows():
-        artifact_name = "hawk_ffi.dll"
+        artifact_name = "rust_ffi.dll"
         resources_dir = path.join(resources_dir, "windows")
     if utils.is_linux():
-        artifact_name = "libhawk_ffi.so"
+        artifact_name = "librust_ffi.so"
         resources_dir = path.join(resources_dir, "nix")
     if utils.is_mac():
-        artifact_name = "libhawk_ffi.dylib"
+        artifact_name = "librust_ffi.dylib"
         resources_dir = path.join(resources_dir, "mac")
     artifact_path = path.join(
-        ".", "hawk_ffi", "target", "release", artifact_name)
+        ".", "rust_ffi", "target", "release", artifact_name)
     resources_dir = path.join(resources_dir, "lib")
     destination = path.join(resources_dir, artifact_name)
 
@@ -265,13 +269,10 @@ def build_imagej(local_rust_jni: bool) -> bool:
     return _merge_jhawk(imagej_resources)
 
 
-def build_pyhawk(local_hawk_ffi: bool) -> bool:
-    py_hawk_resources = path.join(".", "py-hawk", "src", "py_hawk")
+def build_python_package(local_hawk_ffi: bool) -> bool:
+    package_resources = path.join(python_package_path(), "src", "smlm_terrapins", "resources")
+    if not _gather_tools_into(package_resources):
+        return False
     if local_hawk_ffi:
-        return _merge_local_hawk_ffi(py_hawk_resources)
-    return _merge_hawk_ffi(py_hawk_resources)
-
-
-def build_nap_hawk() -> bool:
-    nap_hawk_resources = path.join(".", "nap-hawk", "src", "nap_hawk")
-    return _merge_hawk_ffi(nap_hawk_resources)
+        return _merge_local_hawk_ffi(package_resources)
+    return _merge_hawk_ffi(package_resources)
