@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-import process
+import platform
+from . import process
 from os import path
 
 
@@ -286,8 +287,43 @@ class Results():
         self.data_directory_ = data_directory
 
 
+WINDOWS_NAME = "resources/windows/bin/assessment.exe"
+NIX_NAME = "resources/nix/bin/assessment"
+MAC_NAME= "resources/mac/bin/assessment"
+
+
+def _get_system():
+    return platform.system()
+
+
+def is_windows():
+    return _get_system() == "Windows"
+
+
+def is_linux():
+    return _get_system() == "Linux"
+
+
+def is_mac():
+    return _get_system() == "Darwin"
+
+
+def _get_tool_path():
+    if is_windows():
+         return WINDOWS_NAME
+    if is_linux():
+        return NIX_NAME
+    return MAC_NAME
+
+
+def default_tool_path():
+    this_file = path.realpath(__file__)
+    (curr_dir, _tail) = path.split(this_file)
+    return path.join(curr_dir, _get_tool_path())
+
+
 def get_commands() -> list[str]:
-    return ["./resources/windows/bin/assessment.exe"]
+    return [default_tool_path()]
 
 
 def add_parameter(commands: list[str], key: str, value: None | str):
@@ -307,23 +343,25 @@ def add_core_settings_commands(commands: list[str], settings: CoreSettings):
     add_parameter(commands, MAGNIFICATION, str(settings.magnification()))
 
 
-def run_assessment(arguments: list[str]) -> bool:
-    return process.run_with_output(arguments, shell=False)
+def run_assessment(working_directory: str, data_name: str, arguments: list[str]) -> None | Results:
+    ok = process.run_with_output(arguments, shell=False)
+    if not ok:
+        return None
+    data_directory = path.join(working_directory, f"{data_name}_data")
+    return Results(data_directory)
 
 
-def assess_localisations(commands: list[str], settings: LocalisationSettings) -> None | Results:
+def assess_localisations(working_directory: str, data_name: str, commands: list[str], settings: LocalisationSettings) -> None | Results:
     commands.append(LOCALISATION_MODE)
     add_parameter(commands, LOCALISATION_FILE, settings.localisations_filepath())
     add_parameter(commands, LOCALISATION_FILE_FORMAT, settings.localisation_file_format())
 
     add_parameter(commands, HAWK_LOCALISATION_FILE, settings.hawk_localisations_filepath())
     add_parameter(commands, HAWK_LOCALISATION_FILE_FORMAT, settings.hawk_localisation_file_format())
-    if not run_assessment(commands):
-        return None
-    return None
+    return run_assessment(working_directory, data_name, commands)
 
 
-def assess_images(commands: list[str], settings: ImageSettings) -> None | Results:
+def assess_images(working_directory: str, data_name: str, commands: list[str], settings: ImageSettings) -> None | Results:
     commands.append(IMAGE_MODE)
     add_parameter(commands, REFERENCE_IMAGE, settings.recon_image())
     add_parameter(commands, HAWK_IMAGE, settings.hawk_image())
@@ -336,20 +374,21 @@ def assess_images(commands: list[str], settings: ImageSettings) -> None | Result
 
     add_parameter(commands, ZIP_SPLIT_IMAGE_A, settings.zip_split_a())
     add_parameter(commands, ZIP_SPLIT_IMAGE_B, settings.zip_split_b())
-    if not run_assessment(commands):
-        return None
-    return None
+    return run_assessment(working_directory, data_name, commands)
 
 
 def assess(settings: Settings) -> None | Results:
+    working_directory = settings.working_directory()
+    data_name = settings.data_name()
+
     commands = get_commands()
-    commands.append(WORKING_DIRECTORY)
-    commands.append("something")
-    # commands.append(DATA_NAME)
-    # commands.append("now")
+    add_parameter(commands, WORKING_DIRECTORY, working_directory)
+    add_parameter(commands, DATA_NAME, data_name)
     add_parameter(commands, SETTINGS_FILE, settings.settings_file())
+
     add_core_settings_commands(commands, settings.core_settings())
     commands.append(EXTRACT)
-    if (settings.use_localisations()):
-        return assess_localisations(commands, settings.localisation_settings())
-    return assess_images(commands, settings.image_settings())
+
+    if settings.use_localisations():
+        return assess_localisations(working_directory, data_name, commands, settings.localisation_settings())
+    return assess_images(working_directory, data_name, commands, settings.image_settings())
