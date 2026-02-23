@@ -5,6 +5,8 @@ import com.coxphysics.terrapins.models.io.PathSelector
 import com.coxphysics.terrapins.models.macros.MacroUtils
 import com.coxphysics.terrapins.view_models.TERRAPINS.ImageSelectorVM
 import com.coxphysics.terrapins.view_models.TERRAPINS.PathSelectorVM
+import com.coxphysics.terrapins.views.HAWKWorker
+import com.coxphysics.terrapins.views.hawk.HAWKView
 import ij.IJ
 import ij.ImagePlus
 import java.awt.Color
@@ -117,8 +119,8 @@ class HAWKVM private constructor(private var settings_: Settings)
             image.show()
     }
 
-    fun save_to_disk(): Boolean
+    fun save_to_disk(ui_update: (Boolean) -> Unit)
     {
-        return HAWK.from(settings_).save_to_disk()
+        HAWKWorker.from(ui_update, settings_).execute()
     }
 }
