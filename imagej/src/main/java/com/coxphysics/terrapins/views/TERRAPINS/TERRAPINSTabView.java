@@ -58,7 +58,7 @@ class CloseListener implements WindowListener
 
     }
 }
-public class TERRAPINSTabView extends JDialog {
+public class TERRAPINSTabView extends JFrame {
     private JPanel root_;
     private JTabbedPane tab_pane_;
     private JPanel pre_processing_pane_;
@@ -84,7 +84,7 @@ public class TERRAPINSTabView extends JDialog {
     private TERRAPINSVM view_model_;
 
     private TERRAPINSTabView() {
-        super(IJ.getInstance(), "TERRAPINS");
+        super("TERRAPINS");
         add(root_);
         localistations_run_btn_.addActionListener(ActionableListener.from(this, TERRAPINSTabView::run_localisations));
         images_run_btn_.addActionListener(ActionableListener.from(this, TERRAPINSTabView::run_images));
