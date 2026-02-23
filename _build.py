@@ -91,7 +91,7 @@ def _merge_hawkman_and_squirrel(resources_dir: str) -> bool:
 def _merge_assessment(resources_dir: str) -> bool:
     artifacts = "assessment_artifacts"
     repo = "https://github.com/Assessing-Quality-SMLM/assessment/"
-    release = "assessment_0.28.0"
+    release = "assessment_0.30.0"
     return _merge(resources_dir, artifacts, repo, release)
 
 
