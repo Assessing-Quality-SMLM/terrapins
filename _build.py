@@ -275,4 +275,5 @@ def build_python_package(local_hawk_ffi: bool) -> bool:
         return False
     if local_hawk_ffi:
         return _merge_local_hawk_ffi(package_resources)
-    return _merge_hawk_ffi(package_resources)
+    # return _merge_hawk_ffi(package_resources)
+    return True
