@@ -4,11 +4,13 @@ import com.coxphysics.terrapins.models.hawk.NegativeValuesPolicy;
 import com.coxphysics.terrapins.models.hawk.OutputStyle;
 import com.coxphysics.terrapins.models.utils.ActionableListener;
 import com.coxphysics.terrapins.view_models.hawk.HAWKVM;
+import com.coxphysics.terrapins.views.HAWKWorker;
 import com.coxphysics.terrapins.views.TERRAPINS.ImageSelectorView;
 import com.coxphysics.terrapins.views.TERRAPINS.PathSelectorView;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import kotlin.Unit;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -243,14 +245,27 @@ public class HAWKView extends JDialog {
         dispose();
     }
 
-    public void save_to_disk()
+    public void save_to_disk() {
+        save_to_disk_btn_.setEnabled(false);
+        path_selector_view_.set_enabled(false);
+        view_model_.save_to_disk(ok -> {
+            update_save_button_background(ok);
+            return Unit.INSTANCE;
+        });
+    }
+
+    private void update_save_button_background(boolean ok)
     {
-        boolean ok = view_model_.save_to_disk();
-        if (!ok)
-            save_to_disk_btn_.setBackground(Color.RED);
-        else
+        save_to_disk_btn_.setEnabled(true);
+        path_selector_view_.set_enabled(true);
+        if (ok)
         {
             save_to_disk_btn_.setBackground(new JButton().getBackground());
+            path_selector_view_.update_data_path_from_view();
+        }
+        else
+        {
+            save_to_disk_btn_.setBackground(Color.RED);
         }
     }
 
