@@ -1,4 +1,4 @@
-import tests
+import _build
 
 from dev_ops import gh, cargo
 
@@ -8,11 +8,11 @@ import sys
 
 
 def run() -> bool:
-    version_file = tests.rust_ffi_toml()
+    version_file = _build.rust_ffi_toml()
     new_version = cargo.bump_minor(version_file)
     if new_version is None:
         return False
-    return gh.commit_version_bump("rust_ffi", new_version, version_file, "./artifacts.zip")
+    return gh.commit_version_bump("hawk_ffi", new_version, version_file, "./artifacts.zip")
 
 
 if run():
