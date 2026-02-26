@@ -2,11 +2,11 @@ package com.coxphysics.terrapins.models.hawk
 
 import com.coxphysics.terrapins.models.Image
 import com.coxphysics.terrapins.models.PathWrapper
+import com.coxphysics.terrapins.models.ij_wrapping.IJWindowManager
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.macros.MacroUtils
 import com.coxphysics.terrapins.plugins.*
 import ij.ImagePlus
-import ij.WindowManager
 
 enum class OutputStyle
 {
@@ -77,13 +77,16 @@ class Settings private constructor(
         }
 
         @JvmStatic
-        fun from_macro_options(options: MacroOptions): Settings
+        fun from_macro_options_with(options: MacroOptions, window_manager: com.coxphysics.terrapins.models.ij_wrapping.WindowManager): Settings
         {
             val settings = default()
 
             val image_name = options.get(HAWK_IMAGE_NAME)
-            val image = WindowManager.getImage(image_name)
-            settings.set_image(image)
+            if(image_name != null)
+            {
+                val image = window_manager.get_image(image_name)
+                settings.set_image(image)
+            }
 
             val n_level_s = options.get(HAWK_N_LEVELS)
             val n_levels = n_level_s?.toIntOrNull()
@@ -104,6 +107,12 @@ class Settings private constructor(
             if (maybe_filename_s != null)
                 settings.set_filename(maybe_filename_s)
             return settings
+        }
+
+        @JvmStatic
+        fun from_macro_options(options: MacroOptions): Settings
+        {
+            return from_macro_options_with(options, IJWindowManager.new())
         }
 
         @JvmStatic
