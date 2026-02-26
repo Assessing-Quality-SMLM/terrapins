@@ -75,31 +75,6 @@ class TERRAPINSPlugin : PlugIn
         return view.was_canceled()
     }
 
-    private fun run_linear_view()
-    {
-        val view_model = TERRAPINSVM.from(settings_)
-        val view = TERRAPINSView.from(view_model)
-
-        view.preferredSize = Dimension(400, 400)
-        view.pack()
-        // show the window - its modal - see ctor
-        view.isVisible = true
-        // view is modal dialog - executes when window is closed
-        if (view.cancelled())
-            return
-        if (MacroUtils.is_recording())
-        {
-            settings_.record_to_macro()
-        }
-        val results = run_assessment(settings_)
-        if (results == null)
-        {
-            IJ.log("Assessment failed")
-            return
-        }
-        Utils.run_results_viewer(results)
-    }
-
     private fun run_assessment(settings: Settings): AssessmentResults?
     {
         return TERRAPINS.default().run(settings)
