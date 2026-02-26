@@ -111,4 +111,12 @@ class SettingsTests
         assertEquals(settings.is_sequential(), false)
         assertEquals(settings.is_temporal(), true)
     }
+
+    @Test
+    fun can_set_file_to_save_to()
+    {
+        val options = MacroOptions.from("save_to_disk=something")
+        val settings = Settings.from_macro_options(options)
+        assertEquals(settings.filename(), "something")
+    }
 }
