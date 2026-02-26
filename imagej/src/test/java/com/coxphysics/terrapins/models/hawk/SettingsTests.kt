@@ -51,4 +51,64 @@ class SettingsTests
         val settings = Settings.from_macro_options_with(options, FakeWindowManager.empty())
         assertEquals(settings.image_name(), StringUtils.EMPTY_STRING)
     }
+
+    @Test
+    fun can_parse_n_levels()
+    {
+        val options = MacroOptions.from("n_levels=10")
+        val settings = Settings.from_macro_options(options)
+        assertEquals(settings.n_levels(), 10)
+    }
+
+    @Test
+    fun n_levels_not_set_on_parse_failure()
+    {
+        val options = MacroOptions.from("n_levels=junk")
+        val settings = Settings.from_macro_options(options)
+        assertEquals(settings.n_levels(), 3)
+    }
+
+    @Test
+    fun n_levels_not_set_for_missing_key()
+    {
+        val options = MacroOptions.from("")
+        val settings = Settings.from_macro_options(options)
+        assertEquals(settings.n_levels(), 3)
+    }
+
+    @Test
+    fun negative_value_abs_policy_can_be_set()
+    {
+        val options = MacroOptions.from("negative_values=ABS")
+        val settings = Settings.from_macro_options(options)
+        assertEquals(settings.is_absolute(), true)
+        assertEquals(settings.is_separate(), false)
+    }
+
+    @Test
+    fun negative_value_separate_policy_can_be_set()
+    {
+        val options = MacroOptions.from("negative_values=separate")
+        val settings = Settings.from_macro_options(options)
+        assertEquals(settings.is_absolute(), false)
+        assertEquals(settings.is_separate(), true)
+    }
+
+    @Test
+    fun output_style_sequential_policy_can_be_set()
+    {
+        val options = MacroOptions.from("output_style=sequential")
+        val settings = Settings.from_macro_options(options)
+        assertEquals(settings.is_sequential(), true)
+        assertEquals(settings.is_temporal(), false)
+    }
+
+    @Test
+    fun output_style_temporal_policy_can_be_set()
+    {
+        val options = MacroOptions.from("output_style=temporal")
+        val settings = Settings.from_macro_options(options)
+        assertEquals(settings.is_sequential(), false)
+        assertEquals(settings.is_temporal(), true)
+    }
 }
