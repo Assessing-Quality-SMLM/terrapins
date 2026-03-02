@@ -16,39 +16,6 @@ import java.awt.event.ActionListener;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-class DataPathListener implements DocumentListener
-{
-    private final PathSelectorView view_;
-
-    private DataPathListener(PathSelectorView view)
-    {
-        view_ = view;
-    }
-
-    public static DataPathListener from(PathSelectorView view)
-    {
-        return new DataPathListener(view);
-    }
-
-    @Override
-    public void insertUpdate(DocumentEvent e)
-    {
-        view_.update_data_path_from_view();
-    }
-
-    @Override
-    public void removeUpdate(DocumentEvent e)
-    {
-        view_.update_data_path_from_view();
-    }
-
-    @Override
-    public void changedUpdate(DocumentEvent e)
-    {
-        view_.update_data_path_from_view();
-    }
-}
-
 class FindListener implements ActionListener
 {
     private final PathSelectorView view_;
