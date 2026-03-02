@@ -1,6 +1,5 @@
 package com.coxphysics.terrapins.models
 
-import com.coxphysics.terrapins.models.ij_wrapping.ImageSelector
 import com.coxphysics.terrapins.models.ij_wrapping.WindowManager
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.utils.IJUtils
@@ -68,7 +67,6 @@ class DiskOrImage private constructor(
                 return from_path(name_as_path)
             return null
         }
-
     }
 
     fun path_wrapper(): PathWrapper

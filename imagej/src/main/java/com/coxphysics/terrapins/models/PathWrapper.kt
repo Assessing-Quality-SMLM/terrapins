@@ -1,6 +1,5 @@
 package com.coxphysics.terrapins.models
 
-import com.coxphysics.terrapins.models.utils.StringUtils
 import java.nio.file.Path
 import java.nio.file.Paths
 import kotlin.io.path.exists
