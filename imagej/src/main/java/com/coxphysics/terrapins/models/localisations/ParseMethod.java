@@ -271,10 +271,12 @@ public class ParseMethod
     private String csv_macro_string()
     {
         String[] data = new String[]{
+            String.valueOf(delimiter()),
             String.valueOf(n_header_lines()),
             String.valueOf(frame_number_position()),
             String.valueOf(x_position()),
             String.valueOf(y_position()),
+            String.valueOf(psf_sigma_position()),
             String.valueOf(uncertainty_position())
         };
         return String.join(",", data);
