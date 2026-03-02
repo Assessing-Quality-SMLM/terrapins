@@ -138,6 +138,7 @@ class DiskOrImageTests
             val data = listOf(1.0)
             val image = ImagePlus("some", FloatProcessor(1, 1, data.toDoubleArray()))
             val disk_or_image = DiskOrImage.from_image(Image.from(image))
+            MacroOptions.reset()
             disk_or_image.record_to_macro_with("thing")
             val options = MacroOptions.from_recorder_command_options()
             assertEquals(options.get("thing"), "some")
