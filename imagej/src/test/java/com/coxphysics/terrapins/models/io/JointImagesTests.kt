@@ -1,6 +1,7 @@
 package com.coxphysics.terrapins.models.io
 
 import com.coxphysics.terrapins.models.DiskOrImage
+import com.coxphysics.terrapins.models.hawk.FakeWindowManager
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -105,7 +106,7 @@ class JointImagesTests
 
             val options = MacroOptions.from_recorder_command_options()
 
-            val new_images = JointImages.from_macro_options_with("a", "b", options)
+            val new_images = JointImages.from_macro_options_with("a", "b", options, FakeWindowManager.empty())
             assertEquals(new_images!!.image_1().filename_nn(), "some")
             assertEquals(new_images.image_2().filename_nn(), "thing")
         }.get()

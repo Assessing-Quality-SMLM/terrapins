@@ -101,6 +101,8 @@ public class ParseMethod
 
     }
 
+    private final static String MACRO_DELIMITER = "a";
+
     private final static String PARSE_METHOD_THUNDERSTORM = "ts";
 
     private final CsvSettings csv_settings_ = new CsvSettings();
@@ -139,29 +141,35 @@ public class ParseMethod
             method.set_parse_method_thunderstorm();
             return method;
         }
-        String[] splits = description.split(",");
-        if (splits.length < 5)
+        String[] splits = description.split(MACRO_DELIMITER);
+        if (splits.length < 7)
             return null;
-        Integer n_header_lines = nullable_parse(splits[0]);
+        String delimiter = splits[0];
+        Integer n_header_lines = nullable_parse(splits[1]);
         if (n_header_lines == null)
             return null;
-        Integer frame_number =nullable_parse(splits[1]);
+        Integer frame_number =nullable_parse(splits[2]);
         if (frame_number == null)
             return null;
-        Integer x_pos =nullable_parse(splits[2]);
+        Integer x_pos =nullable_parse(splits[3]);
         if (x_pos == null)
             return null;
-        Integer y_pos =nullable_parse(splits[3]);
+        Integer y_pos =nullable_parse(splits[4]);
         if (y_pos == null)
             return null;
-        Integer uncertainty_sigma =nullable_parse(splits[4]);
+        Integer psf_sigma = nullable_parse(splits[5]);
+        if (psf_sigma == null)
+            return null;
+        Integer uncertainty_sigma =nullable_parse(splits[6]);
         if (uncertainty_sigma == null)
             return null;
+        method.set_delimiter(delimiter.charAt(0));
         method.set_parse_method_csv();
         method.set_n_headers(n_header_lines);
         method.set_frame_number_pos(frame_number);
         method.set_x_pos(x_pos);
         method.set_y_pos(y_pos);
+        method.set_psf_sigma_pos(psf_sigma);
         method.set_uncertainty_pos(uncertainty_sigma);
         return method;
     }
@@ -271,12 +279,14 @@ public class ParseMethod
     private String csv_macro_string()
     {
         String[] data = new String[]{
+            String.valueOf(delimiter()),
             String.valueOf(n_header_lines()),
             String.valueOf(frame_number_position()),
             String.valueOf(x_position()),
             String.valueOf(y_position()),
+            String.valueOf(psf_sigma_position()),
             String.valueOf(uncertainty_position())
         };
-        return String.join(",", data);
+        return String.join(MACRO_DELIMITER, data);
     }
 }

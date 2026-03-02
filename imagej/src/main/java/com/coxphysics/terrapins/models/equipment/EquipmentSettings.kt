@@ -36,16 +36,6 @@ class EquipmentSettings private constructor(
                 settings.set_magnification(magnification)
             return settings
         }
-
-        @JvmStatic
-        fun from_macro_recorder(): EquipmentSettings
-        {
-            val settings = default()
-            val options = MacroOptions.default_()
-            if (options == null)
-                return settings
-            return from_macro_options(options)
-        }
     }
 
     fun instrument_psf_fwhm_nm(): Double

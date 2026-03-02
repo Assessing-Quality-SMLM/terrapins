@@ -3,15 +3,14 @@ package com.coxphysics.terrapins.models.assessment.localisation
 import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.assessment.CoreSettings
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
+import com.coxphysics.terrapins.models.ij_wrapping.WindowManager
 import com.coxphysics.terrapins.models.localisations.LocalisationFile
 import com.coxphysics.terrapins.models.macros.MacroOptions
-import com.coxphysics.terrapins.models.reports.EqualSettings
 import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_HAWK_LOCALISATIONS
 import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_HAWK_LOCALISATIONS_PARSER
 import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_RAW_LOCALISATIONS
 import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_RAW_LOCALISATIONS_PARSER
 import java.nio.file.Path
-import java.nio.file.Paths
 
 class AssessmentSettings private constructor(
     private var core_settings_: CoreSettings
@@ -36,19 +35,20 @@ class AssessmentSettings private constructor(
         }
 
         @JvmStatic
-        fun from_macro_options(options: MacroOptions) : AssessmentSettings?
+        fun from_macro_options(options: MacroOptions, window_manager: WindowManager) : AssessmentSettings?
         {
-            val core_settings = CoreSettings.from_macro_options(options)
+            val has_loc_file = options.has_key(LOCALISATION_SETTINGS_RAW_LOCALISATIONS);
+            if (!has_loc_file) // we use this null to know if which workflow we are in
+                return null
+
+            val core_settings = CoreSettings.from_macro_options(options, window_manager)
 
             val equipment_settings = EquipmentSettings.from_macro_options(options)
 
             val localisation_file = LocalisationFile.from_macro_options(LOCALISATION_SETTINGS_RAW_LOCALISATIONS, LOCALISATION_SETTINGS_RAW_LOCALISATIONS_PARSER, options)
-            if (localisation_file == null)
-                return null
 
             val hawk_localisation_file = LocalisationFile.from_macro_options(LOCALISATION_SETTINGS_HAWK_LOCALISATIONS, LOCALISATION_SETTINGS_HAWK_LOCALISATIONS_PARSER, options)
-            if (hawk_localisation_file == null)
-                return null
+
 
             val settings = default()
             settings.core_settings_ = core_settings

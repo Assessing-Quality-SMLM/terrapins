@@ -4,6 +4,7 @@ import com.coxphysics.terrapins.models.PathWrapper
 import com.coxphysics.terrapins.models.assessment.CoreSettings
 import com.coxphysics.terrapins.models.assessment.localisation.AssessmentSettings
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
+import com.coxphysics.terrapins.models.ij_wrapping.WindowManager
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.plugins.WORKFLOW_SETTINGS_USE_LOCALISATIONS
 import com.coxphysics.terrapins.views.ImageSelectorSetttings
@@ -32,7 +33,7 @@ class Settings private constructor(image_selector_setttings: ImageSelectorSettti
         }
 
         @JvmStatic
-        fun extract_from_macro_options(options: MacroOptions): Settings
+        fun extract_from_macro_options(options: MacroOptions, window_manager: WindowManager): Settings
         {
             val settings = default()
             val hawk_settings = HawkSettings.from_macro_options(options)
@@ -40,13 +41,14 @@ class Settings private constructor(image_selector_setttings: ImageSelectorSettti
 
             val equipment = EquipmentSettings.from_macro_options(options)
 
-            val localisation_settings = AssessmentSettings.from_macro_options(options)
+            val localisation_settings = AssessmentSettings.from_macro_options(options, window_manager)
             if (localisation_settings != null)
             {
                 localisation_settings.set_equipment_settings(equipment)
                 settings.localisation_settings_ = localisation_settings
             }
-            val images_settings = ImagesSettings.from_macro_options(options)
+
+            val images_settings = ImagesSettings.from_macro_options(options, window_manager)
             if (images_settings != null)
             {
                 images_settings.set_equipment_settings(equipment)

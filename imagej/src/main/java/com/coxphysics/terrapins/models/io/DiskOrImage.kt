@@ -1,6 +1,6 @@
 package com.coxphysics.terrapins.models
 
-import com.coxphysics.terrapins.models.ij_wrapping.ImageSelector
+import com.coxphysics.terrapins.models.ij_wrapping.WindowManager
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.utils.IJUtils
 import com.coxphysics.terrapins.models.utils.StringUtils
@@ -53,12 +53,12 @@ class DiskOrImage private constructor(
         }
 
         @JvmStatic
-        fun from_macro_options_with(key: String, options: MacroOptions) : DiskOrImage?
+        fun from_macro_options_with(key: String, options: MacroOptions, window_manger: WindowManager) : DiskOrImage?
         {
             val name = options.get(key)
             if (name == null)
                 return null
-            val name_as_title = ImageSelector.get_image_from_title(name)
+            val name_as_title = window_manger.get_image(name)
             if(name_as_title != null)
                 return from_image(Image.from(name_as_title))
 
@@ -67,7 +67,6 @@ class DiskOrImage private constructor(
                 return from_path(name_as_path)
             return null
         }
-
     }
 
     fun path_wrapper(): PathWrapper

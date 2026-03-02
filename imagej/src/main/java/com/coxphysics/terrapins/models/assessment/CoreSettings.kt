@@ -1,6 +1,7 @@
 package com.coxphysics.terrapins.models.assessment
 
 import com.coxphysics.terrapins.models.*
+import com.coxphysics.terrapins.models.ij_wrapping.WindowManager
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.processing.WidefieldGenerator
 import com.coxphysics.terrapins.models.utils.FsUtils
@@ -44,13 +45,13 @@ class CoreSettings private constructor(
 
         private fun default_working_directory(): Path = FsUtils.temp_directory().resolve("smlm_assessment")
 
-        fun from_macro_options(options: MacroOptions): CoreSettings
+        fun from_macro_options(options: MacroOptions, window_manager: WindowManager): CoreSettings
         {
-            var widefield = DiskOrImage.from_macro_options_with(CORE_SETTINGS_WIDEFIELD, options)
+            var widefield = DiskOrImage.from_macro_options_with(CORE_SETTINGS_WIDEFIELD, options, window_manager)
             if (widefield == null)
                 widefield = DiskOrImage.default()
 
-            var image_stack = DiskOrImage.from_macro_options_with(CORE_SETTINGS_IMAGE_STACK, options)
+            var image_stack = DiskOrImage.from_macro_options_with(CORE_SETTINGS_IMAGE_STACK, options, window_manager)
             if (image_stack == null)
                 image_stack = DiskOrImage.default()
 
