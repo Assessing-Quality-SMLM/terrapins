@@ -45,6 +45,11 @@ class MacroOptions private constructor(private var options: String?)
         }
     }
 
+    fun has_key(key: String): Boolean
+    {
+        return get(key) != null
+    }
+
     fun get(key: String) : String?
     {
         if (options == null)
