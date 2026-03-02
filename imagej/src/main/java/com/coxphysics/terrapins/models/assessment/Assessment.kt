@@ -8,6 +8,7 @@ import com.coxphysics.terrapins.models.hawkman.external.Hawkman
 import com.coxphysics.terrapins.models.process.Runner
 import com.coxphysics.terrapins.models.squirrel.external.Squirrel
 import com.coxphysics.terrapins.models.utils.FsUtils
+import com.coxphysics.terrapins.models.utils.StringUtils
 import ij.IJ
 import java.nio.file.Path
 import java.time.LocalDateTime
@@ -112,8 +113,7 @@ class Assessment private constructor(private val exe_location_: Path)
             val reference_path = settings.reference_image_path()
             if (reference_path != null)
             {
-                commands.add("--reference-image")
-                commands.add(reference_path.toString())
+                add_path_to(commands, "--reference-image", reference_path)
             }
         }
 
@@ -122,8 +122,7 @@ class Assessment private constructor(private val exe_location_: Path)
             val hawk_path = settings.hawk_image_path()
             if (hawk_path != null)
             {
-                commands.add("--hawk-image")
-                commands.add(hawk_path.toString())
+                add_path_to(commands, "--hawk-image", hawk_path)
             }
         }
 
@@ -133,10 +132,8 @@ class Assessment private constructor(private val exe_location_: Path)
             val half_split_b_path = settings.half_split_image_b_filepath()
             if (half_split_a_path != null && half_split_b_path != null)
             {
-                commands.add("--half-split-a")
-                commands.add(half_split_a_path.toString())
-                commands.add("--half-split-b")
-                commands.add(half_split_b_path.toString())
+                add_path_to(commands, "--half-split-a", half_split_a_path)
+                add_path_to(commands, "--half-split-b", half_split_b_path)
             }
         }
 
@@ -146,10 +143,8 @@ class Assessment private constructor(private val exe_location_: Path)
             val zip_split_b_path = settings.zip_split_image_b_filepath()
             if (zip_split_a_path != null && zip_split_b_path != null)
             {
-                commands.add("--zip-split-a")
-                commands.add(zip_split_a_path.toString())
-                commands.add("--zip-split-b")
-                commands.add(zip_split_b_path.toString())
+                add_path_to(commands, "--zip-split-a", zip_split_a_path)
+                add_path_to(commands, "--zip-split-b", zip_split_b_path)
             }
         }
 
@@ -159,13 +154,20 @@ class Assessment private constructor(private val exe_location_: Path)
             val drift_split_b_path = settings.drift_split_image_b_filepath()
             if (drift_split_a_path != null && drift_split_b_path != null)
             {
-                commands.add("--drift-split-a")
-                commands.add(drift_split_a_path.toString())
-                commands.add("--drift-split-b")
-                commands.add(drift_split_b_path.toString())
+                add_path_to(commands, "--drift-split-a", drift_split_a_path)
+                add_path_to(commands, "--drift-split-b", drift_split_b_path)
             }
         }
 //        add_equipment(true, settings.equipment_settings(), commands)
+    }
+
+    fun add_path_to(commands: MutableList<String>, key: String, path: Path)
+    {
+        val path_string = path.toString()
+        if (path_string == StringUtils.EMPTY_STRING)
+            return
+        commands.add(key)
+        commands.add(path_string)
     }
 
     fun run_localisations(runner : Runner, localisations: AssessmentSettings): AssessmentResults?
