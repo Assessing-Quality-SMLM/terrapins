@@ -5,13 +5,11 @@ import com.coxphysics.terrapins.models.assessment.CoreSettings
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import com.coxphysics.terrapins.models.localisations.LocalisationFile
 import com.coxphysics.terrapins.models.macros.MacroOptions
-import com.coxphysics.terrapins.models.reports.EqualSettings
 import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_HAWK_LOCALISATIONS
 import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_HAWK_LOCALISATIONS_PARSER
 import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_RAW_LOCALISATIONS
 import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_RAW_LOCALISATIONS_PARSER
 import java.nio.file.Path
-import java.nio.file.Paths
 
 class AssessmentSettings private constructor(
     private var core_settings_: CoreSettings
