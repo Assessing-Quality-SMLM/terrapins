@@ -1,6 +1,7 @@
 package com.coxphysics.terrapins.models.assessment
 
 import com.coxphysics.terrapins.models.assessment.images.Settings
+import com.coxphysics.terrapins.models.utils.StringUtils
 import org.junit.jupiter.api.Assertions.assertArrayEquals
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
@@ -42,6 +43,17 @@ class ImagesTests
         settings.set_reference_filename("some.thing")
         val commands = Assessment.custom(exe_path()).get_images_arguments(settings.core_settings(), settings, null)
         val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--n-threads", "4", "--extract", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0", "--magnification", "10.0", "image", "--reference-image", "some.thing")
+        assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
+    }
+
+    @Test
+    fun image_path_not_added_if_empty()
+    {
+        val settings = Settings.with(working_directory_path())
+        settings.set_n_threads(4)
+        settings.set_reference_filename("")
+        val commands = Assessment.custom(exe_path()).get_images_arguments(settings.core_settings(), settings, null)
+        val expected = listOf(exe_path().toString(), "--working-directory", working_directory(), "--n-threads", "4", "--extract", "--camera-pixel-size-nm", "160.0", "--instrument-psf-fwhm-nm", "270.0", "--magnification", "10.0", "image")
         assertArrayEquals(commands.toTypedArray(), expected.toTypedArray())
     }
 
