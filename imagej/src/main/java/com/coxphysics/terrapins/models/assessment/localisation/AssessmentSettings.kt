@@ -36,7 +36,7 @@ class AssessmentSettings private constructor(
         }
 
         @JvmStatic
-        fun from_macro_options(options: MacroOptions) : AssessmentSettings?
+        fun from_macro_options(options: MacroOptions) : AssessmentSettings
         {
             val core_settings = CoreSettings.from_macro_options(options)
 
