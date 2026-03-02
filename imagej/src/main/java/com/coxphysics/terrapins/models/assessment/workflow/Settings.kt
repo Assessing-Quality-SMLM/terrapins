@@ -46,6 +46,7 @@ class Settings private constructor(image_selector_setttings: ImageSelectorSettti
                 localisation_settings.set_equipment_settings(equipment)
                 settings.localisation_settings_ = localisation_settings
             }
+
             val images_settings = ImagesSettings.from_macro_options(options)
             if (images_settings != null)
             {
