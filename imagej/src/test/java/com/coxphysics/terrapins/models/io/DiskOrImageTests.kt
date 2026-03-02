@@ -182,4 +182,18 @@ class DiskOrImageTests
         }.get()
     }
 
+    @Test
+    fun can_get_image_from_window_manager()
+    {
+        executor.submit{
+            val data = listOf(1.0)
+            val image = ImagePlus("some", FloatProcessor(1, 1, data.toDoubleArray()))
+            val window_manager = FakeWindowManager.from(mapOf(Pair("some", image)))
+
+            val options = MacroOptions.from("thing=some")
+            val model = DiskOrImage.from_macro_options_with("thing", options, window_manager )
+            assertEquals(model!!.use_image(), true)
+            assertEquals(model.image(), image)
+        }.get()
+    }
 }
