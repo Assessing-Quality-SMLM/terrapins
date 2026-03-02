@@ -40,7 +40,7 @@ class ImagesVM private constructor(private var settings_: Settings)
     {
         return hawk_recon_vm_
     }
-    
+
     fun drift_split_vm() : JointImagesVM
     {
         return drift_split_vm_
