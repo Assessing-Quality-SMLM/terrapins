@@ -148,7 +148,7 @@ public class ParseMethodTests
 
                 MacroOptions options = MacroOptions.from_recorder_command_options();
                 String desc = options.get("something");
-                assertEquals(desc, ",,1,4,5,6,2,3");
+                assertEquals(desc, ",a1a4a5a6a2a3");
             }).get();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
