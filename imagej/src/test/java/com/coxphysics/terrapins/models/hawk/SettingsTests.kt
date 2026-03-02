@@ -34,6 +34,11 @@ class FakeWindowManager private constructor(
             return map_[image_name]
         return null
     }
+
+    override fun get_image_at(index: Int): ImagePlus?
+    {
+        return map_.values.elementAt(index)
+    }
 }
 
 class SettingsTests
