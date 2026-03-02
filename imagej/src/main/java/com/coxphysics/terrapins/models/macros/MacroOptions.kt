@@ -37,6 +37,12 @@ class MacroOptions private constructor(private var options: String?)
         {
             return Macro.getOptions() == null
         }
+
+        @JvmStatic
+        fun reset()
+        {
+            Recorder.resetCommandOptions()
+        }
     }
 
     fun get(key: String) : String?
