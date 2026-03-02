@@ -36,6 +36,10 @@ public class ImagesView {
 
     public void set_visible(boolean value) {
         root_panel_.setVisible(value);
+        recon_panel_.setVisible(value);
+        recon_view_.set_visible(value);
+        hawk_panel_.setVisible(value);
+        hawk_recon_view_.set_visible(value);
         drift_split_ctrl_.set_visible(value);
         half_split_ctrl_.set_visible(value);
         zip_split_ctrl_.set_visible(value);
