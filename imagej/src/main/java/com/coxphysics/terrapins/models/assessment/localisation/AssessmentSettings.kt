@@ -43,12 +43,8 @@ class AssessmentSettings private constructor(
             val equipment_settings = EquipmentSettings.from_macro_options(options)
 
             val localisation_file = LocalisationFile.from_macro_options(LOCALISATION_SETTINGS_RAW_LOCALISATIONS, LOCALISATION_SETTINGS_RAW_LOCALISATIONS_PARSER, options)
-            if (localisation_file == null)
-                return null
 
             val hawk_localisation_file = LocalisationFile.from_macro_options(LOCALISATION_SETTINGS_HAWK_LOCALISATIONS, LOCALISATION_SETTINGS_HAWK_LOCALISATIONS_PARSER, options)
-            if (hawk_localisation_file == null)
-                return null
 
             val settings = default()
             settings.core_settings_ = core_settings
