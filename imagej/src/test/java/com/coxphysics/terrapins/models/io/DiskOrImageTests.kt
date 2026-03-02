@@ -2,6 +2,7 @@ package com.coxphysics.terrapins.models.io
 
 import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.Image
+import com.coxphysics.terrapins.models.hawk.FakeWindowManager
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.utils.StringUtils
 import ij.ImagePlus
@@ -162,7 +163,7 @@ class DiskOrImageTests
     {
         executor.submit {
             val options = MacroOptions.from("a=thing")
-            val disk_or_image = DiskOrImage.from_macro_options_with("a", options)
+            val disk_or_image = DiskOrImage.from_macro_options_with("a", options, FakeWindowManager.empty())
             assertEquals(disk_or_image!!.filename_nn(), "thing")
         }.get()
     }

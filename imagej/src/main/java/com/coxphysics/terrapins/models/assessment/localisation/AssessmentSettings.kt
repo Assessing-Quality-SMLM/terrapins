@@ -3,6 +3,7 @@ package com.coxphysics.terrapins.models.assessment.localisation
 import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.assessment.CoreSettings
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
+import com.coxphysics.terrapins.models.ij_wrapping.WindowManager
 import com.coxphysics.terrapins.models.localisations.LocalisationFile
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_HAWK_LOCALISATIONS
@@ -34,13 +35,13 @@ class AssessmentSettings private constructor(
         }
 
         @JvmStatic
-        fun from_macro_options(options: MacroOptions) : AssessmentSettings?
+        fun from_macro_options(options: MacroOptions, window_manager: WindowManager) : AssessmentSettings?
         {
             val has_loc_file = options.has_key(LOCALISATION_SETTINGS_RAW_LOCALISATIONS);
             if (!has_loc_file) // we use this null to know if which workflow we are in
                 return null
 
-            val core_settings = CoreSettings.from_macro_options(options)
+            val core_settings = CoreSettings.from_macro_options(options, window_manager)
 
             val equipment_settings = EquipmentSettings.from_macro_options(options)
 

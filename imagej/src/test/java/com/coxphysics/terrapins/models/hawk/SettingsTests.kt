@@ -1,6 +1,5 @@
 package com.coxphysics.terrapins.models.hawk
 
-import com.coxphysics.terrapins.models.ij_wrapping.WindowManager
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.utils.StringUtils
 import com.coxphysics.terrapins.plugins.*
@@ -11,35 +10,6 @@ import org.junit.jupiter.api.Test
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
-
-class FakeWindowManager private constructor(
-    private val map_: Map<String, ImagePlus>
-): WindowManager
-{
-    companion object
-    {
-        fun from(map: Map<String, ImagePlus>) : FakeWindowManager
-        {
-            return FakeWindowManager(map)
-        }
-
-        fun empty(): FakeWindowManager
-        {
-            return from(emptyMap())
-        }
-    }
-    override fun get_image(image_name: String): ImagePlus?
-    {
-        if(map_.containsKey(image_name))
-            return map_[image_name]
-        return null
-    }
-
-    override fun get_image_at(index: Int): ImagePlus?
-    {
-        return map_.values.elementAt(index)
-    }
-}
 
 class SettingsTests
 {

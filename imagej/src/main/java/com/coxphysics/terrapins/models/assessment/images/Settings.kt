@@ -3,6 +3,7 @@ package com.coxphysics.terrapins.models.assessment.images
 import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.assessment.CoreSettings
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
+import com.coxphysics.terrapins.models.ij_wrapping.WindowManager
 import com.coxphysics.terrapins.models.io.FrcImages
 import com.coxphysics.terrapins.models.io.JointImages
 import com.coxphysics.terrapins.models.macros.MacroOptions
@@ -36,29 +37,29 @@ class Settings private constructor(
         }
 
         @JvmStatic
-        fun from_macro_options(options: MacroOptions) : Settings?
+        fun from_macro_options(options: MacroOptions, window_manager: WindowManager) : Settings?
         {
-            val core_settings = CoreSettings.from_macro_options(options)
+            val core_settings = CoreSettings.from_macro_options(options, window_manager)
 
             val equipment_settings = EquipmentSettings.from_macro_options(options)
 
-            var reference_image = DiskOrImage.from_macro_options_with(IMAGES_SETTINGS_RECON_IMAGE, options)
+            var reference_image = DiskOrImage.from_macro_options_with(IMAGES_SETTINGS_RECON_IMAGE, options, window_manager)
             if (reference_image == null)
                 reference_image = DiskOrImage.default()
 
-            var hawk_image = DiskOrImage.from_macro_options_with(IMAGES_SETTINGS_HAWK_IMAGE, options)
+            var hawk_image = DiskOrImage.from_macro_options_with(IMAGES_SETTINGS_HAWK_IMAGE, options, window_manager)
             if (hawk_image == null)
                 hawk_image = DiskOrImage.default()
 
-            var half_split = JointImages.from_macro_options_with(IMAGES_SETTINGS_HALF_SPLIT_1, IMAGES_SETTINGS_HALF_SPLIT_2, options)
+            var half_split = JointImages.from_macro_options_with(IMAGES_SETTINGS_HALF_SPLIT_1, IMAGES_SETTINGS_HALF_SPLIT_2, options, window_manager)
             if (half_split == null)
                 half_split = JointImages.default()
 
-            var drift_split = JointImages.from_macro_options_with(IMAGES_SETTINGS_DRIFT_SPLIT_1, IMAGES_SETTINGS_DRIFT_SPLIT_2, options)
+            var drift_split = JointImages.from_macro_options_with(IMAGES_SETTINGS_DRIFT_SPLIT_1, IMAGES_SETTINGS_DRIFT_SPLIT_2, options, window_manager)
             if (drift_split == null)
                 drift_split = JointImages.default()
 
-            var zip_split = JointImages.from_macro_options_with(IMAGES_SETTINGS_ZIP_SPLIT_1, IMAGES_SETTINGS_ZIP_SPLIT_2, options)
+            var zip_split = JointImages.from_macro_options_with(IMAGES_SETTINGS_ZIP_SPLIT_1, IMAGES_SETTINGS_ZIP_SPLIT_2, options, window_manager)
             if (zip_split == null)
                 zip_split = JointImages.default()
 

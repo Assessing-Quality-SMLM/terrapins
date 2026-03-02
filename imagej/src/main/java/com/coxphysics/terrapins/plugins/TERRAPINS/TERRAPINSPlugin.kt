@@ -3,6 +3,7 @@ package com.coxphysics.terrapins.plugins.TERRAPINS
 import com.coxphysics.terrapins.models.assessment.AssessmentResults
 import com.coxphysics.terrapins.models.assessment.TERRAPINS
 import com.coxphysics.terrapins.models.assessment.workflow.Settings
+import com.coxphysics.terrapins.models.ij_wrapping.IJWindowManager
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.macros.MacroUtils
 import com.coxphysics.terrapins.models.squirrel.tools.SQUIRREL_GetFileFromResource
@@ -53,7 +54,7 @@ class TERRAPINSPlugin : PlugIn
 //                IJ.log("Could not construct macro options")
                 return
             }
-            settings_ = Settings.extract_from_macro_options(options)
+            settings_ = Settings.extract_from_macro_options(options, IJWindowManager.new())
             val results = run_assessment(settings_) // has side-effects to disk
             // we are in a macro so don't display the results viewer
         }
