@@ -168,7 +168,7 @@ public class ParseMethodTests
     @Test
     void read_csv_settings_from_macro()
     {
-        MacroOptions options = MacroOptions.from("something=1,4,5,6,2");
+        MacroOptions options = MacroOptions.from("something=,a1a4a5a6a2a3");
         ParseMethod method = ParseMethod.from_macro_options("something", options);
 
         assertEquals(method.use_thunderstorm(), false);
@@ -176,6 +176,7 @@ public class ParseMethodTests
         assertEquals(method.frame_number_position(), 4);
         assertEquals(method.x_position(), 5);
         assertEquals(method.y_position(), 6);
-        assertEquals(method.uncertainty_position(), 2);
+        assertEquals(method.psf_sigma_position(), 2);
+        assertEquals(method.uncertainty_position(), 3);
     }
 }
