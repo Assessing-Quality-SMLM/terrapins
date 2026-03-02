@@ -4,6 +4,8 @@ import com.coxphysics.terrapins.models.assessment.images.Settings
 
 class ImagesVM private constructor(private var settings_: Settings)
 {
+    private val recon_vm_ = DiskOrImageVM.from(settings_.reference_image())
+    private val hawk_recon_vm_ = DiskOrImageVM.from(settings_.hawk_image())
     private val drift_split_vm_ = JointImagesVM.from(settings_.drift_split_model(), "Section Split a", "Section Split b")
     private val half_split_vm_ = JointImagesVM.from(settings_.half_split_model(), "Half Split a", "Half Split b")
     private val zip_split_vm_ = JointImagesVM.from(settings_.zip_split_model(), "Zip Split a", "Zip Split b")
@@ -29,6 +31,16 @@ class ImagesVM private constructor(private var settings_: Settings)
             return default()
         }
     }
+    fun recon_vm(): DiskOrImageVM
+    {
+        return recon_vm_
+    }
+
+    fun hawk_recon_vm(): DiskOrImageVM
+    {
+        return hawk_recon_vm_
+    }
+    
     fun drift_split_vm() : JointImagesVM
     {
         return drift_split_vm_

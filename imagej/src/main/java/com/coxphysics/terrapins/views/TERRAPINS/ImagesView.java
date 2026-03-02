@@ -27,7 +27,8 @@ public class ImagesView {
 
     public void set_view_model(ImagesVM view_model) {
         view_model_ = view_model;
-
+        recon_view_.set_view_model(view_model_.recon_vm());
+        hawk_recon_view_.set_view_model(view_model_.hawk_recon_vm());
         drift_split_ctrl_.set_view_model(view_model.drift_split_vm());
         half_split_ctrl_.set_view_model(view_model.half_split_vm());
         zip_split_ctrl_.set_view_model(view_model.zip_split_vm());
