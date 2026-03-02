@@ -36,8 +36,12 @@ class AssessmentSettings private constructor(
         }
 
         @JvmStatic
-        fun from_macro_options(options: MacroOptions) : AssessmentSettings
+        fun from_macro_options(options: MacroOptions) : AssessmentSettings?
         {
+            val has_loc_file = options.has_key(LOCALISATION_SETTINGS_RAW_LOCALISATIONS);
+            if (!has_loc_file) // we use this null to know if which workflow we are in
+                return null
+
             val core_settings = CoreSettings.from_macro_options(options)
 
             val equipment_settings = EquipmentSettings.from_macro_options(options)
@@ -45,6 +49,7 @@ class AssessmentSettings private constructor(
             val localisation_file = LocalisationFile.from_macro_options(LOCALISATION_SETTINGS_RAW_LOCALISATIONS, LOCALISATION_SETTINGS_RAW_LOCALISATIONS_PARSER, options)
 
             val hawk_localisation_file = LocalisationFile.from_macro_options(LOCALISATION_SETTINGS_HAWK_LOCALISATIONS, LOCALISATION_SETTINGS_HAWK_LOCALISATIONS_PARSER, options)
+
 
             val settings = default()
             settings.core_settings_ = core_settings
