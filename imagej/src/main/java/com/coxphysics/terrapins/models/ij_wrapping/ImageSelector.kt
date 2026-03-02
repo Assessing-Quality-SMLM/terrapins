@@ -32,6 +32,7 @@ private fun get_image_index_from_manager(image: ImagePlus): Int?
 
 // Image.with(get_image_from_manager(current_image_))
 class ImageSelector private constructor(
+    private val window_manager_: com.coxphysics.terrapins.models.ij_wrapping.WindowManager,
     private var current_image_: Int,
     private var image_ : Image
 )
@@ -42,7 +43,7 @@ class ImageSelector private constructor(
         @JvmStatic
         fun default(): ImageSelector
         {
-            return ImageSelector(INVALID_INDEX, Image.empty())
+            return ImageSelector(IJWindowManager.new(), INVALID_INDEX, Image.empty())
         }
 
         @JvmStatic
@@ -50,11 +51,11 @@ class ImageSelector private constructor(
         {
             val ip = image.to_image_plus()
             if (ip == null)
-                return ImageSelector(INVALID_INDEX, image)
+                return ImageSelector(IJWindowManager.new(), INVALID_INDEX, image)
             val idx = get_image_index_from_manager(ip)
             if (idx == null)
-                return ImageSelector(INVALID_INDEX, image)
-            return ImageSelector(idx, image)
+                return ImageSelector(IJWindowManager.new(), INVALID_INDEX, image)
+            return ImageSelector(IJWindowManager.new(), idx, image)
         }
 
         @JvmStatic
@@ -93,7 +94,7 @@ class ImageSelector private constructor(
         if (current_image_ == INVALID_INDEX)
             return null
         val selected_image = current_image_
-        val id = WindowManager.getNthImageID(selected_image + 1)
-        return WindowManager.getImage(id)
+
+        return window_manager_.get_image_at(selected_image)
     }
 }
