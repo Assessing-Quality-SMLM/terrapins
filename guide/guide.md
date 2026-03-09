@@ -96,8 +96,6 @@ $include ./guide/select_localisation_pathway.md
 
 Input the localisation files into the field and select how you would like to parse it. There is an in built reader for Thunderstorm files otherwise we can treat it as a csv and you can select appropriate parsing parameters. 
 
-$include ./guide/select_localisation_pathway.md
-
 If you have taken a widefield load it into ImageJ, click reset images, and select it from the drop down menu. Do the same for the raw image data to. These inputs are for the SQUIRREL analysis and the slightly different reference images will tell us about about different sources of error.
 
 With the data input select run and check the logs for what is going on. When the proces has finished the results viewer should appear

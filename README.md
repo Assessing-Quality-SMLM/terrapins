@@ -111,9 +111,6 @@ Select the Images Workflow tab
 
 ![Select the images pathway](./guide/images/select_images_pathway.png)
 
-If you want your results to go to a specific directory fill in the
-working directory information
-
 Fill in the instrumentation details and the magnification your images
 are rendered at.
 
@@ -170,14 +167,6 @@ like to parse it. There is an in built reader for Thunderstorm files
 otherwise we can treat it as a csv and you can select appropriate
 parsing parameters.
 
-Select the Localisation Workflow tab
-
-![Select the Localisation Workflow
-tab](./guide/images/select_localisation_pathway.png)
-
-Fill in the instrumentation details and the magnification you would like
-your data to be rendered to.
-
 If you have taken a widefield load it into ImageJ, click reset images,
 and select it from the drop down menu. Do the same for the raw image
 data to. These inputs are for the SQUIRREL analysis and the slightly
@@ -202,9 +191,6 @@ plugin drop down menu.
 Select the Images Workflow tab
 
 ![Select the images pathway](./guide/images/select_images_pathway.png)
-
-If you want your results to go to a specific directory fill in the
-working directory information
 
 Fill in the instrumentation details and the magnification your images
 are rendered at.
