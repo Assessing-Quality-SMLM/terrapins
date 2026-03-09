@@ -71,20 +71,15 @@ What do I need to do/steps
 
 ## Assess my images to help inform my experimental setup using localisation data
 
-Generate your localisation data using whichever tool you like. Then open
-the workflow
+Generate your localisation data using whichever tool you like. Then
 
-Select the workflow option from the TERRRAPINS plugin drop down mentu.
+open the workflow by selecting the workflow option from the TERRRAPINS
+plugin drop down menu.
 
-Tell the workflow localisation data has been created
+Select the Localisation Workflow tab
 
-![Tell the workflow localisation data has been
-created](./guide/images/localisation_files_created.png)
-
-And select the localisation pathway
-
-![Select the Localisation
-pathway](./guide/images/select_localisation_pathway.png)
+![Select the Localisation Workflow
+tab](./guide/images/select_localisation_pathway.png)
 
 Fill in the instrumentation details and the magnification you would like
 your data to be rendered to.
@@ -94,21 +89,8 @@ to parse it. There is an in built reader for Thunderstorm files
 otherwise we can treat it as a csv and you can select appropriate
 parsing parameters.
 
-Tell the workflow localisation data has been created
-
-![Tell the workflow localisation data has been
-created](./guide/images/localisation_files_created.png)
-
-And select the localisation pathway
-
-![Select the Localisation
-pathway](./guide/images/select_localisation_pathway.png)
-
-Fill in the instrumentation details and the magnification you would like
-your data to be rendered to.
-
 This is enough input to get an idea of how your experiment is setup. If
-you have taken a widefield there is no harm in adding for SQUIRREL
+you have taken a widefield there is no harm in adding it for SQUIRREL
 output (also true for the image stack).
 
 With the data input select run and check the logs for what is going on.
@@ -120,16 +102,12 @@ outputs](#the-results-viewer).
 ## Assess my images to help inform my experimental setup using image data
 
 Generate your reconstruction(s) using whichever tools you like and load
-them into ImageJ. Then open the workflow
+them into ImageJ. Then
 
-Select the workflow option from the TERRRAPINS plugin drop down mentu.
+open the workflow by selecting the workflow option from the TERRRAPINS
+plugin drop down menu.
 
-Tell the workflow the data has been created
-
-![Tell the workflow data has been
-created](./guide/images/localisation_files_created.png)
-
-And select the images pathway
+Select the Images Workflow tab
 
 ![Select the images pathway](./guide/images/select_images_pathway.png)
 
@@ -140,15 +118,9 @@ Fill in the instrumentation details and the magnification your images
 are rendered at.
 
 If you have a true widefield image either fill in its file path or click
-use image and select it from the drop down.
-
-![Select a widefield](./guide/images/select_widefield_image.png)
-
-If you opened the workflow before you loaded your image click reset
-images in the bottom left corner to re-populate the dropdown.
-
-![Select a widefield with the
-dropdown](./guide/images/select_widefield_loaded_into_image_j)
+use image and select it from the drop down. If you opened the workflow
+before you loaded your image click reset images in the bottom left
+corner to re-populate the dropdown.
 
 Do the same for the image stack if you have it. N.B if the image stack
 is large leave it on disk rather than load it to ImageJ.
@@ -180,19 +152,15 @@ you like. Then run HAWK on the image stack and localise again. HAWK
 inputs are required to assess bias and we need to know the bias to
 dissambiguate sources of error for other outputs.
 
-Once this is done open the workflow
+Once this is done
 
-Select the workflow option from the TERRRAPINS plugin drop down mentu.
+open the workflow by selecting the workflow option from the TERRRAPINS
+plugin drop down menu.
 
-Tell the workflow localisation data has been created
+Select the Localisation Workflow tab
 
-![Tell the workflow localisation data has been
-created](./guide/images/localisation_files_created.png)
-
-And select the localisation pathway
-
-![Select the Localisation
-pathway](./guide/images/select_localisation_pathway.png)
+![Select the Localisation Workflow
+tab](./guide/images/select_localisation_pathway.png)
 
 Fill in the instrumentation details and the magnification you would like
 your data to be rendered to.
@@ -202,15 +170,10 @@ like to parse it. There is an in built reader for Thunderstorm files
 otherwise we can treat it as a csv and you can select appropriate
 parsing parameters.
 
-Tell the workflow localisation data has been created
+Select the Localisation Workflow tab
 
-![Tell the workflow localisation data has been
-created](./guide/images/localisation_files_created.png)
-
-And select the localisation pathway
-
-![Select the Localisation
-pathway](./guide/images/select_localisation_pathway.png)
+![Select the Localisation Workflow
+tab](./guide/images/select_localisation_pathway.png)
 
 Fill in the instrumentation details and the magnification you would like
 your data to be rendered to.
@@ -231,16 +194,12 @@ outputs](#the-results-viewer).
 
 Generate your reconstruction(s) using whichever tools you like and load
 them into ImageJ along with the widefield (if you have it) and the raw
-data stack. Then open the workflow
+data stack. Then
 
-Select the workflow option from the TERRRAPINS plugin drop down mentu.
+open the workflow by selecting the workflow option from the TERRRAPINS
+plugin drop down menu.
 
-Tell the workflow the data has been created
-
-![Tell the workflow data has been
-created](./guide/images/localisation_files_created.png)
-
-And select the images pathway
+Select the Images Workflow tab
 
 ![Select the images pathway](./guide/images/select_images_pathway.png)
 
@@ -251,15 +210,9 @@ Fill in the instrumentation details and the magnification your images
 are rendered at.
 
 If you have a true widefield image either fill in its file path or click
-use image and select it from the drop down.
-
-![Select a widefield](./guide/images/select_widefield_image.png)
-
-If you opened the workflow before you loaded your image click reset
-images in the bottom left corner to re-populate the dropdown.
-
-![Select a widefield with the
-dropdown](./guide/images/select_widefield_loaded_into_image_j)
+use image and select it from the drop down. If you opened the workflow
+before you loaded your image click reset images in the bottom left
+corner to re-populate the dropdown.
 
 Do the same for the image stack if you have it. N.B if the image stack
 is large leave it on disk rather than load it to ImageJ.
@@ -295,8 +248,6 @@ software. Nat Methods 16, 387--395 (2019).
 https://doi.org/10.1038/s41592-019-0364-4
 
 ## Reports
-
-These reports are formed from the truth table logic in????????????
 
 ### Drift
 
