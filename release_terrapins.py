@@ -3,6 +3,7 @@ import _build
 from dev_ops import fs, gh, maven
 
 import argparse
+from os import path
 import sys
 
 
@@ -21,25 +22,34 @@ def run(dry_run: bool) -> bool:
     build_ok = _build.build_imagej(use_bleeding_edge_dll)
     if not build_ok:
         return False
-
+    print("updating version number")
     pom = _build.imagej_pom()
     new_version_number = bump_imagej_version_number(pom)
+    print(f"new version number is {new_version_number}")
     if new_version_number is None:
         return False
 
-    if not fs.remove_directory(_build.imagej_target()):
-        return False
+    target_dir = _build.imagej_target()
+    print(f"Removing {target_dir}")
+    if path.exists(target_dir):
+        if not fs.remove_directory(target_dir):
+            return False
 
+    print("Cleaning")
     if not maven.clean(pom):
         return False
 
+    print("Running install")
     if not maven.install(pom):
         return False
 
+
+    print("Deploying")
     new_artifact = _build.dependency_build_of(PROJECT, new_version_number)
     deployment_location = _build.image_j_deployment_path(PROJECT, new_version_number)
     fs.copy_file(new_artifact, deployment_location)
 
+    print("Committing changes")
     if not gh.commit_version_bump(PROJECT, new_version_number, pom, deployment_location, dry_run):
         return False
 
