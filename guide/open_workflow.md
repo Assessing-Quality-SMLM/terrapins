@@ -1,1 +1,1 @@
-Select the workflow option from the TERRRAPINS plugin drop down mentu.
+open the workflow by selecting the workflow option from the TERRRAPINS plugin drop down menu.

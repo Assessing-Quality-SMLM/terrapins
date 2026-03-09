@@ -54,7 +54,7 @@ What do I need to do/steps
 
 ## Assess my images to help inform my experimental setup using localisation data
 
-Generate your localisation data using whichever tool you like. Then open the workflow
+Generate your localisation data using whichever tool you like. Then
 
 $include ./guide/open_workflow.md
 
@@ -62,9 +62,7 @@ $include ./guide/select_localisation_pathway.md
 
 Input the localisation file into the field and select how you would like to parse it. There is an in built reader for Thunderstorm files otherwise we can treat it as a csv and you can select appropriate parsing parameters. 
 
-$include ./guide/select_localisation_pathway.md
-
-This is enough input to get an idea of how your experiment is setup. If you have taken a widefield there is no harm in adding for SQUIRREL output (also true for the image stack).
+This is enough input to get an idea of how your experiment is setup. If you have taken a widefield there is no harm in adding it for SQUIRREL output (also true for the image stack).
 
 With the data input select run and check the logs for what is going on. When the proces has finished the results viewer should appear
 
@@ -72,7 +70,7 @@ With the data input select run and check the logs for what is going on. When the
 
 ## Assess my images to help inform my experimental setup using image data
 
-Generate your reconstruction(s) using whichever tools you like and load them into ImageJ. Then open the workflow
+Generate your reconstruction(s) using whichever tools you like and load them into ImageJ. Then
 
 $include ./guide/open_workflow.md
 
@@ -90,7 +88,7 @@ With the data input select run and check the logs for what is going on. When the
 
 Generate localisation data for the raw image stack using whichever tool you like. Then run HAWK on the image stack and localise again. HAWK inputs are required to assess bias and we need to know the bias to dissambiguate sources of error for other outputs.
 
-Once this is done open the workflow
+Once this is done
 
 $include ./guide/open_workflow.md
 
@@ -109,7 +107,7 @@ With the data input select run and check the logs for what is going on. When the
 
 ## Assess my images for a limiting precision score using image data
 
-Generate your reconstruction(s) using whichever tools you like and load them into ImageJ along with the widefield (if you have it) and the raw data stack. Then open the workflow
+Generate your reconstruction(s) using whichever tools you like and load them into ImageJ along with the widefield (if you have it) and the raw data stack. Then
 
 $include ./guide/open_workflow.md
 
