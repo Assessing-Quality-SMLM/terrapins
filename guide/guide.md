@@ -1,6 +1,26 @@
 # TERRAPINS - TEsting Resolution, Reliability And Performance IN SMLM 
 
-This tool is for assessing 2D SMLM data quality and reliability. Many issues can affect the quality of this data, this tool aims to give a you both a measure of quality but, also how to tune your experimental setup and highlight the limiting factors of its performance.
+This tool is for assessing 2D SMLM data quality and reliability. SMLM is particularly prone to artifacts and issues can arise from a number of different sources which affect the quality of the data. This tool aims to give a you both a measure of quality but, also how to tune your experimental setup and highlight the limiting factors of its performance.
+
+To use this package you will need your raw data, for the HAWK, and your localisation lists / rendered images for the assessment.
+
+
+## Data Requirements
+ - [Drift](#drift) / [Magnification](#magnification)
+     - Localisation Workflow - Localisation list 
+     - Image Workflow - Section split and Half split rendered images
+ - [Sampling](#sampling)
+     - Localisation Workflow - Localisation list
+     - Image Workflow - Section split rendered images
+ - [Blinking](#blinking)
+     - Localisation Workflow - Localisation list 
+     - Image Workflow - Section split and Interleaved split rendered images
+ - [Bias](#bias)
+     - Localisation Workflow - Localisation list and HAWKed Localisation list
+     - Image Workflow - Standard recon and HAWKed recon
+ - [Linearity](#linearity)
+     - Localisation Workflow - Localisation list and image stack (raw frames) for non-linearity and/or true widfield for all other error sources
+     - Image Workflow - Recon image and image stack (raw frames) for non-linearity and/or true widfield for all other error sources
 
 
 # Processing Flow chart
@@ -231,6 +251,8 @@ If, when you look at the skeletonised images, they are not representative then y
 FRC is based on a Fourier transform; consequently there are 2 main sources of errors, missalignment when cropping a ROI or if your data is highly structured, particularly over long ranges, e.g. a structural motif is repeated across the image. 
 
 In the case of cropping an image take your time and be accurate, FRC can produce unexpected results with single pixel missalignments. Also be sure to crop all the data you are using; widefields, image stacks, recons and recon localisation lists etc.
+
+Different analysis packages can also produce different alignments so if using the image workflow that images are rendered with the same technique from the same package.
 
 In the case of highly structured data artefacts can be introduced into the spectrum which can be hard accomodate. If you are only interested in a particular part of the image try cropping it out and running the assessment on that.
 
