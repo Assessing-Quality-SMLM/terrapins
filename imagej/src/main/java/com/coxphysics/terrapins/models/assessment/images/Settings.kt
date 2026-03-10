@@ -2,6 +2,7 @@ package com.coxphysics.terrapins.models.assessment.images
 
 import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.assessment.CoreSettings
+import com.coxphysics.terrapins.models.assessment.SquirrelInputs
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import com.coxphysics.terrapins.models.ij_wrapping.WindowManager
 import com.coxphysics.terrapins.models.io.FrcImages
@@ -9,13 +10,13 @@ import com.coxphysics.terrapins.models.io.JointImages
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.plugins.*
 import java.nio.file.Path
-import java.nio.file.Paths
 
 class Settings private constructor(
     private var core_settings_: CoreSettings
 )
 {
     private var equipment = EquipmentSettings.default()
+    private var squirrel_inputs_ = SquirrelInputs.default()
     private var reference_image_ = DiskOrImage.default()
     private var hawk_image_ = DiskOrImage.default()
     private var half_split_ = JointImages.default()
@@ -25,20 +26,27 @@ class Settings private constructor(
     companion object
     {
         @JvmStatic
+        fun from(core_settings: CoreSettings): Settings
+        {
+            return Settings(core_settings)
+        }
+
+        @JvmStatic
         fun with(working_directory: Path): Settings
         {
-            return Settings(CoreSettings.from(working_directory))
+            return from(CoreSettings.from(working_directory))
         }
 
         @JvmStatic
         fun default(): Settings
         {
-            return Settings(CoreSettings.default())
+            return from(CoreSettings.default())
         }
 
         @JvmStatic
         fun from_macro_options(options: MacroOptions, window_manager: WindowManager) : Settings?
         {
+            val squirrel_inputs = SquirrelInputs.from_macro_options(options, window_manager)
             val core_settings = CoreSettings.from_macro_options(options, window_manager)
 
             val equipment_settings = EquipmentSettings.from_macro_options(options)
@@ -64,6 +72,7 @@ class Settings private constructor(
                 zip_split = JointImages.default()
 
             val settings = default()
+            settings.squirrel_inputs_ = squirrel_inputs
             settings.core_settings_ = core_settings
             settings.equipment = equipment_settings
             settings.reference_image_ = reference_image
@@ -120,16 +129,6 @@ class Settings private constructor(
         core_settings_.set_working_directory(value)
     }
 
-    fun set_widefield_filename(value: String)
-    {
-        core_settings_.set_widefield_filename(value)
-    }
-
-    fun set_image_stack_filename(value: String)
-    {
-        core_settings_.set_image_stack_filename(value)
-    }
-
     fun set_n_threads(value: Int)
     {
         core_settings_.set_n_threads(value)
@@ -143,6 +142,23 @@ class Settings private constructor(
     fun set_settings_file(value: String)
     {
         core_settings_.set_settings_file(value)
+    }
+
+    /// SQUIRREL SETTINGS
+
+    fun squirrel_inputs(): SquirrelInputs
+    {
+        return squirrel_inputs_
+    }
+
+    fun set_widefield_filename(value: String)
+    {
+        squirrel_inputs_.set_widefield_filename(value)
+    }
+
+    fun set_image_stack_filename(value: String)
+    {
+        squirrel_inputs_.set_image_stack_filename(value)
     }
 
     /// REFERENCE
@@ -345,14 +361,14 @@ class Settings private constructor(
     }
 
     /// METHODS
-    fun prepare_images_for_analysis(): CoreSettings?
+    fun prepare_images_for_analysis(): SquirrelInputs?
     {
         return working_directory()?.let{p -> prepare_images_for_analysis_in(p)}
     }
 
-    private fun prepare_images_for_analysis_in(working_directory: Path): CoreSettings?
+    private fun prepare_images_for_analysis_in(working_directory: Path): SquirrelInputs?
     {
-        val new_core_settings = core_settings_.to_disk_in(working_directory)
+        val new_squirrel_inputs = squirrel_inputs_.to_disk_in(working_directory)
         var reference_ok = true
         if (reference_image_.has_data())
         {
@@ -375,12 +391,13 @@ class Settings private constructor(
                      zip_split_ok &&
                      drift_split_ok
         if (all_ok)
-            return new_core_settings
+            return new_squirrel_inputs
         return null
     }
 
     fun record_to_macro()
     {
+        squirrel_inputs_.record_to_macro()
         core_settings_.record_to_macro()
         equipment.record_to_macro()
         reference_image_.record_to_macro_with(IMAGES_SETTINGS_RECON_IMAGE)

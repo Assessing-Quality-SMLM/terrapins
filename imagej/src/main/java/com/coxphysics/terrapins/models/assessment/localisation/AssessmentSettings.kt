@@ -2,6 +2,7 @@ package com.coxphysics.terrapins.models.assessment.localisation
 
 import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.assessment.CoreSettings
+import com.coxphysics.terrapins.models.assessment.SquirrelInputs
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import com.coxphysics.terrapins.models.ij_wrapping.WindowManager
 import com.coxphysics.terrapins.models.localisations.LocalisationFile
@@ -10,6 +11,7 @@ import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_HAWK_LOCALISATIONS
 import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_HAWK_LOCALISATIONS_PARSER
 import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_RAW_LOCALISATIONS
 import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_RAW_LOCALISATIONS_PARSER
+import com.coxphysics.terrapins.view_models.TERRAPINS.SquirrelInputsVM
 import java.nio.file.Path
 
 class AssessmentSettings private constructor(
@@ -19,6 +21,7 @@ class AssessmentSettings private constructor(
     private var equipment_ = EquipmentSettings.default()
     private var localisation_file_ = LocalisationFile.default()
     private var hawk_localisation_file_ = LocalisationFile.default()
+    private var squirrel_inputs_ = SquirrelInputs.default()
 
     companion object
     {
@@ -29,9 +32,15 @@ class AssessmentSettings private constructor(
         }
 
         @JvmStatic
+        fun from(core_settings: CoreSettings): AssessmentSettings
+        {
+            return AssessmentSettings(core_settings)
+        }
+
+        @JvmStatic
         fun default(): AssessmentSettings
         {
-            return AssessmentSettings(CoreSettings.default())
+            return from(CoreSettings.default())
         }
 
         @JvmStatic
@@ -51,6 +60,7 @@ class AssessmentSettings private constructor(
 
 
             val settings = default()
+            settings.squirrel_inputs_ = SquirrelInputs.from_macro_options(options, window_manager)
             settings.core_settings_ = core_settings
             settings.equipment_ = equipment_settings
             settings.localisation_file_ = localisation_file
@@ -79,21 +89,6 @@ class AssessmentSettings private constructor(
         core_settings_.set_working_directory(value)
     }
 
-    fun widefield(): DiskOrImage
-    {
-        return core_settings_.widefield()
-    }
-
-    fun image_stack(): DiskOrImage
-    {
-        return core_settings_.image_stack()
-    }
-
-    fun set_widefield(value: DiskOrImage)
-    {
-        core_settings_.set_widefield(value)
-    }
-
     fun set_n_threads(value: Int)
     {
         core_settings_.set_n_threads(value)
@@ -109,9 +104,29 @@ class AssessmentSettings private constructor(
         core_settings_.set_settings_file(value)
     }
 
+    fun squirrel_inputs(): SquirrelInputs
+    {
+        return squirrel_inputs_
+    }
+
+    fun widefield(): DiskOrImage
+    {
+        return squirrel_inputs_.widefield()
+    }
+
+    fun image_stack(): DiskOrImage
+    {
+        return squirrel_inputs_.image_stack()
+    }
+
+    fun set_widefield(value: DiskOrImage)
+    {
+        squirrel_inputs_.set_widefield(value)
+    }
+
     fun set_image_stack(value: DiskOrImage)
     {
-        core_settings_.set_image_stack(value)
+        squirrel_inputs_.set_image_stack(value)
     }
 
     fun equipment(): EquipmentSettings
@@ -185,14 +200,14 @@ class AssessmentSettings private constructor(
     }
 
     /// METHODS
-    fun prepare_images_for_analysis(): CoreSettings?
+    fun prepare_images_for_analysis(): SquirrelInputs?
     {
         return working_directory()?.let{p -> prepare_images_for_analysis_in(p)}
     }
 
-    private fun prepare_images_for_analysis_in(working_directory: Path): CoreSettings?
+    private fun prepare_images_for_analysis_in(working_directory: Path): SquirrelInputs?
     {
-        return core_settings_.to_disk_in(working_directory)
+        return squirrel_inputs_.to_disk_in(working_directory)
     }
 
     fun record_to_macro()
@@ -201,5 +216,6 @@ class AssessmentSettings private constructor(
         equipment_.record_to_macro()
         localisation_file_.record_to_macro(LOCALISATION_SETTINGS_RAW_LOCALISATIONS, LOCALISATION_SETTINGS_RAW_LOCALISATIONS_PARSER)
         hawk_localisation_file_.record_to_macro(LOCALISATION_SETTINGS_HAWK_LOCALISATIONS, LOCALISATION_SETTINGS_HAWK_LOCALISATIONS_PARSER)
+        squirrel_inputs_.record_to_macro()
     }
 }

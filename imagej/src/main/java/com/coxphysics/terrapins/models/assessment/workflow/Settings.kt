@@ -13,13 +13,16 @@ import java.nio.file.Path
 import com.coxphysics.terrapins.models.assessment.images.Settings as ImagesSettings
 import com.coxphysics.terrapins.models.hawk.Settings as HawkSettings
 
-class Settings private constructor(image_selector_setttings: ImageSelectorSetttings)
+class Settings private constructor(
+    private val image_selector_setttings: ImageSelectorSetttings,
+    private val core_settings_: CoreSettings
+)
 {
     private val hawk_stack_image_selector_settings_ = image_selector_setttings
     private var hawk_settings_ = HawkSettings.default()
     private var use_localisations_ = true
-    private var localisation_settings_ = AssessmentSettings.default()
-    private var images_settings_ = ImagesSettings.default()
+    private var localisation_settings_ = AssessmentSettings.from(core_settings_)
+    private var images_settings_ = ImagesSettings.from(core_settings_)
 
     companion object
     {
@@ -29,7 +32,7 @@ class Settings private constructor(image_selector_setttings: ImageSelectorSettti
             val image_selector_settings = ImageSelectorSetttings.default_()
             image_selector_settings.set_n_images(1);
             image_selector_settings.set_image_names(listOf("Image").toTypedArray());
-            return Settings(image_selector_settings)
+            return Settings(image_selector_settings, CoreSettings.default())
         }
 
         @JvmStatic
@@ -62,9 +65,7 @@ class Settings private constructor(image_selector_setttings: ImageSelectorSettti
 
     fun core_settings(): CoreSettings
     {
-        if(use_localisations())
-            return localisation_settings_.core_settings()
-        return images_settings_.core_settings()
+        return core_settings_
     }
 
     fun working_directory() : Path?

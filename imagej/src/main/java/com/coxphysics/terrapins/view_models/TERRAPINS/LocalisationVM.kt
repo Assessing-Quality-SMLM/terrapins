@@ -7,7 +7,10 @@ class LocalisationVM private constructor(private val settings_: AssessmentSettin
 {
     private var localisation_file_vm_: LocalisationFileVM = LocalisationFileVM.from(settings_.localisation_file())
     private var hawk_loc_file_vm_: LocalisationFileVM = LocalisationFileVM.from(settings_.hawk_localisation_file())
-    companion object {
+    private var squirrel_inputs_vm_ = SquirrelInputsVM.from(settings_.squirrel_inputs())
+
+    companion object
+    {
         @JvmStatic
         fun from(settings: AssessmentSettings): LocalisationVM
         {
@@ -36,6 +39,11 @@ class LocalisationVM private constructor(private val settings_: AssessmentSettin
     fun hawk_localisation_file_vm(): LocalisationFileVM
     {
         return hawk_loc_file_vm_
+    }
+
+    fun squirrel_inputs_vm(): SquirrelInputsVM
+    {
+        return squirrel_inputs_vm_
     }
 
     fun propogate_settings()

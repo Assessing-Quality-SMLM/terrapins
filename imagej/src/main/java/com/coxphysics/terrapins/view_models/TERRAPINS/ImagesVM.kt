@@ -4,6 +4,7 @@ import com.coxphysics.terrapins.models.assessment.images.Settings
 
 class ImagesVM private constructor(private var settings_: Settings)
 {
+    private val squirrel_inputs_vm_ = SquirrelInputsVM.from(settings_.squirrel_inputs())
     private val recon_vm_ = DiskOrImageVM.from(settings_.reference_image())
     private val hawk_recon_vm_ = DiskOrImageVM.from(settings_.hawk_image())
     private val drift_split_vm_ = JointImagesVM.from(settings_.drift_split_model(), "Section Split a", "Section Split b")
@@ -31,6 +32,12 @@ class ImagesVM private constructor(private var settings_: Settings)
             return default()
         }
     }
+
+    fun squirrel_inputs_vm(): SquirrelInputsVM
+    {
+        return squirrel_inputs_vm_
+    }
+
     fun recon_vm(): DiskOrImageVM
     {
         return recon_vm_

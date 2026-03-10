@@ -1,8 +1,8 @@
 package com.coxphysics.terrapins.view_models.TERRAPINS
 
-import com.coxphysics.terrapins.models.assessment.CoreSettings
+import com.coxphysics.terrapins.models.assessment.SquirrelInputs
 
-class SquirrelInputsVM private constructor(private val model_: CoreSettings)
+class SquirrelInputsVM private constructor(private val model_: SquirrelInputs)
 {
     private val widefield_vm_ = DiskOrImageVM.from(model_.widefield())
     private val image_stack_vm_ = DiskOrImageVM.from(model_.image_stack())
@@ -10,7 +10,7 @@ class SquirrelInputsVM private constructor(private val model_: CoreSettings)
     companion object
     {
         @JvmStatic
-        fun from(model: CoreSettings): SquirrelInputsVM
+        fun from(model: SquirrelInputs): SquirrelInputsVM
         {
             return SquirrelInputsVM(model)
         }
@@ -18,7 +18,7 @@ class SquirrelInputsVM private constructor(private val model_: CoreSettings)
         @JvmStatic
         fun default() : SquirrelInputsVM
         {
-            return from(CoreSettings.default())
+            return from(SquirrelInputs.default())
         }
 
         @JvmStatic
