@@ -14,6 +14,7 @@ import java.nio.file.Path
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.io.path.Path
+import kotlin.io.path.exists
 import com.coxphysics.terrapins.models.assessment.images.Settings as ImagesSettings
 
 private const val EXE_NAME = "assessment"
@@ -263,20 +264,20 @@ class Assessment private constructor(private val exe_location_: Path)
             commands.add(data_name)
         }
 
-        if (settings.has_widefield())
+        if (squirrel_inputs.has_widefield())
         {
-            val widefield_path = settings.widefield_path()
-            if (widefield_path != null)
+            val widefield_path = squirrel_inputs.widefield_path_in(working_directory)
+            if (widefield_path != null && widefield_path.exists())
             {
                 commands.add("--widefield")
                 commands.add(widefield_path.toString())
             }
         }
 
-        if (settings.has_image_stack())
+        if (squirrel_inputs.has_image_stack())
         {
-            val image_stack_path = settings.image_stack_path()
-            if (image_stack_path != null)
+            val image_stack_path = squirrel_inputs.image_stack_path_in(working_directory)
+            if (image_stack_path != null && image_stack_path.exists())
             {
                 commands.add("--image-stack")
                 commands.add(image_stack_path.toString())
