@@ -11,4 +11,10 @@ public class SystemFileSystem implements FileSystem
     {
         return FsUtils.prepare_directory(directory);
     }
+
+    @Override
+    public boolean exists(Path value)
+    {
+        return FsUtils.exists(value);
+    }
 }
