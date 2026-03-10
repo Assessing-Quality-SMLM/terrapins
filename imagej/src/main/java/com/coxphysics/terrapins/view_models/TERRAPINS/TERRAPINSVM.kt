@@ -1,11 +1,9 @@
 package com.coxphysics.terrapins.view_models.TERRAPINS
 
-import com.coxphysics.terrapins.models.assessment.AssessmentResults
-import com.coxphysics.terrapins.models.assessment.TERRAPINS
 import com.coxphysics.terrapins.models.assessment.workflow.Settings
 import com.coxphysics.terrapins.models.log.IJLog
-import com.coxphysics.terrapins.views.AssessmentWorker
 import com.coxphysics.terrapins.models.to_nullable_path
+import com.coxphysics.terrapins.views.AssessmentWorker
 import java.awt.Color
 import javax.swing.JTextField
 import kotlin.io.path.exists
