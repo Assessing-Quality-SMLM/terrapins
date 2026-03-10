@@ -13,13 +13,13 @@ import kotlin.io.path.exists
 class TERRAPINSVM private constructor(private val settings_: Settings)
 {
     private val pre_processing_vm_: PreProcessingVM = PreProcessingVM.from(settings_)
-    private val squirrel_inputs_vm_: SquirrelInputsVM = SquirrelInputsVM.from(settings_.core_settings())
     private val localisations_equipment_settings_vm_: EquipmentSettingsVM = EquipmentSettingsVM.from(settings_.localisation_settings().equipment())
     private val localisation_vm_ : LocalisationVM = LocalisationVM.from(settings_.localisation_settings())
     private val images__equipment_settings_vm_: EquipmentSettingsVM = EquipmentSettingsVM.from(settings_.images_settings().equipment_settings())
     private val images_vm_ : ImagesVM = ImagesVM.from(settings_.images_settings())
     private val working_directory_vm_: PathSelectorVM = PathSelectorVM.with_directory_path_and_title("Working Directory", settings_.core_settings().working_directory())
     private val settings_vm_: PathSelectorVM = PathSelectorVM.with_path_and_title("Settings File", settings_.settings_file())
+
     companion object
     {
         @JvmStatic
@@ -65,11 +65,6 @@ class TERRAPINSVM private constructor(private val settings_: Settings)
         return pre_processing_vm_
     }
 
-    fun squirrel_inputs_vm(): SquirrelInputsVM
-    {
-        return squirrel_inputs_vm_
-    }
-
     fun localisation_equipment_settings_vm(): EquipmentSettingsVM
     {
         return localisations_equipment_settings_vm_
@@ -80,6 +75,11 @@ class TERRAPINSVM private constructor(private val settings_: Settings)
         return localisation_vm_
     }
 
+    fun localisation_squirrel_inputs_vm(): SquirrelInputsVM
+    {
+        return localisation_vm_.squirrel_inputs_vm()
+    }
+
     fun images_equipment_settings_vm(): EquipmentSettingsVM
     {
         return images__equipment_settings_vm_
@@ -88,6 +88,11 @@ class TERRAPINSVM private constructor(private val settings_: Settings)
     fun images_vm(): ImagesVM
     {
         return images_vm_
+    }
+
+    fun images_squirrel_inputs_vm(): SquirrelInputsVM
+    {
+        return images_vm_.squirrel_inputs_vm()
     }
 
     fun use_localisations(): Boolean

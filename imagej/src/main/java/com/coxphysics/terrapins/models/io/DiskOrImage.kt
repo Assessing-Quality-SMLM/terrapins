@@ -7,6 +7,7 @@ import com.coxphysics.terrapins.models.utils.StringUtils
 import ij.ImagePlus
 import ij.plugin.frame.Recorder
 import java.nio.file.Path
+import java.nio.file.Paths
 
 class DiskOrImage private constructor(
     private var filename_: PathWrapper,
@@ -129,7 +130,7 @@ class DiskOrImage private constructor(
         return filename_path()
     }
 
-    private fun filename_path(): Path?
+    fun filename_path(): Path?
     {
         return filename_.path()
     }
@@ -150,11 +151,20 @@ class DiskOrImage private constructor(
         return filename_path()?.let{p -> IJUtils.load_image(p)}
     }
 
-    fun set_filename_and_switch_usage(filename: String)
+    fun set_path_and_switch_usage(filename: Path)
     {
-        set_filename(filename)
+        set_filepath(filename)
         if (!use_disk())
             set_use_disk(true)
+    }
+    fun set_filename_and_switch_usage(filename: String)
+    {
+        set_path_and_switch_usage(Paths.get(filename))
+    }
+
+    fun set_filepath(value: Path)
+    {
+        filename_.set_path(value)
     }
 
     fun set_filename(filename: String)

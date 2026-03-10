@@ -66,24 +66,24 @@ class Assessment private constructor(private val exe_location_: Path)
 
     fun run_images(runner : Runner, images: ImagesSettings): AssessmentResults?
     {
-        val new_core_settings = images.prepare_images_for_analysis()
-        if (new_core_settings == null)
+        val new_squirrel_inputs = images.prepare_images_for_analysis()
+        if (new_squirrel_inputs == null)
         {
             IJ.log("Failed to prepare images for analysis")
             return null
         }
         val data_name = generate_data_name()
-        val arguments = get_images_arguments(new_core_settings, images, data_name)
+        val arguments = get_images_arguments(new_squirrel_inputs, images, data_name)
         val working_directory = images.working_directory()
         if (working_directory == null)
             return null
         return run_arguments(runner, arguments, working_directory, data_name)
     }
 
-    fun get_images_arguments(adjusted_core_settings: CoreSettings, images: ImagesSettings, data_name: String?): List<String>
+    fun get_images_arguments(adjusted_squirrel_inputs: SquirrelInputs, images: ImagesSettings, data_name: String?): List<String>
     {
         val commands = get_commands()
-        add_core_commands(adjusted_core_settings, data_name, commands)
+        add_core_commands(images.core_settings(), adjusted_squirrel_inputs, data_name, commands)
         add_equipment(images.equipment_settings(), commands)
         add_image_commands_to(commands, images)
         return commands
@@ -172,24 +172,24 @@ class Assessment private constructor(private val exe_location_: Path)
 
     fun run_localisations(runner : Runner, localisations: AssessmentSettings): AssessmentResults?
     {
-        val core_settings = localisations.prepare_images_for_analysis()
-        if (core_settings == null)
+        val adjusted_squirrel_inputs = localisations.prepare_images_for_analysis()
+        if (adjusted_squirrel_inputs == null)
         {
             IJ.log("Failed to prepare images for analysis")
             return null
         }
         val data_name = generate_data_name()
-        val arguments = get_localisations_arguments(core_settings, localisations, data_name)
+        val arguments = get_localisations_arguments(adjusted_squirrel_inputs, localisations, data_name)
         val working_directory = localisations.working_directory()
         if (working_directory == null)
             return null
         return run_arguments(runner, arguments, working_directory, data_name)
     }
 
-    fun get_localisations_arguments(adjusted_core_settings: CoreSettings, localisations: AssessmentSettings, data_name: String?): List<String>
+    fun get_localisations_arguments(adjusted_squirrel_inputs: SquirrelInputs, localisations: AssessmentSettings, data_name: String?): List<String>
     {
         val commands = get_commands()
-        add_core_commands(adjusted_core_settings, data_name, commands)
+        add_core_commands(localisations.core_settings(), adjusted_squirrel_inputs, data_name, commands)
         add_equipment(localisations.equipment(), commands)
         add_localisations_commands(localisations, commands)
         return commands
@@ -249,7 +249,7 @@ class Assessment private constructor(private val exe_location_: Path)
 //      --image-stack <IMAGE_STACK>  Image stack file
 //      --metrics-only               Only generate metric file
 //      --extract                    Extract Data to directory
-    private fun add_core_commands(settings: CoreSettings, data_name: String?, commands: MutableList<String>)
+    private fun add_core_commands(settings: CoreSettings, squirrel_inputs: SquirrelInputs, data_name: String?, commands: MutableList<String>)
     {
         commands.add("--working-directory")
         var working_directory = settings.working_directory_path()

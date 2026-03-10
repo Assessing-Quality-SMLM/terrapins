@@ -97,11 +97,11 @@ public class TERRAPINSTabView extends JFrame {
 
     private void set_view_model(TERRAPINSVM view_model) {
         view_model_ = view_model;
-        localisations_squirrel_inputs_view_.set_view_model(view_model_.squirrel_inputs_vm());
+        localisations_squirrel_inputs_view_.set_view_model(view_model_.localisation_squirrel_inputs_vm());
         localisation_equipment_view_.set_view_model(view_model_.localisation_equipment_settings_vm());
         localisations_ctrl_.set_view_model(view_model_.localisation_vm());
         images_equipment_view_.set_view_model(view_model_.images_equipment_settings_vm());
-        images_squirrel_inputs_view_.set_view_model(view_model.squirrel_inputs_vm());
+        images_squirrel_inputs_view_.set_view_model(view_model.images_squirrel_inputs_vm());
         images_ctrl_.set_view_model(view_model_.images_vm());
         working_directory_view_.set_view_model(view_model.working_directory_vm());
         settings_view_.set_view_model(view_model_.settings_vm());
