@@ -4,6 +4,8 @@ import com.coxphysics.terrapins.models.assessment.localisation.AssessmentSetting
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import com.coxphysics.terrapins.models.ffi
 import com.coxphysics.terrapins.models.frc.FRC
+import com.coxphysics.terrapins.models.fs.FileSystem
+import com.coxphysics.terrapins.models.fs.SystemFileSystem
 import com.coxphysics.terrapins.models.hawkman.external.Hawkman
 import com.coxphysics.terrapins.models.process.Runner
 import com.coxphysics.terrapins.models.squirrel.external.Squirrel
@@ -19,14 +21,14 @@ import com.coxphysics.terrapins.models.assessment.images.Settings as ImagesSetti
 
 private const val EXE_NAME = "assessment"
 
-class Assessment private constructor(private val exe_location_: Path)
+class Assessment private constructor(private val exe_location_: Path, private val file_system_: FileSystem)
 {
     companion object
     {
         @JvmStatic
-        fun custom(exe_path: Path): Assessment
+        fun custom(exe_path: Path, file_system: FileSystem): Assessment
         {
-            return Assessment(exe_path)
+            return Assessment(exe_path, file_system)
         }
 
         @JvmStatic
@@ -37,7 +39,7 @@ class Assessment private constructor(private val exe_location_: Path)
             Squirrel.extract_default_tool()
             val name = ffi.os_exe_name(EXE_NAME)
             val exe_path = ffi.extract_resource_to_temp(this::class.java, name, true, true)
-            return custom(exe_path);
+            return custom(exe_path, SystemFileSystem());
         }
 
         // For Java
@@ -267,7 +269,7 @@ class Assessment private constructor(private val exe_location_: Path)
         if (squirrel_inputs.has_widefield())
         {
             val widefield_path = squirrel_inputs.widefield_path_in(working_directory)
-            if (widefield_path != null && widefield_path.exists())
+            if (widefield_path != null && file_system_.exists(widefield_path))
             {
                 commands.add("--widefield")
                 commands.add(widefield_path.toString())
@@ -277,7 +279,7 @@ class Assessment private constructor(private val exe_location_: Path)
         if (squirrel_inputs.has_image_stack())
         {
             val image_stack_path = squirrel_inputs.image_stack_path_in(working_directory)
-            if (image_stack_path != null && image_stack_path.exists())
+            if (image_stack_path != null && file_system_.exists(image_stack_path))
             {
                 commands.add("--image-stack")
                 commands.add(image_stack_path.toString())
