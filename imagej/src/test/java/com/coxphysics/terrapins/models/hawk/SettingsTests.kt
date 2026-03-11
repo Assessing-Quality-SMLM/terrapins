@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.models.hawk
 
+import com.coxphysics.terrapins.models.log.ListLog
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.utils.StringUtils
 import com.coxphysics.terrapins.plugins.*
@@ -20,6 +21,21 @@ class SettingsTests
     {
         executor.shutdown();
         while (!executor.awaitTermination(100, TimeUnit.MICROSECONDS));
+    }
+
+    @Test
+    fun check_for_errors_before_getting_image()
+    {
+        val settings = Settings.default()
+        val data = listOf(1.0f).toTypedArray().toFloatArray()
+        val image_processor = FloatProcessor(1, 1, data)
+        val image = ImagePlus("something", image_processor)
+        settings.set_image(image)
+        val expected = "Validation Error: data length of 1 < kernel size 8"
+        assertEquals(settings.error_string()!!, expected)
+        val log = ListLog<String>()
+        HAWK.new(settings, log).get_hawk_image()
+        assertEquals(log.log().contains(expected), true)
     }
 
     @Test
@@ -138,6 +154,5 @@ class SettingsTests
             assertEquals(new_settings.is_temporal(), settings.is_temporal())
             assertEquals(new_settings.is_sequential(), settings.is_sequential())
         }.get()
-
     }
 }
