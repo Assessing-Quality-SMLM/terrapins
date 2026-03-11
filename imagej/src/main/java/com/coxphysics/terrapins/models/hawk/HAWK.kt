@@ -1,18 +1,28 @@
 package com.coxphysics.terrapins.models.hawk
 
+import com.coxphysics.terrapins.models.log.IJLog
+import com.coxphysics.terrapins.models.log.Log
 import com.coxphysics.terrapins.models.macros.MacroUtils
 import ij.IJ
 import ij.ImagePlus
 import ij.measure.Calibration
 
-class HAWK private constructor(private var settings_: Settings)
+class HAWK private constructor(
+    private var settings_: Settings,
+    private val log_: Log<String>
+    )
 {
     companion object
     {
         @JvmStatic
+        fun new(settings: Settings, log: Log<String>): HAWK
+        {
+            return HAWK(settings, log)
+        }
+        @JvmStatic
         fun from(settings: Settings): HAWK
         {
-            return HAWK(settings)
+            return HAWK(settings, IJLog.new())
         }
     }
 
@@ -36,6 +46,12 @@ class HAWK private constructor(private var settings_: Settings)
 
     private fun inner_get_hawk_image() : ImagePlus?
     {
+        val errors = settings_.error_string()
+        if (errors != null)
+        {
+            log_.log(errors)
+            return null
+        }
         val p_stream = PStream.from(settings_)
         if (p_stream == null)
             return null
