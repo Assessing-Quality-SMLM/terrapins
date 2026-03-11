@@ -58,7 +58,9 @@ public class IJUtils
                 throw new RuntimeException(e);
             }
         }
+        String original_title = image.getTitle();
         IJ.saveAsTiff(image, image_path.toString());
+        image.setTitle(original_title);
         return image_path;
     }
 }
