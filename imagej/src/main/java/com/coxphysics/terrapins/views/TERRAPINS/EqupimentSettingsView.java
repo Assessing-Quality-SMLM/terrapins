@@ -7,7 +7,10 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
 import java.awt.*;
+import java.util.Locale;
 
 public class EqupimentSettingsView {
     private JPanel root_;
@@ -17,71 +20,64 @@ public class EqupimentSettingsView {
     private JTextField fwhm_field_;
     private JLabel magnification_lbl_;
     private JTextField magnification_field_;
+    private JLabel camera_pixel_size_info_;
+    private JLabel psf_info_;
+    private JLabel mag_info_;
 
     private EquipmentSettingsVM view_model_ = EquipmentSettingsVM.default_();
 
-    public EqupimentSettingsView()
-    {
+    public EqupimentSettingsView() {
         camera_pixel_size_nm_field_.getDocument().addDocumentListener(ActionableDocumentListener.from(this, EqupimentSettingsView::update_camera_pixel_size));
         fwhm_field_.getDocument().addDocumentListener(ActionableDocumentListener.from(this, EqupimentSettingsView::update_instrument_psf_fwhm));
         magnification_field_.getDocument().addDocumentListener(ActionableDocumentListener.from(this, EqupimentSettingsView::update_magnification));
     }
 
-    private static EqupimentSettingsView from(EquipmentSettingsVM view_model)
-    {
+    private static EqupimentSettingsView from(EquipmentSettingsVM view_model) {
         EqupimentSettingsView view = new EqupimentSettingsView();
         view.set_view_model(view_model);
         return view;
     }
 
-    public void set_view_model(EquipmentSettingsVM view_model)
-    {
+    public void set_view_model(EquipmentSettingsVM view_model) {
         view_model_ = view_model;
         populate_fields();
     }
 
-    private void populate_fields()
-    {
+    private void populate_fields() {
         camera_pixel_size_nm_field_.setText(String.valueOf(view_model_.camera_pixel_size_nm()));
         fwhm_field_.setText(String.valueOf(view_model_.instrument_psf_fwhm_nm()));
         magnification_field_.setText(String.valueOf(view_model_.magnification()));
     }
 
-    public void update_camera_pixel_size()
-    {
+    public void update_camera_pixel_size() {
         String new_value = camera_pixel_size_nm_field_.getText();
         boolean ok = view_model_.set_camera_pixel_size_nm(new_value);
         set_camera_pixel_size_bg_colour(ok);
     }
 
-    private void set_camera_pixel_size_bg_colour(boolean ok)
-    {
+    private void set_camera_pixel_size_bg_colour(boolean ok) {
         Color background_colour = ok ? view_model_.default_colour() : view_model_.error_colour();
         camera_pixel_size_nm_field_.setBackground(background_colour);
     }
 
-    public void update_instrument_psf_fwhm()
-    {
+    public void update_instrument_psf_fwhm() {
         String new_value = fwhm_field_.getText();
         boolean ok = view_model_.set_instrument_psf_fwhm_nm(new_value);
         set_fwhm_bg_colour(ok);
     }
 
-    private void set_fwhm_bg_colour(boolean ok)
-    {
+    private void set_fwhm_bg_colour(boolean ok) {
         Color background_colour = ok ? view_model_.default_colour() : view_model_.error_colour();
         fwhm_field_.setBackground(background_colour);
     }
 
-    public void update_magnification()
-    {
+    public void update_magnification() {
         String new_value = magnification_field_.getText();
         boolean ok = view_model_.set_magnification(new_value);
         set_magnification_colour(ok);
     }
 
-    private void set_magnification_colour(boolean ok)
-    {
+    private void set_magnification_colour(boolean ok) {
         Color background_colour = ok ? view_model_.default_colour() : view_model_.error_colour();
         magnification_field_.setBackground(background_colour);
     }
@@ -102,26 +98,63 @@ public class EqupimentSettingsView {
      */
     private void $$$setupUI$$$() {
         root_ = new JPanel();
-        root_.setLayout(new GridLayoutManager(4, 3, new Insets(0, 0, 0, 0), -1, -1));
+        root_.setLayout(new GridLayoutManager(4, 4, new Insets(0, 0, 0, 0), -1, -1));
         camera_pixel_size_lbl_ = new JLabel();
         camera_pixel_size_lbl_.setText("Camera Pixel Size (nm)");
         root_.add(camera_pixel_size_lbl_, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
-        root_.add(spacer1, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        root_.add(spacer1, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
         root_.add(spacer2, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         fwhm_lbl_ = new JLabel();
         fwhm_lbl_.setText("Instrument psf FWHM (nm)");
         root_.add(fwhm_lbl_, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         fwhm_field_ = new JTextField();
-        root_.add(fwhm_field_, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
+        root_.add(fwhm_field_, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
         magnification_lbl_ = new JLabel();
         magnification_lbl_.setText("Magnification");
         root_.add(magnification_lbl_, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         magnification_field_ = new JTextField();
-        root_.add(magnification_field_, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
+        root_.add(magnification_field_, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
         camera_pixel_size_nm_field_ = new JTextField();
-        root_.add(camera_pixel_size_nm_field_, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
+        root_.add(camera_pixel_size_nm_field_, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
+        camera_pixel_size_info_ = new JLabel();
+        Font camera_pixel_size_info_Font = this.$$$getFont$$$(null, Font.ITALIC, -1, camera_pixel_size_info_.getFont());
+        if (camera_pixel_size_info_Font != null) camera_pixel_size_info_.setFont(camera_pixel_size_info_Font);
+        camera_pixel_size_info_.setText("Set this to the image size of the camera pixels – must match that used for localisation");
+        root_.add(camera_pixel_size_info_, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        psf_info_ = new JLabel();
+        Font psf_info_Font = this.$$$getFont$$$(null, Font.ITALIC, -1, psf_info_.getFont());
+        if (psf_info_Font != null) psf_info_.setFont(psf_info_Font);
+        psf_info_.setText("Set this to the physical size of the PSF (approx. lamda/2NA if not known)");
+        root_.add(psf_info_, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        mag_info_ = new JLabel();
+        Font mag_info_Font = this.$$$getFont$$$(null, Font.ITALIC, -1, mag_info_.getFont());
+        if (mag_info_Font != null) mag_info_.setFont(mag_info_Font);
+        mag_info_.setText("The up sampling ratio desired. ie, how many times smaller (length) a reconstruction pixel is than a camera pixel ");
+        root_.add(mag_info_, new GridConstraints(2, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+        if (currentFont == null) return null;
+        String resultName;
+        if (fontName == null) {
+            resultName = currentFont.getName();
+        } else {
+            Font testFont = new Font(fontName, Font.PLAIN, 10);
+            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+                resultName = fontName;
+            } else {
+                resultName = currentFont.getName();
+            }
+        }
+        Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+        boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
+        Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
+        return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
     }
 
     /**
