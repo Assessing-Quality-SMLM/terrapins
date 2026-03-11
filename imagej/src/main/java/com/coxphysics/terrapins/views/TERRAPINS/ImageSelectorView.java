@@ -134,7 +134,7 @@ public class ImageSelectorView {
         images_combo_box_ = new JComboBox();
         root_.add(images_combo_box_, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         reset_btn_ = new JButton();
-        reset_btn_.setText("Reset Images");
+        reset_btn_.setText("Reload Image List");
         root_.add(reset_btn_, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
