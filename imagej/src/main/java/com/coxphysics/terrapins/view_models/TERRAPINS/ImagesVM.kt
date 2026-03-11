@@ -7,9 +7,9 @@ class ImagesVM private constructor(private var settings_: Settings)
     private val squirrel_inputs_vm_ = SquirrelInputsVM.from(settings_.squirrel_inputs())
     private val recon_vm_ = DiskOrImageVM.from(settings_.reference_image())
     private val hawk_recon_vm_ = DiskOrImageVM.from(settings_.hawk_image())
-    private val drift_split_vm_ = JointImagesVM.from(settings_.drift_split_model(), "Section Split a", "Section Split b")
-    private val half_split_vm_ = JointImagesVM.from(settings_.half_split_model(), "Half Split a", "Half Split b")
-    private val zip_split_vm_ = JointImagesVM.from(settings_.zip_split_model(), "Zip Split a", "Zip Split b")
+    private val drift_split_vm_ = JointImagesVM.from(settings_.drift_split_model(), "Block Split Image A", "Block Split Image B")
+    private val half_split_vm_ = JointImagesVM.from(settings_.half_split_model(), "Half Split Image A", "Half Split Image B")
+    private val zip_split_vm_ = JointImagesVM.from(settings_.zip_split_model(), "Interleave Split Image A", "Interleave Split Image B")
 
     companion object
     {
