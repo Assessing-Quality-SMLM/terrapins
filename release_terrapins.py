@@ -9,8 +9,11 @@ import sys
 
 PROJECT = "TERRAPINS"
 
-def bump_imagej_version_number(pom: str) -> bool:
-    return maven.bump_minor(pom)
+def use_shell() -> bool:
+    return False
+
+def bump_imagej_version_number(pom: str) -> bool:    
+    return maven.bump_minor(pom, use_shell())
 
 
 def run(dry_run: bool) -> bool:
@@ -36,11 +39,11 @@ def run(dry_run: bool) -> bool:
             return False
 
     print("Cleaning")
-    if not maven.clean(pom):
+    if not maven.clean(pom, use_shell()):
         return False
 
     print("Running install")
-    if not maven.install(pom):
+    if not maven.install(pom, use_shell()):
         return False
 
 
