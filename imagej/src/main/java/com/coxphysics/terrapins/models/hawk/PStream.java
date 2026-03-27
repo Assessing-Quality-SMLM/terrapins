@@ -36,7 +36,7 @@ public class PStream extends ImageStack{
     private PStream(ImageStack stack, Config config, int output_size)
     {
         super(stack.getWidth(), stack.getHeight());
-        System.out.printf("PStream constructor");
+        System.out.println("PStream constructor");
         stack_ = stack;
         output_size_ = output_size;
         config_ = config;
@@ -49,20 +49,25 @@ public class PStream extends ImageStack{
         // with indexing later
         ArrayList<ArrayList<HawkImageParameters>> params = new ArrayList<ArrayList<HawkImageParameters>>();
 
-        if(interleave)
+        if(interleave){
+            System.out.println("1");
             for(int i=0; i < N; i++)
                 params.add(new ArrayList<HawkImageParameters>());
-        else
+        }
+        else{
+            System.out.println("2");
             params.add(new ArrayList<HawkImageParameters>());
+        }
 
         for(int l=0; l < levels; l++)
 		{
 			final int kernel_w = 2 << l;
 			final int kernel_half_w = 1 << l;
-			final float normalization_factor = (float)Math.sqrt(kernel_w);
 
+            System.out.printf("Level = %d", l);
 			for(int s=0; s < N-kernel_w+ 1; s++)
 			{
+                System.out.printf("  image = %d", s);
 				int pos_to_add = 0;
 				if(interleave)
 					pos_to_add = s + kernel_half_w - 1; // This is the "central" frame
@@ -78,11 +83,15 @@ public class PStream extends ImageStack{
             }
         }
         
+        System.out.println("3");
+        image_parameters_ = new ArrayList<HawkImageParameters>();
         // Collate them into the single array
 		for(int i=0; i < params.size(); i++)
 			for(int j=0; j < params.get(i).size(); j++)
 				image_parameters_.add(params.get(i).get(j));
+        
 
+        System.out.println("Finished pstream");
     }
 
     public static PStream from(ImageStack stack, Config config, int output_size)
@@ -152,18 +161,51 @@ public class PStream extends ImageStack{
     @Override
     public Object getPixels(int n)
     {
-        int rust_index = n - 1;
-        StackWrapper wrapper = StackWrapper.from_stack(stack_);
-        //FIXME(ER): HAWK computation goes here
-        System.out.printf("TODO: compute layer %d\n", n);
-        return new float[getWidth()*getHeight()];
+        return getProcessor(n).getPixels();
     }
 
     @Override
     public ImageProcessor getProcessor(int n)
     {
-        Object data = getPixels(n);
-        return new FloatProcessor(getWidth(), getHeight(), (float[]) data);
+        FloatProcessor fp = new FloatProcessor(getWidth(), getHeight());
+        
+        //Imagej indexes from 1. All our arrays are Java standard, so from 0
+        n--;
+        
+        final int l = image_parameters_.get(n).layer;
+        final int s = image_parameters_.get(n).index;
+        Split split = image_parameters_.get(n).split;
+
+
+        final int kernel_w = 2 << l;
+        final int kernel_half_w = 1 << l;
+        final int h = getHeight();
+        final int w = getWidth();
+
+
+        for(int r=0; r < h; r++)
+            for(int c=0; c<w; c++)
+            {
+                float sum=0;
+                for(int i=0; i < kernel_half_w; i++)
+                    sum += stack_.getVoxel(c, r, s+i) - stack_.getVoxel(c, r, s+i+kernel_half_w);
+                
+                if(split == Split.Abs)
+                {
+                    fp.setf(c, r, (float)Math.abs(sum));
+                }
+                else if(split == Split.Positive)
+                {
+                    if(sum > 0)
+                        fp.setf(c, r, sum);
+                }
+                else /* if(split == Split.Negative)*/{
+                    if(sum < 0)
+                        fp.setf(c, r, -sum);
+                }
+            }
+
+        return fp;
     }
 
     /** FAKE OUT SOME OTHER METHODS*/
