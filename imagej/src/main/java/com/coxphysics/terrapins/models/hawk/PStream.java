@@ -48,6 +48,7 @@ public class PStream extends ImageStack{
         if (filename == null)
             return false;
         StackWrapper wrapper = StackWrapper.from_stack(stack_);
+	System.out.printf("TODO: save to %s\n", filename);
 	//FIXME(ER): actually write here
 	return false;
     }
@@ -81,6 +82,7 @@ public class PStream extends ImageStack{
         int rust_index = n - 1;
         StackWrapper wrapper = StackWrapper.from_stack(stack_);
 	//FIXME(ER): HAWK computation goes here
+	System.out.printf("TODO: compute layer %i\n", n);
         return new float[getWidth()*getHeight()];
     }
 
