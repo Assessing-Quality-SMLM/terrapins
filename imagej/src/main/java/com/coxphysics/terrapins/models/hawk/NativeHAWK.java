@@ -6,42 +6,28 @@ import java.nio.file.Path;
 
 public class NativeHAWK 
 {
-    private static Path get_dll_path()
-    {
-        String name = ffi.os_dll_name("rust_jni");
-        return ffi.extract_resource_to_temp(NativeHAWK.class, name, false, true);
-    }
 
-    public static Boolean init()
-    {
-        Path p = get_dll_path();
-        if (p == null)
-            return false;
-        // System.out.println("Loading " + p);
-        System.load(p.toString());
-        return true;
-    }
+    public static short output_style_sequential(){
+		return 0;
+	}
+    public static short output_style_interleaved(){
+		return 1;
+	}
+
+    public static short negative_handling_absolute(){
+		return 0;
+	}
+
+    public static short negative_handling_separate(){
+		return 1;
+	}
+
+    public static String config_validate(long config_ptr, long n_frames){
+		return ""; //ER FIXME. What is this meant to do?
+	}
+
+    public static String get_metadata(long config_ptr){
+		return ""; // ER FIXME. Is this needed?
+	}
     
-    static
-    {
-        init();
-    }
-
-    public static native short output_style_sequential();
-    public static native short output_style_interleaved();
-
-    public static native short negative_handling_absolute();
-    public static native short negative_handling_separate();
-
-    public static native long config_new(long n_levels, short negative_handling, short output_style);
-    public static native String config_validate(long config_ptr, long n_frames);
-    public static native void config_free(long ptr);
-
-    public static native String get_metadata(long config_ptr);
-    
-    public static native long output_size(long config_ptr, long n_frames);
-
-    public static native float[] hawk_stream_get_image_float(Object stack_wrapper, long config_ptr, int stream_index, int n_pixels);
-
-    public static native boolean hawk_to_file(Object stack_wrapper, long config_ptr, int height, int width, String file_name);
 }
