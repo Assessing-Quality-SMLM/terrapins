@@ -5,25 +5,22 @@ import ij.ImageStack;
 import ij.process.FloatProcessor;
 import ij.process.ImageProcessor;
 
-public class PStream extends ImageStack implements AutoCloseable{
+public class PStream extends ImageStack{
     private final ImageStack stack_;
-    private final long config_ptr_;
     private final int output_size_;
-    private final int n_pixels_;
+    private final Config config_;
 
-    private PStream(ImageStack stack, long config_ptr, int output_size, int n_pixels)
+    private PStream(ImageStack stack, Config config, int output_size, int n_pixels)
     {
         super(stack.getWidth(), stack.getHeight());
         stack_ = stack;
         output_size_ = output_size;
-        n_pixels_ = n_pixels;
-        config_ptr_ = config_ptr;
+        config_ = config;
     }
 
     public static PStream from(ImageStack stack, Config config, int output_size, int n_pixels)
     {
-        long config_ptr = NativeHAWK.config_new(config.n_levels(), config.negative_handling(), config.output_style());
-        return new PStream(stack, config_ptr, output_size, n_pixels);
+        return new PStream(stack, config, output_size, n_pixels);
     }
 
     public static PStream from(Settings settings)
@@ -41,8 +38,9 @@ public class PStream extends ImageStack implements AutoCloseable{
     }
 
     public String get_metadata()
-    {
-        return NativeHAWK.get_metadata(config_ptr_);
+    {	
+	//FIXME(ER) put some useful metadata in here?
+        return "";
     }
 
     public boolean write_to_disk(String filename)
@@ -50,7 +48,8 @@ public class PStream extends ImageStack implements AutoCloseable{
         if (filename == null)
             return false;
         StackWrapper wrapper = StackWrapper.from_stack(stack_);
-        return NativeHAWK.hawk_to_file(wrapper, config_ptr_, stack_.getHeight(), stack_.getWidth(), filename);
+	//FIXME(ER): actually write here
+	return false;
     }
 
     /** Returns the number of slices in this stack. */
@@ -81,7 +80,8 @@ public class PStream extends ImageStack implements AutoCloseable{
     {
         int rust_index = n - 1;
         StackWrapper wrapper = StackWrapper.from_stack(stack_);
-        return NativeHAWK.hawk_stream_get_image_float(wrapper, config_ptr_, rust_index, n_pixels_);
+	//FIXME(ER): HAWK computation goes here
+        return new float[getWidth()*getHeight()];
     }
 
     @Override
@@ -89,12 +89,6 @@ public class PStream extends ImageStack implements AutoCloseable{
     {
         Object data = getPixels(n);
         return new FloatProcessor(getWidth(), getHeight(), (float[]) data);
-    }
-
-    @Override
-    public void close() throws Exception
-    {
-        NativeHAWK.config_free(config_ptr_);
     }
 
     /** FAKE OUT SOME OTHER METHODS*/

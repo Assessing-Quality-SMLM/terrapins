@@ -111,12 +111,13 @@ public class PStreamFilter implements ExtendedPlugInFilter {
 
     public boolean write_to_disk()
     {
-        try (PStream p_stream = create_p_stream())
+        try
         {
+            PStream p_stream = create_p_stream();
             if (p_stream == null)
                 return false;
             if (config_.has_output_filename_set())
-                return p_stream.write_to_disk(config_.filename());
+                return p_stream.write_to_disk(config_.filename);
         }
         catch (Exception e)
         {
