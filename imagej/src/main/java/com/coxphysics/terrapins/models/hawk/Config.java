@@ -38,12 +38,29 @@ public final class Config
     {
         // Cadged from Ed's old hawkplugin 
         //Compute the number of frames in the output
-        int target_size=0;
-        for(int l=0; l < n_levels; l++)
-        {
-            final int kernel_w = 2 << l;
-            target_size += (n_frames-kernel_w+1);
-        }
+        //int target_size=0;
+        //for(int l=0; l < n_levels; l++)
+        //{
+        //    final int kernel_w = 2 << l;
+        //    target_size += (n_frames-kernel_w+1);
+        //}
+        //
+        // This has a closed form soluion:
+        // Let N = n_frames
+        // Let L = n_levels
+        // Let target_size = s
+        //     L-1 ⎡       l     ⎤
+        // s = Σ   ⎢N - 2.2  + 1 ⎥
+        //     i=0 ⎣             ⎦
+        //
+        //            L-1 ⎡ l⎤
+        //   = LN + 2 Σ   ⎢2 ⎥ + L
+        //            i=0 ⎣  ⎦
+        //
+        //   = L(N+1) - 2(2^L-1)
+
+        int target_size = n_levels*(n_frames+1) - 2*((1<<n_levels)-1);
+
         if(negative_handling_separate)
             target_size*=2;
 
