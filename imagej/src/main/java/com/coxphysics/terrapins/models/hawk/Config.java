@@ -58,6 +58,6 @@ public final class Config
 
     public String get_validation_errors(int n_frames)
     {
-        return "";
+        return null;
     }
 }

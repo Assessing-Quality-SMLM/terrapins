@@ -96,6 +96,7 @@ public class PStreamFilter implements ExtendedPlugInFilter {
     @Nullable
     public PStream create_p_stream()
     {
+	System.out.println("pstreamfilter.create_p_stream");
         if (image_ == null || config_ == null || !valid_output_size())
             return null;
         int n_pixels = image_.getWidth() * image_.getHeight();

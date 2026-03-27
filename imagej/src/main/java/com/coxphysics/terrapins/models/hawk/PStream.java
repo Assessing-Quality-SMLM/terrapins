@@ -13,6 +13,7 @@ public class PStream extends ImageStack{
     private PStream(ImageStack stack, Config config, int output_size, int n_pixels)
     {
         super(stack.getWidth(), stack.getHeight());
+        System.out.println("PStream constructor");
         stack_ = stack;
         output_size_ = output_size;
         config_ = config;
@@ -20,26 +21,33 @@ public class PStream extends ImageStack{
 
     public static PStream from(ImageStack stack, Config config, int output_size, int n_pixels)
     {
+        System.out.println("PStream from 1");
         return new PStream(stack, config, output_size, n_pixels);
     }
 
     public static PStream from(Settings settings)
     {
+        System.out.println("Trying to make a p stream");
         Config config = Config.from(settings);
         ImagePlus image = settings.image();
-        if (image == null)
+        if (image == null){
+            System.out.println("no image in settings");
             return null;
+        }
         Integer n_frames = settings.n_frames();
-        if (n_frames == null)
+        if (n_frames == null){
+            System.out.println("n_frames is null");
             return null;
+        }
         int output_size = config.get_output_size(n_frames);
         int n_pixels = image.getWidth() * image.getHeight();
+        System.out.println("Made a pee stream");
         return from(image.getStack(), config, output_size, n_pixels);
     }
 
     public String get_metadata()
-    {	
-	//FIXME(ER) put some useful metadata in here?
+    {   
+        //FIXME(ER) put some useful metadata in here?
         return "";
     }
 
@@ -48,9 +56,9 @@ public class PStream extends ImageStack{
         if (filename == null)
             return false;
         StackWrapper wrapper = StackWrapper.from_stack(stack_);
-	System.out.printf("TODO: save to %s\n", filename);
-	//FIXME(ER): actually write here
-	return false;
+        System.out.printf("TODO: wtf wtf save to %s\n", filename);
+        //FIXME(ER): actually write here
+        return false;
     }
 
     /** Returns the number of slices in this stack. */
@@ -81,8 +89,8 @@ public class PStream extends ImageStack{
     {
         int rust_index = n - 1;
         StackWrapper wrapper = StackWrapper.from_stack(stack_);
-	//FIXME(ER): HAWK computation goes here
-	System.out.printf("TODO: compute layer %i\n", n);
+        //FIXME(ER): HAWK computation goes here
+        System.out.printf("TODO: compute layer %d\n", n);
         return new float[getWidth()*getHeight()];
     }
 

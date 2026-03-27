@@ -114,6 +114,7 @@ class HAWKVM private constructor(private var settings_: Settings)
 
     fun run_filter()
     {
+	println("HAWKVM::run_filter()");
         val image = HAWK.from(settings_).get_hawk_image()
         if (image != null)
             image.show()
