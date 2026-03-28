@@ -28,17 +28,15 @@ public class PStream extends ImageStack{
 
         
     private final ImageStack stack_;
-    private final int output_size_;
     private final Config config_;
     private ArrayList<HawkImageParameters> image_parameters_;
     
 
-    private PStream(ImageStack stack, Config config, int output_size)
+    private PStream(ImageStack stack, Config config)
     {
         super(stack.getWidth(), stack.getHeight());
         System.out.println("PStream constructor");
         stack_ = stack;
-        output_size_ = output_size;
         config_ = config;
 
         final int N = stack_.getSize();
@@ -94,10 +92,10 @@ public class PStream extends ImageStack{
         System.out.println("Finished pstream");
     }
 
-    public static PStream from(ImageStack stack, Config config, int output_size)
+    public static PStream from(ImageStack stack, Config config)
     {
         System.out.println("PStream from 1");
-        return new PStream(stack, config, output_size);
+        return new PStream(stack, config);
     }
 
     public static PStream from(Settings settings)
@@ -114,9 +112,8 @@ public class PStream extends ImageStack{
             System.out.println("n_frames is null");
             return null;
         }
-        int output_size = config.get_output_size(n_frames);
         System.out.println("Made a pee stream");
-        return from(image.getStack(), config, output_size);
+        return from(image.getStack(), config);
     }
 
     public String get_metadata()
@@ -129,7 +126,6 @@ public class PStream extends ImageStack{
     {
         if (filename == null)
             return false;
-        StackWrapper wrapper = StackWrapper.from_stack(stack_);
         System.out.printf("TODO: wtf wtf save to %s\n", filename);
         //FIXME(ER): actually write here
         return false;
@@ -139,7 +135,7 @@ public class PStream extends ImageStack{
     @Override
     public int getSize()
     {
-        return output_size_;
+        return image_parameters_.size();
     }
 
     /** Returns the bit depth (8, 16, 24 or 32), or 0 if the bit depth is not known. */
