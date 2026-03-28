@@ -2,10 +2,11 @@ package com.coxphysics.terrapins.models.hawk;
 import java.util.ArrayList;
 import ij.ImagePlus;
 import ij.ImageStack;
+import ij.VirtualStack;
 import ij.process.FloatProcessor;
 import ij.process.ImageProcessor;
 
-public class PStream extends ImageStack{
+public class PStream extends VirtualStack{
 
 
     private enum Split{
