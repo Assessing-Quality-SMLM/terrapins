@@ -176,7 +176,7 @@ public class PStream extends VirtualStack{
         n--;
         
         final int l = image_parameters_.get(n).layer;
-        final int s = image_parameters_.get(n).index;
+        final int s = image_parameters_.get(n).index + 1;  // 1- indexing
         Split split = image_parameters_.get(n).split;
 
 
@@ -186,27 +186,28 @@ public class PStream extends VirtualStack{
         final int w = getWidth();
 
 
-        for(int r=0; r < h; r++)
-            for(int c=0; c<w; c++)
-            {
-                float sum=0;
-                for(int i=0; i < kernel_half_w; i++)
-                    sum += stack_.getVoxel(c, r, s+i) - stack_.getVoxel(c, r, s+i+kernel_half_w);
-                
-                if(split == Split.Abs)
-                {
-                    fp.setf(c, r, (float)Math.abs(sum));
-                }
-                else if(split == Split.Positive)
-                {
-                    if(sum > 0)
-                        fp.setf(c, r, sum);
-                }
-                else /* if(split == Split.Negative)*/{
-                    if(sum < 0)
-                        fp.setf(c, r, -sum);
-                }
-            }
+		for(int i=0; i < kernel_half_w; i++){
+			// getVoxel does not work for VirtualStacks
+			// so work one slice at a time.
+			ImageProcessor i1 = stack_.getProcessor(s+i);
+			ImageProcessor i2 = stack_.getProcessor(s+i+kernel_half_w);
+
+			for(int r=0; r < h; r++)
+				for(int c=0; c<w; c++)
+					fp.setf(c,r, fp.getf(c,r) +i1.getf(c,r)-i2.getf(c,r));
+		}
+
+		for(int r=0; r < h; r++)
+			for(int c=0; c<w; c++){
+				float val = fp.getf(r,c);
+				if(split == Split.Abs)
+					val = Math.abs(val);
+				else if(split == Split.Positive)
+					val = Math.max(0, val);
+				else /* if(split == Split.Negative)*/
+					val = Math.max(0, -val);
+				fp.setf(r,c,val);
+			}
 
         return fp;
     }
