@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.models.hawk;
 import java.util.ArrayList;
+import ij.io.FileSaver;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.VirtualStack;
@@ -125,11 +126,19 @@ public class PStream extends VirtualStack{
 
     public boolean write_to_disk(String filename)
     {
+		// This is pretty redundant now we use standard ImageJ saving
+		// probably remove it later.
+		// Actually I think this is misplaced because this is an ImageStack
+		// which doesn't have the metadata, so anything saved from here will
+		// be missing that.
         if (filename == null)
             return false;
         System.out.printf("TODO: wtf wtf save to %s\n", filename);
         //FIXME(ER): actually write here
-        return false;
+		ImagePlus imp = new ImagePlus("", this);
+		FileSaver fs = new FileSaver(imp);
+		fs.saveAsTiff(filename);
+        return true;
     }
 
     /** Returns the number of slices in this stack. */
@@ -152,9 +161,6 @@ public class PStream extends VirtualStack{
         return true;
     }
 
-
-    // These are imageJ 1-based indexes
-    // Rust wants zero based
     @Override
     public Object getPixels(int n)
     {
