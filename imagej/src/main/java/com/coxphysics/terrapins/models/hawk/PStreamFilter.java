@@ -99,8 +99,7 @@ public class PStreamFilter implements ExtendedPlugInFilter {
 	System.out.println("pstreamfilter.create_p_stream");
         if (image_ == null || config_ == null || !valid_output_size())
             return null;
-        int n_pixels = image_.getWidth() * image_.getHeight();
-        return PStream.from(image_.getStack(), config_, output_size_, n_pixels);
+        return PStream.from(image_.getStack(), config_, output_size_);
     }
 
     private Calibration get_calibration()
