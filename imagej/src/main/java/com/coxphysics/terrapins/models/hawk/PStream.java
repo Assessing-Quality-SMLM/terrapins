@@ -37,7 +37,6 @@ public class PStream extends VirtualStack{
     private PStream(ImageStack stack, Config config)
     {
         super(stack.getWidth(), stack.getHeight());
-        System.out.println("PStream constructor");
         stack_ = stack;
         config_ = config;
 
@@ -50,12 +49,10 @@ public class PStream extends VirtualStack{
         ArrayList<ArrayList<HawkImageParameters>> params = new ArrayList<ArrayList<HawkImageParameters>>();
 
         if(interleave){
-            System.out.println("1");
             for(int i=0; i < N; i++)
                 params.add(new ArrayList<HawkImageParameters>());
         }
         else{
-            System.out.println("2");
             params.add(new ArrayList<HawkImageParameters>());
         }
 
@@ -83,26 +80,20 @@ public class PStream extends VirtualStack{
             }
         }
         
-        System.out.println("3");
         image_parameters_ = new ArrayList<HawkImageParameters>();
         // Collate them into the single array
 		for(int i=0; i < params.size(); i++)
 			for(int j=0; j < params.get(i).size(); j++)
 				image_parameters_.add(params.get(i).get(j));
-        
-
-        System.out.println("Finished pstream");
     }
 
     public static PStream from(ImageStack stack, Config config)
     {
-        System.out.println("PStream from 1");
         return new PStream(stack, config);
     }
 
     public static PStream from(Settings settings)
     {
-        System.out.println("Trying to make a p stream");
         Config config = Config.from(settings);
         ImagePlus image = settings.image();
         if (image == null){
@@ -114,13 +105,13 @@ public class PStream extends VirtualStack{
             System.out.println("n_frames is null");
             return null;
         }
-        System.out.println("Made a pee stream");
         return from(image.getStack(), config);
     }
 
     public String get_metadata()
     {   
         //FIXME(ER) put some useful metadata in here?
+        System.out.println("TODO: metadata isn't done");
         return "";
     }
 
@@ -133,8 +124,6 @@ public class PStream extends VirtualStack{
 		// be missing that.
         if (filename == null)
             return false;
-        System.out.printf("TODO: wtf wtf save to %s\n", filename);
-        //FIXME(ER): actually write here
 		ImagePlus imp = new ImagePlus("", this);
 		FileSaver fs = new FileSaver(imp);
 		fs.saveAsTiff(filename);
