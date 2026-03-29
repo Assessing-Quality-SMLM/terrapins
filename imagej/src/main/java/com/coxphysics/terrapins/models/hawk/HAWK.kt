@@ -22,20 +22,17 @@ class HAWK private constructor(
         @JvmStatic
         fun from(settings: Settings): HAWK
         {
-	    println("HAWK.kt::HAWK::companion object::from");
             return HAWK(settings, IJLog.new())
         }
     }
 
     fun save_to_disk(): Boolean
     {
-	println("save_to_disk");
         return recordable_action { inner_save_to_disk() }
     }
 
     private fun inner_save_to_disk(): Boolean
     {
-	println("inner_save_to_disk");
         val p_stream = PStream.from(settings_)
         if (p_stream == null)
             return false
@@ -44,13 +41,11 @@ class HAWK private constructor(
 
     fun get_hawk_image() : ImagePlus?
     {
-	println("get_hawk_image");
         return recordable_action { inner_get_hawk_image() }
     }
 
     private fun inner_get_hawk_image() : ImagePlus?
     {
-	println("inner_get_hawk_image");
         val errors = settings_.error_string()
         if (errors != null)
         {
@@ -69,13 +64,11 @@ class HAWK private constructor(
 
     private fun get_hawk_image_name(): String
     {
-	println("get_hawk_image_name");
         return String.format("%s-HAWK-stream", settings_.image_name())
     }
 
     private fun get_calibration(settings: Settings): Calibration?
     {
-	println("get_calibration");
         val image = settings.image()
         if (image == null)
             return null
