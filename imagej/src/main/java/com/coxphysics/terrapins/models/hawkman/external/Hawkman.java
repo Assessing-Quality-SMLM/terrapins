@@ -106,6 +106,7 @@ public class Hawkman
 
     public static Hawkman default_()
     {
+		System.out.println("start default_");
         Path exe_path = extract_default_tool();
         return custom(exe_path);
     }
@@ -113,9 +114,11 @@ public class Hawkman
     @Nullable
     public static Path extract_default_tool()
     {
+		System.out.println("start extract_default_tool");
         String name = ffi.os_exe_name(EXE_NAME);
         Path exe_path = ffi.extract_resource_to_temp(Hawkman.class, name, true, true);
         extract_depenencies();
+		System.out.println("end extract_default_tool");
         return exe_path;
     }
 
@@ -164,8 +167,11 @@ public class Hawkman
     }
     public static void run_with_settings(Settings settings)
     {
+		System.out.println("Hello run_with_settings");
         Hawkman hawkman = default_();
+		System.out.println("Attempting to run in run_with_settings");
         hawkman.run(new SystemRunner(), settings);
+		System.out.println("done");
     }
 
     private void run(Runner process_runner, Settings settings)

@@ -34,11 +34,17 @@ class Assessment private constructor(private val exe_location_: Path, private va
         @JvmStatic
         fun default(): Assessment
         {
+			println("Start Assessment");
             FRC.extract_dependencies()
+			println("1");
             Hawkman.extract_default_tool()
+			println("2");
             Squirrel.extract_default_tool()
+			println("3");
             val name = ffi.os_exe_name(EXE_NAME)
+			println("4");
             val exe_path = ffi.extract_resource_to_temp(this::class.java, name, true, true)
+			println("Ending Assessment");
             return custom(exe_path, SystemFileSystem());
         }
 
