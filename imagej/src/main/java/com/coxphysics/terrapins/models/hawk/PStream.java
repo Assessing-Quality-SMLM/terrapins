@@ -1,63 +1,140 @@
 package com.coxphysics.terrapins.models.hawk;
-
+import java.util.ArrayList;
+import ij.io.FileSaver;
 import ij.ImagePlus;
 import ij.ImageStack;
+import ij.VirtualStack;
 import ij.process.FloatProcessor;
 import ij.process.ImageProcessor;
 
-public class PStream extends ImageStack implements AutoCloseable{
-    private final ImageStack stack_;
-    private final long config_ptr_;
-    private final int output_size_;
-    private final int n_pixels_;
+public class PStream extends VirtualStack{
 
-    private PStream(ImageStack stack, long config_ptr, int output_size, int n_pixels)
+
+    private enum Split{
+        Abs,
+        Positive,
+        Negative
+    };
+
+    private class HawkImageParameters{
+        public final int layer;
+        public final int index;
+        public final Split split;
+        public HawkImageParameters(int l_, int i_, Split s_)
+        {
+            layer=l_;
+            index=i_;
+            split=s_;
+        }
+    };
+
+        
+    private final ImageStack stack_;
+    private final Config config_;
+    private ArrayList<HawkImageParameters> image_parameters_;
+    
+
+    private PStream(ImageStack stack, Config config)
     {
         super(stack.getWidth(), stack.getHeight());
         stack_ = stack;
-        output_size_ = output_size;
-        n_pixels_ = n_pixels;
-        config_ptr_ = config_ptr;
+        config_ = config;
+
+        final int N = stack_.getSize();
+        final int levels = config_.n_levels;
+        final boolean interleave = config_.output_style_interleaved;
+
+        // Precompute all the image parameters so we can just look it up 
+        // with indexing later
+        ArrayList<ArrayList<HawkImageParameters>> params = new ArrayList<ArrayList<HawkImageParameters>>();
+
+        if(interleave){
+            for(int i=0; i < N; i++)
+                params.add(new ArrayList<HawkImageParameters>());
+        }
+        else{
+            params.add(new ArrayList<HawkImageParameters>());
+        }
+
+        for(int l=0; l < levels; l++)
+		{
+			final int kernel_w = 2 << l;
+			final int kernel_half_w = 1 << l;
+
+            System.out.printf("Level = %d", l);
+			for(int s=0; s < N-kernel_w+ 1; s++)
+			{
+                System.out.printf("  image = %d", s);
+				int pos_to_add = 0;
+				if(interleave)
+					pos_to_add = s + kernel_half_w - 1; // This is the "central" frame
+				else
+					pos_to_add = 0; //Otherwise add things in the order they're computed
+
+                if(config_.negative_handling_separate){
+                    params.get(pos_to_add).add(new HawkImageParameters(l, s, Split.Positive));
+                    params.get(pos_to_add).add(new HawkImageParameters(l, s, Split.Negative));
+                }
+                else
+                    params.get(pos_to_add).add(new HawkImageParameters(l, s, Split.Abs));
+            }
+        }
+        
+        image_parameters_ = new ArrayList<HawkImageParameters>();
+        // Collate them into the single array
+		for(int i=0; i < params.size(); i++)
+			for(int j=0; j < params.get(i).size(); j++)
+				image_parameters_.add(params.get(i).get(j));
     }
 
-    public static PStream from(ImageStack stack, Config config, int output_size, int n_pixels)
+    public static PStream from(ImageStack stack, Config config)
     {
-        long config_ptr = NativeHAWK.config_new(config.n_levels(), config.negative_handling(), config.output_style());
-        return new PStream(stack, config_ptr, output_size, n_pixels);
+        return new PStream(stack, config);
     }
 
     public static PStream from(Settings settings)
     {
         Config config = Config.from(settings);
         ImagePlus image = settings.image();
-        if (image == null)
+        if (image == null){
+            System.out.println("no image in settings");
             return null;
+        }
         Integer n_frames = settings.n_frames();
-        if (n_frames == null)
+        if (n_frames == null){
+            System.out.println("n_frames is null");
             return null;
-        int output_size = config.get_output_size(n_frames);
-        int n_pixels = image.getWidth() * image.getHeight();
-        return from(image.getStack(), config, output_size, n_pixels);
+        }
+        return from(image.getStack(), config);
     }
 
     public String get_metadata()
-    {
-        return NativeHAWK.get_metadata(config_ptr_);
+    {   
+        //FIXME(ER) put some useful metadata in here?
+        System.out.println("TODO: metadata isn't done");
+        return "";
     }
 
     public boolean write_to_disk(String filename)
     {
+		// This is pretty redundant now we use standard ImageJ saving
+		// probably remove it later.
+		// Actually I think this is misplaced because this is an ImageStack
+		// which doesn't have the metadata, so anything saved from here will
+		// be missing that.
         if (filename == null)
             return false;
-        StackWrapper wrapper = StackWrapper.from_stack(stack_);
-        return NativeHAWK.hawk_to_file(wrapper, config_ptr_, stack_.getHeight(), stack_.getWidth(), filename);
+		ImagePlus imp = new ImagePlus("", this);
+		FileSaver fs = new FileSaver(imp);
+		fs.saveAsTiff(filename);
+        return true;
     }
 
     /** Returns the number of slices in this stack. */
     @Override
     public int getSize()
     {
-        return output_size_;
+        return image_parameters_.size();
     }
 
     /** Returns the bit depth (8, 16, 24 or 32), or 0 if the bit depth is not known. */
@@ -73,28 +150,55 @@ public class PStream extends ImageStack implements AutoCloseable{
         return true;
     }
 
-
-    // These are imageJ 1-based indexes
-    // Rust wants zero based
     @Override
     public Object getPixels(int n)
     {
-        int rust_index = n - 1;
-        StackWrapper wrapper = StackWrapper.from_stack(stack_);
-        return NativeHAWK.hawk_stream_get_image_float(wrapper, config_ptr_, rust_index, n_pixels_);
+        return getProcessor(n).getPixels();
     }
 
     @Override
     public ImageProcessor getProcessor(int n)
     {
-        Object data = getPixels(n);
-        return new FloatProcessor(getWidth(), getHeight(), (float[]) data);
-    }
+        FloatProcessor fp = new FloatProcessor(getWidth(), getHeight());
+        
+        //Imagej indexes from 1. All our arrays are Java standard, so from 0
+        n--;
+        
+        final int l = image_parameters_.get(n).layer;
+        final int s = image_parameters_.get(n).index + 1;  // 1- indexing
+        Split split = image_parameters_.get(n).split;
 
-    @Override
-    public void close() throws Exception
-    {
-        NativeHAWK.config_free(config_ptr_);
+
+        final int kernel_w = 2 << l;
+        final int kernel_half_w = 1 << l;
+        final int h = getHeight();
+        final int w = getWidth();
+
+
+		for(int i=0; i < kernel_half_w; i++){
+			// getVoxel does not work for VirtualStacks
+			// so work one slice at a time.
+			ImageProcessor i1 = stack_.getProcessor(s+i);
+			ImageProcessor i2 = stack_.getProcessor(s+i+kernel_half_w);
+
+			for(int r=0; r < h; r++)
+				for(int c=0; c<w; c++)
+					fp.setf(c,r, fp.getf(c,r) +i1.getf(c,r)-i2.getf(c,r));
+		}
+
+		for(int r=0; r < h; r++)
+			for(int c=0; c<w; c++){
+				float val = fp.getf(r,c);
+				if(split == Split.Abs)
+					val = Math.abs(val);
+				else if(split == Split.Positive)
+					val = Math.max(0, val);
+				else /* if(split == Split.Negative)*/
+					val = Math.max(0, -val);
+				fp.setf(r,c,val);
+			}
+
+        return fp;
     }
 
     /** FAKE OUT SOME OTHER METHODS*/

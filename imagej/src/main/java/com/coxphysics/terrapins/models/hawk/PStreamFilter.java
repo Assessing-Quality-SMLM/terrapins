@@ -16,8 +16,6 @@ public class PStreamFilter implements ExtendedPlugInFilter {
 
     int n_frames_ = 0;
 
-    int output_size_ = 0;
-
     int flags_ = STACK_REQUIRED | NO_CHANGES | DOES_16 | DOES_32 | DOES_8G;
 
     public PStreamFilter()
@@ -35,7 +33,6 @@ public class PStreamFilter implements ExtendedPlugInFilter {
     {
         PStreamFilter filter = new PStreamFilter(image, config);
         filter.setup("", image);
-        filter.output_size_ = config.get_output_size(filter.n_frames_);
         return filter;
     }
 
@@ -47,7 +44,6 @@ public class PStreamFilter implements ExtendedPlugInFilter {
         if(!gd.wasOKed())
             return flags_;
         config_ = HawkUI.create_config(gd);
-        output_size_ = config_.get_output_size(n_frames_);
         return flags_;
     }
 
@@ -76,11 +72,6 @@ public class PStreamFilter implements ExtendedPlugInFilter {
         view.show();
     }
 
-    private boolean valid_output_size()
-    {
-        return output_size_ > 0;
-    }
-
     public ImagePlus get_image_plus()
     {
         PStream p_stream = create_p_stream();
@@ -96,10 +87,10 @@ public class PStreamFilter implements ExtendedPlugInFilter {
     @Nullable
     public PStream create_p_stream()
     {
-        if (image_ == null || config_ == null || !valid_output_size())
+	System.out.println("pstreamfilter.create_p_stream");
+        if (image_ == null || config_ == null)
             return null;
-        int n_pixels = image_.getWidth() * image_.getHeight();
-        return PStream.from(image_.getStack(), config_, output_size_, n_pixels);
+        return PStream.from(image_.getStack(), config_);
     }
 
     private Calibration get_calibration()
@@ -111,12 +102,13 @@ public class PStreamFilter implements ExtendedPlugInFilter {
 
     public boolean write_to_disk()
     {
-        try (PStream p_stream = create_p_stream())
+        try
         {
+            PStream p_stream = create_p_stream();
             if (p_stream == null)
                 return false;
             if (config_.has_output_filename_set())
-                return p_stream.write_to_disk(config_.filename());
+                return p_stream.write_to_disk(config_.filename);
         }
         catch (Exception e)
         {

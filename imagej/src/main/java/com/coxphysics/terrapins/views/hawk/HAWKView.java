@@ -229,6 +229,7 @@ public class HAWKView extends JDialog {
 
     public void run_filter()
     {
+        System.out.println("HAWKView::run_filter()");
         view_model_.run_filter();
         close_ok();
     }
