@@ -9,10 +9,12 @@ import sys
 
 PROJECT = "TERRAPINS"
 
+
 def use_shell() -> bool:
     return False
 
-def bump_imagej_version_number(pom: str) -> bool:    
+
+def bump_imagej_version_number(pom: str) -> bool:
     return maven.bump_minor(pom, use_shell())
 
 
@@ -45,7 +47,6 @@ def run(dry_run: bool) -> bool:
     print("Running install")
     if not maven.install(pom, use_shell()):
         return False
-
 
     print("Deploying")
     new_artifact = _build.dependency_build_of(PROJECT, new_version_number)
