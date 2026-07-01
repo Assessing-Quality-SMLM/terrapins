@@ -9,7 +9,6 @@ import com.coxphysics.terrapins.plugins.CORE_SETTINGS_IMAGE_STACK
 import com.coxphysics.terrapins.plugins.CORE_SETTINGS_WIDEFIELD
 import ij.ImagePlus
 import java.nio.file.Path
-import java.nio.file.Paths
 
 class SquirrelInputs private constructor(
     private var widefield_: DiskOrImage,
