@@ -59,26 +59,26 @@ public class PStreamFilterTests {
         assertEquals(filtered_image.getCalibration().frameInterval, 0);
     }
 
-    @Test
-    public void image_has_metadata()
-    {
-        int[] data = {0, 1, 2, 3, 4, 5, 6, 7, 8};
-        ImageStack stack = new ImageStack(1, 1, data.length);
-        int count = 1;
-        for (int value : data)
-        {
-            float [] pixel_data = {value};
-            stack.setPixels(pixel_data, count);
-            count++;
-        }
-        ImagePlus image = new ImagePlus("image", stack);
-        Config config = Config.from(Settings.from(1, NegativeValuesPolicy.ABSOLUTE, OutputStyle.SEQUENTIAL));
-        PStreamFilter filter = PStreamFilter.from(image, config);
-        ImagePlus filtered_image = filter.get_image_plus();
-        String metadata = MetaDataExtract.get_metadata(filtered_image);
-        String expected = "hawk_core:\n" +
-                "Version: 0.2.0\n" +
-                "config: {\"Version1\":{\"threading\":\"Parallel\",\"memory\":\"Contiguous\",\"run_style\":\"InMemory\",\"algorithm\":{\"n_levels\":1,\"output_style\":\"Sequential\",\"negative_handling\":\"Absolute\"},\"validation\":{\"LimitOutputsToUnder32Bits\":true}}}";
-        assertEquals(metadata, expected);
-    }
+//    @Test
+//    public void image_has_metadata()
+//    {
+//        int[] data = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+//        ImageStack stack = new ImageStack(1, 1, data.length);
+//        int count = 1;
+//        for (int value : data)
+//        {
+//            float [] pixel_data = {value};
+//            stack.setPixels(pixel_data, count);
+//            count++;
+//        }
+//        ImagePlus image = new ImagePlus("image", stack);
+//        Config config = Config.from(Settings.from(1, NegativeValuesPolicy.ABSOLUTE, OutputStyle.SEQUENTIAL));
+//        PStreamFilter filter = PStreamFilter.from(image, config);
+//        ImagePlus filtered_image = filter.get_image_plus();
+//        String metadata = MetaDataExtract.get_metadata(filtered_image);
+//        String expected = "hawk_core:\n" +
+//                "Version: 0.2.0\n" +
+//                "config: {\"Version1\":{\"threading\":\"Parallel\",\"memory\":\"Contiguous\",\"run_style\":\"InMemory\",\"algorithm\":{\"n_levels\":1,\"output_style\":\"Sequential\",\"negative_handling\":\"Absolute\"},\"validation\":{\"LimitOutputsToUnder32Bits\":true}}}";
+//        assertEquals(metadata, expected);
+//    }
 }

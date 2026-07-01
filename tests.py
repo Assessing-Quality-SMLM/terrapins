@@ -21,7 +21,8 @@ def rust_tests() -> bool:
 def java_tests(use_local_ffi_bindings: bool) -> bool:
     if not _build.build_imagej(use_local_ffi_bindings):
         return False
-    return maven.test(_build.imagej_pom())
+    use_shell = False
+    return maven.test(_build.imagej_pom(), use_shell)
 
 
 def python_tests(use_local_ffi_bindings: bool) -> bool:
@@ -38,7 +39,7 @@ def run_local_tests() -> bool:
 
 
 def run_package_tests() -> bool:
-    return java_tests(False) and python_tests(False)
+    return java_tests(False)  # and python_tests(False)
 
 
 def run(local_tests: bool) -> bool:

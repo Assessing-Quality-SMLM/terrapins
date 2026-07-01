@@ -1,6 +1,5 @@
 package com.coxphysics.terrapins.models.reports;
 
-import com.coxphysics.terrapins.models.hawk.NativeHAWK;
 import org.junit.jupiter.api.Test;
 
 import java.io.StringWriter;
