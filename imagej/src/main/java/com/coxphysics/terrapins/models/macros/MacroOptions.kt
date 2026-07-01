@@ -66,4 +66,9 @@ class MacroOptions private constructor(private var options: String?)
     {
         return get(key)?.toDoubleOrNull()
     }
+
+    fun get_bool(key: String): Boolean?
+    {
+        return get(key)?.toBooleanStrictOrNull()
+    }
 }
