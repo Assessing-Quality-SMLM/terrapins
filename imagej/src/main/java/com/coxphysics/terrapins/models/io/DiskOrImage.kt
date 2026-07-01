@@ -197,7 +197,6 @@ class DiskOrImage private constructor(
 
     fun record_to_macro_with(key: String)
     {
-
         val description = macro_string()
         if (description != StringUtils.EMPTY_STRING)
         {
