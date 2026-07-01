@@ -285,6 +285,9 @@ class Assessment private constructor(private val exe_location_: Path, private va
             }
         }
 
+        commands.add("--register")
+        commands.add(squirrel_inputs.perform_registration().toString())
+
         commands.add("--n-threads")
         commands.add(settings.n_threads().toString())
 
