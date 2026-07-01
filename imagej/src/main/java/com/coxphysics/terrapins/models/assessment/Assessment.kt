@@ -16,7 +16,6 @@ import java.nio.file.Path
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.io.path.Path
-import kotlin.io.path.exists
 import com.coxphysics.terrapins.models.assessment.images.Settings as ImagesSettings
 
 private const val EXE_NAME = "assessment"
@@ -285,6 +284,9 @@ class Assessment private constructor(private val exe_location_: Path, private va
                 commands.add(image_stack_path.toString())
             }
         }
+
+        commands.add("--register")
+        commands.add(squirrel_inputs.perform_registration().toString())
 
         commands.add("--n-threads")
         commands.add(settings.n_threads().toString())

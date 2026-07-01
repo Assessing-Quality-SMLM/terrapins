@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.views.TERRAPINS;
 
+import com.coxphysics.terrapins.models.utils.ActionableListener;
 import com.coxphysics.terrapins.view_models.TERRAPINS.SquirrelInputsVM;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -15,17 +16,24 @@ public class SquirrelInputs {
     private JPanel root_;
     private JPanel widefield_panel_;
     private JPanel image_stack_panel_;
+    private JCheckBox register_;
 
     private SquirrelInputsVM view_model_ = SquirrelInputsVM.default_();
 
-    public SquirrelInputs() {
-
+    public SquirrelInputs()
+    {
+        register_.addActionListener(ActionableListener.from(this, SquirrelInputs::set_registration));
     }
 
     public void set_view_model(SquirrelInputsVM view_model) {
         view_model_ = view_model;
         widefield_view_.set_view_model(view_model.widefield_vm());
         image_stack_view_.set_view_model(view_model.image_stack_vm());
+    }
+
+    private void set_registration()
+    {
+        view_model_.set_registration(register_.isSelected());
     }
 
     {
@@ -44,21 +52,24 @@ public class SquirrelInputs {
      */
     private void $$$setupUI$$$() {
         root_ = new JPanel();
-        root_.setLayout(new GridLayoutManager(2, 2, new Insets(5, 5, 5, 5), -1, -1));
-        final Spacer spacer1 = new Spacer();
-        root_.add(spacer1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        root_.setLayout(new GridLayoutManager(3, 3, new Insets(5, 5, 5, 5), -1, -1));
         widefield_panel_ = new JPanel();
         widefield_panel_.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        root_.add(widefield_panel_, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        root_.add(widefield_panel_, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         widefield_panel_.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(-16777216)), "Widefield", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         widefield_view_ = new DiskOrImageView();
         widefield_panel_.add(widefield_view_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         image_stack_panel_ = new JPanel();
         image_stack_panel_.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        root_.add(image_stack_panel_, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 1, false));
+        root_.add(image_stack_panel_, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 1, false));
         image_stack_panel_.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(-16777216)), "Image Stack", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         image_stack_view_ = new DiskOrImageView();
         image_stack_panel_.add(image_stack_view_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        register_ = new JCheckBox();
+        register_.setText("SQUIRREL: Perform Registration");
+        root_.add(register_, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        final Spacer spacer1 = new Spacer();
+        root_.add(spacer1, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
     }
 
     /**
