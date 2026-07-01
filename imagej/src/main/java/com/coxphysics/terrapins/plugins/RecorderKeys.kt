@@ -44,3 +44,6 @@ const val IMAGES_SETTINGS_DRIFT_SPLIT_2 = "drift_split_2"
 
 const val IMAGES_SETTINGS_ZIP_SPLIT_1 = "zip_split_1"
 const val IMAGES_SETTINGS_ZIP_SPLIT_2 = "zip_split_2"
+
+// SQUIRREL SETTINGS
+const val SQUIRREL_PERFORM_REGISTRATION = "register"

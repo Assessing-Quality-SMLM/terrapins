@@ -7,25 +7,28 @@ import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.processing.WidefieldGenerator
 import com.coxphysics.terrapins.plugins.CORE_SETTINGS_IMAGE_STACK
 import com.coxphysics.terrapins.plugins.CORE_SETTINGS_WIDEFIELD
+import com.coxphysics.terrapins.plugins.SQUIRREL_PERFORM_REGISTRATION
 import ij.ImagePlus
+import ij.plugin.frame.Recorder
 import java.nio.file.Path
 
 class SquirrelInputs private constructor(
     private var widefield_: DiskOrImage,
-    private var image_stack_: DiskOrImage)
+    private var image_stack_: DiskOrImage,
+    private var perform_registration_: Boolean)
 {
     companion object
     {
         @JvmStatic
-        fun new(widefield: DiskOrImage, image_stack: DiskOrImage): SquirrelInputs
+        fun new(widefield: DiskOrImage, image_stack: DiskOrImage, perform_registration: Boolean): SquirrelInputs
         {
-            return SquirrelInputs(widefield, image_stack)
+            return SquirrelInputs(widefield, image_stack, perform_registration)
         }
 
         @JvmStatic
         fun default(): SquirrelInputs
         {
-            return new(DiskOrImage.default(), DiskOrImage.default())
+            return new(DiskOrImage.default(), DiskOrImage.default(), true)
         }
 
 
@@ -38,7 +41,12 @@ class SquirrelInputs private constructor(
             var image_stack = DiskOrImage.from_macro_options_with(CORE_SETTINGS_IMAGE_STACK, options, window_manager)
             if (image_stack == null)
                 image_stack = DiskOrImage.default()
-            return new(widefield, image_stack)
+
+            var perform_registration = options.get_bool(SQUIRREL_PERFORM_REGISTRATION)
+            if (perform_registration == null)
+                perform_registration = true
+
+            return new(widefield, image_stack, perform_registration)
         }
     }
     fun has_widefield(): Boolean
@@ -107,6 +115,16 @@ class SquirrelInputs private constructor(
         image_stack_.set_filename_and_switch_usage(value)
     }
 
+    fun perform_registration(): Boolean
+    {
+        return perform_registration_
+    }
+
+    fun set_regisration(value: Boolean)
+    {
+        perform_registration_ = value
+    }
+
     fun to_disk_in(working_directory: Path) : SquirrelInputs?
     {
         var widefield_ok = true
@@ -156,10 +174,10 @@ class SquirrelInputs private constructor(
 
     }
 
-
     fun record_to_macro()
     {
         widefield_.record_to_macro_with(CORE_SETTINGS_WIDEFIELD)
         image_stack_.record_to_macro_with(CORE_SETTINGS_IMAGE_STACK)
+        Recorder.recordOption(SQUIRREL_PERFORM_REGISTRATION, perform_registration_.toString())
     }
 }
