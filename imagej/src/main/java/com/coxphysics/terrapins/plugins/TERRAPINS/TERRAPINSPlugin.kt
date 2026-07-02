@@ -6,11 +6,8 @@ import com.coxphysics.terrapins.models.assessment.workflow.Settings
 import com.coxphysics.terrapins.models.ij_wrapping.IJWindowManager
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.macros.MacroUtils
-import com.coxphysics.terrapins.models.squirrel.tools.SQUIRREL_GetFileFromResource
 import com.coxphysics.terrapins.view_models.TERRAPINS.TERRAPINSVM
 import com.coxphysics.terrapins.views.TERRAPINS.TERRAPINSTabView
-import com.coxphysics.terrapins.views.TERRAPINS.TERRAPINSView
-import com.coxphysics.terrapins.views.utils.Utils
 import ij.IJ
 import ij.ImageJ
 import ij.plugin.PlugIn
