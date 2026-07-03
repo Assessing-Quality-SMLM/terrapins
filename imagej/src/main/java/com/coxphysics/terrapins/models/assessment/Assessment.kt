@@ -279,6 +279,9 @@ class Assessment private constructor(private val exe_location_: Path, private va
         }
     }
 
+    commands.add("--hawkman-n-levels")
+    commands.add(settings.hawkman_n_levels().toString())
+
     commands.add("--register")
     commands.add(squirrel_inputs.perform_registration().toString())
 
