@@ -33,8 +33,8 @@ class TERRAPINSPlugin : PlugIn
             // start ImageJ
             ImageJ();
                     // run the plugin
-            val reference = IJ.openImage(SQUIRREL_GetFileFromResource.getLocalFileFromResource("/HDVee.tif").getAbsolutePath());
-            reference.show();
+//            val reference = IJ.openImage(SQUIRREL_GetFileFromResource.getLocalFileFromResource("/HDVee.tif").getAbsolutePath());
+//            reference.show();
 //            IJ.run("Record...")
             IJ.runPlugIn(clazz.getName(), "");
         }
