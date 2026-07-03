@@ -38,6 +38,10 @@ class SquirrelInputsVM private constructor(private val model_: SquirrelInputs)
         return image_stack_vm_
     }
 
+    fun register_images(): Boolean
+    {
+        return model_.perform_registration()
+    }
     fun set_registration(value: Boolean)
     {
         model_.set_regisration(value)
