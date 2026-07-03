@@ -251,54 +251,47 @@ class Assessment private constructor(private val exe_location_: Path, private va
 //      --image-stack <IMAGE_STACK>  Image stack file
 //      --metrics-only               Only generate metric file
 //      --extract                    Extract Data to directory
-    private fun add_core_commands(settings: CoreSettings, squirrel_inputs: SquirrelInputs, data_name: String?, commands: MutableList<String>)
-    {
-        commands.add("--working-directory")
-        var working_directory = settings.working_directory_path()
-        if (working_directory == null)
-            working_directory = FsUtils.temp_directory()
-        commands.add(working_directory.toString())
+    private fun add_core_commands(settings: CoreSettings, squirrel_inputs: SquirrelInputs, data_name: String?, commands: MutableList<String>) {
+    commands.add("--working-directory")
+    var working_directory = settings.working_directory_path()
+    if (working_directory == null)
+        working_directory = FsUtils.temp_directory()
+    commands.add(working_directory.toString())
 
-        if (data_name != null)
-        {
-            commands.add("--data-name")
-            commands.add(data_name)
-        }
-
-        if (squirrel_inputs.has_widefield())
-        {
-            val widefield_path = squirrel_inputs.widefield_path_in(working_directory)
-            if (widefield_path != null && file_system_.exists(widefield_path))
-            {
-                commands.add("--widefield")
-                commands.add(widefield_path.toString())
-            }
-        }
-
-        if (squirrel_inputs.has_image_stack())
-        {
-            val image_stack_path = squirrel_inputs.image_stack_path_in(working_directory)
-            if (image_stack_path != null && file_system_.exists(image_stack_path))
-            {
-                commands.add("--image-stack")
-                commands.add(image_stack_path.toString())
-            }
-        }
-
-        commands.add("--register")
-        commands.add(squirrel_inputs.perform_registration().toString())
-
-        commands.add("--n-threads")
-        commands.add(settings.n_threads().toString())
-
-        if (settings.has_settings_file())
-        {
-            commands.add("--settings")
-            commands.add(settings.settings_file_nn())
-        }
-
-        commands.add("--extract")
+    if (data_name != null) {
+        commands.add("--data-name")
+        commands.add(data_name)
     }
+
+    if (squirrel_inputs.has_widefield()) {
+        val widefield_path = squirrel_inputs.widefield_path_in(working_directory)
+        if (widefield_path != null && file_system_.exists(widefield_path)) {
+            commands.add("--widefield")
+            commands.add(widefield_path.toString())
+        }
+    }
+
+    if (squirrel_inputs.has_image_stack()) {
+        val image_stack_path = squirrel_inputs.image_stack_path_in(working_directory)
+        if (image_stack_path != null && file_system_.exists(image_stack_path)) {
+            commands.add("--image-stack")
+            commands.add(image_stack_path.toString())
+        }
+    }
+
+    commands.add("--register")
+    commands.add(squirrel_inputs.perform_registration().toString())
+
+    commands.add("--n-threads")
+    commands.add(settings.n_threads().toString())
+
+    if (settings.has_settings_file()) {
+        commands.add("--settings")
+        commands.add(settings.settings_file_nn())
+    }
+
+    commands.add("--extract")
+}
 
     private fun add_equipment(settings: EquipmentSettings, commands: MutableList<String>)
     {
