@@ -1,6 +1,6 @@
 import _build
 
-from dev_ops import cargo, maven, hatch
+from dev_ops import cargo, maven, hatch, utils
 
 import argparse
 import sys
@@ -21,7 +21,7 @@ def rust_tests() -> bool:
 def java_tests(use_local_ffi_bindings: bool) -> bool:
     if not _build.build_imagej(use_local_ffi_bindings):
         return False
-    use_shell = False
+    use_shell = utils.is_windows()
     return maven.test(_build.imagej_pom(), use_shell)
 
 

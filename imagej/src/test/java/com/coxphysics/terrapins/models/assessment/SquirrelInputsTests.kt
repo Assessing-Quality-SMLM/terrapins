@@ -131,6 +131,18 @@ class SquirrelInputsTests
     }
 
     @Test
+    fun to_disk_passes_on_perform_registration()
+    {
+        val working_directory = Paths.get("some", "thing")
+        val settings = SquirrelInputs.default()
+        assertEquals(settings.to_disk_in(working_directory)!!.perform_registration(), true)
+        settings.set_regisration(false)
+        assertEquals(settings.to_disk_in(working_directory)!!.perform_registration(), false)
+        settings.set_regisration(true)
+        assertEquals(settings.to_disk_in(working_directory)!!.perform_registration(), true)
+    }
+
+    @Test
     fun macro_recording_records_widefield()
     {
         executor.submit {

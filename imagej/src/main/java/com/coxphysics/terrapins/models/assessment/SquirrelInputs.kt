@@ -170,6 +170,7 @@ class SquirrelInputs private constructor(
             inputs.set_widefield_path(widefield_path)
         if (image_stack_path != null)
             inputs.set_image_stack_path(image_stack_path)
+        inputs.set_regisration(perform_registration())
         return inputs
 
     }

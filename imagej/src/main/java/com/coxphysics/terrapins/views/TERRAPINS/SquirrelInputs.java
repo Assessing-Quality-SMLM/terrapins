@@ -29,6 +29,7 @@ public class SquirrelInputs {
         view_model_ = view_model;
         widefield_view_.set_view_model(view_model.widefield_vm());
         image_stack_view_.set_view_model(view_model.image_stack_vm());
+        register_.setSelected(view_model.register_images());
     }
 
     private void set_registration()
