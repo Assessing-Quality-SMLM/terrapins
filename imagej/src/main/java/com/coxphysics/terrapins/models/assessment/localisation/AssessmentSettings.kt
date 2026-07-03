@@ -11,7 +11,6 @@ import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_HAWK_LOCALISATIONS
 import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_HAWK_LOCALISATIONS_PARSER
 import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_RAW_LOCALISATIONS
 import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_RAW_LOCALISATIONS_PARSER
-import com.coxphysics.terrapins.view_models.TERRAPINS.SquirrelInputsVM
 import java.nio.file.Path
 
 class AssessmentSettings private constructor(
