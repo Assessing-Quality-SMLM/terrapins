@@ -26,7 +26,6 @@ class SquirrelInputsVM private constructor(private val model_: SquirrelInputs)
         {
             return default()
         }
-
     }
 
     fun widefield_vm(): DiskOrImageVM
