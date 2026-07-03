@@ -16,6 +16,7 @@ class CoreSettings private constructor(
     private var settings_file_: PathWrapper
     )
 {
+    private var n_hawkman_levels_ = 10
     private var n_threads_ = Prefs.getThreads();
 
     companion object
@@ -62,6 +63,16 @@ class CoreSettings private constructor(
     fun set_working_directory(value: Path)
     {
         working_directory_.set_path(value)
+    }
+
+    fun hawkman_n_levels(): Int
+    {
+        return n_hawkman_levels_
+    }
+
+    fun set_hawkman_n_levels(value: Int)
+    {
+        n_hawkman_levels_ = value
     }
 
     fun n_threads(): Int
