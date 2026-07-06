@@ -1,6 +1,6 @@
 import _build
 
-from dev_ops import fs, gh, maven
+from dev_ops import fs, gh, maven, utils
 
 import argparse
 from os import path
@@ -12,7 +12,7 @@ ARTIFACT_NAME = f"{PROJECT}_plugin"
 
 
 def use_shell() -> bool:
-    return False
+    return utils.is_windows()
 
 
 def bump_imagej_version_number(pom: str) -> bool:
