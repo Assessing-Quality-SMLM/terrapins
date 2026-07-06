@@ -2,6 +2,7 @@ package com.coxphysics.terrapins.models.assessment.images
 
 import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.assessment.CoreSettings
+import com.coxphysics.terrapins.models.assessment.HAWKMANSettings
 import com.coxphysics.terrapins.models.assessment.SquirrelInputs
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import com.coxphysics.terrapins.models.ij_wrapping.WindowManager
@@ -16,6 +17,7 @@ class Settings private constructor(
 )
 {
     private var equipment = EquipmentSettings.default()
+    private var hawkman_settings_ = HAWKMANSettings.default()
     private var squirrel_inputs_ = SquirrelInputs.default()
     private var reference_image_ = DiskOrImage.default()
     private var hawk_image_ = DiskOrImage.default()
@@ -46,6 +48,7 @@ class Settings private constructor(
         @JvmStatic
         fun from_macro_options(options: MacroOptions, window_manager: WindowManager) : Settings?
         {
+            val hawkman_settings = HAWKMANSettings.from_macro_options(options)
             val squirrel_inputs = SquirrelInputs.from_macro_options(options, window_manager)
             val core_settings = CoreSettings.from_macro_options(options, window_manager)
 
@@ -72,6 +75,7 @@ class Settings private constructor(
                 zip_split = JointImages.default()
 
             val settings = default()
+            settings.hawkman_settings_ = hawkman_settings
             settings.squirrel_inputs_ = squirrel_inputs
             settings.core_settings_ = core_settings
             settings.equipment = equipment_settings
@@ -142,6 +146,12 @@ class Settings private constructor(
     fun set_settings_file(value: String)
     {
         core_settings_.set_settings_file(value)
+    }
+
+    /// HAWKMAN SETTINGS
+    fun hawkwman_settings(): HAWKMANSettings
+    {
+        return hawkman_settings_
     }
 
     /// SQUIRREL SETTINGS
@@ -397,6 +407,7 @@ class Settings private constructor(
 
     fun record_to_macro()
     {
+        hawkman_settings_.record_to_macro()
         squirrel_inputs_.record_to_macro()
         core_settings_.record_to_macro()
         equipment.record_to_macro()
