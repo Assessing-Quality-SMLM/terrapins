@@ -2,6 +2,7 @@ package com.coxphysics.terrapins.models.localisations
 
 import com.coxphysics.terrapins.models.PathWrapper
 import com.coxphysics.terrapins.models.macros.MacroOptions
+import com.coxphysics.terrapins.models.utils.PathUtils
 import ij.plugin.frame.Recorder
 
 class LocalisationFile private constructor(
@@ -140,7 +141,7 @@ class LocalisationFile private constructor(
 
     fun record_to_macro(key: String, parse_key: String)
     {
-        val filename = filename_nn()
+        val filename = PathUtils.path_string_delimit_with_forward_slash(filename_nn())
         Recorder.recordOption(key, filename)
         parse_method_.record_to_macro(parse_key)
     }

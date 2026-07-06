@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.models
 
+import com.coxphysics.terrapins.models.utils.PathUtils
 import java.nio.file.Path
 import java.nio.file.Paths
 import kotlin.io.path.exists
@@ -69,5 +70,10 @@ class PathWrapper private constructor(private var path_: Path?)
     fun to_string(): String
     {
         return path_.to_string_non_null()
+    }
+
+    fun to_forward_slash_delimited_string(): String
+    {
+        return PathUtils.path_string_delimit_with_forward_slash(to_string())
     }
 }

@@ -3,6 +3,7 @@ package com.coxphysics.terrapins.models
 import com.coxphysics.terrapins.models.ij_wrapping.WindowManager
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.utils.IJUtils
+import com.coxphysics.terrapins.models.utils.PathUtils
 import com.coxphysics.terrapins.models.utils.StringUtils
 import ij.ImagePlus
 import ij.plugin.frame.Recorder
@@ -192,7 +193,7 @@ class DiskOrImage private constructor(
 
     private fun macro_string() : String
     {
-        return if (use_disk()) filename_nn() else image_.title_nn()
+        return if (use_disk()) PathUtils.path_string_delimit_with_forward_slash(filename_nn()) else image_.title_nn()
     }
 
     fun record_to_macro_with(key: String)
