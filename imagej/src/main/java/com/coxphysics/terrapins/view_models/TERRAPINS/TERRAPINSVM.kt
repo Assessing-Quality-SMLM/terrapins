@@ -11,9 +11,9 @@ import kotlin.io.path.exists
 class TERRAPINSVM private constructor(private val settings_: Settings)
 {
     private val pre_processing_vm_: PreProcessingVM = PreProcessingVM.from(settings_)
-    private val localisations_equipment_settings_vm_: EquipmentSettingsVM = EquipmentSettingsVM.from(settings_.localisation_settings().equipment())
+    private val localisations_equipment_settings_vm_: AuxiallySettingsVM = AuxiallySettingsVM.from(settings_.localisation_settings().equipment(), settings_.localisation_settings().hawkman_settings())
     private val localisation_vm_ : LocalisationVM = LocalisationVM.from(settings_.localisation_settings())
-    private val images__equipment_settings_vm_: EquipmentSettingsVM = EquipmentSettingsVM.from(settings_.images_settings().equipment_settings())
+    private val images__equipment_settings_vm_: AuxiallySettingsVM = AuxiallySettingsVM.from(settings_.images_settings().equipment_settings(), settings_.images_settings().hawkwman_settings())
     private val images_vm_ : ImagesVM = ImagesVM.from(settings_.images_settings())
     private val working_directory_vm_: PathSelectorVM = PathSelectorVM.with_directory_path_and_title("Working Directory", settings_.core_settings().working_directory())
     private val settings_vm_: PathSelectorVM = PathSelectorVM.with_path_and_title("Settings File", settings_.settings_file())
@@ -63,7 +63,7 @@ class TERRAPINSVM private constructor(private val settings_: Settings)
         return pre_processing_vm_
     }
 
-    fun localisation_equipment_settings_vm(): EquipmentSettingsVM
+    fun localisation_equipment_settings_vm(): AuxiallySettingsVM
     {
         return localisations_equipment_settings_vm_
     }
@@ -78,7 +78,7 @@ class TERRAPINSVM private constructor(private val settings_: Settings)
         return localisation_vm_.squirrel_inputs_vm()
     }
 
-    fun images_equipment_settings_vm(): EquipmentSettingsVM
+    fun images_equipment_settings_vm(): AuxiallySettingsVM
     {
         return images__equipment_settings_vm_
     }
