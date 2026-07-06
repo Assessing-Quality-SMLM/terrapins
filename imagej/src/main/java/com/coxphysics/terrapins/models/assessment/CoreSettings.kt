@@ -96,8 +96,8 @@ class CoreSettings private constructor(
 
     fun record_to_macro()
     {
-        Recorder.recordOption(CORE_SETTINGS_WORKING_DIRECTORY, working_directory_.to_string())
+        Recorder.recordOption(CORE_SETTINGS_WORKING_DIRECTORY, working_directory_.to_forward_slash_delimited_string())
         if(settings_file_.has_data())
-            Recorder.recordOption(CORE_SETTINGS_SETTINGS_FILE, settings_file_.to_string())
+            Recorder.recordOption(CORE_SETTINGS_SETTINGS_FILE, settings_file_.to_forward_slash_delimited_string())
     }
 }
