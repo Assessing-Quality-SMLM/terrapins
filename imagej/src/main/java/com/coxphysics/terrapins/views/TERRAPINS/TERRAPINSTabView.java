@@ -65,8 +65,8 @@ public class TERRAPINSTabView extends JFrame {
     private LocalisationView localisations_ctrl_;
     private ImagesView images_ctrl_;
     private PathSelectorView settings_view_;
-    private EqupimentSettingsView localisation_equipment_view_;
-    private EqupimentSettingsView images_equipment_view_;
+    private AuxillarySettingsView localisation_equipment_view_;
+    private AuxillarySettingsView images_equipment_view_;
     private JButton localistations_run_btn_;
     private JButton images_run_btn_;
     private SquirrelInputs localisations_squirrel_inputs_view_;
@@ -81,7 +81,8 @@ public class TERRAPINSTabView extends JFrame {
 
     private TERRAPINSVM view_model_;
 
-    private TERRAPINSTabView() {
+    private TERRAPINSTabView()
+    {
         super("TERRAPINS");
         add(root_);
         localistations_run_btn_.addActionListener(ActionableListener.from(this, TERRAPINSTabView::run_localisations));
@@ -165,7 +166,7 @@ public class TERRAPINSTabView extends JFrame {
         localisation_panel_ = new JPanel();
         localisation_panel_.setLayout(new GridLayoutManager(5, 1, new Insets(5, 5, 5, 5), -1, -1));
         tab_pane_.addTab("Localisation Workflow", localisation_panel_);
-        localisation_equipment_view_ = new EqupimentSettingsView();
+        localisation_equipment_view_ = new AuxillarySettingsView();
         localisation_panel_.add(localisation_equipment_view_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         localisation_panel_.add(spacer1, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
@@ -183,7 +184,7 @@ public class TERRAPINSTabView extends JFrame {
         images_panel_.add(images_ctrl_.$$$getRootComponent$$$(), new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
         images_panel_.add(spacer2, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        images_equipment_view_ = new EqupimentSettingsView();
+        images_equipment_view_ = new AuxillarySettingsView();
         images_panel_.add(images_equipment_view_.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         images_run_btn_ = new JButton();
         images_run_btn_.setText("Run");
