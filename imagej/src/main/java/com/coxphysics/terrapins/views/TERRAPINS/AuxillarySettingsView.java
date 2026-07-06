@@ -12,7 +12,8 @@ import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.util.Locale;
 
-public class EqupimentSettingsView {
+public class AuxillarySettingsView
+{
     private JPanel root_;
     private JTextField camera_pixel_size_nm_field_;
     private JLabel camera_pixel_size_lbl_;
@@ -23,63 +24,91 @@ public class EqupimentSettingsView {
     private JLabel camera_pixel_size_info_;
     private JLabel psf_info_;
     private JLabel mag_info_;
+    private JLabel hawkman_n_levels_lbl_;
+    private JTextField hawkman_n_levels_field_;
+    private JLabel hawkman_n_levels_info_;
 
     private AuxiallySettingsVM view_model_ = AuxiallySettingsVM.default_();
 
-    public EqupimentSettingsView() {
-        camera_pixel_size_nm_field_.getDocument().addDocumentListener(ActionableDocumentListener.from(this, EqupimentSettingsView::update_camera_pixel_size));
-        fwhm_field_.getDocument().addDocumentListener(ActionableDocumentListener.from(this, EqupimentSettingsView::update_instrument_psf_fwhm));
-        magnification_field_.getDocument().addDocumentListener(ActionableDocumentListener.from(this, EqupimentSettingsView::update_magnification));
+    public AuxillarySettingsView()
+    {
+        camera_pixel_size_nm_field_.getDocument().addDocumentListener(ActionableDocumentListener.from(this, AuxillarySettingsView::update_camera_pixel_size));
+        fwhm_field_.getDocument().addDocumentListener(ActionableDocumentListener.from(this, AuxillarySettingsView::update_instrument_psf_fwhm));
+        magnification_field_.getDocument().addDocumentListener(ActionableDocumentListener.from(this, AuxillarySettingsView::update_magnification));
+        hawkman_n_levels_field_.getDocument().addDocumentListener(ActionableDocumentListener.from(this, AuxillarySettingsView::update_hawkman_n_levels));
     }
 
-    private static EqupimentSettingsView from(AuxiallySettingsVM view_model) {
-        EqupimentSettingsView view = new EqupimentSettingsView();
+    private static AuxillarySettingsView from(AuxiallySettingsVM view_model)
+    {
+        AuxillarySettingsView view = new AuxillarySettingsView();
         view.set_view_model(view_model);
         return view;
     }
 
-    public void set_view_model(AuxiallySettingsVM view_model) {
+    public void set_view_model(AuxiallySettingsVM view_model)
+    {
         view_model_ = view_model;
         populate_fields();
     }
 
-    private void populate_fields() {
+    private void populate_fields()
+    {
         camera_pixel_size_nm_field_.setText(String.valueOf(view_model_.camera_pixel_size_nm()));
         fwhm_field_.setText(String.valueOf(view_model_.instrument_psf_fwhm_nm()));
         magnification_field_.setText(String.valueOf(view_model_.magnification()));
+        hawkman_n_levels_field_.setText(String.valueOf(view_model_.hawkman_n_levels()));
     }
 
-    public void update_camera_pixel_size() {
+    public void update_camera_pixel_size()
+    {
         String new_value = camera_pixel_size_nm_field_.getText();
         boolean ok = view_model_.set_camera_pixel_size_nm(new_value);
         set_camera_pixel_size_bg_colour(ok);
     }
 
-    private void set_camera_pixel_size_bg_colour(boolean ok) {
+    private void set_camera_pixel_size_bg_colour(boolean ok)
+    {
         Color background_colour = ok ? view_model_.default_colour() : view_model_.error_colour();
         camera_pixel_size_nm_field_.setBackground(background_colour);
     }
 
-    public void update_instrument_psf_fwhm() {
+    public void update_instrument_psf_fwhm()
+    {
         String new_value = fwhm_field_.getText();
         boolean ok = view_model_.set_instrument_psf_fwhm_nm(new_value);
         set_fwhm_bg_colour(ok);
     }
 
-    private void set_fwhm_bg_colour(boolean ok) {
+    private void set_fwhm_bg_colour(boolean ok)
+    {
         Color background_colour = ok ? view_model_.default_colour() : view_model_.error_colour();
         fwhm_field_.setBackground(background_colour);
     }
 
-    public void update_magnification() {
+    public void update_magnification()
+    {
         String new_value = magnification_field_.getText();
         boolean ok = view_model_.set_magnification(new_value);
         set_magnification_colour(ok);
     }
 
-    private void set_magnification_colour(boolean ok) {
+    private void set_magnification_colour(boolean ok)
+    {
         Color background_colour = ok ? view_model_.default_colour() : view_model_.error_colour();
         magnification_field_.setBackground(background_colour);
+    }
+
+    public void update_hawkman_n_levels()
+    {
+        String new_value = hawkman_n_levels_field_.getText();
+        boolean ok = view_model_.set_hawkman_n_levels(new_value);
+        set_hawkman_n_levels_colour(ok);
+    }
+
+    private void set_hawkman_n_levels_colour(boolean ok)
+    {
+        Color background_colour = ok ? view_model_.default_colour() : view_model_.error_colour();
+        hawkman_n_levels_field_.setBackground(background_colour);
     }
 
     {
@@ -96,16 +125,17 @@ public class EqupimentSettingsView {
      *
      * @noinspection ALL
      */
-    private void $$$setupUI$$$() {
+    private void $$$setupUI$$$()
+    {
         root_ = new JPanel();
-        root_.setLayout(new GridLayoutManager(4, 4, new Insets(0, 0, 0, 0), -1, -1));
+        root_.setLayout(new GridLayoutManager(5, 4, new Insets(0, 0, 0, 0), -1, -1));
         camera_pixel_size_lbl_ = new JLabel();
         camera_pixel_size_lbl_.setText("Camera Pixel Size (nm)");
         root_.add(camera_pixel_size_lbl_, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         root_.add(spacer1, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
-        root_.add(spacer2, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        root_.add(spacer2, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         fwhm_lbl_ = new JLabel();
         fwhm_lbl_.setText("Instrument psf FWHM (nm)");
         root_.add(fwhm_lbl_, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -133,21 +163,38 @@ public class EqupimentSettingsView {
         if (mag_info_Font != null) mag_info_.setFont(mag_info_Font);
         mag_info_.setText("The up sampling ratio desired. ie, how many times smaller (length) a reconstruction pixel is than a camera pixel ");
         root_.add(mag_info_, new GridConstraints(2, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        hawkman_n_levels_lbl_ = new JLabel();
+        hawkman_n_levels_lbl_.setText("HAWKMAN N Levels");
+        root_.add(hawkman_n_levels_lbl_, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        hawkman_n_levels_field_ = new JTextField();
+        root_.add(hawkman_n_levels_field_, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
+        hawkman_n_levels_info_ = new JLabel();
+        Font hawkman_n_levels_info_Font = this.$$$getFont$$$(null, Font.ITALIC, -1, hawkman_n_levels_info_.getFont());
+        if (hawkman_n_levels_info_Font != null) hawkman_n_levels_info_.setFont(hawkman_n_levels_info_Font);
+        hawkman_n_levels_info_.setText("Number of levels to use for HAWKMAN. Each level is run on a separate thread");
+        root_.add(hawkman_n_levels_info_, new GridConstraints(3, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
      * @noinspection ALL
      */
-    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont)
+    {
         if (currentFont == null) return null;
         String resultName;
-        if (fontName == null) {
+        if (fontName == null)
+        {
             resultName = currentFont.getName();
-        } else {
+        }
+        else
+        {
             Font testFont = new Font(fontName, Font.PLAIN, 10);
-            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+            if (testFont.canDisplay('a') && testFont.canDisplay('1'))
+            {
                 resultName = fontName;
-            } else {
+            }
+            else
+            {
                 resultName = currentFont.getName();
             }
         }
@@ -160,7 +207,8 @@ public class EqupimentSettingsView {
     /**
      * @noinspection ALL
      */
-    public JComponent $$$getRootComponent$$$() {
+    public JComponent $$$getRootComponent$$$()
+    {
         return root_;
     }
 

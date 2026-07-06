@@ -1,10 +1,12 @@
 package com.coxphysics.terrapins.view_models.TERRAPINS
 
+import com.coxphysics.terrapins.models.assessment.CoreSettings
+import com.coxphysics.terrapins.models.assessment.HAWKMANSettings
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import java.awt.Color
 import javax.swing.JTextField
 
-class EquipmentSettingsVM private constructor(private val model_: EquipmentSettings)
+class AuxiallySettingsVM private constructor(private val model_: EquipmentSettings, private val hawkman_settings: HAWKMANSettings)
 {
     private val default_colour_: Color = JTextField().background
     private val error_colour_ : Color = Color.RED
@@ -12,20 +14,20 @@ class EquipmentSettingsVM private constructor(private val model_: EquipmentSetti
     companion object
     {
         @JvmStatic
-        fun from(model: EquipmentSettings): EquipmentSettingsVM
+        fun from(model: EquipmentSettings, hawkman_settings: HAWKMANSettings): AuxiallySettingsVM
         {
-            return EquipmentSettingsVM(model)
+            return AuxiallySettingsVM(model, hawkman_settings)
         }
 
         @JvmStatic
-        fun default(): EquipmentSettingsVM
+        fun default(): AuxiallySettingsVM
         {
-            return EquipmentSettingsVM(EquipmentSettings.default())
+            return AuxiallySettingsVM(EquipmentSettings.default(), HAWKMANSettings.default())
         }
 
         // for Java
         @JvmStatic
-        fun default_(): EquipmentSettingsVM
+        fun default_(): AuxiallySettingsVM
         {
             return default()
         }
@@ -70,6 +72,20 @@ class EquipmentSettingsVM private constructor(private val model_: EquipmentSetti
         if (new_value == null)
             return false
         model_.set_magnification(new_value)
+        return true
+    }
+
+    fun hawkman_n_levels(): Int
+    {
+        return hawkman_settings.n_levels()
+    }
+
+    fun set_hawkman_n_levels(value: String): Boolean
+    {
+        val new_value = value.toIntOrNull()
+        if (new_value == null)
+            return false
+        hawkman_settings.set_n_levels(new_value)
         return true
     }
 
