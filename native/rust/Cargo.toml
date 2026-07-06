@@ -1,0 +1,12 @@
+[workspace]
+resolver = "2"
+members = [
+    "assessment",
+    "smlm-qa",
+    "frc_this",
+    "smlm-frc",
+    "f2i",
+    "smlm-renderer",
+    "split",
+    "smlm-locs",
+]

@@ -1,0 +1,1 @@
+pub const DEFAULT_NM_PER_PIXEL : f64 = 20.0;

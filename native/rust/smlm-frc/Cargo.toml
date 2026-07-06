@@ -1,0 +1,34 @@
+[package]
+name = "smlm-frc"
+version = "0.9.0"
+edition = "2021"
+homepage = "https://github.com/Assessing-Quality-SMLM/frc"
+repository = "https://github.com/Assessing-Quality-SMLM/frc"
+description = "Fourier Ring Correlation (FRC) calculation for smlm"
+keywords = ["smlm", "FRC", "Fourier-ring-correl"] # keywords must be less than 20 characters
+license = "GPL-3.0-only"
+readme = "README.md"
+
+[dependencies]
+gnuplot = { "version" = "0.0.43", optional = true}
+
+# this typically needs to go in lock step with the renderer which feeds its imp output into here
+# imp = {"path" = "../../imp/imp"}
+# imp = {"git" = "https://github.com/Assessing-Quality-SMLM/imp.git", tag="imp_0.4.0"}
+smlm-imp = "0.5"
+
+# locs = {"path" = "../../localisations/locs"}
+# locs = {"git" = "https://github.com/Assessing-Quality-SMLM/localisations.git", tag="locs_0.11.0"}
+smlm-locs = "0.12"
+
+nalgebra = "0.33"
+num-traits = "0.2"
+rand = "0.8"
+
+# sig_proc = {"path" = "../../signal_processing/sig_proc"}
+# sig_proc = {"git" = "https://github.com/Assessing-Quality-SMLM/signal_processing.git", tag="sig_proc_v0.1.0"}
+smlm-sig-proc = "0.3"
+
+[features]
+plot = ["dep:gnuplot", "smlm-imp/plot"]
+# default=["plot"]

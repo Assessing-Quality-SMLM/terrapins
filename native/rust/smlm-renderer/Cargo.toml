@@ -1,0 +1,14 @@
+[package]
+name = "smlm-renderer"
+version = "0.13.0"
+edition = "2021"
+description = "Render a list of localisations with a gaussian based on the uncertainty"
+keywords = ["smlm", "renderer"]
+license = "GPL-3.0-only"
+readme = "README.md"
+
+[dependencies]
+smlm-imp = "0.5"
+smlm-locs = {path = "../smlm-locs"}
+
+statrs = "0.18"
