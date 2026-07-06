@@ -1,7 +1,7 @@
 package com.coxphysics.terrapins.views.TERRAPINS;
 
 import com.coxphysics.terrapins.models.utils.ActionableDocumentListener;
-import com.coxphysics.terrapins.view_models.TERRAPINS.EquipmentSettingsVM;
+import com.coxphysics.terrapins.view_models.TERRAPINS.AuxiallySettingsVM;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -24,7 +24,7 @@ public class EqupimentSettingsView {
     private JLabel psf_info_;
     private JLabel mag_info_;
 
-    private EquipmentSettingsVM view_model_ = EquipmentSettingsVM.default_();
+    private AuxiallySettingsVM view_model_ = AuxiallySettingsVM.default_();
 
     public EqupimentSettingsView() {
         camera_pixel_size_nm_field_.getDocument().addDocumentListener(ActionableDocumentListener.from(this, EqupimentSettingsView::update_camera_pixel_size));
@@ -32,13 +32,13 @@ public class EqupimentSettingsView {
         magnification_field_.getDocument().addDocumentListener(ActionableDocumentListener.from(this, EqupimentSettingsView::update_magnification));
     }
 
-    private static EqupimentSettingsView from(EquipmentSettingsVM view_model) {
+    private static EqupimentSettingsView from(AuxiallySettingsVM view_model) {
         EqupimentSettingsView view = new EqupimentSettingsView();
         view.set_view_model(view_model);
         return view;
     }
 
-    public void set_view_model(EquipmentSettingsVM view_model) {
+    public void set_view_model(AuxiallySettingsVM view_model) {
         view_model_ = view_model;
         populate_fields();
     }
