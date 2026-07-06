@@ -8,6 +8,7 @@ import sys
 
 
 PROJECT = "TERRAPINS"
+ARTIFACT_NAME = f"{PROJECT}_plugin"
 
 
 def use_shell() -> bool:
@@ -49,8 +50,8 @@ def run(dry_run: bool) -> bool:
         return False
 
     print("Deploying")
-    new_artifact = _build.dependency_build_of(PROJECT, new_version_number)
-    deployment_location = _build.image_j_deployment_path(PROJECT, new_version_number)
+    new_artifact = _build.dependency_build_of(ARTIFACT_NAME, new_version_number)
+    deployment_location = _build.image_j_deployment_path(ARTIFACT_NAME, new_version_number)
     fs.copy_file(new_artifact, deployment_location)
 
     print("Committing changes")
