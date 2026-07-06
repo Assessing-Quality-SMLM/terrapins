@@ -45,5 +45,8 @@ const val IMAGES_SETTINGS_DRIFT_SPLIT_2 = "drift_split_2"
 const val IMAGES_SETTINGS_ZIP_SPLIT_1 = "zip_split_1"
 const val IMAGES_SETTINGS_ZIP_SPLIT_2 = "zip_split_2"
 
+// HAWKMAN SETTINGS
+const val HAWKMAN_SETTINGS_N_LEVELS = "hman_levels"
+
 // SQUIRREL SETTINGS
 const val SQUIRREL_PERFORM_REGISTRATION = "register"

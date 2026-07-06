@@ -1,22 +1,19 @@
 package com.coxphysics.terrapins.models.assessment
 
-import com.coxphysics.terrapins.models.*
+import com.coxphysics.terrapins.models.PathWrapper
 import com.coxphysics.terrapins.models.ij_wrapping.WindowManager
 import com.coxphysics.terrapins.models.macros.MacroOptions
-import com.coxphysics.terrapins.models.processing.WidefieldGenerator
+import com.coxphysics.terrapins.models.to_path_or_default
 import com.coxphysics.terrapins.models.utils.FsUtils
-import com.coxphysics.terrapins.plugins.CORE_SETTINGS_IMAGE_STACK
 import com.coxphysics.terrapins.plugins.CORE_SETTINGS_SETTINGS_FILE
-import com.coxphysics.terrapins.plugins.CORE_SETTINGS_WIDEFIELD
 import com.coxphysics.terrapins.plugins.CORE_SETTINGS_WORKING_DIRECTORY
-import ij.ImagePlus
 import ij.Prefs
 import ij.plugin.frame.Recorder
 import java.nio.file.Path
 
 class CoreSettings private constructor(
     private var working_directory_: PathWrapper,
-    private var settings_file_: PathWrapper
+    private var settings_file_: PathWrapper,
     )
 {
     private var n_threads_ = Prefs.getThreads();

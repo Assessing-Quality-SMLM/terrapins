@@ -89,7 +89,7 @@ public class TERRAPINSView extends JDialog {
     private ImagesView images_ctrl_;
     private JButton run_btn_;
     private JButton cancel_btn_;
-    private EqupimentSettingsView equipment_settings_ctrl_;
+    private AuxillarySettingsView equipment_settings_ctrl_;
 
     private TERRAPINSView() {
         super((Dialog) null, "TERRAPINS", true);
@@ -203,7 +203,7 @@ public class TERRAPINSView extends JDialog {
         cancel_btn_ = new JButton();
         cancel_btn_.setText("Cancel");
         root_.add(cancel_btn_, new GridConstraints(7, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        equipment_settings_ctrl_ = new EqupimentSettingsView();
+        equipment_settings_ctrl_ = new AuxillarySettingsView();
         root_.add(equipment_settings_ctrl_.$$$getRootComponent$$$(), new GridConstraints(3, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
     }
 

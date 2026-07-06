@@ -2,6 +2,7 @@ package com.coxphysics.terrapins.models.assessment.localisation
 
 import com.coxphysics.terrapins.models.DiskOrImage
 import com.coxphysics.terrapins.models.assessment.CoreSettings
+import com.coxphysics.terrapins.models.assessment.HAWKMANSettings
 import com.coxphysics.terrapins.models.assessment.SquirrelInputs
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import com.coxphysics.terrapins.models.ij_wrapping.WindowManager
@@ -11,7 +12,6 @@ import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_HAWK_LOCALISATIONS
 import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_HAWK_LOCALISATIONS_PARSER
 import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_RAW_LOCALISATIONS
 import com.coxphysics.terrapins.plugins.LOCALISATION_SETTINGS_RAW_LOCALISATIONS_PARSER
-import com.coxphysics.terrapins.view_models.TERRAPINS.SquirrelInputsVM
 import java.nio.file.Path
 
 class AssessmentSettings private constructor(
@@ -19,6 +19,7 @@ class AssessmentSettings private constructor(
 )
 {
     private var equipment_ = EquipmentSettings.default()
+    private var hawkman_settings_ = HAWKMANSettings.default()
     private var localisation_file_ = LocalisationFile.default()
     private var hawk_localisation_file_ = LocalisationFile.default()
     private var squirrel_inputs_ = SquirrelInputs.default()
@@ -60,6 +61,7 @@ class AssessmentSettings private constructor(
 
 
             val settings = default()
+            settings.hawkman_settings_ = HAWKMANSettings.from_macro_options(options)
             settings.squirrel_inputs_ = SquirrelInputs.from_macro_options(options, window_manager)
             settings.core_settings_ = core_settings
             settings.equipment_ = equipment_settings
@@ -102,6 +104,11 @@ class AssessmentSettings private constructor(
     fun set_settings_file(value: String)
     {
         core_settings_.set_settings_file(value)
+    }
+
+    fun hawkman_settings(): HAWKMANSettings
+    {
+        return hawkman_settings_
     }
 
     fun squirrel_inputs(): SquirrelInputs
@@ -216,6 +223,7 @@ class AssessmentSettings private constructor(
         equipment_.record_to_macro()
         localisation_file_.record_to_macro(LOCALISATION_SETTINGS_RAW_LOCALISATIONS, LOCALISATION_SETTINGS_RAW_LOCALISATIONS_PARSER)
         hawk_localisation_file_.record_to_macro(LOCALISATION_SETTINGS_HAWK_LOCALISATIONS, LOCALISATION_SETTINGS_HAWK_LOCALISATIONS_PARSER)
+        hawkman_settings_.record_to_macro()
         squirrel_inputs_.record_to_macro()
     }
 }

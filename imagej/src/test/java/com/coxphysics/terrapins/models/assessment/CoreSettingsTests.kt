@@ -1,12 +1,8 @@
 package com.coxphysics.terrapins.models.assessment
 
-import com.coxphysics.terrapins.models.DiskOrImage
-import com.coxphysics.terrapins.models.Image
 import com.coxphysics.terrapins.models.assessment.images.Settings
 import com.coxphysics.terrapins.models.macros.MacroOptions
-import com.coxphysics.terrapins.plugins.CORE_SETTINGS_IMAGE_STACK
 import com.coxphysics.terrapins.plugins.CORE_SETTINGS_SETTINGS_FILE
-import com.coxphysics.terrapins.plugins.CORE_SETTINGS_WIDEFIELD
 import com.coxphysics.terrapins.plugins.CORE_SETTINGS_WORKING_DIRECTORY
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
