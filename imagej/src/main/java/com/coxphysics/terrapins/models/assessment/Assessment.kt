@@ -85,7 +85,7 @@ class Assessment private constructor(private val exe_location_: Path, private va
     fun get_images_arguments(adjusted_squirrel_inputs: SquirrelInputs, images: ImagesSettings, data_name: String?): List<String>
     {
         val commands = get_commands()
-        add_core_commands(images.core_settings(), adjusted_squirrel_inputs, data_name, commands)
+        add_core_commands(images.core_settings(), images.hawkwman_settings(), adjusted_squirrel_inputs, data_name, commands)
         add_equipment(images.equipment_settings(), commands)
         add_image_commands_to(commands, images)
         return commands
@@ -191,7 +191,7 @@ class Assessment private constructor(private val exe_location_: Path, private va
     fun get_localisations_arguments(adjusted_squirrel_inputs: SquirrelInputs, localisations: AssessmentSettings, data_name: String?): List<String>
     {
         val commands = get_commands()
-        add_core_commands(localisations.core_settings(), adjusted_squirrel_inputs, data_name, commands)
+        add_core_commands(localisations.core_settings(), localisations.hawkman_settings(), adjusted_squirrel_inputs, data_name, commands)
         add_equipment(localisations.equipment(), commands)
         add_localisations_commands(localisations, commands)
         return commands
@@ -251,7 +251,7 @@ class Assessment private constructor(private val exe_location_: Path, private va
 //      --image-stack <IMAGE_STACK>  Image stack file
 //      --metrics-only               Only generate metric file
 //      --extract                    Extract Data to directory
-    private fun add_core_commands(settings: CoreSettings, squirrel_inputs: SquirrelInputs, data_name: String?, commands: MutableList<String>) {
+    private fun add_core_commands(settings: CoreSettings, hawkman_settings: HAWKMANSettings, squirrel_inputs: SquirrelInputs, data_name: String?, commands: MutableList<String>) {
     commands.add("--working-directory")
     var working_directory = settings.working_directory_path()
     if (working_directory == null)
@@ -280,7 +280,7 @@ class Assessment private constructor(private val exe_location_: Path, private va
     }
 
     commands.add("--hawkman-n-levels")
-    commands.add(settings.hawkman_n_levels().toString())
+    commands.add(hawkman_settings.n_levels().toString())
 
     commands.add("--register")
     commands.add(squirrel_inputs.perform_registration().toString())
