@@ -121,6 +121,7 @@ clone_repo https://github.com/DIPlib/diplib.git "$DIPLIB_SRC"
 
 # --- 5. C++ binaries (hawkman, squirrel) -------------------------------------
 echo "==> Configuring C++ tools (CMake, $BUILD_TYPE)"
+rm -rf "$CPP_BUILD_DIR"
 cmake -S "$REPO_ROOT/native/cpp/tools" -B "$CPP_BUILD_DIR" -G Ninja \
 	-DCMAKE_CXX_COMPILER="$CXX" \
 	-DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
