@@ -30,8 +30,7 @@
 #
 set -euo pipefail
 
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-cd "$REPO_ROOT"
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
 BUILD_TYPE="${BUILD_TYPE:-Release}"
 OPENCV_VERSION="${OPENCV_VERSION:-4.12.0}"
@@ -40,25 +39,26 @@ DIPLIB_VERSION="${DIPLIB_VERSION:-3.6.0}"
 OUTPUT_DIR="${OUTPUT_DIR:-$REPO_ROOT/native/dist/linux}"
 CXX="${CXX:-c++}"
 
-DEPS_DIR="$REPO_ROOT/native/.deps"
+# absolute: fed to CMake's -DDIPLIB_DIR / install prefix, which don't take cwd-relative paths
+DEPS_DIR="$PWD/native/.deps"
 PREFIX="$DEPS_DIR/prefix"          # install prefix for OpenCV + NLopt
-DIPLIB_SRC="$DEPS_DIR/diplib-$DIPLIB_VERSION"
-CPP_BUILD_DIR="$REPO_ROOT/native/cpp/tools/build"
-RUST_MANIFEST="$REPO_ROOT/native/rust/Cargo.toml"
-RUST_TARGET_DIR="$REPO_ROOT/native/rust/target/release"
+DIPLIB_SRC="$DEPS_DIR/diplib"
+CPP_BUILD_DIR="native/cpp/tools/build"
+RUST_MANIFEST="native/rust/Cargo.toml"
+RUST_TARGET_DIR="native/rust/target/release"
 
 
 mkdir -p "$DEPS_DIR" "$PREFIX"
 
 # Clone a repo once (shallow), skipping if already present.
 clone_repo() {
-	local url="$1" dest="$2"
+	local url="$1" tag="$2" dest="$3"
 	if [ -d "$dest/.git" ]; then
 		echo "==> Reusing source: $dest"
 	else
-		echo "==> Fetching $(basename "$dest")"
+		echo "==> Fetching $(basename "$dest") ($tag)"
 		rm -rf "$dest"
-		git clone --depth 1 "$url" "$dest"
+		git clone --depth 1 --branch "$tag" "$url" "$dest"
 	fi
 }
 
@@ -67,10 +67,10 @@ echo "==> Building Rust workspace (release)"
 cargo build --release --manifest-path "$RUST_MANIFEST"
 
 # --- 2. OpenCV (static, TIFF-only, core/imgproc/imgcodecs) -------------------
-OPENCV_SRC="$DEPS_DIR/opencv-$OPENCV_VERSION"
+OPENCV_SRC="$DEPS_DIR/opencv"
 if [ ! -f "$PREFIX/lib/cmake/opencv4/OpenCVConfig.cmake" ] && \
    [ ! -f "$PREFIX/lib64/cmake/opencv4/OpenCVConfig.cmake" ]; then
-	clone_repo https://github.com/opencv/opencv.git "$OPENCV_SRC"
+	clone_repo https://github.com/opencv/opencv.git "$OPENCV_VERSION" "$OPENCV_SRC"
 	echo "==> Building OpenCV $OPENCV_VERSION"
 	cmake -S "$OPENCV_SRC" -B "$OPENCV_SRC/build" -G Ninja \
 		-DCMAKE_CXX_COMPILER="$CXX" \
@@ -101,10 +101,10 @@ else
 fi
 
 # --- 3. NLopt (static) -------------------------------------------------------
-NLOPT_SRC="$DEPS_DIR/nlopt-$NLOPT_VERSION"
+NLOPT_SRC="$DEPS_DIR/nlopt"
 if [ ! -f "$PREFIX/lib/cmake/nlopt/NLoptConfig.cmake" ] && \
    [ ! -f "$PREFIX/lib64/cmake/nlopt/NLoptConfig.cmake" ]; then
-	clone_repo https://github.com/stevengj/nlopt.git "$NLOPT_SRC"
+	clone_repo https://github.com/stevengj/nlopt.git "$NLOPT_VERSION" "$NLOPT_SRC"
 	echo "==> Building NLopt $NLOPT_VERSION"
 	cmake -S "$NLOPT_SRC" -B "$NLOPT_SRC/build" -G Ninja \
 		-DCMAKE_CXX_COMPILER="$CXX" \
@@ -117,12 +117,12 @@ else
 fi
 
 # --- 4. DIPlib source (built by the tools CMake via add_subdirectory) --------
-clone_repo https://github.com/DIPlib/diplib.git "$DIPLIB_SRC"
+clone_repo https://github.com/DIPlib/diplib.git "$DIPLIB_VERSION" "$DIPLIB_SRC"
 
 # --- 5. C++ binaries (hawkman, squirrel) -------------------------------------
 echo "==> Configuring C++ tools (CMake, $BUILD_TYPE)"
 rm -rf "$CPP_BUILD_DIR"
-cmake -S "$REPO_ROOT/native/cpp/tools" -B "$CPP_BUILD_DIR" -G Ninja \
+cmake -S native/cpp/tools -B "$CPP_BUILD_DIR" -G Ninja \
 	-DCMAKE_CXX_COMPILER="$CXX" \
 	-DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
 	-DCMAKE_PREFIX_PATH="$PREFIX" \
