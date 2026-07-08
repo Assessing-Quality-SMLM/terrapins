@@ -1,0 +1,25 @@
+[package]
+name = "smlm-imp"
+version = "0.5.0"
+edition = "2021"
+homepage = "https://github.com/Assessing-Quality-SMLM/imp"
+repository = "https://github.com/Assessing-Quality-SMLM/imp"
+description = "Image processing library with a focus on smlm and super resolution microscopy methods"
+keywords = ["smlm", "image-processing"]
+license = "GPL-3.0-only"
+readme = "README.md"
+
+[dependencies]
+# sig_proc = {"path" = "../../signal_processing/sig_proc", default-features=false}
+# sig_proc = {"git" = "https://github.com/Assessing-Quality-SMLM/signal_processing.git", tag="sig_proc_v0.1.0", default-features=false}
+smlm-sig-proc = {path = "../smlm-sig-proc"}
+
+# tiff_wrap = {"path" = "../../tiff_wrap/tiff_wrap"}
+# tiff_wrap = {"git" = "https://github.com/Assessing-Quality-SMLM/tiff_wrap.git", tag="tiff_wrap_0.3.0"}
+smlm-tiff = {path = "../smlm-tiff"}
+
+gnuplot = { "version" = "0.0.43", optional = true}
+
+[features]
+plot = ["dep:gnuplot"]
+# default=["plot"]

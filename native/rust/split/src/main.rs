@@ -1,5 +1,5 @@
 extern crate clap;
-extern crate locs;
+extern crate smlm_locs;
 
 use smlm_locs::io::{ParseMethod};
 use smlm_locs::split;

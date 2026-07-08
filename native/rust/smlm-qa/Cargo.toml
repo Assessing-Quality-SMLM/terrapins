@@ -8,7 +8,7 @@ license = "GPL-3.0-only"
 readme = "README.md"
 
 [dependencies]
-smlm-imp = "0.5"
+smlm-imp = {path = "../smlm-imp"}
 smlm-locs = {path = "../smlm-locs"}
 smlm-renderer = {path = "../smlm-renderer"}
 smlm-frc = {path = "../smlm-frc"}
@@ -16,7 +16,7 @@ smlm-frc = {path = "../smlm-frc"}
 serde = { version = "1", features=["derive"]}
 serde_json = { version = "1"}
 
-smlm-tiff = "0.8"
+smlm-tiff = {path = "../smlm-tiff"}
 
 time = {version = "0.3", features=["formatting"]}
 walkdir = "2"

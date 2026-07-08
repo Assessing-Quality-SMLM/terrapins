@@ -9,4 +9,7 @@ members = [
     "smlm-renderer",
     "split",
     "smlm-locs",
+    "smlm-tiff",
+    "smlm-imp",
+    "smlm-sig-proc",
 ]
