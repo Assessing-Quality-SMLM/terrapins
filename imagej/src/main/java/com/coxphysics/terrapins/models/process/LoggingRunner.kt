@@ -17,11 +17,16 @@ class LoggingRunner private constructor(
 
     override fun run(builder: ProcessBuilder): Int
     {
+        System.err.println("[TERRAPINS] running: " + builder.command().joinToString(" "))
+        builder.redirectErrorStream(true)   // fold the exe's stderr into what we read/log
         val process = builder.start()
         for (line in StreamUtils.get_lines(process.inputStream))
         {
             logger_.log(line)
+            System.err.println("[TERRAPINS] $line")
         }
-        return process.waitFor()
+        val exit = process.waitFor()
+        System.err.println("[TERRAPINS] exit code: $exit")
+        return exit
     }
 }
