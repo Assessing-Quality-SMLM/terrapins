@@ -96,6 +96,24 @@ if [ ! -f "$PREFIX/lib/cmake/opencv4/OpenCVConfig.cmake" ]; then
 		-DWITH_PROTOBUF=OFF \
 		-DWITH_ADE=OFF \
 		-DWITH_EIGEN=OFF \
+		-DWITH_FFMPEG=OFF \
+		-DWITH_GSTREAMER=OFF \
+		-DWITH_V4L=OFF \
+		-DWITH_1394=OFF \
+		-DWITH_GPHOTO2=OFF \
+		-DWITH_GTK=OFF \
+		-DWITH_QT=OFF \
+		-DWITH_OPENGL=OFF \
+		-DWITH_OPENCL=OFF \
+		-DWITH_IPP=OFF \
+		-DWITH_ITT=OFF \
+		-DWITH_VA=OFF \
+		-DWITH_VA_INTEL=OFF \
+		-DWITH_LAPACK=OFF \
+		-DWITH_TBB=OFF \
+		-DBUILD_JAVA=OFF \
+		-DBUILD_opencv_python3=OFF \
+		-DBUILD_opencv_apps=OFF \
 		-DBUILD_LIST=core,imgproc,imgcodecs
 	ninja -C "$OPENCV_SRC/build" install
 else
