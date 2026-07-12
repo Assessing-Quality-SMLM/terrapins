@@ -13,13 +13,18 @@ set -eu
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
-[ "$(uname -s)" = Linux ] || { echo "only Linux is supported for now" >&2; exit 1; }
+# platform -> (imagej resource subdir, native build script). Windows is TODO.
+case "$(uname -s)" in
+	Linux)  sub=nix ; native=scripts/build-native-linux.sh ;;
+	Darwin) sub=mac ; native=scripts/build-native-macos.sh ;;
+	*) echo "only Linux and macOS are supported (Windows: TODO)" >&2; exit 1 ;;
+esac
 
 # 1. native binaries -> native/build/dist
-scripts/build-native-linux.sh
+"$native"
 
-# 2. stage them where ffi.java loads them from at runtime (nix/bin in the jar)
-res="imagej/src/main/resources/nix/bin"
+# 2. stage them where ffi.java loads them from at runtime (<os>/bin in the jar)
+res="imagej/src/main/resources/$sub/bin"
 rm -rf "$res"
 mkdir -p "$res"
 cp native/build/dist/* "$res/"

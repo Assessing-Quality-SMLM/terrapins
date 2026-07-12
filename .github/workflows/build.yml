@@ -34,11 +34,30 @@ jobs:
           path: native/build/dist/
           if-no-files-found: error
 
+  # Universal (arm64 + x86_64) macOS binaries. Runner has git + rust preinstalled.
+  native-macos:
+    name: Native binaries (macOS universal)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install toolchain
+        run: brew install cmake ninja
+
+      - name: Build native binaries
+        run: scripts/build-native-macos.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: binaries-mac
+          path: native/build/dist/
+          if-no-files-found: error
+
   # Stage each platform's binaries into the plugin resources, then build one jar.
   # Add more platforms by adding native-<os> jobs + a download step per platform.
   jar:
     name: Plugin jar
-    needs: [native-linux]
+    needs: [native-linux, native-macos]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -53,6 +72,12 @@ jobs:
         with:
           name: binaries-linux
           path: imagej/src/main/resources/nix/bin
+
+      - name: Stage macOS binaries into plugin resources
+        uses: actions/download-artifact@v4
+        with:
+          name: binaries-mac
+          path: imagej/src/main/resources/mac/bin
 
       - name: Build jar
         run: mvn -Denforcer.skip -Dmaven.test.skip=true -f imagej/pom.xml install
