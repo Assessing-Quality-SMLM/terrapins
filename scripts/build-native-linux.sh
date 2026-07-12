@@ -28,50 +28,49 @@
 #   DIPLIB_VERSION    DIPlib git tag                (default: 3.6.0)
 #   OUTPUT_DIR        where binaries are collected  (default: native/dist/linux)
 #
-set -euo pipefail
+set -eu
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
-BUILD_TYPE="${BUILD_TYPE:-Release}"
-OPENCV_VERSION="${OPENCV_VERSION:-4.12.0}"
-NLOPT_VERSION="${NLOPT_VERSION:-v2.7.1}"
-DIPLIB_VERSION="${DIPLIB_VERSION:-3.6.0}"
-OUTPUT_DIR="${OUTPUT_DIR:-$REPO_ROOT/native/dist/linux}"
-CXX="${CXX:-c++}"
+: "${BUILD_TYPE:=Release}"
+: "${OPENCV_VERSION:=4.12.0}"
+: "${NLOPT_VERSION:=v2.7.1}"
+: "${DIPLIB_VERSION:=3.6.0}"
+: "${OUTPUT_DIR:=native/dist/linux}"
+: "${CXX:=c++}"
 
-# absolute: fed to CMake's -DDIPLIB_DIR / install prefix, which don't take cwd-relative paths
+# absolute: DIPLIB_SRC feeds CMake's add_subdirectory(${DIPLIB_DIR}), which resolves
+# a relative path against the CMakeLists dir (native/cpp/lib), not our cwd
 DEPS_DIR="$PWD/native/.deps"
 PREFIX="$DEPS_DIR/prefix"          # install prefix for OpenCV + NLopt
 DIPLIB_SRC="$DEPS_DIR/diplib"
 CPP_BUILD_DIR="native/cpp/tools/build"
 RUST_MANIFEST="native/rust/Cargo.toml"
-RUST_TARGET_DIR="native/rust/target/release"
 
 
 mkdir -p "$DEPS_DIR" "$PREFIX"
 
-# Clone a repo once (shallow), skipping if already present.
 clone_repo() {
 	local url="$1" tag="$2" dest="$3"
-	if [ -d "$dest/.git" ]; then
-		echo "==> Reusing source: $dest"
-	else
-		echo "==> Fetching $(basename "$dest") ($tag)"
-		rm -rf "$dest"
-		git clone --depth 1 --branch "$tag" "$url" "$dest"
-	fi
+	echo -e '\n\n----------' "Fetching $(basename "$dest") ($tag)"
+	git init "$dest" # This idempotent
+	git -C "$dest" fetch --depth 1 "$url" "+refs/tags/$tag:refs/tags/$tag"
+	git -C "$dest" checkout "$tag"
 }
 
-# --- 1. Rust binaries --------------------------------------------------------
-echo "==> Building Rust workspace (release)"
+
+yes '' | head -10
+echo "---------------------------------------- Rust build"
 cargo build --release --manifest-path "$RUST_MANIFEST"
 
-# --- 2. OpenCV (static, TIFF-only, core/imgproc/imgcodecs) -------------------
+yes '' | head -10
+echo "---------------------------------------- C++ build"
+# Build a pretty minimal OpenCV
 OPENCV_SRC="$DEPS_DIR/opencv"
-if [ ! -f "$PREFIX/lib/cmake/opencv4/OpenCVConfig.cmake" ] && \
-   [ ! -f "$PREFIX/lib64/cmake/opencv4/OpenCVConfig.cmake" ]; then
+if [ ! -f "$PREFIX/lib/cmake/opencv4/OpenCVConfig.cmake" ]; then
 	clone_repo https://github.com/opencv/opencv.git "$OPENCV_VERSION" "$OPENCV_SRC"
-	echo "==> Building OpenCV $OPENCV_VERSION"
+	yes '' | head -10
+	echo "-------------------- OpenCV"
 	cmake -S "$OPENCV_SRC" -B "$OPENCV_SRC/build" -G Ninja \
 		-DCMAKE_CXX_COMPILER="$CXX" \
 		-DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
@@ -100,12 +99,12 @@ else
 	echo "==> Reusing OpenCV in $PREFIX"
 fi
 
-# --- 3. NLopt (static) -------------------------------------------------------
+# NLOPT
 NLOPT_SRC="$DEPS_DIR/nlopt"
-if [ ! -f "$PREFIX/lib/cmake/nlopt/NLoptConfig.cmake" ] && \
-   [ ! -f "$PREFIX/lib64/cmake/nlopt/NLoptConfig.cmake" ]; then
+if [ ! -f "$PREFIX/lib/cmake/nlopt/NLoptConfig.cmake" ]; then
 	clone_repo https://github.com/stevengj/nlopt.git "$NLOPT_VERSION" "$NLOPT_SRC"
-	echo "==> Building NLopt $NLOPT_VERSION"
+	yes '' | head -10
+	echo "-------------------- NLOPT"
 	cmake -S "$NLOPT_SRC" -B "$NLOPT_SRC/build" -G Ninja \
 		-DCMAKE_CXX_COMPILER="$CXX" \
 		-DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
@@ -116,11 +115,13 @@ else
 	echo "==> Reusing NLopt in $PREFIX"
 fi
 
-# --- 4. DIPlib source (built by the tools CMake via add_subdirectory) --------
+# Just check out diplib: current instructions are to include as a subdirectory
+# rather than a library. Not sure why.
 clone_repo https://github.com/DIPlib/diplib.git "$DIPLIB_VERSION" "$DIPLIB_SRC"
 
-# --- 5. C++ binaries (hawkman, squirrel) -------------------------------------
-echo "==> Configuring C++ tools (CMake, $BUILD_TYPE)"
+# Build hawkman and squirrel
+yes '' | head -10
+echo "-------------------- NLOPT"
 rm -rf "$CPP_BUILD_DIR"
 cmake -S native/cpp/tools -B "$CPP_BUILD_DIR" -G Ninja \
 	-DCMAKE_CXX_COMPILER="$CXX" \
@@ -137,19 +138,7 @@ cmake -S native/cpp/tools -B "$CPP_BUILD_DIR" -G Ninja \
 echo "==> Building C++ tools"
 ninja -C "$CPP_BUILD_DIR"
 
-# --- 6. Collect binaries -----------------------------------------------------
-echo "==> Collecting binaries into $OUTPUT_DIR"
+# Put the exes in one dir
 mkdir -p "$OUTPUT_DIR"
-
-# Rust CLIs
-cp "$RUST_TARGET_DIR/assessment" "$OUTPUT_DIR/"
-cp "$RUST_TARGET_DIR/frc_this" "$OUTPUT_DIR/"
-cp "$RUST_TARGET_DIR/f2i" "$OUTPUT_DIR/"
-cp "$RUST_TARGET_DIR/split" "$OUTPUT_DIR/"
-# C++ tools
-cp "$CPP_BUILD_DIR/hawkman" "$OUTPUT_DIR/"
-cp "$CPP_BUILD_DIR/squirrel" "$OUTPUT_DIR/"
-
-echo "==> Done. Native Linux binaries are in: $OUTPUT_DIR"
-# To assemble the ImageJ jar, copy these into
-# imagej/src/main/resources/nix/bin (see BUILD.md) before running mvn install.
+cp native/rust/target/release/{assessment,frc_this,f2i,split} "$OUTPUT_DIR/"
+cp "$CPP_BUILD_DIR"/{hawkman,squirrel} "$OUTPUT_DIR/"
