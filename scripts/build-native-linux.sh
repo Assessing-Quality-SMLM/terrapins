@@ -17,7 +17,7 @@
 #             add_subdirectory(${DIPLIB_DIR}); we only fetch its source.
 # OpenCV and NLopt are found via CMAKE_PREFIX_PATH; DIPlib via -DDIPLIB_DIR.
 #
-# Everything installs into native/.deps - no system packages, no sudo.
+# Everything installs into native/build - no system packages, no sudo.
 # Expected on PATH: a C++23 compiler (gcc >= 13 or clang >= 17), cmake, ninja,
 # git and a Rust toolchain. Set CC/CXX to pick a specific compiler.
 #
@@ -41,14 +41,12 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
 # absolute: DIPLIB_SRC feeds CMake's add_subdirectory(${DIPLIB_DIR}), which resolves
 # a relative path against the CMakeLists dir (native/cpp/lib), not our cwd
-DEPS_DIR="$PWD/native/.deps"
-PREFIX="$DEPS_DIR/prefix"          # install prefix for OpenCV + NLopt
-DIPLIB_SRC="$DEPS_DIR/diplib"
-CPP_BUILD_DIR="native/cpp/tools/build"
-RUST_MANIFEST="native/rust/Cargo.toml"
+BUILD_DIR="$PWD/native/build"
+PREFIX="$BUILD_DIR/prefix"          # install prefix for OpenCV + NLopt
+DIPLIB_SRC="$BUILD_DIR/diplib"
 
 
-mkdir -p "$DEPS_DIR" "$PREFIX"
+mkdir -p "$BUILD_DIR" "$PREFIX"
 
 clone_repo() {
 	local url="$1" tag="$2" dest="$3"
@@ -58,18 +56,23 @@ clone_repo() {
 	git -C "$dest" checkout "$tag"
 }
 
+blank_lines() {
+	yes '' | head -10
+}
 
-yes '' | head -10
+blank_lines
 echo "---------------------------------------- Rust build"
-cargo build --release --manifest-path "$RUST_MANIFEST"
+cargo build --release --manifest-path native/rust/Cargo.toml --target-dir "$BUILD_DIR/rust"
 
-yes '' | head -10
+
+
+blank_lines
 echo "---------------------------------------- C++ build"
 # Build a pretty minimal OpenCV
-OPENCV_SRC="$DEPS_DIR/opencv"
+OPENCV_SRC="$BUILD_DIR/opencv"
 if [ ! -f "$PREFIX/lib/cmake/opencv4/OpenCVConfig.cmake" ]; then
 	clone_repo https://github.com/opencv/opencv.git "$OPENCV_VERSION" "$OPENCV_SRC"
-	yes '' | head -10
+	blank_lines
 	echo "-------------------- OpenCV"
 	cmake -S "$OPENCV_SRC" -B "$OPENCV_SRC/build" -G Ninja \
 		-DCMAKE_CXX_COMPILER="$CXX" \
@@ -100,10 +103,10 @@ else
 fi
 
 # NLOPT
-NLOPT_SRC="$DEPS_DIR/nlopt"
+NLOPT_SRC="$BUILD_DIR/nlopt"
 if [ ! -f "$PREFIX/lib/cmake/nlopt/NLoptConfig.cmake" ]; then
 	clone_repo https://github.com/stevengj/nlopt.git "$NLOPT_VERSION" "$NLOPT_SRC"
-	yes '' | head -10
+	blank_lines
 	echo "-------------------- NLOPT"
 	cmake -S "$NLOPT_SRC" -B "$NLOPT_SRC/build" -G Ninja \
 		-DCMAKE_CXX_COMPILER="$CXX" \
@@ -120,10 +123,10 @@ fi
 clone_repo https://github.com/DIPlib/diplib.git "$DIPLIB_VERSION" "$DIPLIB_SRC"
 
 # Build hawkman and squirrel
-yes '' | head -10
-echo "-------------------- NLOPT"
-rm -rf "$CPP_BUILD_DIR"
-cmake -S native/cpp/tools -B "$CPP_BUILD_DIR" -G Ninja \
+blank_lines
+echo "-------------------- hawkman/squirrel"
+rm -rf "$BUILD_DIR/tools"
+cmake -S native/cpp/tools -B "$BUILD_DIR/tools" -G Ninja \
 	-DCMAKE_CXX_COMPILER="$CXX" \
 	-DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
 	-DCMAKE_PREFIX_PATH="$PREFIX" \
@@ -136,9 +139,9 @@ cmake -S native/cpp/tools -B "$CPP_BUILD_DIR" -G Ninja \
 	-DDIP_ENABLE_DOCTEST=OFF
 
 echo "==> Building C++ tools"
-ninja -C "$CPP_BUILD_DIR"
+ninja -C "$BUILD_DIR/tools"
 
 # Put the exes in one dir
 mkdir -p "$OUTPUT_DIR"
-cp native/rust/target/release/{assessment,frc_this,f2i,split} "$OUTPUT_DIR/"
-cp "$CPP_BUILD_DIR"/{hawkman,squirrel} "$OUTPUT_DIR/"
+cp "$BUILD_DIR/rust/release"/{assessment,frc_this,f2i,split} "$OUTPUT_DIR/"
+cp "$BUILD_DIR/tools"/{hawkman,squirrel} "$OUTPUT_DIR/"

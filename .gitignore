@@ -14,9 +14,7 @@ imagej/src/main/resources/nix/*
 imagej/src/main/resources/mac/*
 imagej/target/*
 
-native/rust/target/
-native/cpp/tools/build/
-native/.deps/
+native/build/
 native/dist/
 
 rust_jni/Cargo.lock
