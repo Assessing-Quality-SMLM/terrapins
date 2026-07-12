@@ -18,8 +18,8 @@ jobs:
 
       - name: Install toolchain
         run: |
-          dnf install -y epel-release
-          dnf install -y gcc-toolset-13 gcc-toolset-13-gcc-c++ cmake ninja-build git make
+          dnf install -y gcc-toolset-13 gcc-toolset-13-gcc-c++ cmake git make python3-pip
+          pip3 install ninja
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
           echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
 
