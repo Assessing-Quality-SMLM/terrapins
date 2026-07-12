@@ -1,48 +1,36 @@
 #!/usr/bin/env bash
 #
-# Build all TERRAPINS native binaries on Linux.
+# Build all TERRAPINS native binaries
 #
-# Produces the six native executables:
-#   Rust  (native/rust):        assessment, frc_this, f2i, split
-#   C++   (native/cpp/tools):   hawkman, squirrel
-# and collects them into "$OUTPUT_DIR" (default: native/dist/linux).
+# Produces the native executables (in native/build/dist)
+#   Rust:    assessment, frc_this, f2i, split
+#   C++:     hawkman, squirrel
 #
-# The C++ dependencies are built from source following the hawkman build
-# instructions (the C++ tools are vendored from the hawkman repo):
-#   - OpenCV: static, TIFF-only (the plugin exchanges TIFFs with the exe, so
-#             JPEG/PNG/etc are deliberately disabled), modules core,imgproc,
-#             imgcodecs, installed into a local prefix.
-#   - NLopt:  static, installed into the same prefix.
-#   - DIPlib: not built standalone - the tools CMake builds it via
-#             add_subdirectory(${DIPLIB_DIR}); we only fetch its source.
-# OpenCV and NLopt are found via CMAKE_PREFIX_PATH; DIPlib via -DDIPLIB_DIR.
+# The C++ dependencies are built from source as static libs (where applicable)
+# and in the most minimal way possible (i.e. TIFF loading, little else optional)
 #
-# Everything installs into native/build - no system packages, no sudo.
-# Expected on PATH: a C++23 compiler (gcc >= 13 or clang >= 17), cmake, ninja,
-# git and a Rust toolchain. Set CC/CXX to pick a specific compiler.
-#
-# Configuration (all overridable via environment):
-#   BUILD_TYPE        CMake build type              (default: Release)
-#   OPENCV_VERSION    OpenCV git tag                (default: 4.12.0)
-#   NLOPT_VERSION     NLopt git tag                 (default: v2.7.1)
-#   DIPLIB_VERSION    DIPlib git tag                (default: 3.6.0)
-#   OUTPUT_DIR        where binaries are collected  (default: native/dist/linux)
-#
+# Everything installs into native/build
+# 
+# Requirements:
+# C++23 (override compiler with CXX=)
+# cmake
+# ninja 
+# git
+# rust toolchain
 set -eu
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
-: "${BUILD_TYPE:=Release}"
-: "${OPENCV_VERSION:=4.12.0}"
-: "${NLOPT_VERSION:=v2.7.1}"
-: "${DIPLIB_VERSION:=3.6.0}"
-: "${OUTPUT_DIR:=native/dist/linux}"
+BUILD_TYPE=Release
+OPENCV_VERSION=4.12.0
+NLOPT_VERSION=v2.7.1
+DIPLIB_VERSION=3.6.0
 : "${CXX:=c++}"
 
 # absolute: DIPLIB_SRC feeds CMake's add_subdirectory(${DIPLIB_DIR}), which resolves
 # a relative path against the CMakeLists dir (native/cpp/lib), not our cwd
 BUILD_DIR="$PWD/native/build"
-PREFIX="$BUILD_DIR/prefix"          # install prefix for OpenCV + NLopt
+PREFIX="$BUILD_DIR/prefix"
 DIPLIB_SRC="$BUILD_DIR/diplib"
 
 
@@ -165,6 +153,6 @@ echo "==> Building C++ tools"
 ninja -C "$BUILD_DIR/tools"
 
 # Put the exes in one dir
-mkdir -p "$OUTPUT_DIR"
-cp "$BUILD_DIR/rust/release"/{assessment,frc_this,f2i,split} "$OUTPUT_DIR/"
-cp "$BUILD_DIR/tools"/{hawkman,squirrel} "$OUTPUT_DIR/"
+mkdir -p native/build/dist/
+cp "$BUILD_DIR/rust/release"/{assessment,frc_this,f2i,split} native/build/dist/
+cp "$BUILD_DIR/tools"/{hawkman,squirrel} native/build/dist/
