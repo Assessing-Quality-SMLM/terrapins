@@ -32,7 +32,8 @@ function ToCMakePath($p) { return $p.Replace('\', '/') }
 $Gen = @(
     '-G', 'Visual Studio 17 2022', '-A', 'x64',
     '-DCMAKE_POLICY_DEFAULT_CMP0091=NEW',
-    '-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded'
+    '-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded',
+    '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'   # let CMake 4.x configure old deps (e.g. NLopt)
 )
 
 function Clone-Repo($url, $tag, $dest) {
@@ -63,18 +64,18 @@ Clone-Repo 'https://github.com/opencv/opencv.git' $OpenCVVersion $OpenCVSrc
 Write-Host '==> Building OpenCV'
 cmake -S $OpenCVSrc -B "$OpenCVSrc\build" @Gen `
     "-DCMAKE_INSTALL_PREFIX=$(ToCMakePath $Prefix)" `
-    -DBUILD_SHARED_LIBS=OFF `
-    -DWITH_PNG=OFF -DWITH_JPEG=OFF -DWITH_WEBP=OFF -DWITH_JASPER=OFF `
-    -DWITH_OPENJPEG=OFF -DWITH_OPENEXR=OFF -DWITH_JPEGXL=OFF `
-    -DBUILD_TIFF=ON `
-    -DWITH_IMGCODEC_HDR=OFF -DWITH_IMGCODEC_SUNRASTER=OFF -DWITH_IMGCODEC_PXM=OFF `
-    -DWITH_IMGCODEC_PFM=OFF -DWITH_IMGCODEC_GIF=OFF `
-    -DWITH_PROTOBUF=OFF -DWITH_ADE=OFF -DWITH_EIGEN=OFF `
-    -DWITH_FFMPEG=OFF -DWITH_MSMF=OFF -DWITH_DSHOW=OFF -DWITH_DIRECTX=OFF `
-    -DWITH_WIN32UI=OFF -DWITH_OPENCL=OFF -DWITH_IPP=OFF -DWITH_ITT=OFF `
-    -DWITH_LAPACK=OFF -DWITH_TBB=OFF `
-    -DBUILD_JAVA=OFF -DBUILD_opencv_python3=OFF -DBUILD_opencv_apps=OFF `
-    -DBUILD_LIST=core,imgproc,imgcodecs
+    '-DBUILD_SHARED_LIBS=OFF' `
+    '-DWITH_PNG=OFF' '-DWITH_JPEG=OFF' '-DWITH_WEBP=OFF' '-DWITH_JASPER=OFF' `
+    '-DWITH_OPENJPEG=OFF' '-DWITH_OPENEXR=OFF' '-DWITH_JPEGXL=OFF' `
+    '-DBUILD_TIFF=ON' `
+    '-DWITH_IMGCODEC_HDR=OFF' '-DWITH_IMGCODEC_SUNRASTER=OFF' '-DWITH_IMGCODEC_PXM=OFF' `
+    '-DWITH_IMGCODEC_PFM=OFF' '-DWITH_IMGCODEC_GIF=OFF' `
+    '-DWITH_PROTOBUF=OFF' '-DWITH_ADE=OFF' '-DWITH_EIGEN=OFF' `
+    '-DWITH_FFMPEG=OFF' '-DWITH_MSMF=OFF' '-DWITH_DSHOW=OFF' '-DWITH_DIRECTX=OFF' `
+    '-DWITH_WIN32UI=OFF' '-DWITH_OPENCL=OFF' '-DWITH_IPP=OFF' '-DWITH_ITT=OFF' `
+    '-DWITH_LAPACK=OFF' '-DWITH_TBB=OFF' `
+    '-DBUILD_JAVA=OFF' '-DBUILD_opencv_python3=OFF' '-DBUILD_opencv_apps=OFF' `
+    '-DBUILD_LIST=core,imgproc,imgcodecs'
 cmake --build "$OpenCVSrc\build" --config $BuildType
 cmake --install "$OpenCVSrc\build" --config $BuildType
 
@@ -84,7 +85,7 @@ Clone-Repo 'https://github.com/stevengj/nlopt.git' $NloptVersion $NloptSrc
 Write-Host '==> Building NLopt'
 cmake -S $NloptSrc -B "$NloptSrc\build" @Gen `
     "-DCMAKE_INSTALL_PREFIX=$(ToCMakePath $Prefix)" `
-    -DBUILD_SHARED_LIBS=OFF
+    '-DBUILD_SHARED_LIBS=OFF'
 cmake --build "$NloptSrc\build" --config $BuildType
 cmake --install "$NloptSrc\build" --config $BuildType
 
@@ -97,10 +98,10 @@ Remove-Item -Recurse -Force "$BuildDir\tools" -ErrorAction SilentlyContinue
 cmake -S native\cpp\tools -B "$BuildDir\tools" @Gen `
     "-DCMAKE_PREFIX_PATH=$(ToCMakePath $Prefix)" `
     "-DDIPLIB_DIR=$(ToCMakePath $DiplibSrc)" `
-    -DDIP_BUILD_JAVAIO=OFF -DDIP_BUILD_DIPIMAGE=OFF -DDIP_BUILD_DIPVIEWER=OFF `
-    -DDIP_BUILD_PYDIP=OFF -DDIP_SHARED_LIBRARY=OFF -DDIP_ENABLE_DOCTEST=OFF `
-    -DDIP_ENABLE_ICS=OFF -DDIP_ENABLE_TIFF=OFF -DDIP_ENABLE_JPEG=OFF `
-    -DDIP_ENABLE_PNG=OFF -DDIP_ENABLE_ZLIB=OFF
+    '-DDIP_BUILD_JAVAIO=OFF' '-DDIP_BUILD_DIPIMAGE=OFF' '-DDIP_BUILD_DIPVIEWER=OFF' `
+    '-DDIP_BUILD_PYDIP=OFF' '-DDIP_SHARED_LIBRARY=OFF' '-DDIP_ENABLE_DOCTEST=OFF' `
+    '-DDIP_ENABLE_ICS=OFF' '-DDIP_ENABLE_TIFF=OFF' '-DDIP_ENABLE_JPEG=OFF' `
+    '-DDIP_ENABLE_PNG=OFF' '-DDIP_ENABLE_ZLIB=OFF'
 cmake --build "$BuildDir\tools" --config $BuildType
 # VS generator puts exes in a per-config subdir
 Copy-Item "$BuildDir\tools\$BuildType\hawkman.exe" $Dist
