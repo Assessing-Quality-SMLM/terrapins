@@ -19,6 +19,9 @@ $OpenCVVersion = '4.12.0'
 $NloptVersion  = 'v2.7.1'
 $DiplibVersion = '3.6.0'
 
+# Reaches CMake 4.x subprocesses too (NLopt's build-time 'cmake -P' codegen).
+$env:CMAKE_POLICY_VERSION_MINIMUM = '3.5'
+
 $BuildDir  = Join-Path (Get-Location) 'native\build'
 $Prefix    = Join-Path $BuildDir 'prefix'
 $DiplibSrc = Join-Path $BuildDir 'diplib'
