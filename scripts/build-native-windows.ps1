@@ -1,10 +1,7 @@
 # Build native binaries on Windows (MSVC) -> native\build\dist\*.exe
 #
-# ⚠ UNTESTED SCAFFOLD - needs iterating on a real windows-latest runner, same as
-# the Linux ninja issue. Known risk points are flagged with TODO below.
-#
 # Design (differs from the *nix scripts):
-#   - MSVC via the Visual Studio generator (auto-locates the compiler; no vcvars)
+#   - MSVC/MSBuild via the auto-detected Visual Studio generator (no vcvars)
 #   - static CRT (/MT) so the exes need no VC++ redistributable on the target
 #   - Rust uses the default x86_64-pc-windows-msvc toolchain
 #
@@ -51,12 +48,8 @@ function Clone-Repo($url, $tag, $dest) {
 # --- Rust binaries -----------------------------------------------------------
 Write-Host '==> Rust build'
 cargo build --release --manifest-path native\rust\Cargo.toml --target-dir "$BuildDir\rust"
-# TODO(fftw): frc_this depends on FFTW. The fftw-src crate builds FFTW from
-# source and may not work under MSVC. The original plugin shipped a bundled
-# fftw3.dll on Windows (see ffi.java's windows-only DLL extraction). If cargo
-# fails here on fftw, provide a prebuilt FFTW (point the fftw crate at it via
-# FFTW3_DIR / the `system` feature) and Copy-Item fftw3.dll into $Dist, and add
-# it to imagej/src/main/resources/windows/lib in the packaging step.
+# Note: frc_this's FFTW (fftw-src crate) builds statically under MSVC just fine,
+# so no bundled fftw3.dll is needed (ffi.java's windows DLL extraction is unused).
 foreach ($exe in 'assessment', 'frc_this', 'f2i', 'split') {
     Copy-Item "$BuildDir\rust\release\$exe.exe" $Dist
 }
