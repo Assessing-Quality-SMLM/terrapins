@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 #
-# Build universal (arm64 + x86_64) native binaries on macOS -> native/build/dist.
+# Build native arm64 (Apple Silicon) binaries on macOS -> native/build/dist.
 #
-# Same shape as build-native-linux.sh; the macOS-specific bits are the universal
-# builds:
-#   - C++ (deps + tools): one build with -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
-#   - Rust: build each apple target, then lipo the exes into one fat binary
+# arm64 only: FFTW (via the fftw-src crate) can't be cross-compiled, so a
+# universal build would need a second Intel runner + lipo. This builds the
+# host arch natively, so run it on an Apple Silicon mac / macos-latest runner.
 #
 # Requirements: Xcode clang (>= the one that ships <format>), cmake, ninja, git,
 # rust toolchain.
@@ -19,11 +18,9 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."
 : "${DIPLIB_VERSION:=3.6.0}"
 : "${CXX:=c++}"
 # Floor for the release: libc++ std::format needs macOS 13.3+ (the mac analogue
-# of the glibc floor on Linux). Applied to every C++ build for a consistent min.
+# of the glibc floor on Linux).
 : "${MACOSX_DEPLOYMENT_TARGET:=13.3}"
 export MACOSX_DEPLOYMENT_TARGET
-
-ARCHS="arm64;x86_64"
 
 BUILD_DIR="$PWD/native/build"
 PREFIX="$BUILD_DIR/prefix"
@@ -43,22 +40,14 @@ blank_lines() {
 	yes '' | head -10
 }
 
-# --- Rust: build both apple targets, lipo into universal binaries -------------
 blank_lines
-echo "---------------------------------------- Rust build (universal)"
-rustup target add aarch64-apple-darwin x86_64-apple-darwin
-cargo build --release --manifest-path native/rust/Cargo.toml --target-dir "$BUILD_DIR/rust" --target aarch64-apple-darwin
-cargo build --release --manifest-path native/rust/Cargo.toml --target-dir "$BUILD_DIR/rust" --target x86_64-apple-darwin
+echo "---------------------------------------- Rust build"
+cargo build --release --manifest-path native/rust/Cargo.toml --target-dir "$BUILD_DIR/rust"
 mkdir -p native/build/dist
-for exe in assessment frc_this f2i split; do
-	lipo -create \
-		"$BUILD_DIR/rust/aarch64-apple-darwin/release/$exe" \
-		"$BUILD_DIR/rust/x86_64-apple-darwin/release/$exe" \
-		-output "native/build/dist/$exe"
-done
+cp "$BUILD_DIR/rust/release"/{assessment,frc_this,f2i,split} native/build/dist/
 
 blank_lines
-echo "---------------------------------------- C++ build (universal)"
+echo "---------------------------------------- C++ build"
 # Build a pretty minimal OpenCV
 OPENCV_SRC="$BUILD_DIR/opencv"
 if [ ! -f "$PREFIX/lib/cmake/opencv4/OpenCVConfig.cmake" ]; then
@@ -68,7 +57,6 @@ if [ ! -f "$PREFIX/lib/cmake/opencv4/OpenCVConfig.cmake" ]; then
 	cmake -S "$OPENCV_SRC" -B "$OPENCV_SRC/build" -G Ninja \
 		-DCMAKE_CXX_COMPILER="$CXX" \
 		-DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
-		-DCMAKE_OSX_ARCHITECTURES="$ARCHS" \
 		-DBUILD_SHARED_LIBS=OFF \
 		-DENABLE_PIC=ON \
 		-DCMAKE_INSTALL_PREFIX="$PREFIX" \
@@ -115,7 +103,6 @@ if [ ! -f "$PREFIX/lib/cmake/nlopt/NLoptConfig.cmake" ]; then
 	cmake -S "$NLOPT_SRC" -B "$NLOPT_SRC/build" -G Ninja \
 		-DCMAKE_CXX_COMPILER="$CXX" \
 		-DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
-		-DCMAKE_OSX_ARCHITECTURES="$ARCHS" \
 		-DBUILD_SHARED_LIBS=OFF \
 		-DCMAKE_INSTALL_PREFIX="$PREFIX"
 	ninja -C "$NLOPT_SRC/build" install
@@ -126,14 +113,13 @@ fi
 # Just check out diplib: built via add_subdirectory by the tools CMake.
 clone_repo https://github.com/DIPlib/diplib.git "$DIPLIB_VERSION" "$DIPLIB_SRC"
 
-# Build hawkman and squirrel (universal)
+# Build hawkman and squirrel
 blank_lines
 echo "-------------------- hawkman/squirrel"
 rm -rf "$BUILD_DIR/tools"
 cmake -S native/cpp/tools -B "$BUILD_DIR/tools" -G Ninja \
 	-DCMAKE_CXX_COMPILER="$CXX" \
 	-DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
-	-DCMAKE_OSX_ARCHITECTURES="$ARCHS" \
 	-DCMAKE_PREFIX_PATH="$PREFIX" \
 	-DDIPLIB_DIR="$DIPLIB_SRC" \
 	-DDIP_BUILD_JAVAIO=OFF \

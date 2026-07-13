@@ -34,9 +34,11 @@ jobs:
           path: native/build/dist/
           if-no-files-found: error
 
-  # Universal (arm64 + x86_64) macOS binaries. Runner has git + rust preinstalled.
+  # arm64 (Apple Silicon) macOS binaries. Runner has git + rust preinstalled.
+  # arm64-only because FFTW can't be cross-compiled (universal would need an
+  # Intel runner + lipo). macos-latest is Apple Silicon.
   native-macos:
-    name: Native binaries (macOS universal)
+    name: Native binaries (macOS arm64)
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
