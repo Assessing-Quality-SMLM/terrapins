@@ -1,20 +1,19 @@
 #!/usr/bin/env bash
 #
-# Build all TERRAPINS native binaries
-#
-# Produces the native executables (in native/build/dist)
+# Build all TERRAPINS native binaries (Linux and macOS) -> native/build/dist
 #   Rust:    assessment, frc_this, f2i, split
 #   C++:     hawkman, squirrel
 #
 # The C++ dependencies are built from source as static libs (where applicable)
 # and in the most minimal way possible (i.e. TIFF loading, little else optional)
 #
-# Everything installs into native/build
-# 
+# macOS builds the host arch only (arm64 on Apple Silicon) - FFTW can't be
+# cross-compiled, so a universal build would need a second Intel runner + lipo.
+#
 # Requirements:
 # C++23 (override compiler with CXX=)
 # cmake
-# ninja 
+# ninja
 # git
 # rust toolchain
 set -eu
@@ -26,6 +25,11 @@ OPENCV_VERSION=4.12.0
 NLOPT_VERSION=v2.7.1
 DIPLIB_VERSION=3.6.0
 : "${CXX:=c++}"
+
+# macOS: libc++ std::format needs a 13.3+ deployment target (the release floor).
+if [ "$(uname)" = Darwin ]; then
+	export MACOSX_DEPLOYMENT_TARGET="${MACOSX_DEPLOYMENT_TARGET:-13.3}"
+fi
 
 # absolute: DIPLIB_SRC feeds CMake's add_subdirectory(${DIPLIB_DIR}), which resolves
 # a relative path against the CMakeLists dir (native/cpp/lib), not our cwd
@@ -56,7 +60,8 @@ cargo build --release --manifest-path native/rust/Cargo.toml --target-dir "$BUIL
 
 blank_lines
 echo "---------------------------------------- C++ build"
-# Build a pretty minimal OpenCV
+# Build a pretty minimal OpenCV. The platform-specific WITH_* below are a union
+# of Linux + macOS options; CMake just warns about the ones that don't apply.
 OPENCV_SRC="$BUILD_DIR/opencv"
 if [ ! -f "$PREFIX/lib/cmake/opencv4/OpenCVConfig.cmake" ]; then
 	clone_repo https://github.com/opencv/opencv.git "$OPENCV_VERSION" "$OPENCV_SRC"
@@ -92,6 +97,8 @@ if [ ! -f "$PREFIX/lib/cmake/opencv4/OpenCVConfig.cmake" ]; then
 		-DWITH_GTK=OFF \
 		-DWITH_QT=OFF \
 		-DWITH_OPENGL=OFF \
+		-DWITH_AVFOUNDATION=OFF \
+		-DWITH_QUARTZ=OFF \
 		-DWITH_OPENCL=OFF \
 		-DWITH_IPP=OFF \
 		-DWITH_ITT=OFF \

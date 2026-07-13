@@ -26,7 +26,7 @@ jobs:
       - name: Build native binaries
         env:
           CXX: g++            # resolves to the gcc-toolset-13 g++ under scl enable
-        run: scl enable gcc-toolset-13 -- scripts/build-native-linux.sh
+        run: scl enable gcc-toolset-13 -- scripts/build-native.sh
 
       - uses: actions/upload-artifact@v4
         with:
@@ -47,7 +47,7 @@ jobs:
         run: brew install cmake ninja
 
       - name: Build native binaries
-        run: scripts/build-native-macos.sh
+        run: scripts/build-native.sh
 
       - uses: actions/upload-artifact@v4
         with:
@@ -55,11 +55,28 @@ jobs:
           path: native/build/dist/
           if-no-files-found: error
 
+  # Windows binaries (MSVC). Runner has VS2022 + cmake + git + rust preinstalled.
+  native-windows:
+    name: Native binaries (Windows)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build native binaries
+        shell: pwsh
+        run: ./scripts/build-native-windows.ps1
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: binaries-windows
+          path: native/build/dist/
+          if-no-files-found: error
+
   # Stage each platform's binaries into the plugin resources, then build one jar.
   # Add more platforms by adding native-<os> jobs + a download step per platform.
   jar:
     name: Plugin jar
-    needs: [native-linux, native-macos]
+    needs: [native-linux, native-macos, native-windows]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -80,6 +97,12 @@ jobs:
         with:
           name: binaries-mac
           path: imagej/src/main/resources/mac/bin
+
+      - name: Stage Windows binaries into plugin resources
+        uses: actions/download-artifact@v4
+        with:
+          name: binaries-windows
+          path: imagej/src/main/resources/windows/bin
 
       - name: Build jar
         run: mvn -Denforcer.skip -Dmaven.test.skip=true -f imagej/pom.xml install
