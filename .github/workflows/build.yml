@@ -55,7 +55,7 @@ jobs:
           path: native/build/dist/
           if-no-files-found: error
 
-  # Windows binaries (MSVC). Runner has VS2022 + cmake + git + rust preinstalled.
+  # Windows binaries (MSVC/MSBuild). Runner has VS + cmake + git + rust preinstalled.
   native-windows:
     name: Native binaries (Windows)
     runs-on: windows-latest

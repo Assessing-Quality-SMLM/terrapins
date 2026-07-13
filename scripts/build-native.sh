@@ -25,6 +25,7 @@ OPENCV_VERSION=4.12.0
 NLOPT_VERSION=v2.7.1
 DIPLIB_VERSION=3.6.0
 : "${CXX:=c++}"
+export CMAKE_POLICY_VERSION_MINIMUM=3.5   # honored by cmake 4.x + nested cmake -P (NLopt codegen)
 
 # macOS: libc++ std::format needs a 13.3+ deployment target (the release floor).
 if [ "$(uname)" = Darwin ]; then
@@ -70,7 +71,6 @@ if [ ! -f "$PREFIX/lib/cmake/opencv4/OpenCVConfig.cmake" ]; then
 	cmake -S "$OPENCV_SRC" -B "$OPENCV_SRC/build" -G Ninja \
 		-DCMAKE_CXX_COMPILER="$CXX" \
 		-DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
-		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
 		-DBUILD_SHARED_LIBS=OFF \
 		-DENABLE_PIC=ON \
 		-DCMAKE_INSTALL_PREFIX="$PREFIX" \
@@ -125,7 +125,6 @@ if [ ! -f "$PREFIX/lib/cmake/nlopt/NLoptConfig.cmake" ]; then
 	cmake -S "$NLOPT_SRC" -B "$NLOPT_SRC/build" -G Ninja \
 		-DCMAKE_CXX_COMPILER="$CXX" \
 		-DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
-		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
 		-DBUILD_SHARED_LIBS=OFF \
 		-DCMAKE_INSTALL_PREFIX="$PREFIX"
 	ninja -C "$NLOPT_SRC/build" install
@@ -144,7 +143,6 @@ rm -rf "$BUILD_DIR/tools"
 cmake -S native/cpp/tools -B "$BUILD_DIR/tools" -G Ninja \
 	-DCMAKE_CXX_COMPILER="$CXX" \
 	-DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
-	-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
 	-DCMAKE_PREFIX_PATH="$PREFIX" \
 	-DDIPLIB_DIR="$DIPLIB_SRC" \
 	-DDIP_BUILD_JAVAIO=OFF \

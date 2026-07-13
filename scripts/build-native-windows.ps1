@@ -28,9 +28,11 @@ New-Item -ItemType Directory -Force -Path $BuildDir, $Prefix, $Dist | Out-Null
 # cmake needs forward slashes in -D path args (esp. DIPLIB_DIR -> add_subdirectory)
 function ToCMakePath($p) { return $p.Replace('\', '/') }
 
-# MSVC, x64, static CRT. CMP0091=NEW makes CMAKE_MSVC_RUNTIME_LIBRARY take effect.
+# MSVC, x64, static CRT. No -G: let CMake auto-detect the installed VS generator
+# (the runner image tracks the latest VS, e.g. 2026 - don't hardcode the version).
+# CMP0091=NEW makes CMAKE_MSVC_RUNTIME_LIBRARY take effect.
 $Gen = @(
-    '-G', 'Visual Studio 17 2022', '-A', 'x64',
+    '-A', 'x64',
     '-DCMAKE_POLICY_DEFAULT_CMP0091=NEW',
     '-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded',
     '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'   # let CMake 4.x configure old deps (e.g. NLopt)
