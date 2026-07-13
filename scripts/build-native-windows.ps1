@@ -102,6 +102,7 @@ Write-Host '==> Building hawkman/squirrel'
 Remove-Item -Recurse -Force "$BuildDir\tools" -ErrorAction SilentlyContinue
 cmake -S native\cpp\tools -B "$BuildDir\tools" @Gen `
     "-DCMAKE_PREFIX_PATH=$(ToCMakePath $Prefix)" `
+    "-DOpenCV_DIR=$(ToCMakePath (Join-Path $Prefix 'staticlib'))" `
     "-DDIPLIB_DIR=$(ToCMakePath $DiplibSrc)" `
     '-DDIP_BUILD_JAVAIO=OFF' '-DDIP_BUILD_DIPIMAGE=OFF' '-DDIP_BUILD_DIPVIEWER=OFF' `
     '-DDIP_BUILD_PYDIP=OFF' '-DDIP_SHARED_LIBRARY=OFF' '-DDIP_ENABLE_DOCTEST=OFF' `
