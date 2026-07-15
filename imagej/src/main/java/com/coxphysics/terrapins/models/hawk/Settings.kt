@@ -38,7 +38,7 @@ class Settings private constructor(
         @JvmStatic
         fun default() : Settings
         {
-            return from(3, NegativeValuesPolicy.ABSOLUTE, OutputStyle.SEQUENTIAL)
+            return from(3, NegativeValuesPolicy.SEPARATE, OutputStyle.TEMPORAL)
         }
 
         // for Java to use
