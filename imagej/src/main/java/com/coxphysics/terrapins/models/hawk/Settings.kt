@@ -189,12 +189,22 @@ class Settings private constructor(
         n_levels_ = value
     }
 
-    fun negative_handling(): String
+    fun negative_handling(): NegativeValuesPolicy
+    {
+        return negative_handling_
+    }
+
+    fun negative_handling_str(): String
     {
         return negative_handling_.toString()
     }
 
-    fun output_style(): String
+    fun output_style(): OutputStyle
+    {
+        return output_style_
+    }
+
+    fun output_style_str(): String
     {
         return output_style_.toString()
     }
