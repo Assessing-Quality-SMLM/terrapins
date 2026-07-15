@@ -146,6 +146,8 @@ public class HAWKView extends JDialog {
         super((Dialog) null, "HAWK", true);
         view_model_.set_n_levels_default_colour(n_levels_field_.getBackground());
         add(content_panel_);
+        setup_negative_values_policy();
+        setup_output_style_options();
         output_order_combo_box_.addItemListener(OutputStyleListener.from(this));
         negative_values_combo_box_.addItemListener(NegativeValuePolicyListener.from(this));
         n_levels_field_.getDocument().addDocumentListener(NLevelsListener.from(this));
@@ -209,7 +211,12 @@ public class HAWKView extends JDialog {
         set_n_levels_background_colour(true);
     }
 
-    private void draw_negative_value_options() {
+    private void draw_negative_value_options()
+    {
+        negative_values_combo_box_.setSelectedItem(view_model_.negative_value_policy());
+    }
+
+    private void setup_negative_values_policy() {
         negative_values_combo_box_.removeAllItems();
         for (NegativeValuesPolicy value : NegativeValuesPolicy.getEntries()) {
             negative_values_combo_box_.addItem(value);
@@ -217,6 +224,10 @@ public class HAWKView extends JDialog {
     }
 
     private void draw_output_style_options() {
+        output_order_combo_box_.setSelectedItem(view_model_.output_style());
+    }
+
+    private void setup_output_style_options() {
         output_order_combo_box_.removeAllItems();
         for (OutputStyle value : OutputStyle.getEntries()) {
             output_order_combo_box_.addItem(value);

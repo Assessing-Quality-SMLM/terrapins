@@ -39,8 +39,8 @@ public class HawkUI implements ItemListener {
     public static HawkUI add_to_dialog(GenericDialog dialog, Settings settings)
     {
         NumericField n_levels = Utils.add_numeric_field(dialog,"Number of Levels", settings.n_levels(), 0);
-        StringChoice negative_values = Utils.add_string_choice(dialog, "Negative values", new String[]{ABSOLUTE, SEPARATE}, settings.negative_handling());
-        StringChoice output_order = Utils.add_string_choice(dialog,"Output order", new String[]{SEQUENTIAL, TEMPORALLY}, settings.output_style());
+        StringChoice negative_values = Utils.add_string_choice(dialog, "Negative values", new String[]{ABSOLUTE, SEPARATE}, settings.negative_handling_str());
+        StringChoice output_order = Utils.add_string_choice(dialog,"Output order", new String[]{SEQUENTIAL, TEMPORALLY}, settings.output_style_str());
         TextAreas text = Utils.add_text_areas(dialog, "", null, 8, 30);
         Checkbox save_to_disk = Utils.add_checkbox(dialog, "Save to disk", false);
         FileField file_field = Utils.add_file_field(dialog, "HAWK output file", settings.filename());
