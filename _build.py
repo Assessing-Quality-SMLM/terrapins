@@ -264,16 +264,17 @@ def build_imagej(local_rust_jni: bool) -> bool:
     imagej_resources = path.join(".", "imagej", "src", "main", "resources")
     if not _gather_tools_into(imagej_resources):
         return False
-    if local_rust_jni:
-        return _merge_local_rust_jni(imagej_resources)
-    return _merge_jhawk(imagej_resources)
+    # if local_rust_jni:
+    #     return _merge_local_rust_jni(imagej_resources)
+    # return _merge_jhawk(imagej_resources)
+    return True
 
 
 def build_python_package(local_hawk_ffi: bool) -> bool:
     package_resources = path.join(python_package_path(), "src", "smlm_terrapins", "resources")
     if not _gather_tools_into(package_resources):
         return False
-    if local_hawk_ffi:
-        return _merge_local_hawk_ffi(package_resources)
+    # if local_hawk_ffi:
+    #     return _merge_local_hawk_ffi(package_resources)
     # return _merge_hawk_ffi(package_resources)
     return True
