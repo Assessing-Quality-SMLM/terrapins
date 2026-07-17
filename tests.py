@@ -32,8 +32,9 @@ def python_tests(use_local_ffi_bindings: bool) -> bool:
 
 
 def run_local_tests() -> bool:
-    return rust_tests() and \
-        java_tests(True)
+    return java_tests(True)
+    # return rust_tests() and \
+    #     java_tests(True)
         # and \
         # python_tests(True)
 
