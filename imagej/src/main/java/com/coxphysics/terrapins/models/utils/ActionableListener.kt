@@ -9,7 +9,6 @@ class ActionableListener<T> private constructor(
     private val action_: Consumer<T>
 ) : ActionListener
 {
-
     companion object
     {
         @JvmStatic
