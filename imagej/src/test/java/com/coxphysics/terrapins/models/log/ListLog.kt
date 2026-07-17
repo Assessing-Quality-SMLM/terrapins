@@ -11,6 +11,6 @@ class ListLog<T>() : Log<T>
 
     override fun log(item: T)
     {
-        log_.addLast(item)
+        log_.add(item)
     }
 }
