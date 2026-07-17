@@ -16,31 +16,7 @@ import kotlin.Unit;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-
-class CancelListener implements ActionListener
-{
-   private final HAWKView view_;
-
-    private CancelListener(HAWKView view)
-    {
-        view_ = view;
-    }
-
-    public static CancelListener from(HAWKView view)
-    {
-        return new CancelListener(view);
-    }
-
-
-    @Override
-    public void actionPerformed(ActionEvent e)
-    {
-        view_.close_cancel();
-    }
-}
 
 public class HAWKView extends JDialog {
     private JComboBox<OutputStyle> output_order_combo_box_;
@@ -70,7 +46,7 @@ public class HAWKView extends JDialog {
         negative_values_combo_box_.addItemListener(SelectedEventsListener.from(this, HAWKView::extract_negative_value_policy));
         n_levels_field_.getDocument().addDocumentListener(ActionableDocumentListener.from(this, HAWKView::update_n_levels_value));
         run_btn_.addActionListener(ActionableListener.from(this, HAWKView::run_filter));
-        cancel_btn_.addActionListener(CancelListener.from(this));
+        cancel_btn_.addActionListener(ActionableListener.from(this, HAWKView::close_cancel));
         save_to_disk_btn_.addActionListener(ActionableListener.from(this, HAWKView::save_to_disk));
     }
 
