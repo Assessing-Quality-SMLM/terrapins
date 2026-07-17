@@ -2,6 +2,7 @@ package com.coxphysics.terrapins.views.hawk;
 
 import com.coxphysics.terrapins.models.hawk.NegativeValuesPolicy;
 import com.coxphysics.terrapins.models.hawk.OutputStyle;
+import com.coxphysics.terrapins.models.utils.ActionableDocumentListener;
 import com.coxphysics.terrapins.models.utils.ActionableListener;
 import com.coxphysics.terrapins.models.utils.SelectedEventsListener;
 import com.coxphysics.terrapins.view_models.hawk.HAWKVM;
@@ -14,45 +15,10 @@ import kotlin.Unit;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
-class NLevelsListener implements DocumentListener
-{
-    private final HAWKView view_;
-
-    private NLevelsListener(HAWKView view)
-    {
-        view_ = view;
-    }
-
-    public static NLevelsListener from(HAWKView view)
-    {
-        return new NLevelsListener(view);
-    }
-
-    @Override
-    public void insertUpdate(DocumentEvent e)
-    {
-        view_.update_n_levels_value();
-    }
-
-    @Override
-    public void removeUpdate(DocumentEvent e)
-    {
-        view_.update_n_levels_value();
-    }
-
-    @Override
-    public void changedUpdate(DocumentEvent e)
-    {
-        view_.update_n_levels_value();
-    }
-}
 
 class CancelListener implements ActionListener
 {
@@ -102,7 +68,7 @@ public class HAWKView extends JDialog {
         setup_output_style_options();
         output_order_combo_box_.addItemListener(SelectedEventsListener.from(this, HAWKView::extract_output_style));
         negative_values_combo_box_.addItemListener(SelectedEventsListener.from(this, HAWKView::extract_negative_value_policy));
-        n_levels_field_.getDocument().addDocumentListener(NLevelsListener.from(this));
+        n_levels_field_.getDocument().addDocumentListener(ActionableDocumentListener.from(this, HAWKView::update_n_levels_value));
         run_btn_.addActionListener(ActionableListener.from(this, HAWKView::run_filter));
         cancel_btn_.addActionListener(CancelListener.from(this));
         save_to_disk_btn_.addActionListener(ActionableListener.from(this, HAWKView::save_to_disk));
