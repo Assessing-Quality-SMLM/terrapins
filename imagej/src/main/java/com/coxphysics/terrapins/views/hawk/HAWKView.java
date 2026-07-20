@@ -2,9 +2,10 @@ package com.coxphysics.terrapins.views.hawk;
 
 import com.coxphysics.terrapins.models.hawk.NegativeValuesPolicy;
 import com.coxphysics.terrapins.models.hawk.OutputStyle;
+import com.coxphysics.terrapins.models.utils.ActionableDocumentListener;
 import com.coxphysics.terrapins.models.utils.ActionableListener;
+import com.coxphysics.terrapins.models.utils.SelectedEventsListener;
 import com.coxphysics.terrapins.view_models.hawk.HAWKVM;
-import com.coxphysics.terrapins.views.HAWKWorker;
 import com.coxphysics.terrapins.views.TERRAPINS.ImageSelectorView;
 import com.coxphysics.terrapins.views.TERRAPINS.PathSelectorView;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -14,115 +15,8 @@ import kotlin.Unit;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
-
-class OutputStyleListener implements ItemListener
-{
-    private final HAWKView view_;
-
-    private OutputStyleListener(HAWKView view)
-    {
-        view_ = view;
-    }
-
-    public static OutputStyleListener from(HAWKView view)
-    {
-        return new OutputStyleListener(view);
-    }
-
-    @Override
-    public void itemStateChanged(ItemEvent e)
-    {
-        if (e == null)
-            return;
-        view_.extract_output_style();
-    }
-}
-
-class NegativeValuePolicyListener implements ItemListener
-{
-    private final HAWKView view_;
-
-    private NegativeValuePolicyListener(HAWKView view)
-    {
-        view_ = view;
-    }
-
-    public static NegativeValuePolicyListener from(HAWKView view)
-    {
-        return new NegativeValuePolicyListener(view);
-    }
-
-    @Override
-    public void itemStateChanged(ItemEvent e)
-    {
-        if (e == null)
-            return;
-        view_.extract_negative_value_policy();
-    }
-}
-
-class NLevelsListener implements DocumentListener
-{
-    private final HAWKView view_;
-
-    private NLevelsListener(HAWKView view)
-    {
-        view_ = view;
-    }
-
-    public static NLevelsListener from(HAWKView view)
-    {
-        return new NLevelsListener(view);
-    }
-
-    @Override
-    public void insertUpdate(DocumentEvent e)
-    {
-        view_.update_n_levels_value();
-    }
-
-    @Override
-    public void removeUpdate(DocumentEvent e)
-    {
-        view_.update_n_levels_value();
-    }
-
-    @Override
-    public void changedUpdate(DocumentEvent e)
-    {
-        view_.update_n_levels_value();
-    }
-}
-
-class CancelListener implements ActionListener
-{
-   private final HAWKView view_;
-
-    private CancelListener(HAWKView view)
-    {
-        view_ = view;
-    }
-
-    public static CancelListener from(HAWKView view)
-    {
-        return new CancelListener(view);
-    }
-
-
-    @Override
-    public void actionPerformed(ActionEvent e)
-    {
-        view_.close_cancel();
-    }
-}
 
 public class HAWKView extends JDialog {
     private JComboBox<OutputStyle> output_order_combo_box_;
@@ -146,11 +40,13 @@ public class HAWKView extends JDialog {
         super((Dialog) null, "HAWK", true);
         view_model_.set_n_levels_default_colour(n_levels_field_.getBackground());
         add(content_panel_);
-        output_order_combo_box_.addItemListener(OutputStyleListener.from(this));
-        negative_values_combo_box_.addItemListener(NegativeValuePolicyListener.from(this));
-        n_levels_field_.getDocument().addDocumentListener(NLevelsListener.from(this));
+        setup_negative_values_policy();
+        setup_output_style_options();
+        output_order_combo_box_.addItemListener(SelectedEventsListener.from(this, HAWKView::extract_output_style));
+        negative_values_combo_box_.addItemListener(SelectedEventsListener.from(this, HAWKView::extract_negative_value_policy));
+        n_levels_field_.getDocument().addDocumentListener(ActionableDocumentListener.from(this, HAWKView::update_n_levels_value));
         run_btn_.addActionListener(ActionableListener.from(this, HAWKView::run_filter));
-        cancel_btn_.addActionListener(CancelListener.from(this));
+        cancel_btn_.addActionListener(ActionableListener.from(this, HAWKView::close_cancel));
         save_to_disk_btn_.addActionListener(ActionableListener.from(this, HAWKView::save_to_disk));
     }
 
@@ -209,7 +105,12 @@ public class HAWKView extends JDialog {
         set_n_levels_background_colour(true);
     }
 
-    private void draw_negative_value_options() {
+    private void draw_negative_value_options()
+    {
+        negative_values_combo_box_.setSelectedItem(view_model_.negative_value_policy());
+    }
+
+    private void setup_negative_values_policy() {
         negative_values_combo_box_.removeAllItems();
         for (NegativeValuesPolicy value : NegativeValuesPolicy.getEntries()) {
             negative_values_combo_box_.addItem(value);
@@ -217,6 +118,10 @@ public class HAWKView extends JDialog {
     }
 
     private void draw_output_style_options() {
+        output_order_combo_box_.setSelectedItem(view_model_.output_style());
+    }
+
+    private void setup_output_style_options() {
         output_order_combo_box_.removeAllItems();
         for (OutputStyle value : OutputStyle.getEntries()) {
             output_order_combo_box_.addItem(value);

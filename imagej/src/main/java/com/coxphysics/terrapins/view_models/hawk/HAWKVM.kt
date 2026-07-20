@@ -1,14 +1,12 @@
 package com.coxphysics.terrapins.view_models.hawk
 
-import com.coxphysics.terrapins.models.hawk.*
-import com.coxphysics.terrapins.models.io.PathSelector
-import com.coxphysics.terrapins.models.macros.MacroUtils
+import com.coxphysics.terrapins.models.hawk.HAWK
+import com.coxphysics.terrapins.models.hawk.NegativeValuesPolicy
+import com.coxphysics.terrapins.models.hawk.OutputStyle
+import com.coxphysics.terrapins.models.hawk.Settings
 import com.coxphysics.terrapins.view_models.TERRAPINS.ImageSelectorVM
 import com.coxphysics.terrapins.view_models.TERRAPINS.PathSelectorVM
 import com.coxphysics.terrapins.views.HAWKWorker
-import com.coxphysics.terrapins.views.hawk.HAWKView
-import ij.IJ
-import ij.ImagePlus
 import java.awt.Color
 
 class HAWKVM private constructor(private var settings_: Settings)
@@ -66,9 +64,19 @@ class HAWKVM private constructor(private var settings_: Settings)
         return true
     }
 
+    fun output_style(): OutputStyle
+    {
+        return settings_.output_style()
+    }
+
     fun set_output_style(value: OutputStyle)
     {
         settings_.set_output_style(value)
+    }
+
+    fun negative_value_policy(): NegativeValuesPolicy
+    {
+        return settings_.negative_handling()
     }
 
     fun set_negative_value_policy(value: NegativeValuesPolicy)

@@ -55,7 +55,7 @@ class RunListener implements ActionListener
 
 class LocalisationListener implements ActionListener
 {
-    private TERRAPINSView view_;
+    private final TERRAPINSView view_;
 
     private LocalisationListener(TERRAPINSView view)
     {

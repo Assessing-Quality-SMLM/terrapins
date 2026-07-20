@@ -24,66 +24,66 @@ public class HAWKMAN implements PlugIn
     @Override
     public void run(String args)
     {
-        String imgTestName, imgRefName;
-        double PSFsizeGD, maxScaleGD;
-        double FWHMthr, FWHMsmo, FWHMoff;
-        double SKELthr, SKELsmo, SKELoff;
-        boolean ADialErrode, BDialErrode, DiagnoseFlag, FlattenFlag, BlurSkelFlag;
-
-        IJ.log("HAWKMAN : Super-resolution sharpening artefact detection");
-        GryphonDialog GryphonGD;
-        try {
-            GryphonGD = new GryphonDialog();
-            GryphonGD.showDialog();
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            IJ.showMessage("HAWKMAN error", "HAWKMAN requires both a Test and a Reference image!");
-            IJ.log("HAWKMAN : Could not get images - Exiting");
-            return;
-        }
-
-	if(!GryphonGD.wasOKed())
-            return;
-
-        GryphonGD.getParamsFromGD();
-
-        PSFsizeGD = GryphonGD.getNextNumber();
-        maxScaleGD = GryphonGD.getNextNumber();
-        imgTestName = GryphonGD.getNextChoice();
-        imgRefName = GryphonGD.getNextChoice();
-        FWHMthr = GryphonGD.FWHMthreshold;
-        FWHMsmo = GryphonGD.FWHMsmooth;
-        FWHMoff = GryphonGD.FWHMoffset;
-        SKELthr = GryphonGD.SKELthreshold;
-        SKELsmo = GryphonGD.SKELsmooth;
-        SKELoff = GryphonGD.SKELoffset;
-        ADialErrode = GryphonGD.ADelAndErrode;
-        BDialErrode = GryphonGD.BDelAndErrode;
-        DiagnoseFlag = GryphonGD.DiagnosticWin;
-        FlattenFlag = GryphonGD.FlattenImage;
-        BlurSkelFlag = GryphonGD.BlurSkeleton;
-
-        if (PSFsizeGD == 0.0) {                     //if PSF = 0 in macro use values for calcPSF checkbox and calculate
-            GryphonGD.getCalculatedPSF();
-        }
-        if (GryphonGD.calculatedPSF > 0.01) {       // if calculatedPSF no zero then overide main dialog with calculated value
-            PSFsizeGD = (double)GryphonGD.calculatedPSF;
-        }
-        run_with(PSFsizeGD,
-                 maxScaleGD,
-                 imgTestName,
-                 imgRefName,
-                 FWHMthr,
-                 FWHMsmo,
-                 FWHMoff,
-                 SKELthr,
-                 SKELsmo,
-                 SKELoff,
-                 ADialErrode,
-                 BDialErrode,
-                 DiagnoseFlag,
-                 FlattenFlag,
-                 BlurSkelFlag);
+//        String imgTestName, imgRefName;
+//        double PSFsizeGD, maxScaleGD;
+//        double FWHMthr, FWHMsmo, FWHMoff;
+//        double SKELthr, SKELsmo, SKELoff;
+//        boolean ADialErrode, BDialErrode, DiagnoseFlag, FlattenFlag, BlurSkelFlag;
+//
+//        IJ.log("HAWKMAN : Super-resolution sharpening artefact detection");
+//        GryphonDialog GryphonGD;
+//        try {
+//            GryphonGD = new GryphonDialog();
+//            GryphonGD.showDialog();
+//        }
+//        catch (ArrayIndexOutOfBoundsException e) {
+//            IJ.showMessage("HAWKMAN error", "HAWKMAN requires both a Test and a Reference image!");
+//            IJ.log("HAWKMAN : Could not get images - Exiting");
+//            return;
+//        }
+//
+//	if(!GryphonGD.wasOKed())
+//            return;
+//
+//        GryphonGD.getParamsFromGD();
+//
+//        PSFsizeGD = GryphonGD.getNextNumber();
+//        maxScaleGD = GryphonGD.getNextNumber();
+//        imgTestName = GryphonGD.getNextChoice();
+//        imgRefName = GryphonGD.getNextChoice();
+//        FWHMthr = GryphonGD.FWHMthreshold;
+//        FWHMsmo = GryphonGD.FWHMsmooth;
+//        FWHMoff = GryphonGD.FWHMoffset;
+//        SKELthr = GryphonGD.SKELthreshold;
+//        SKELsmo = GryphonGD.SKELsmooth;
+//        SKELoff = GryphonGD.SKELoffset;
+//        ADialErrode = GryphonGD.ADelAndErrode;
+//        BDialErrode = GryphonGD.BDelAndErrode;
+//        DiagnoseFlag = GryphonGD.DiagnosticWin;
+//        FlattenFlag = GryphonGD.FlattenImage;
+//        BlurSkelFlag = GryphonGD.BlurSkeleton;
+//
+//        if (PSFsizeGD == 0.0) {                     //if PSF = 0 in macro use values for calcPSF checkbox and calculate
+//            GryphonGD.getCalculatedPSF();
+//        }
+//        if (GryphonGD.calculatedPSF > 0.01) {       // if calculatedPSF no zero then overide main dialog with calculated value
+//            PSFsizeGD = (double)GryphonGD.calculatedPSF;
+//        }
+//        run_with(PSFsizeGD,
+//                 maxScaleGD,
+//                 imgTestName,
+//                 imgRefName,
+//                 FWHMthr,
+//                 FWHMsmo,
+//                 FWHMoff,
+//                 SKELthr,
+//                 SKELsmo,
+//                 SKELoff,
+//                 ADialErrode,
+//                 BDialErrode,
+//                 DiagnoseFlag,
+//                 FlattenFlag,
+//                 BlurSkelFlag);
     }
 
     public static void run_with_settings(Settings settings)

@@ -5,16 +5,12 @@ import com.coxphysics.terrapins.view_models.TERRAPINS.PathSelectorVM;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import ij.IJ;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 class FindListener implements ActionListener
 {
@@ -48,16 +44,6 @@ public class PathSelectorView {
     public PathSelectorView() {
         filename_txt_field_.getDocument().addDocumentListener(ActionableDocumentListener.from(this, PathSelectorView::update_data_path_from_view));
         find_btn_.addActionListener(FindListener.from(this));
-    }
-
-    private PathSelectorView(PathSelectorVM view_model) {
-        super();
-        view_model_ = view_model;
-    }
-
-    public static PathSelectorView from(PathSelectorVM view_model) {
-        PathSelectorView view = new PathSelectorView(view_model);
-        return view;
     }
 
     public void set_view_model(PathSelectorVM view_model) {

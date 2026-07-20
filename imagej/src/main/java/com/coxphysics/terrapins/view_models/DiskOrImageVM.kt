@@ -1,31 +1,26 @@
 package com.coxphysics.terrapins.view_models
 
 import com.coxphysics.terrapins.models.DiskOrImage
-import com.coxphysics.terrapins.views.ImageSelectorSetttings
 import ij.ImagePlus
 
 class DiskOrImageVM private constructor(
     private var model_: DiskOrImage,
     private var name_: String,
-    private var image_selector_settings_ : ImageSelectorSetttings,
     private var draw_reset_button_: Boolean)
 {
     companion object
     {
         @JvmStatic
-        fun new(name: String, model: DiskOrImage, image_selector_settings: ImageSelectorSetttings, draw_reset_button: Boolean) : DiskOrImageVM
+        fun new(name: String, model: DiskOrImage, draw_reset_button: Boolean) : DiskOrImageVM
         {
-            return DiskOrImageVM(model, name, image_selector_settings, draw_reset_button)
+            return DiskOrImageVM(model, name, draw_reset_button)
         }
 
         @JvmStatic
         fun with(name: String, model: DiskOrImage) : DiskOrImageVM
         {
-            val settings = ImageSelectorSetttings.default_()
-            settings.set_n_images(1)
-            settings.set_image_names(listOf("Image").toTypedArray())
-            settings.set_visible(true)
-            return new(name, model, settings, true)
+
+            return new(name, model, true)
         }
     }
 
@@ -42,11 +37,6 @@ class DiskOrImageVM private constructor(
     fun filename_nn(): String
     {
         return model_.filename_nn()
-    }
-
-    fun image_selector_settings(): ImageSelectorSetttings
-    {
-        return image_selector_settings_
     }
 
     fun draw_reset_button(): Boolean
