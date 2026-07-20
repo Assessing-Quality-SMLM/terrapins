@@ -1,7 +1,6 @@
 package com.coxphysics.terrapins.view_models.io
 
 import com.coxphysics.terrapins.models.io.FrcImages
-import com.coxphysics.terrapins.views.io.JointImagesUI
 
 class FrcImagesVM private constructor(
     private val model_: FrcImages,

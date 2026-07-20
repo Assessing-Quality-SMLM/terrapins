@@ -7,18 +7,15 @@ import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import com.coxphysics.terrapins.models.ij_wrapping.WindowManager
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.plugins.WORKFLOW_SETTINGS_USE_LOCALISATIONS
-import com.coxphysics.terrapins.views.ImageSelectorSetttings
 import ij.plugin.frame.Recorder
 import java.nio.file.Path
 import com.coxphysics.terrapins.models.assessment.images.Settings as ImagesSettings
 import com.coxphysics.terrapins.models.hawk.Settings as HawkSettings
 
 class Settings private constructor(
-    private val image_selector_setttings: ImageSelectorSetttings,
     private val core_settings_: CoreSettings
 )
 {
-    private val hawk_stack_image_selector_settings_ = image_selector_setttings
     private var hawk_settings_ = HawkSettings.default()
     private var use_localisations_ = true
     private var localisation_settings_ = AssessmentSettings.from(core_settings_)
@@ -29,10 +26,7 @@ class Settings private constructor(
         @JvmStatic
         fun default() : Settings
         {
-            val image_selector_settings = ImageSelectorSetttings.default_()
-            image_selector_settings.set_n_images(1);
-            image_selector_settings.set_image_names(listOf("Image").toTypedArray());
-            return Settings(image_selector_settings, CoreSettings.default())
+            return Settings(CoreSettings.default())
         }
 
         @JvmStatic
@@ -92,11 +86,6 @@ class Settings private constructor(
     fun set_use_localisations(value: Boolean)
     {
         use_localisations_ = value
-    }
-
-    fun hawk_stack_image_selector_settings(): ImageSelectorSetttings
-    {
-        return hawk_stack_image_selector_settings_;
     }
 
     fun hawk_settings() : HawkSettings

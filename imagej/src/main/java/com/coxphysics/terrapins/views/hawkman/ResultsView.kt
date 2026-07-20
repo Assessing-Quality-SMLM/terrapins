@@ -1,12 +1,9 @@
 package com.coxphysics.terrapins.views.hawkman
 
 import com.coxphysics.terrapins.models.hawkman.external.Results
-import com.coxphysics.terrapins.models.utils.FsUtils
 import com.coxphysics.terrapins.models.utils.IJUtils
 import com.coxphysics.terrapins.views.assessment.PlotManager
 import ij.ImagePlus
-import ij.gui.PlotWindow
-import java.nio.file.Path
 
 class ResultsView private constructor(private val results_: Results )
 {

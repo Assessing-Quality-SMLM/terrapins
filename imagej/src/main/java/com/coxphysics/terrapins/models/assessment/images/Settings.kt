@@ -50,7 +50,7 @@ class Settings private constructor(
         {
             val hawkman_settings = HAWKMANSettings.from_macro_options(options)
             val squirrel_inputs = SquirrelInputs.from_macro_options(options, window_manager)
-            val core_settings = CoreSettings.from_macro_options(options, window_manager)
+            val core_settings = CoreSettings.from_macro_options(options)
 
             val equipment_settings = EquipmentSettings.from_macro_options(options)
 

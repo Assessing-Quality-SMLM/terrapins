@@ -6,11 +6,6 @@ import java.nio.file.Path;
 
 public class SystemFileSystem implements FileSystem
 {
-    @Override
-    public boolean prepare_directory(Path directory)
-    {
-        return FsUtils.prepare_directory(directory);
-    }
 
     @Override
     public boolean exists(Path value)

@@ -1,7 +1,6 @@
 package com.coxphysics.terrapins.models.assessment
 
 import com.coxphysics.terrapins.models.PathWrapper
-import com.coxphysics.terrapins.models.ij_wrapping.WindowManager
 import com.coxphysics.terrapins.models.macros.MacroOptions
 import com.coxphysics.terrapins.models.to_path_or_default
 import com.coxphysics.terrapins.models.utils.FsUtils
@@ -40,7 +39,7 @@ class CoreSettings private constructor(
 
         private fun default_working_directory(): Path = FsUtils.temp_directory().resolve("smlm_assessment")
 
-        fun from_macro_options(options: MacroOptions, window_manager: WindowManager): CoreSettings
+        fun from_macro_options(options: MacroOptions): CoreSettings
         {
             val working_directory = options.get(CORE_SETTINGS_WORKING_DIRECTORY)
             val working_directory_path = working_directory.to_path_or_default(default_working_directory())
