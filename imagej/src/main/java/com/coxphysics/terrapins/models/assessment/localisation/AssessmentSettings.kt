@@ -51,7 +51,7 @@ class AssessmentSettings private constructor(
             if (!has_loc_file) // we use this null to know if which workflow we are in
                 return null
 
-            val core_settings = CoreSettings.from_macro_options(options, window_manager)
+            val core_settings = CoreSettings.from_macro_options(options)
 
             val equipment_settings = EquipmentSettings.from_macro_options(options)
 
