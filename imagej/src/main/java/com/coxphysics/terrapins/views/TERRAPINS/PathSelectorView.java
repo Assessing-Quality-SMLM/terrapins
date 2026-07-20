@@ -50,16 +50,6 @@ public class PathSelectorView {
         find_btn_.addActionListener(FindListener.from(this));
     }
 
-    private PathSelectorView(PathSelectorVM view_model) {
-        super();
-        view_model_ = view_model;
-    }
-
-    public static PathSelectorView from(PathSelectorVM view_model) {
-        PathSelectorView view = new PathSelectorView(view_model);
-        return view;
-    }
-
     public void set_view_model(PathSelectorVM view_model) {
         view_model_ = view_model;
         draw();
