@@ -1,5 +1,8 @@
 package com.coxphysics.terrapins.models.assessment.reports
 
+import com.coxphysics.terrapins.models.DRIFT_SPLIT_LABEL
+import com.coxphysics.terrapins.models.HALF_SPLIT_LABEL
+import com.coxphysics.terrapins.models.ZIP_SPLIT_LABEL
 import com.coxphysics.terrapins.models.assessment.AssessmentResults
 import com.coxphysics.terrapins.models.assessment.results.FRC
 import com.coxphysics.terrapins.models.assessment.results.Recon
@@ -11,9 +14,6 @@ import com.coxphysics.terrapins.models.squirrel.external.Results as SquirrelResu
 import com.coxphysics.terrapins.views.hawkman.ResultsView as HawkmanResultsView
 import com.coxphysics.terrapins.views.squirrel.ResultsView as SquirrelResultsView
 
-const val HALF_SPLIT_LABEL = "Section"
-const val ZIP_SPLIT_LABEL = "Interleave"
-const val DRIFT_SPLIT_LABEL = "Block"
 
 class Report private constructor(private val results_: AssessmentResults)
 {
