@@ -1,15 +1,33 @@
 package com.coxphysics.terrapins.view_models.TERRAPINS
 
+import com.coxphysics.terrapins.models.DRIFT_SPLIT_LABEL
+import com.coxphysics.terrapins.models.HALF_SPLIT_LABEL
+import com.coxphysics.terrapins.models.ZIP_SPLIT_LABEL
 import com.coxphysics.terrapins.models.assessment.images.Settings
+
+
+private fun image_x(label: String, x: String): String
+{
+    return "%s Split Image %s".format(label, x)
+}
+private fun image_a(label: String): String
+{
+    return image_x(label, "A")
+}
+
+private fun image_b(label: String): String
+{
+    return image_x(label, "B")
+}
 
 class ImagesVM private constructor(private var settings_: Settings)
 {
     private val squirrel_inputs_vm_ = SquirrelInputsVM.from(settings_.squirrel_inputs())
     private val recon_vm_ = DiskOrImageVM.from(settings_.reference_image())
     private val hawk_recon_vm_ = DiskOrImageVM.from(settings_.hawk_image())
-    private val drift_split_vm_ = JointImagesVM.from(settings_.drift_split_model(), "Block Split Image A", "Block Split Image B")
-    private val half_split_vm_ = JointImagesVM.from(settings_.half_split_model(), "Half Split Image A", "Half Split Image B")
-    private val zip_split_vm_ = JointImagesVM.from(settings_.zip_split_model(), "Interleave Split Image A", "Interleave Split Image B")
+    private val drift_split_vm_ = JointImagesVM.from(settings_.drift_split_model(), image_a(DRIFT_SPLIT_LABEL), image_b(DRIFT_SPLIT_LABEL))
+    private val half_split_vm_ = JointImagesVM.from(settings_.half_split_model(), image_a(HALF_SPLIT_LABEL), image_b(HALF_SPLIT_LABEL))
+    private val zip_split_vm_ = JointImagesVM.from(settings_.zip_split_model(), image_a(ZIP_SPLIT_LABEL), image_b(ZIP_SPLIT_LABEL))
 
     companion object
     {
