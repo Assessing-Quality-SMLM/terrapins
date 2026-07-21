@@ -3,7 +3,7 @@
 ## native/rust
 
 The Rust crates under `native/rust/` were consolidated into this repository from
-[sibling repositories](https://github/com/Assessing-Quality-SMLM). Provenance is:
+[sibling repositories](https://github.com/Assessing-Quality-SMLM). Provenance is:
 
 | native/rust dir | source repo : subdir              | commit    |
 |-----------------|-----------------------------------|-----------|
@@ -21,7 +21,7 @@ The Rust crates under `native/rust/` were consolidated into this repository from
 
 Differences are:
 
-- `Cargo.toml`: intra-project dependencies changed to local dependences 
+- `Cargo.toml`: intra-project dependencies changed to local dependencies
 - `frc_this/src/main.rs`: crate rename `rust_frc` -> `smlm_frc` (3 sites).
   The repo's `frc_this/src/corrections.rs` was not copied; it is dead code
   (`// mod corrections;` is commented out upstream).
@@ -30,7 +30,7 @@ Differences are:
 ## native/cpp/
 
 Code comes from [hawkman](https://github.com/Assessing-Quality-SMLM/hawkman)
-commit  `e00f563`
+commit `e00f563`.
 
 `CMakeLists.txt` was trimmed to just the hawkman and squirrel targets, and the
 extra tools and `cpp/lib_tests/` were not copied.
