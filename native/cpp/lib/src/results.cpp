@@ -76,7 +76,12 @@ namespace hkmn
 
 	const std::vector<cv::Mat> Results::confidence_stack() const
 	{
-		return confidence_stack_;
+		auto stack = std::vector<cv::Mat>();
+		for (const auto& [k, v]: confidence_stack_)
+		{
+			stack.push_back(v);
+		}
+		return stack;
 	}
 
 	bool Results::write_global_score(int level, double score)
@@ -106,12 +111,12 @@ namespace hkmn
 				structure_.initialise_at(structure.string()));
 	}
 
-	bool Results::add_confidence_map(cv::Mat map)
+	bool Results::add_confidence_map(int level, cv::Mat map)
 	{
 		// std::cout << "Waiting for lock\n";
 		std::lock_guard<std::mutex> guard(lock_);
 		// std::cout << "Adding to stack\n";
-		confidence_stack_.push_back(map);
+		confidence_stack_.insert({level, map});
 		// std::cout << "leaving\n";
 		return true;
 	}

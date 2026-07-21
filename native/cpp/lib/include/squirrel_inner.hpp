@@ -50,6 +50,7 @@ namespace sqrl
 	std::optional<Parameters> calculate_alpha_beta_from_images(const cv::Mat& wf, const cv::Mat& sr, const cv::Mat& ones);
 	std::optional<Parameters> optimal_alpha_beta(const cv::Mat& wf_image, const cv::Mat& sr_image, double sigma);
 	cv::Mat error_map(const cv::Mat& image_a, const cv::Mat& image_b, bool show_positive_negative);
+	cv::Mat generate_colour_bar(const cv::Mat& error_map);
 
 	std::vector<Patch> get_patches_over(const cv::Mat& image, const Settings& settings);
 

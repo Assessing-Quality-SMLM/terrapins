@@ -9,15 +9,15 @@ namespace imp
     private: 
         static constexpr int OPENCV_MAX_HUE_LEVELS = 179;
 
-        explicit HueCalculator(double hue_per_level);
+        explicit HueCalculator(double offset, double hue_per_level);
 
     public:
-        static HueCalculator from(std::uint8_t n_levels, std::uint32_t max_hue);
-        static HueCalculator from_opencv(std::uint8_t n_levels);
-        static HueCalculator rainbow_from_opencv(std::uint8_t n_levels);
+        static HueCalculator from(std::uint8_t n_levels, std::uint32_t max_hue);        
+        static HueCalculator cold_to_hot_opencv(std::uint8_t n_levels);
 
         double hue_per_level() const;
         double hue_for_level(std::uint8_t level) const;
+        
         template<typename T> 
         T hue_for_level_t(std::uint8_t level) const
         {
@@ -25,6 +25,7 @@ namespace imp
         }
 
     private:
+        const double offset_ = 0.0;
         const double hue_per_level_ = 1.0;
     };
 }

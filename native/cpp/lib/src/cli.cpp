@@ -125,12 +125,21 @@ namespace hkmn
         return get_setting(command_line, key).and_then(parse_threshold_settings);
     }
 
-    Settings get_settings(int argc, char const* argv[])
+    void build_command_line_into(int argc, char const* argv[], CommandLine& command_line)
     {
-        auto command_line = CommandLine();
         for (auto idx = 0; idx < argc; idx++)
             command_line.emplace_back(argv[idx]);
+    }
 
+    CommandLine build_command_line(int argc, char const* argv[])
+    {
+        auto command_line = CommandLine();
+        build_command_line_into(argc, argv, command_line);
+        return command_line;
+    }
+
+    Settings get_settings_from(const CommandLine& command_line)
+    {        
         auto settings = hkmn::Settings::default_settings();
 
         const auto ref_image = get_setting(command_line, "ref");
@@ -169,6 +178,10 @@ namespace hkmn
         if (skel_settings)
             settings.set_skeleton_threshold_settings(*skel_settings);
 
+        const auto score_threshold = get_setting_double(command_line, "score-threshold");
+        if (score_threshold)
+            settings.set_score_threshold(*score_threshold);
+
         const auto output_directory = get_setting(command_line, "o");
         if (output_directory)
             settings.set_output_directory(*output_directory);
@@ -184,6 +197,12 @@ namespace hkmn
         }
 
         return settings;
+    }
+
+    Settings get_settings(int argc, char const* argv[])
+    {
+        auto command_line = build_command_line(argc, argv);
+        return get_settings_from(command_line);
     }
 }
 

@@ -4,6 +4,7 @@
 #include <opencv2/core/core.hpp>
 
 #include <fstream>
+#include <map>
 #include <mutex>
 #include <vector>
 
@@ -35,14 +36,14 @@ namespace hkmn
         bool write_global_score(int level, double score);
         bool write_sharpening(int level, double score);
         bool write_structure(int level, double score);
-        bool add_confidence_map(cv::Mat image);
+        bool add_confidence_map(int level, cv::Mat image);
         bool finalise();
     private:
         std::mutex lock_;
         ScoreStream global_;  
         ScoreStream sharp_;  
         ScoreStream structure_;
-        std::vector<cv::Mat> confidence_stack_;
+        std::map<int, cv::Mat> confidence_stack_;
     };
 }
 #endif //RESULTS_HPP_

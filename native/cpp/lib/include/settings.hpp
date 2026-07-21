@@ -58,8 +58,13 @@ namespace hkmn
 		void set_n_threads(std::uint8_t value);
 
 		bool create_single_image_summary() const;
+
+		double score_threshold() const;
+		void set_score_threshold(double value);
+		
 		double artifact_threshold() const;
 		void set_artifact_threshold(double value);
+		
 		std::uint8_t consecutive_scales() const;
 		void set_consecutive_scales(std::uint8_t value);
 
@@ -82,6 +87,7 @@ namespace hkmn
 		double psf_;
 		bool dilate_erode_ = false;
 		bool blur_skeletons_ = true;
+		double score_threshold_ = 0.85;
 		double artifact_threshold_ = 0.1;
 		std::uint8_t consecutive_scales_ = 3;
 		std::uint8_t n_threads_ = 0; // zero is single thread

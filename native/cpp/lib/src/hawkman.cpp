@@ -200,16 +200,16 @@ namespace hkmn
         return imp::combine_to_single_image(test_binary, ref_binary, ref_binary);
     }
 
-    double half_global_correlation(double correlation)
+    double half_global_correlation(const Settings& settings, double correlation)
     {
-    	const auto thresh = (0.5 / 0.85) * correlation;
+    	const auto thresh = (0.5 / settings.score_threshold()) * correlation;
         return std::min(thresh, 0.5);
     }
 
-    double global_correlation(double skeleton_correation, double resolution_correlation)
+    double global_correlation(const Settings& settings, double skeleton_correation, double resolution_correlation)
     {
-        const auto skel_score = half_global_correlation(skeleton_correation);
-        const auto res_score = half_global_correlation(resolution_correlation);
+        const auto skel_score = half_global_correlation(settings, skeleton_correation);
+        const auto res_score = half_global_correlation(settings, resolution_correlation);
         return skel_score + res_score;
     }
 
@@ -312,12 +312,12 @@ namespace hkmn
         imp::write_tiff(test_skel, (settings.output_directory_path() / std::format("test_skel_{}.tiff", scale_number)).string());
 
         const auto ref_skel_double = imp::convert_to_floating_point(ref_skel);
-        const auto ref_skel_blur = imp::imagej_gaussian_blur(ref_skel_double, sigma);
+        const auto ref_skel_blur = imp::gaussian_blur_and_normalise_cv(ref_skel_double, sigma);
         // display_image<FLOATING_TYPE>(ref_skel_blur);
         imp::write_tiff(ref_skel_blur, (settings.output_directory_path() / std::format("ref_skel_blur_{}.tiff", scale_number)).string()); 
 
         const auto test_skel_double = imp::convert_to_floating_point(test_skel);
-        const auto test_skel_blur = imp::imagej_gaussian_blur(test_skel_double, sigma);
+        const auto test_skel_blur = imp::gaussian_blur_and_normalise_cv(test_skel_double, sigma);
         imp::write_tiff(test_skel_blur, (settings.output_directory_path() / std::format("test_skel_blur_{}.tiff", scale_number)).string());
 
         // std::cout << "Creating Structure map\n";
@@ -370,14 +370,14 @@ namespace hkmn
         const auto confidence_map_path = settings.confidence_map_dir() / scale_number_filename;
         imp::write_tiff(confidence_map, confidence_map_path.string());
         
-        const auto global_corr = global_correlation(skel_correlation, correlation);
+        const auto global_corr = global_correlation(settings, skel_correlation, correlation);
         std::cout << "Global correlation: " << global_corr << "\n";
         const auto conf_score_name = settings.confidence_map_dir() / "score";
         results.write_global_score(scale_number, global_corr);
         // write_score(conf_score_name.string(), scale_number, global_corr);
         
         // std::cout << "Adding to confidence stack\n";
-        const auto ok = results.add_confidence_map(confidence_map);
+        const auto ok = results.add_confidence_map(scale_number, confidence_map);
         // std::cout << "Added to stack\n";
         return ok;
     }
@@ -389,13 +389,13 @@ namespace hkmn
         const auto size = cv::Size(n_cols, n_rows);
         cv::Mat hsv_image = cv::Mat::zeros(size, CV_8UC3);
         cv::Mat hue_channel = cv::Mat::zeros(size, CV_BINARY_DEPTH);
-        cv::Mat saturation_channel = cv::Mat::ones(size, CV_BINARY_DEPTH) * 127;
+        cv::Mat saturation_channel = cv::Mat::ones(size, CV_BINARY_DEPTH) * 179;
         cv::Mat value_channel = cv::Mat::ones(size, CV_BINARY_DEPTH) * 255;
         const auto n_levels = settings.n_levels();
         const double double_n_levels = static_cast<double>(n_levels);
         const double double_rows = static_cast<double>(n_rows);
         const double hue_per_level = MAX_HUE_LEVEL_CV_f64 / double_n_levels;
-        const auto hue_calculator = imp::HueCalculator::rainbow_from_opencv(n_levels);
+        const auto hue_calculator = imp::HueCalculator::cold_to_hot_opencv(n_levels);
         for(auto row = 0; row < hsv_image.rows; row++)
         {
             const double rows = static_cast<double>(row + 1);
@@ -416,21 +416,22 @@ namespace hkmn
         return bgr_image;
     }
 
-    cv::Mat create_single_image(const std::vector<cv::Mat>& confidence_stack, const Settings& settings)
+    cv::Mat create_single_image_hsv(const std::vector<cv::Mat>& confidence_stack, const Settings& settings)
     {
         const auto size = confidence_stack[0].size();
         cv::Mat hsv_result = cv::Mat::zeros(confidence_stack[0].size(), CV_8UC3); // 3 (unsigned) byte entries
         //cv::Mat channels[3];
         cv::Mat flags = cv::Mat::zeros(size, CV_32S);
         const auto n_levels = settings.n_levels();
-        const auto hue_calculator = imp::HueCalculator::rainbow_from_opencv(n_levels);
+        const auto hue_calculator = imp::HueCalculator::cold_to_hot_opencv(n_levels);
         const auto con_scales = settings.consecutive_scales();
         const auto threshold = settings.artifact_threshold();
-        cv::Mat hue_channel = cv::Mat::ones(size, CV_BINARY_DEPTH) * hue_calculator.hue_for_level_t<BINARY_TYPE>(1);
-        cv::Mat saturation_channel = cv::Mat::ones(size, CV_BINARY_DEPTH) * 127;
+        cv::Mat hue_channel = cv::Mat::zeros(size, CV_BINARY_DEPTH);
+        cv::Mat saturation_channel = cv::Mat::ones(size, CV_BINARY_DEPTH) * 179;
         cv::Mat value_channel = cv::Mat::zeros(size, CV_BINARY_DEPTH);
+        cv::Mat res_image = cv::Mat::zeros(size, CV_BINARY_DEPTH);
         using INTEGER_TYPE = std::int32_t;
-        for(auto level = settings.start_level(); level < settings.end_level(); level++)
+        for(auto level = 1; level <= n_levels; level++)
         {
             std::cout << "processing level " << (int)level << "\n";
             const cv::Mat& image = confidence_stack[level - 1];
@@ -440,27 +441,30 @@ namespace hkmn
                 for (auto col = 0; col < hsv_result.cols; col++)
                 {
                     const auto pixel = image.at<cv::Vec3b>(row, col);
-                    const BINARY_TYPE channel_1 = pixel(2);
-                    const BINARY_TYPE channel_2 = pixel(1);
-                    const BINARY_TYPE res = channel_1 + channel_2;
-                    //auto result_pixel = *result_it;
+                    const std::uint8_t red_channel = pixel(2);
+                    const std::uint8_t green_channel = pixel(1);
+                    std::uint8_t res = red_channel + green_channel;
+                    // std::cout << std::format("{} + {}: {}\n", red_channel, green_channel, res);
                     if (level == 1 && res > 0)
                     {
-                        const BINARY_TYPE value = res;
-                        value_channel.at<BINARY_TYPE>(row, col) = res;
+                        res_image.at<std::uint8_t>(row, col) = 1;
+                        const std::uint8_t value = res;
+                        hue_channel.at<std::uint8_t>(row, col) = hue_calculator.hue_for_level_t<std::uint8_t>(1);
+                        value_channel.at<std::uint8_t>(row, col) = res;
                         flags.at<INTEGER_TYPE>(row, col) = con_scales;
                     }
-                    // if (level > 1 && res > 0)
-                    if (level > 1)
+                    res = res_image.at<std::uint8_t>(row, col);
+                    if (level > 1 && res > 0)
+                    // if (level > 1)
                     {
-                        // std::cout << "HERE\n";
-                        const double ratio = (double)channel_1 / (double)res;
-                        INTEGER_TYPE& flag = flags.at<INTEGER_TYPE>(row, col);
+                        const double ratio = (double)red_channel / (double)res;
+                        const auto flag = flags.at<INTEGER_TYPE>(row, col);
                         if (ratio > threshold && flag > 0)
                         {
-                            const std::uint8_t value = hue_calculator.hue_for_level_t<std::uint8_t>(level);
+                            res_image.at<std::uint8_t>(row, col) = level;
+                            const auto value = hue_calculator.hue_for_level_t<std::uint8_t>(level);
                             // std::cout << std::format("{},{}={}\n", row, col, level);
-                            hue_channel.at<BINARY_TYPE>(row, col) = value;
+                            hue_channel.at<std::uint8_t>(row, col) = value;
                         }
                         else
                         {
@@ -470,9 +474,15 @@ namespace hkmn
                 }
             }
         }
+
         cv::Mat channels[3]{ hue_channel, saturation_channel, value_channel };
         cv::merge(channels, 3, hsv_result);
-        // std::cout << "Converting colour space\n";
+        return hsv_result;
+    }
+
+    cv::Mat create_single_image(const std::vector<cv::Mat>& confidence_stack, const Settings& settings)
+    {
+        auto hsv_result = create_single_image_hsv(confidence_stack, settings);        
         return imp::convert_hsv_to_bgr(hsv_result);
     }
 

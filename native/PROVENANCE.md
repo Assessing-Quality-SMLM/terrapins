@@ -30,12 +30,7 @@ Differences are:
 ## native/cpp/
 
 Code comes from [hawkman](https://github.com/Assessing-Quality-SMLM/hawkman)
-commit `e00f563`.
+commit `1c29015`.
 
 `CMakeLists.txt` was trimmed to just the hawkman and squirrel targets, and the
 extra tools and `cpp/lib_tests/` were not copied.
-
-Note: hawkman gained three cpp commits after the consolidation snapshot
-(`5028202` cold-to-hot colour scheme, `2aa9824` saturation, `d74e808` blur
-normalisation, 2026-07-07/08, touching `hue_calculator` and `hawkman.cpp`)
-which are NOT in this repository.

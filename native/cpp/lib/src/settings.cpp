@@ -214,6 +214,16 @@ namespace hkmn
         return start_level() == 1;
     }
 
+    double Settings::score_threshold() const
+    {
+        return score_threshold_;
+    }
+
+    void Settings::set_score_threshold(double value)
+    {
+        score_threshold_ = value;
+    } 
+
     double Settings::artifact_threshold() const
     {
         return artifact_threshold_;
@@ -222,7 +232,7 @@ namespace hkmn
     void Settings::set_artifact_threshold(double value)
     {
         artifact_threshold_ = value;
-    } 
+    }
 
     std::uint8_t Settings::consecutive_scales() const
     {

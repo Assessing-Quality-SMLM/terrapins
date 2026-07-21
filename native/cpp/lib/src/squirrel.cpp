@@ -352,7 +352,7 @@ namespace sqrl
 
     void get_sigmas(double magnification, double (&sigma_values)[3])
     {
-    	const auto max_sigma = 6.0 * magnification;
+    	const auto max_sigma = 12.0 * magnification;
     	const auto sigma_start = 2.0 * magnification;
     	sigma_values[0] = 0.000000001;
     	sigma_values[1] = max_sigma;
@@ -735,6 +735,43 @@ namespace sqrl
 		write_metrics_to(stream, rmse, pearsons);
 	}
 
+	cv::Mat generate_colour_bar(const cv::Mat& error_map)
+	{
+		double min;
+		double max;
+		imp::get_min_max(error_map, &min, &max);
+
+
+		const auto font_face = cv::FONT_ITALIC;
+		const auto font_scale = 0.5;
+		const auto thickness = 1;
+		int baseLine;
+
+		const auto min_text = std::format("{:.2f}", min);
+		const auto min_size = cv::getTextSize(min_text, font_face, font_scale, thickness, &baseLine);
+
+		const auto max_text = std::format("{:.2f}", max);
+		const auto max_size = cv::getTextSize(max_text, font_face, font_scale, thickness, &baseLine);
+
+		const auto  n_cols = std::max(min_size.width, max_size.width);
+		const auto n_rows = error_map.rows;
+
+		cv::Mat colour_bar = cv::Mat::zeros(n_rows, n_cols, CV_FLOATING_DEPTH);
+		const auto range = max - min;
+		for (auto row = 0; row < n_rows; row++)
+		{
+			const auto scale_factor = static_cast<double>(row) / static_cast<double>(n_rows - 1);
+			const auto value = min + (range * scale_factor);
+			for (auto col = 0; col < n_cols; col++)
+			{
+				colour_bar.at<double>(row, col) = value;
+			}
+		}
+		cv::putText(colour_bar, min_text , cv::Point(0, 10), font_face, font_scale, cv::Scalar(range));
+        cv::putText(colour_bar, max_text, cv::Point(0, n_rows), font_face, font_scale, cv::Scalar(min));
+		return colour_bar;
+	}
+
 	void create_error_map_from(const cv::Mat& widefield, const cv::Mat& sr_image, const Settings& settings, const double magnification)
 	{
 		std::cout << "Searching for parameters\n";
@@ -784,8 +821,19 @@ namespace sqrl
 		cv::Mat error_map = cv::Mat::zeros(big_map.size(), CV_FLOATING_DEPTH);
 		// cv::Mat roi = error_map(sr_crop_rect);
 		big_map(sr_crop_rect).copyTo(error_map(sr_crop_rect));
-		const auto error_map_filename = settings.output_directory() / "error_map.tiff";
-		imp::write_tiff_to(error_map, error_map_filename);
+		const auto just_error_map_filename = settings.output_directory() / "error_map_.tiff";
+		imp::write_tiff_to(error_map, just_error_map_filename);
+
+		const auto colour_bar = generate_colour_bar(error_map);
+		const auto colourbar_filename = settings.output_directory() / "colourbar.tiff";
+		imp::write_tiff_to(colour_bar, colourbar_filename);
+
+		std::vector<cv::Mat> images = { error_map, colour_bar};
+        cv::Mat map_with_colour_bar;
+        cv::hconcat(images, map_with_colour_bar);
+
+		const auto combined_error_map_filename = settings.output_directory() / "error_map.tiff";
+		imp::write_tiff_to(map_with_colour_bar, combined_error_map_filename);
 
 		// return map;
 	}
