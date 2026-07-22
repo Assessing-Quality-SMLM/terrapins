@@ -1,5 +1,8 @@
 package com.coxphysics.terrapins.models.assessment.reports
 
+import com.coxphysics.terrapins.models.DRIFT_SPLIT_LABEL
+import com.coxphysics.terrapins.models.HALF_SPLIT_LABEL
+import com.coxphysics.terrapins.models.ZIP_SPLIT_LABEL
 import com.coxphysics.terrapins.models.assessment.AssessmentResults
 import com.coxphysics.terrapins.models.assessment.results.FRC
 import com.coxphysics.terrapins.models.assessment.results.Recon
@@ -10,6 +13,7 @@ import com.coxphysics.terrapins.models.hawkman.external.Results as HawkmanResult
 import com.coxphysics.terrapins.models.squirrel.external.Results as SquirrelResults
 import com.coxphysics.terrapins.views.hawkman.ResultsView as HawkmanResultsView
 import com.coxphysics.terrapins.views.squirrel.ResultsView as SquirrelResultsView
+
 
 class Report private constructor(private val results_: AssessmentResults)
 {
@@ -251,6 +255,11 @@ class Report private constructor(private val results_: AssessmentResults)
         return results_.copy_to(new_location)
     }
 
+    private fun results_view_title(label: String) : String
+    {
+        return String.format("%s Split", label)
+    }
+
     private fun cache_data()
     {
         drift_assessment_ = results_.drift_assessment()
@@ -265,20 +274,20 @@ class Report private constructor(private val results_: AssessmentResults)
 
         half_results_ = results_.half_split_results()
         val half_results = half_results_?.results()
-        half_view_ = half_results?.let{ r -> ResultsView.with(r, "Half Split") }
+        half_view_ = half_results?.let{ r -> ResultsView.with(r, results_view_title(HALF_SPLIT_LABEL)) }
 
         zip_results_ = results_.zip_split_results()
         val zip_results = zip_results_?.results()
-        zip_view_ = zip_results?.let{ r ->  ResultsView.with(r, "Zip Split") }
+        zip_view_ = zip_results?.let{ r ->  ResultsView.with(r, results_view_title(ZIP_SPLIT_LABEL)) }
 
         drift_results_ = results_.drift_split_results()
         val drift_results = drift_results_?.results()
-        drift_view_ = drift_results?.let{ r ->  ResultsView.with(r, "Drift Split") }
+        drift_view_ = drift_results?.let{ r ->  ResultsView.with(r, results_view_title(DRIFT_SPLIT_LABEL)) }
 
         if (drift_results != null && half_results != null)
-            drift_report_view_ = ResultsView.merged("Drift", "Drift", drift_results, "Half", half_results)
+            drift_report_view_ = ResultsView.merged("Drift", DRIFT_SPLIT_LABEL, drift_results, HALF_SPLIT_LABEL, half_results)
         if (drift_results != null && zip_results != null)
-            blinking_report_view_ = ResultsView.merged("Blinking", "Drift", drift_results, "Zip", zip_results)
+            blinking_report_view_ = ResultsView.merged("Blinking", DRIFT_SPLIT_LABEL, drift_results, ZIP_SPLIT_LABEL, zip_results)
 
         hawkman_results_ = results_.hawkman_results()
         hawkman_results_view_ = hawkman_results_?.let{ r -> HawkmanResultsView.from(r)}

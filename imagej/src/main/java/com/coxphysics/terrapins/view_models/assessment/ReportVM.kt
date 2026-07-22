@@ -1,5 +1,8 @@
 package com.coxphysics.terrapins.view_models.assessment
 
+import com.coxphysics.terrapins.models.DRIFT_SPLIT_LABEL
+import com.coxphysics.terrapins.models.HALF_SPLIT_LABEL
+import com.coxphysics.terrapins.models.ZIP_SPLIT_LABEL
 import com.coxphysics.terrapins.models.assessment.AssessmentResults
 import com.coxphysics.terrapins.models.assessment.reports.Report
 import com.coxphysics.terrapins.view_models.assessment.results.FRCVM
@@ -59,22 +62,30 @@ class ReportVM private constructor(
         return ReconVM.from("HAWK Recon", model_.hawk_recon())
     }
 
+    fun frc_report_name(label: String) : String
+    {
+        return String.format("%s Split", label)
+    }
+
     fun half_split_results() : FRCVM
     {
-        val results = model_.half_split_results() ?: return FRCVM.empty("Half Split")
-        return FRCVM.from("Half Split", results)
+        val title = frc_report_name(HALF_SPLIT_LABEL)
+        val results = model_.half_split_results() ?: return FRCVM.empty(title)
+        return FRCVM.from(title, results)
     }
 
     fun drift_split_results() : FRCVM
     {
-        val results = model_.drift_split_results() ?: return FRCVM.empty("Drift Split")
-        return FRCVM.from("Drift Split", results)
+        val title = frc_report_name(DRIFT_SPLIT_LABEL)
+        val results = model_.drift_split_results() ?: return FRCVM.empty(title)
+        return FRCVM.from(title, results)
     }
 
     fun zip_split_results() : FRCVM
     {
-        val results = model_.zip_split_results() ?: return FRCVM.empty("Zip Split")
-        return FRCVM.from("Zip Split", results)
+        val title = frc_report_name(ZIP_SPLIT_LABEL)
+        val results = model_.zip_split_results() ?: return FRCVM.empty(title)
+        return FRCVM.from(title, results)
     }
 
     fun hawkman_results() : HAWMANVM
