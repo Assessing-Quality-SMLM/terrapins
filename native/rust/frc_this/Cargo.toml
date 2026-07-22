@@ -1,0 +1,14 @@
+[package]
+name = "frc_this"
+version = "0.8.0"
+edition = "2021"
+
+[dependencies]
+clap = {version = "4.5", features = [ "derive" ]}
+smlm-frc = {path = "../smlm-frc"}
+
+tiff_wrap = {path = "../smlm-tiff", package = "smlm-tiff"}
+
+[features]
+plot = ["smlm-frc/plot"]
+default=[]

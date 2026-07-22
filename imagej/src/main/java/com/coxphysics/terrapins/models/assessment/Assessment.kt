@@ -237,6 +237,7 @@ class Assessment private constructor(private val exe_location_: Path, private va
         val exit_code = runner.run(pb)
         if (exit_code != 0)
         {
+            System.err.println("[TERRAPINS] assessment exe exited with code $exit_code")
             return null
         }
         if (data_name == null)

@@ -1,0 +1,114 @@
+name: Build plugin
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  # Build the native binaries on an old-glibc base so the release runs on
+  # older distros. almalinux:8 = glibc 2.28 (covers EL8/9, Debian 11+,
+  # Ubuntu 20.04+); gcc-toolset-13 gives C++23 while keeping that low floor
+  # (it statically pulls in only the newer libstdc++ symbols).
+  native-linux:
+    name: Native binaries (Linux)
+    runs-on: ubuntu-latest
+    container: almalinux:8
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install toolchain
+        run: |
+          dnf install -y gcc-toolset-13 gcc-toolset-13-gcc-c++ cmake git make python3-pip
+          pip3 install ninja
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+
+      - name: Build native binaries
+        env:
+          CXX: g++            # resolves to the gcc-toolset-13 g++ under scl enable
+        run: scl enable gcc-toolset-13 -- scripts/build-native.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: binaries-linux
+          path: native/build/dist/
+          if-no-files-found: error
+
+  # arm64 (Apple Silicon) macOS binaries. Runner has git + rust preinstalled.
+  # arm64-only because FFTW can't be cross-compiled (universal would need an
+  # Intel runner + lipo). macos-latest is Apple Silicon.
+  native-macos:
+    name: Native binaries (macOS arm64)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install toolchain
+        run: brew install cmake ninja
+
+      - name: Build native binaries
+        run: scripts/build-native.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: binaries-mac
+          path: native/build/dist/
+          if-no-files-found: error
+
+  # Windows binaries (MSVC/MSBuild). Runner has VS + cmake + git + rust preinstalled.
+  native-windows:
+    name: Native binaries (Windows)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build native binaries
+        shell: pwsh
+        run: ./scripts/build-native-windows.ps1
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: binaries-windows
+          path: native/build/dist/
+          if-no-files-found: error
+
+  # Stage each platform's binaries into the plugin resources, then build one jar.
+  # Add more platforms by adding native-<os> jobs + a download step per platform.
+  jar:
+    name: Plugin jar
+    needs: [native-linux, native-macos, native-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Stage Linux binaries into plugin resources
+        uses: actions/download-artifact@v4
+        with:
+          name: binaries-linux
+          path: imagej/src/main/resources/nix/bin
+
+      - name: Stage macOS binaries into plugin resources
+        uses: actions/download-artifact@v4
+        with:
+          name: binaries-mac
+          path: imagej/src/main/resources/mac/bin
+
+      - name: Stage Windows binaries into plugin resources
+        uses: actions/download-artifact@v4
+        with:
+          name: binaries-windows
+          path: imagej/src/main/resources/windows/bin
+
+      - name: Build jar
+        run: mvn -Denforcer.skip -Dmaven.test.skip=true -f imagej/pom.xml install
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TERRAPINS_plugin
+          path: imagej/target/*-jar-with-dependencies.jar
+          if-no-files-found: error

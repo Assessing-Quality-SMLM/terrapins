@@ -1,0 +1,28 @@
+[package]
+name = "smlm-sig-proc"
+version = "0.3.0"
+edition = "2021"
+homepage = "https://github.com/Assessing-Quality-SMLM/signal_processing"
+repository = "https://github.com/Assessing-Quality-SMLM/signal_processing"
+description = "Signal processing library with a focus on smlm and super resolution microscopy methods"
+keywords = ["smlm", "signal-processing"]
+license = "GPL-3.0-only"
+readme = "README.md"
+
+[dependencies]
+nalgebra = "0.33"
+num-traits = "0.2"
+# nv-nlopt = {"path" = "../../nv-nlopt/nv-nlopt", optional=true}
+rand = "0.8"
+fftw = "0.8"
+
+# [features]
+# fit = ["dep:nv-nlopt"]
+
+
+[dev-dependencies]
+criterion = "0.3"
+
+[[bench]]
+name = "variance"
+harness = false

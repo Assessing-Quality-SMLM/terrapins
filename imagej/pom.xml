@@ -59,6 +59,7 @@
 			<groupId>net.imagej</groupId>
 			<artifactId>ij</artifactId>
 			<version>1.54k</version>
+			<scope>provided</scope> <!-- ImageJ is the host runtime; don't bundle a 2nd copy -->
 		</dependency>
 		<dependency>
     		<groupId>org.apache.commons</groupId>
