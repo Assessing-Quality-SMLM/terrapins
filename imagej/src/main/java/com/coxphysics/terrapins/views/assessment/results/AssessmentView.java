@@ -61,7 +61,7 @@ public class AssessmentView {
      */
     private void $$$setupUI$$$() {
         content_panel_ = new JPanel();
-        content_panel_.setLayout(new GridLayoutManager(3, 3, new Insets(0, 0, 0, 0), -1, -1));
+        content_panel_.setLayout(new GridLayoutManager(3, 3, new Insets(2, 5, 5, 5), -1, -1));
         content_panel_.setAutoscrolls(false);
         content_panel_.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(-16777216)), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         name_ = new JLabel();
