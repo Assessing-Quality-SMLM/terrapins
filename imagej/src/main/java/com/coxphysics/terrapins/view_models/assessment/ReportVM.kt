@@ -110,8 +110,9 @@ class ReportVM private constructor(
 
     fun drift_assessment(): AssessmentVM
     {
-        val assessment = model_.drift_assessment() ?: return AssessmentVM.empty("Drift")
-        return AssessmentVM.from(assessment)
+        val has_results = true
+        val assessment = model_.drift_assessment() ?: return AssessmentVM.empty("Drift", has_results)
+        return AssessmentVM.from(assessment, has_results)
     }
 
     fun display_drift_report_details(show_details: Boolean)
@@ -124,8 +125,9 @@ class ReportVM private constructor(
 
     fun magnification_assessment(): AssessmentVM
     {
-        val assessment = model_.magnification_assessment() ?: return AssessmentVM.empty("Magnification")
-        return AssessmentVM.from(assessment)
+        val has_results = true
+        val assessment = model_.magnification_assessment() ?: return AssessmentVM.empty("Magnification", has_results)
+        return AssessmentVM.from(assessment, has_results)
     }
 
     fun display_magnification_details(show_details: Boolean)
@@ -136,10 +138,11 @@ class ReportVM private constructor(
             model_.hide_magnification_details()
     }
 
-     fun blinking_assessment(): AssessmentVM
+    fun blinking_assessment(): AssessmentVM
     {
-        val assessment = model_.blinking_assessment() ?: return AssessmentVM.empty("Blinking")
-        return AssessmentVM.from(assessment)
+        val has_results = true
+        val assessment = model_.blinking_assessment() ?: return AssessmentVM.empty("Blinking", has_results)
+        return AssessmentVM.from(assessment, has_results)
     }
 
     fun display_blinking_details(show_details: Boolean)
@@ -152,8 +155,9 @@ class ReportVM private constructor(
 
     fun sampling_assessment(): AssessmentVM
     {
-        val assessment = model_.sampling_assessment() ?: return AssessmentVM.empty("Sampling")
-        return AssessmentVM.from(assessment)
+        val has_results = true
+        val assessment = model_.sampling_assessment() ?: return AssessmentVM.empty("Sampling", has_results)
+        return AssessmentVM.from(assessment, has_results)
     }
 
     fun display_sampling_details(show_details: Boolean)
@@ -166,14 +170,16 @@ class ReportVM private constructor(
 
     fun localisation_precision_assessment(): AssessmentVM
     {
-        val assessment = model_.localisation_precision_assessment() ?: return AssessmentVM.empty("Localisation Precision")
-        return AssessmentVM.from(assessment)
+        val has_results = false
+        val assessment = model_.localisation_precision_assessment() ?: return AssessmentVM.empty("Localisation Precision", has_results)
+        return AssessmentVM.from(assessment, has_results)
     }
 
     fun frc_resolution_assessment(): AssessmentVM
     {
-        val assessment = model_.frc_resolution_assessment() ?: return AssessmentVM.empty("Frc Resolution")
-        return AssessmentVM.from(assessment)
+        val has_results = true
+        val assessment = model_.frc_resolution_assessment() ?: return AssessmentVM.empty("Frc Resolution", has_results)
+        return AssessmentVM.from(assessment, has_results)
     }
 
     fun display_frc_resolution_details(show_details: Boolean)
@@ -186,8 +192,9 @@ class ReportVM private constructor(
 
     fun bias_assessment(): AssessmentVM
     {
-        val assessment = model_.bias_assessment() ?: return AssessmentVM.empty("Bias")
-        return AssessmentVM.from(assessment)
+        val has_results = true
+        val assessment = model_.bias_assessment() ?: return AssessmentVM.empty("Bias", has_results)
+        return AssessmentVM.from(assessment, has_results)
     }
 
 
@@ -201,8 +208,9 @@ class ReportVM private constructor(
 
     fun squirrel_assessment(): AssessmentVM
     {
-        val assessment = model_.squirrel_assessment() ?: return AssessmentVM.empty("SQUIRREL")
-        return AssessmentVM.from(assessment)
+        val has_results = true
+        val assessment = model_.squirrel_assessment() ?: return AssessmentVM.empty("SQUIRREL", has_results)
+        return AssessmentVM.from(assessment, has_results)
     }
 
 
@@ -216,7 +224,8 @@ class ReportVM private constructor(
 
     fun limiting_resolution_assessment(): AssessmentVM
     {
-        val assessment = model_.limiting_resolution_assessment() ?: return AssessmentVM.empty("Limiting Resolution")
-        return AssessmentVM.from(assessment)
+        val has_results = false
+        val assessment = model_.limiting_resolution_assessment() ?: return AssessmentVM.empty("Limiting Resolution", has_results)
+        return AssessmentVM.from(assessment, has_results)
     }
 }
