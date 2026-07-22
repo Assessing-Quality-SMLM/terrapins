@@ -37,6 +37,8 @@ public class AssessmentView {
         if (background != null)
             passed_panel_.setBackground(background);
         details_.setText(view_model_.message());
+        boolean results_checkbox_visible = view_model_.has_results_to_display();
+        show_results_.setVisible(results_checkbox_visible);
     }
 
     public void add_details_listener(ActionListener listener) {
