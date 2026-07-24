@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.view_models.hawk
 
+import com.coxphysics.terrapins.models.PathWrapper
 import com.coxphysics.terrapins.models.hawk.HAWK
 import com.coxphysics.terrapins.models.hawk.NegativeValuesPolicy
 import com.coxphysics.terrapins.models.hawk.OutputStyle
@@ -9,25 +10,27 @@ import com.coxphysics.terrapins.view_models.TERRAPINS.PathSelectorVM
 import com.coxphysics.terrapins.views.HAWKWorker
 import java.awt.Color
 
-class HAWKVM private constructor(private var settings_: Settings)
+class HAWKVM private constructor(
+    private var settings_: Settings,
+    private var joint_last_path: PathWrapper)
 {
     private var image_selector_vm_ : ImageSelectorVM = ImageSelectorVM.with_image(settings_.inner_image())
-    private var output_file_vm_: PathSelectorVM = PathSelectorVM.with(settings_.file_path_wrapper())
+    private var output_file_vm_: PathSelectorVM = PathSelectorVM.with(settings_.file_path_wrapper(), joint_last_path)
     private var n_levels_default_colour_: Color? = null
     private var n_levels_error_colour_: Color = Color.RED
 
     companion object
     {
         @JvmStatic
-        fun from(settings: Settings): HAWKVM
+        fun from(settings: Settings, joint_last_path: PathWrapper): HAWKVM
         {
-            return HAWKVM(settings)
+            return HAWKVM(settings, joint_last_path)
         }
 
         @JvmStatic
         fun default(): HAWKVM
         {
-            return from(Settings.default())
+            return from(Settings.default(), PathWrapper.empty())
         }
 
         // For Java

@@ -21,21 +21,21 @@ class PathSelectorVM private constructor(
         }
 
         @JvmStatic
-        fun with_path_and_title(title: String, path: PathWrapper) : PathSelectorVM
+        fun with_path_and_title(title: String, path: PathWrapper, joint_last_path: PathWrapper) : PathSelectorVM
         {
-            return from(title, PathSelector.default_with(path))
+            return from(title, PathSelector.default_with(path, joint_last_path))
         }
 
         @JvmStatic
-        fun with_directory_path_and_title(title: String, path: PathWrapper) : PathSelectorVM
+        fun with_directory_path_and_title(title: String, path: PathWrapper, joint_last_path: PathWrapper) : PathSelectorVM
         {
-            return from(title, PathSelector.directory_from(path))
+            return from(title, PathSelector.directory_from(path, joint_last_path))
         }
 
         @JvmStatic
-        fun with(path: PathWrapper) : PathSelectorVM
+        fun with(path: PathWrapper, joint_last_path: PathWrapper) : PathSelectorVM
         {
-            return with_path_and_title("File", path)
+            return with_path_and_title("File", path, joint_last_path)
         }
 
         @JvmStatic
