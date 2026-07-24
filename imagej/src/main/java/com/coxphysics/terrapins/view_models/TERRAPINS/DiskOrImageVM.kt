@@ -1,25 +1,28 @@
 package com.coxphysics.terrapins.view_models.TERRAPINS
 
 import com.coxphysics.terrapins.models.DiskOrImage
+import com.coxphysics.terrapins.models.PathWrapper
 import com.coxphysics.terrapins.models.ij_wrapping.ImageSelector
 
-class DiskOrImageVM private constructor(private var model_: DiskOrImage)
+class DiskOrImageVM private constructor(
+    private var model_: DiskOrImage,
+    private val joint_last_path: PathWrapper)
 {
-    private var path_selector_vm_ : PathSelectorVM = PathSelectorVM.with(model_.path_wrapper())
+    private var path_selector_vm_ : PathSelectorVM = PathSelectorVM.with(model_.path_wrapper(), joint_last_path)
     private var image_selector_vm_ : ImageSelectorVM = ImageSelectorVM.from(ImageSelector.from(model_.image_wrapper()))
 
     companion object
     {
         @JvmStatic
-        fun from(model: DiskOrImage): DiskOrImageVM
+        fun from(model: DiskOrImage, joint_last_path: PathWrapper): DiskOrImageVM
         {
-            return DiskOrImageVM(model)
+            return DiskOrImageVM(model, joint_last_path)
         }
 
         @JvmStatic
         fun default(): DiskOrImageVM
         {
-            return from(DiskOrImage.default())
+            return from(DiskOrImage.default(), PathWrapper.empty())
         }
 
         // For Java

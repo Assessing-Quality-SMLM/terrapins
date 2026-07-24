@@ -1,26 +1,29 @@
 package com.coxphysics.terrapins.view_models.TERRAPINS
 
+import com.coxphysics.terrapins.models.PathWrapper
 import com.coxphysics.terrapins.models.assessment.localisation.AssessmentSettings
 
 
-class LocalisationVM private constructor(private val settings_: AssessmentSettings)
+class LocalisationVM private constructor(
+    private val settings_: AssessmentSettings,
+    private val joint_last_path: PathWrapper)
 {
-    private var localisation_file_vm_: LocalisationFileVM = LocalisationFileVM.from(settings_.localisation_file())
-    private var hawk_loc_file_vm_: LocalisationFileVM = LocalisationFileVM.from(settings_.hawk_localisation_file())
-    private var squirrel_inputs_vm_ = SquirrelInputsVM.from(settings_.squirrel_inputs())
+    private var localisation_file_vm_: LocalisationFileVM = LocalisationFileVM.from(settings_.localisation_file(), joint_last_path)
+    private var hawk_loc_file_vm_: LocalisationFileVM = LocalisationFileVM.from(settings_.hawk_localisation_file(), joint_last_path)
+    private var squirrel_inputs_vm_ = SquirrelInputsVM.from(settings_.squirrel_inputs(), joint_last_path)
 
     companion object
     {
         @JvmStatic
-        fun from(settings: AssessmentSettings): LocalisationVM
+        fun from(settings: AssessmentSettings, joint_last_path: PathWrapper): LocalisationVM
         {
-            return LocalisationVM(settings)
+            return LocalisationVM(settings, joint_last_path)
         }
 
         @JvmStatic
         fun default(): LocalisationVM
         {
-            return from(AssessmentSettings.default())
+            return from(AssessmentSettings.default(), PathWrapper.empty())
         }
 
         // for calls from Java

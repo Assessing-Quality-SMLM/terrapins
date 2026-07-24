@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.view_models.TERRAPINS
 
+import com.coxphysics.terrapins.models.PathWrapper
 import com.coxphysics.terrapins.models.assessment.workflow.Settings
 import com.coxphysics.terrapins.models.log.IJLog
 import com.coxphysics.terrapins.models.to_nullable_path
@@ -10,13 +11,15 @@ import kotlin.io.path.exists
 
 class TERRAPINSVM private constructor(private val settings_: Settings)
 {
-    private val pre_processing_vm_: PreProcessingVM = PreProcessingVM.from(settings_)
+    private val joint_last_path_ = PathWrapper.empty()
+
+    private val pre_processing_vm_: PreProcessingVM = PreProcessingVM.from(settings_, joint_last_path_)
     private val localisations_equipment_settings_vm_: AuxiallySettingsVM = AuxiallySettingsVM.from(settings_.localisation_settings().equipment(), settings_.localisation_settings().hawkman_settings())
-    private val localisation_vm_ : LocalisationVM = LocalisationVM.from(settings_.localisation_settings())
+    private val localisation_vm_ : LocalisationVM = LocalisationVM.from(settings_.localisation_settings(), joint_last_path_)
     private val images__equipment_settings_vm_: AuxiallySettingsVM = AuxiallySettingsVM.from(settings_.images_settings().equipment_settings(), settings_.images_settings().hawkwman_settings())
-    private val images_vm_ : ImagesVM = ImagesVM.from(settings_.images_settings())
-    private val working_directory_vm_: PathSelectorVM = PathSelectorVM.with_directory_path_and_title("Working Directory", settings_.core_settings().working_directory())
-    private val settings_vm_: PathSelectorVM = PathSelectorVM.with_path_and_title("Settings File", settings_.settings_file())
+    private val images_vm_ : ImagesVM = ImagesVM.from(settings_.images_settings(), joint_last_path_)
+    private val working_directory_vm_: PathSelectorVM = PathSelectorVM.with_directory_path_and_title("Working Directory", settings_.core_settings().working_directory(), joint_last_path_)
+    private val settings_vm_: PathSelectorVM = PathSelectorVM.with_path_and_title("Settings File", settings_.settings_file(), joint_last_path_)
 
     companion object
     {

@@ -1,24 +1,27 @@
 package com.coxphysics.terrapins.view_models.TERRAPINS
 
+import com.coxphysics.terrapins.models.PathWrapper
 import com.coxphysics.terrapins.models.assessment.SquirrelInputs
 
-class SquirrelInputsVM private constructor(private val model_: SquirrelInputs)
+class SquirrelInputsVM private constructor(
+    private val model_: SquirrelInputs,
+    private val joint_last_path: PathWrapper)
 {
-    private val widefield_vm_ = DiskOrImageVM.from(model_.widefield())
-    private val image_stack_vm_ = DiskOrImageVM.from(model_.image_stack())
+    private val widefield_vm_ = DiskOrImageVM.from(model_.widefield(), joint_last_path)
+    private val image_stack_vm_ = DiskOrImageVM.from(model_.image_stack(), joint_last_path)
 
     companion object
     {
         @JvmStatic
-        fun from(model: SquirrelInputs): SquirrelInputsVM
+        fun from(model: SquirrelInputs, joint_last_path: PathWrapper): SquirrelInputsVM
         {
-            return SquirrelInputsVM(model)
+            return SquirrelInputsVM(model, joint_last_path)
         }
 
         @JvmStatic
         fun default() : SquirrelInputsVM
         {
-            return from(SquirrelInputs.default())
+            return from(SquirrelInputs.default(), PathWrapper.empty())
         }
 
         @JvmStatic
