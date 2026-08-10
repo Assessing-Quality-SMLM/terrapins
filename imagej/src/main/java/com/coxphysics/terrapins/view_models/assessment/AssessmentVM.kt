@@ -6,22 +6,28 @@ import java.awt.Color
 
 class AssessmentVM private constructor(
     private val default_name_: String?,
-    private val model_: Assessment?
+    private val model_: Assessment?,
+    private val has_results_: Boolean
 )
 {
     companion object
     {
         @JvmStatic
-        fun empty(name: String) : AssessmentVM
+        fun empty(name: String, has_results: Boolean) : AssessmentVM
         {
-            return AssessmentVM(name, null)
+            return AssessmentVM(name, null, has_results)
         }
 
         @JvmStatic
-        fun from(model: Assessment) : AssessmentVM
+        fun from(model: Assessment, has_results: Boolean) : AssessmentVM
         {
-            return AssessmentVM(null, model)
+            return AssessmentVM(null, model, has_results)
         }
+    }
+
+    fun has_results_to_display(): Boolean
+    {
+        return has_results_
     }
 
     private fun is_empty(): Boolean

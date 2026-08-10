@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.plugins.hawk
 
+import com.coxphysics.terrapins.models.PathWrapper
 import com.coxphysics.terrapins.models.hawk.HAWK
 import com.coxphysics.terrapins.models.hawk.PStream
 import com.coxphysics.terrapins.models.hawk.Settings
@@ -69,7 +70,7 @@ class HAWKPlugin : ExtendedPlugInFilter
         }
         else
         {
-            val view_model = HAWKVM.from(settings_)
+            val view_model = HAWKVM.from(settings_, PathWrapper.empty())
             val view = HAWKView.from(view_model)
             view.preferredSize = Dimension(400, 400)
             view.pack()

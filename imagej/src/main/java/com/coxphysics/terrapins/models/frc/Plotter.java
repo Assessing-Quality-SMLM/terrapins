@@ -5,6 +5,7 @@ import kotlin.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -91,7 +92,15 @@ public class Plotter
         double[] qs = result.qs();
         double[] frcs = result.get_frcs(0);
         p.add("line", qs, frcs);
+        double y_min = get_y_min(frcs);
+        p.setLimits(0, 0.5, y_min, 1);
         return qs;
+    }
+
+    public static double get_y_min(double[] frcs)
+    {
+        double min_value = Arrays.stream(frcs).min().orElse(0.0);
+        return Math.min(0.0, min_value);
     }
 
     private static void draw_bounds_on(Plot plot)

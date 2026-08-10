@@ -30,7 +30,7 @@ Differences are:
 ## native/cpp/
 
 Code comes from [hawkman](https://github.com/Assessing-Quality-SMLM/hawkman)
-commit `1c29015`.
+commit `92838d3`.
 
 `CMakeLists.txt` was trimmed to just the hawkman and squirrel targets, and the
 extra tools and `cpp/lib_tests/` were not copied.
