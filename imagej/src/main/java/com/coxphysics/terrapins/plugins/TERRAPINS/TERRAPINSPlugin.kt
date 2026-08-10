@@ -13,7 +13,15 @@ import ij.ImageJ
 import ij.plugin.PlugIn
 import java.awt.Dimension
 import java.io.File
+import java.util.prefs.Preferences
 import javax.swing.SwingUtilities
+
+
+const val DEFAULT_WIDTH = 400
+const val DEFAULT_HEIGHT = 400
+
+const val PERSISTENCE_KEY_WIDTH = "UI_SIZE_WIDTH"
+const val PERSISTENCE_KEY_HEIGHT = "UI_SIZE_HEIGHT"
 
 class TERRAPINSPlugin : PlugIn
 {
@@ -64,15 +72,52 @@ class TERRAPINSPlugin : PlugIn
     {
         val view_model = TERRAPINSVM.from(settings_)
         val view = TERRAPINSTabView.from(view_model)
-        view.preferredSize = Dimension(400, 400)
+        view.preferredSize = get_ui_size()
         view.pack()
         SwingUtilities.invokeLater{
             view.isVisible = true
         }
         // wait on the semaphore
-        return view.was_canceled()
+        val result = view.was_canceled()
+        val dimension = view.size
+        if (dimension == null)
+            return result
+        persist_ui_size(dimension)
+        return result
     }
 
+    private fun get_preferences(): Preferences?
+    {
+        return Preferences.userNodeForPackage(this::class.java)
+    }
+
+    fun get_ui_size(): Dimension
+    {
+        val loaded_size = get_preferences()?.let { p -> load_ui_size_from_persistance(p) }
+        if(loaded_size == null)
+            return Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT)
+        return loaded_size
+    }
+
+    fun load_ui_size_from_persistance(preferences: Preferences): Dimension
+    {
+        val width = preferences.getInt(PERSISTENCE_KEY_WIDTH, DEFAULT_WIDTH)
+        val height = preferences.getInt(PERSISTENCE_KEY_HEIGHT, DEFAULT_HEIGHT)
+        return Dimension(width, height)
+    }
+
+    private fun persist_ui_size(ui_size: Dimension)
+    {
+        val preferences = get_preferences()
+        if (preferences == null)
+            return
+        persist_ui_size_to(preferences, ui_size)
+    }
+    private fun persist_ui_size_to(preferences: Preferences, ui_size: Dimension)
+    {
+        preferences.putInt(PERSISTENCE_KEY_HEIGHT, ui_size.height)
+        preferences.putInt(PERSISTENCE_KEY_WIDTH, ui_size.width)
+    }
     private fun run_assessment(settings: Settings): AssessmentResults?
     {
         return TERRAPINS.default().run(settings)

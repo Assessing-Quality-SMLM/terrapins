@@ -1,28 +1,30 @@
 package com.coxphysics.terrapins.view_models.TERRAPINS
 
+import com.coxphysics.terrapins.models.PathWrapper
 import com.coxphysics.terrapins.models.io.JointImages
 
 class JointImagesVM private constructor(
     private val model_: JointImages,
     private val label_a_: String,
-    private val label_b_: String
+    private val label_b_: String,
+    private val joint_last_path: PathWrapper
 )
 {
-    private var image_1_ = DiskOrImageVM.from(model_.image_1())
-    private var image_2_ = DiskOrImageVM.from(model_.image_2())
+    private var image_1_ = DiskOrImageVM.from(model_.image_1(), joint_last_path)
+    private var image_2_ = DiskOrImageVM.from(model_.image_2(), joint_last_path)
 
     companion object
     {
         @JvmStatic
-        fun from(model: JointImages, label_a: String, label_b: String): JointImagesVM
+        fun from(model: JointImages, label_a: String, label_b: String, joint_last_path: PathWrapper): JointImagesVM
         {
-            return JointImagesVM(model, label_a, label_b)
+            return JointImagesVM(model, label_a, label_b, joint_last_path)
         }
 
         @JvmStatic
         fun default(): JointImagesVM
         {
-            return from(JointImages.default(), "Image a", "Image b")
+            return from(JointImages.default(), "Image a", "Image b", PathWrapper.empty())
         }
 
         // for calls from Java

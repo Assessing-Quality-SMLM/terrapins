@@ -8,33 +8,34 @@ import javax.swing.JFileChooser
 class PathSelector private constructor(
     private var current_path_: PathWrapper,
     private var is_both_: Boolean,
-    private var is_files_: Boolean)
+    private var is_files_: Boolean,
+    private var last_path_ : PathWrapper)
 {
     companion object
     {
         @JvmStatic
-        fun from(path: PathWrapper, is_both: Boolean, is_files: Boolean) : PathSelector
+        fun from(path: PathWrapper, last_path: PathWrapper, is_both: Boolean, is_files: Boolean) : PathSelector
         {
-            return PathSelector(path, is_both, is_files)
+            return PathSelector(path, is_both, is_files, last_path)
         }
 
         @JvmStatic
-        fun directory_from(path: PathWrapper) : PathSelector
+        fun directory_from(path: PathWrapper, last_path: PathWrapper) : PathSelector
         {
-            return from(path, false, false)
+            return from(path, last_path, false, false)
         }
 
         @JvmStatic
-        fun default_with(path: PathWrapper) : PathSelector
+        fun default_with(path: PathWrapper, joint_last_path: PathWrapper) : PathSelector
         {
-            return from(path, true, false)
+            return from(path, joint_last_path, true, false)
         }
 
         @JvmStatic
         fun default() : PathSelector
         {
             val default_path = FileSystems.getDefault().getPath("")
-            return default_with(PathWrapper.from(default_path))
+            return default_with(PathWrapper.from(default_path), PathWrapper.empty())
         }
 
         // for calls from Java
@@ -53,6 +54,7 @@ class PathSelector private constructor(
     fun set_current_path(path: Path)
     {
         current_path_.set_path(path)
+        last_path_.set_path(path)
     }
 
     fun set_is_files_only(value: Boolean)
@@ -76,6 +78,11 @@ class PathSelector private constructor(
         return !is_files_and_directories() && !is_files()
     }
 
+    fun starting_location(): Path?
+    {
+        return current_path() ?: last_path_.path()
+    }
+
     fun find()
     {
         val jfc = JFileChooser()
@@ -86,7 +93,7 @@ class PathSelector private constructor(
         else if (is_directories())
             jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY)
 
-        val file = current_path()?.toFile()
+        val file = starting_location()?.toFile()
         if(file != null)
             jfc.setCurrentDirectory(file)
         val result = jfc.showOpenDialog(null)

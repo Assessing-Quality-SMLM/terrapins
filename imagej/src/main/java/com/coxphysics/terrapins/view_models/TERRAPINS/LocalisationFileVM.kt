@@ -1,17 +1,20 @@
 package com.coxphysics.terrapins.view_models.TERRAPINS
 
+import com.coxphysics.terrapins.models.PathWrapper
 import com.coxphysics.terrapins.models.localisations.LocalisationFile
 
-class LocalisationFileVM private constructor(private var model_: LocalisationFile)
+class LocalisationFileVM private constructor(
+    private var model_: LocalisationFile,
+    private var joint_last_path: PathWrapper)
 {
-    private var path_vm_: PathSelectorVM = PathSelectorVM.with(model_.path())
+    private var path_vm_: PathSelectorVM = PathSelectorVM.with(model_.path(), joint_last_path)
 
     companion object
     {
         @JvmStatic
-        fun from(model: LocalisationFile): LocalisationFileVM
+        fun from(model: LocalisationFile, joint_last_path: PathWrapper): LocalisationFileVM
         {
-            val vm = LocalisationFileVM(model)
+            val vm = LocalisationFileVM(model, joint_last_path)
             vm.path_vm_.set_is_files_only(true)
             return vm
         }
@@ -19,7 +22,7 @@ class LocalisationFileVM private constructor(private var model_: LocalisationFil
         @JvmStatic
         fun default(): LocalisationFileVM
         {
-            return from(LocalisationFile.default())
+            return from(LocalisationFile.default(), PathWrapper.empty())
         }
 
         // For Java
