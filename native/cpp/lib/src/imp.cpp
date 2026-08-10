@@ -448,6 +448,10 @@ namespace imp
 	}
 
 
-
+    int colour_bar_size(int n_cols)
+    {
+        const auto five_percent = static_cast<int>(std::round(static_cast<double>(n_cols) * 0.05));        
+        return std::max(five_percent, 30);
+    }
 
 }

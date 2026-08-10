@@ -382,11 +382,11 @@ namespace hkmn
         return ok;
     }
 
-    cv::Mat generate_scale_image(const Settings& settings, const int n_rows)
+    cv::Mat generate_scale_image(const Settings& settings, const int n_rows, const int n_cols)
     {
-        const auto n_cols = 30;
+        const auto cb_n_cols = imp::colour_bar_size(n_cols);
 
-        const auto size = cv::Size(n_cols, n_rows);
+        const auto size = cv::Size(cb_n_cols, n_rows);
         cv::Mat hsv_image = cv::Mat::zeros(size, CV_8UC3);
         cv::Mat hue_channel = cv::Mat::zeros(size, CV_BINARY_DEPTH);
         cv::Mat saturation_channel = cv::Mat::ones(size, CV_BINARY_DEPTH) * 179;
@@ -443,23 +443,24 @@ namespace hkmn
                     const auto pixel = image.at<cv::Vec3b>(row, col);
                     const std::uint8_t red_channel = pixel(2);
                     const std::uint8_t green_channel = pixel(1);
-                    std::uint8_t res = red_channel + green_channel;
+                    std::uint8_t red_green_combined = red_channel + green_channel;
+                    const double red_green_combined_d = static_cast<double>(red_green_combined);
+                    const double red_channel_d = static_cast<double>(red_channel);
+                    const double colour_ratio = red_channel_d / red_green_combined_d;
                     // std::cout << std::format("{} + {}: {}\n", red_channel, green_channel, res);
-                    if (level == 1 && res > 0)
+                    if (level == 1 && red_green_combined > 0)
                     {
                         res_image.at<std::uint8_t>(row, col) = 1;
-                        const std::uint8_t value = res;
                         hue_channel.at<std::uint8_t>(row, col) = hue_calculator.hue_for_level_t<std::uint8_t>(1);
-                        value_channel.at<std::uint8_t>(row, col) = res;
+                        value_channel.at<std::uint8_t>(row, col) = red_green_combined;
                         flags.at<INTEGER_TYPE>(row, col) = con_scales;
                     }
-                    res = res_image.at<std::uint8_t>(row, col);
+                    const auto res = res_image.at<std::uint8_t>(row, col);
                     if (level > 1 && res > 0)
                     // if (level > 1)
                     {
-                        const double ratio = (double)red_channel / (double)res;
                         const auto flag = flags.at<INTEGER_TYPE>(row, col);
-                        if (ratio > threshold && flag > 0)
+                        if (colour_ratio > threshold && flag > 0)
                         {
                             res_image.at<std::uint8_t>(row, col) = level;
                             const auto value = hue_calculator.hue_for_level_t<std::uint8_t>(level);
@@ -542,7 +543,7 @@ namespace hkmn
         
         const auto test_half_blur = imp::half_psf_blur_cv(test, psf);
         const auto test_half_blur_path = settings.output_directory_path() / "test_half_psf_blur.tiff";
-        imp::write_tiff(ref_half_blur, test_half_blur_path.string());
+        imp::write_tiff(test_half_blur, test_half_blur_path.string());
 
         auto results = Results();
         if (!results.initialise_at(settings.output_directory_path().string()))
@@ -569,7 +570,7 @@ namespace hkmn
             std::cout << "Writing resolution map\n";
             imp::write_tiff(resolution_map, resolution_path.string());
 
-            const auto resolution_scale_map = generate_scale_image(settings, resolution_map.rows);
+            const auto resolution_scale_map = generate_scale_image(settings, resolution_map.rows, resolution_map.cols);
             const auto resolution_scale_map_path = settings.output_directory_path() / "resolution_scale_map.tiff";
             std::cout << "Writing resolution scale map\n";            
             imp::write_tiff(resolution_scale_map, resolution_scale_map_path.string());

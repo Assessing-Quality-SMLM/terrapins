@@ -50,6 +50,8 @@ namespace imp
 
 	bool skeletonise(cv::Mat& image);
 
+    int colour_bar_size(int n_cols);
+
     template<typename T>
     void abs_mut(cv::Mat& image)
     {

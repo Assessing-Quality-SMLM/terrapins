@@ -753,7 +753,11 @@ namespace sqrl
 		const auto max_text = std::format("{:.2f}", max);
 		const auto max_size = cv::getTextSize(max_text, font_face, font_scale, thickness, &baseLine);
 
-		const auto  n_cols = std::max(min_size.width, max_size.width);
+		const auto desired_cols = imp::colour_bar_size(error_map.cols);
+
+		const auto cols_for_text = std::max(min_size.width, max_size.width);
+
+		const auto n_cols = std::max(desired_cols, cols_for_text);
 		const auto n_rows = error_map.rows;
 
 		cv::Mat colour_bar = cv::Mat::zeros(n_rows, n_cols, CV_FLOATING_DEPTH);
