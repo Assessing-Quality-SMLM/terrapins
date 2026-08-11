@@ -3,6 +3,8 @@ name: Build plugin
 on:
   pull_request:
   workflow_dispatch:
+  push:
+    branches: [main]
 
 jobs:
   # Build the native binaries on an old-glibc base so the release runs on
