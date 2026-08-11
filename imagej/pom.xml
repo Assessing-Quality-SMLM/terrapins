@@ -12,22 +12,22 @@
 		<relativePath />
 	</parent>
 
-	<groupId>com.coxphysics</groupId>        <!-- FIXME: Your organization groupId here -->
-	<artifactId>TERRAPINS_plugin</artifactId> <!-- FIXME: Your project artifactId here   -->
-	<version>0.12.0</version>
+	<groupId>com.coxphysics</groupId>
+	<artifactId>TERRAPINS_plugin</artifactId> 
+	<version>0.13.0</version>
 
-	<name>TERRAPINS_plugin</name>                                                   <!-- FIXME: Your project name here          -->
-	<description>TEsting Resolution, Reliability And Performance IN SMLM - ImageJ 1.x plugin.</description> <!-- FIXME: Your project description here   -->
-	<url>https://github.com/Assessing-Quality-SMLM/terrapins</url>                       <!-- FIXME: Your project website here       -->
-	<inceptionYear>2012</inceptionYear>                                           <!-- FIXME: Your project starting year here -->
+	<name>TERRAPINS_plugin</name>
+	<description>TEsting Resolution, Reliability And Performance IN SMLM - ImageJ 1.x plugin.</description>
+	<url>https://github.com/Assessing-Quality-SMLM/terrapins</url>
+	<inceptionYear>2024</inceptionYear> 
 	<organization>
-		<name>Cox Physics</name>           <!-- FIXME: Your organization name here    -->
-		<url>https://github.com/Assessing-Quality-SMLM</url> <!-- FIXME: Your organization website here -->
+		<name>Assessing Quality SMLM</name>
+		<url>https://github.com/Assessing-Quality-SMLM</url>
 	</organization>
 	<licenses>
-		<license>                         <!-- FIXME: Your license here -->
-			<name>CC0</name>
-			<url>https://creativecommons.org/publicdomain/zero/1.0/</url>
+		<license>
+			<name>GPLv3</name>
+			<url>https://www.gnu.org/licenses/gpl-3.0.html</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
@@ -50,7 +50,7 @@
 	</ciManagement>
 
 	<properties>
-		<package-name>com.coxphysics.terrapins</package-name>                   <!-- FIXME: Your project package prefix here -->
+		<package-name>com.coxphysics.terrapins</package-name>
 		<kotlin.version>1.9.22</kotlin.version>
 	</properties>
 
