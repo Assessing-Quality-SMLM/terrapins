@@ -28,9 +28,27 @@ class AssessmentWorker private constructor(
 
     override fun doInBackground(): Void?
     {
+        System.err.println("[TERRAPINS] assessment starting")
         val results = TERRAPINS.from(Assessment.default(), this).run(settings_)
+        if (results == null)
+            System.err.println("[TERRAPINS] assessment returned no results (an exe likely failed - see output above)")
         display_results(results)
         return null
+    }
+
+    override fun done()
+    {
+        try
+        {
+            get()   // re-throws anything doInBackground swallowed
+        }
+        catch (e: Exception)
+        {
+            val cause = e.cause ?: e
+            System.err.println("[TERRAPINS] assessment FAILED: $cause")
+            cause.printStackTrace()
+            logger_.log("Assessment failed: $cause")
+        }
     }
 
     override fun process(chunks: MutableList<String>?)

@@ -1,0 +1,13 @@
+[package]
+name = "smlm-tiff"
+version = "0.8.0"
+edition = "2021"
+homepage = "https://github.com/Assessing-Quality-SMLM/tiff_wrap"
+repository = "https://github.com/Assessing-Quality-SMLM/tiff_wrap"
+description = "Wrap up tiff parsing with a custom API for the rest of the ecosystem"
+keywords = ["smlm", "tiff"]
+license = "GPL-3.0-only"
+readme = "README.md"
+
+[dependencies]
+tiff = "0.9"

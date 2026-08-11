@@ -181,8 +181,13 @@ public class ffi
         String name = resource_name(p);
         InputStream in = class_.getResourceAsStream(name);
         if (in == null)
+        {
+            System.err.println("[TERRAPINS] resource NOT found in jar: " + name);
             return null;
-        return copy_to_temp(resource_name, in, in_bin, is_exe);
+        }
+        Path destination = copy_to_temp(resource_name, in, in_bin, is_exe);
+        System.err.println("[TERRAPINS] extracted " + name + " -> " + destination);
+        return destination;
     }
 
     public static void set_library_path_for(ProcessBuilder process_builder, Path exe_path)

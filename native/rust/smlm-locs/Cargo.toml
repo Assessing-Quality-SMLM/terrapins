@@ -1,0 +1,17 @@
+[package]
+name = "smlm-locs"
+version = "0.15.0"
+edition = "2021"
+homepage = "https://github.com/Assessing-Quality-SMLM/localisations"
+repository = "https://github.com/Assessing-Quality-SMLM/localisations"
+description = "Handle parsing of localisations and manipulations of them like splitting and filtering"
+keywords = ["smlm", "localisations"]
+license = "GPL-3.0-only"
+readme = "README.md"
+
+[dependencies]
+rand = {"version"="0.8", optional=true}
+
+[features]
+split = ["dep:rand"]
+default=["split"]

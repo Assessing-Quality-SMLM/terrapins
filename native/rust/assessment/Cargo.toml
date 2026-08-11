@@ -1,0 +1,8 @@
+[package]
+name = "assessment"
+version = "0.34.0"
+edition = "2024"
+
+[dependencies]
+clap = {version = "4.5", features = ["derive"]}
+smlm-qa = {path = "../smlm-qa"}
