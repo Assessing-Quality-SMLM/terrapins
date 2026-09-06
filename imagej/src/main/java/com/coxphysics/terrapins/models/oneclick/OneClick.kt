@@ -1,5 +1,7 @@
 package com.coxphysics.terrapins.models.oneclick
 
+import com.coxphysics.terrapins.models.DiskOrImage
+import com.coxphysics.terrapins.models.Image
 import com.coxphysics.terrapins.models.assessment.localisation.AssessmentSettings
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import com.coxphysics.terrapins.models.hawk.HAWK
@@ -23,6 +25,13 @@ import com.coxphysics.terrapins.models.hawk.Settings as HawkSettings
  *
  * This class closes that gap. HAWK already runs in-process, and the stream is a virtual stack
  * generated frame by frame, so it can be handed straight to a fitter without ever touching disk.
+ *
+ * The raw stack is used twice: once to localise, and once more as the SQUIRREL image stack. That
+ * second use is easy to miss, and missing it costs a whole report - SQUIRREL needs something to
+ * compare the reconstruction against, and with no widefield supplied the average of the raw
+ * frames is that something. It is a fair reference precisely because it is the same photons the
+ * localisations came from, so it captures non-linearity in the reconstruction without any of the
+ * registration and intensity-matching problems a separately acquired widefield brings.
  *
  * It deliberately produces [AssessmentSettings] rather than running the assessment itself. The
  * existing workflow, macro recording and results viewer all already work from those settings, so
@@ -79,6 +88,8 @@ class OneClick private constructor(
                 hawk_levels: Int): Result?
     {
         log_.log("One-click: ${raw.title}, ${raw.stackSize} frames, fitter: ${fitter_.name()}")
+        log_.log("The raw stack will also be averaged into a widefield for the SQUIRREL "
+                + "non-linearity analysis")
         if (!fitter_.produces_uncertainty())
         {
             // Said once, here, rather than left for the reader to infer from a report that
@@ -100,6 +111,7 @@ class OneClick private constructor(
         val settings = AssessmentSettings.with(working_directory)
         settings.set_equipment_settings(equipment)
         settings.set_localisation_file(localisation_file(raw_table))
+        settings.set_image_stack(DiskOrImage.from_image(Image.from(raw)))
         if (n_hawk != null)
         {
             settings.set_hawk_localisation_file(

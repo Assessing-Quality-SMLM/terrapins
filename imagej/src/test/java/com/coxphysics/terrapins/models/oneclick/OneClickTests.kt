@@ -159,6 +159,54 @@ class OneClickTests
     }
 
     @Test
+    fun the_raw_stack_is_offered_to_squirrel_as_its_image_stack()
+    {
+        // Without this SQUIRREL has nothing to compare the reconstruction against and the
+        // non-linearity analysis is skipped, which showed up as
+        //   "Image stack not supplied - sum of frames widefield cannot be generated"
+        //   "Cannot run non linearity SQUIRREL due to: ... aof_widefield.tiff does not exist"
+        // long after the run had started.
+        val log = ListLog<String>()
+        val fitter = FastFitterAdapter.from(equipment(), 2.0, false, log)
+        val working = working_directory("squirrel")
+
+        val result = OneClick.with(fitter, log)
+            .prepare(synthetic_stack(24, 128), equipment(), working, 3)!!
+
+        assertTrue(result.settings().squirrel_inputs().has_image_stack(),
+            "the raw stack is the widefield reference when no separate widefield was taken")
+    }
+
+    @Test
+    fun the_image_stack_reaches_disk_as_a_single_averaged_frame()
+    {
+        // The assessment is given a path, not an image, so the value of has_image_stack() alone
+        // proves nothing - this follows it to the file the executable will actually open.
+        //
+        // A single frame, not the whole stack: the average is computed here so a multi-gigabyte
+        // acquisition is not copied into the working directory. The Rust side means over
+        // whatever frames it finds, and the mean of one frame is that frame.
+        val log = ListLog<String>()
+        val fitter = FastFitterAdapter.from(equipment(), 2.0, false, log)
+        val working = working_directory("aof")
+
+        val result = OneClick.with(fitter, log)
+            .prepare(synthetic_stack(24, 128), equipment(), working, 3)!!
+        val prepared = result.settings().prepare_images_for_analysis()
+
+        assertNotNull(prepared, "preparing the SQUIRREL inputs must succeed")
+        val path = prepared.image_stack_path_in(working)
+        assertNotNull(path, "the assessment is passed a path for --image-stack")
+        assertTrue(Files.exists(path), "the file at $path must exist before the exe is told about it")
+
+        val written = ij.IJ.openImage(path.toString())
+        assertNotNull(written, "and it must be a readable tiff")
+        assertEquals(1, written.stackSize, "an average, not a copy of the raw stack")
+        assertEquals(128, written.width)
+        assertEquals(128, written.height)
+    }
+
+    @Test
     fun the_hawk_stream_is_longer_than_the_raw_stack()
     {
         // The cost that dominates a one-click run: roughly 2 * levels times the frames, each one
