@@ -177,9 +177,14 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 <!--				<version>CHOOSE LATEST VERSION HERE</version>-->
 				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
+					<!--
+					  A custom descriptor rather than the stock jar-with-dependencies:
+					  that one lets a dependency's plugins.config overwrite ours, which
+					  silently removes every TERRAPINS menu entry. See the descriptor.
+					-->
+					<descriptors>
+						<descriptor>src/assembly/plugin.xml</descriptor>
+					</descriptors>
 				</configuration>
 				<executions>
 					<execution>
