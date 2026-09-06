@@ -1,4 +1,4 @@
-use super::{parse_u32, parse_f64, Parser, ParserFactory};
+use super::{parse_u32, parse_f64, parse_optional_f64, Parser, ParserFactory};
 
 use crate::{AllocatedLocalisation, LocalisationBuilder as Builder};
 
@@ -170,16 +170,19 @@ pub fn parse_line(line: &str, settings: &Settings) -> Result<AllocatedLocalisati
 				Some(v) => builder.with_frame_number(parse_u32(splits[v])?),
 				None => builder
 			};
+		// A column that was not configured leaves the quantity absent, and so does an empty
+		// field in a column that was. Both reach the builder as MISSING rather than as a
+		// plausible-looking default.
 		builder = 
 			match settings.sigma_position()
 			{
-				Some(v) => builder.with_sigma(parse(v)?),
+				Some(v) => builder.with_sigma(parse_optional_f64(splits[v])?),
 				None => builder
 			};
 		builder = 
 			match settings.uncertainty_position()
 			{
-				Some(v) => builder.with_uncertainty(parse(v)?),
+				Some(v) => builder.with_uncertainty(parse_optional_f64(splits[v])?),
 				None => builder
 			};
 		Ok(builder.build())
@@ -224,6 +227,8 @@ impl TryFrom<&str> for CsvParser
 mod tests 
 {
 	use super::*;
+
+	use crate::{FitLocalisation, UncertainLocalisation};
 	
 	#[test]
 	fn default_settings_parse_test() 
@@ -233,8 +238,8 @@ mod tests
 		let localisation = parse_line(data, &settings).unwrap();
 		assert_eq!(localisation.x(), 1.0);
 		assert_eq!(localisation.y(), 2.0);
-		assert_eq!(localisation.sigma(), 20.0);
-		assert_eq!(localisation.uncertainty(), 20.0);
+		assert!(!localisation.has_measured_psf_sigma());
+		assert!(!localisation.has_measured_uncertainty());
 	}
 
 	#[test]
@@ -265,31 +270,41 @@ mod tests
 		let localisation = parse_line(data, &settings).unwrap();
 		assert_eq!(localisation.x(), 1.0);
 		assert_eq!(localisation.y(), 2.0);
-		assert_eq!(localisation.uncertainty(), 20.0);
+		assert!(!localisation.has_measured_uncertainty());
 	}
 
 	#[test]
-	fn sigma_has_default_value() 
+	fn an_unconfigured_sigma_column_is_absent_not_defaulted() 
 	{
 		let data = "1,2";
 		let settings = Settings::default().with_sigma_pos(None).with_uncertainty_pos(None);
 		let localisation = parse_line(data, &settings).unwrap();
 		assert_eq!(localisation.x(), 1.0);
 		assert_eq!(localisation.y(), 2.0);
-		assert_eq!(localisation.sigma(), 20.0);
-		assert_eq!(localisation.uncertainty(), 20.0);
+		// Previously both defaulted to 20.0, which the default psf sigma filter - the exclusive
+		// range (20, 2000) - then discarded, silently emptying the whole table.
+		assert!(!localisation.has_measured_psf_sigma());
+		assert!(!localisation.has_measured_uncertainty());
 	}
 
 	#[test]
-	fn uncertainty_has_default_value() 
+	fn an_empty_field_is_absent_not_an_error() 
 	{
-		let data = "1,2";
-		let settings = Settings::default().with_sigma_pos(None).with_uncertainty_pos(None);
+		let data = "1,2,,";
+		let settings = Settings::default().with_sigma_pos(Some(2)).with_uncertainty_pos(Some(3));
 		let localisation = parse_line(data, &settings).unwrap();
 		assert_eq!(localisation.x(), 1.0);
-		assert_eq!(localisation.y(), 2.0);
-		assert_eq!(localisation.sigma(), 20.0);
-		assert_eq!(localisation.uncertainty(), 20.0);
+		assert!(!localisation.has_measured_psf_sigma());
+		assert!(!localisation.has_measured_uncertainty());
+	}
+
+	#[test]
+	fn a_corrupt_field_is_still_an_error() 
+	{
+		// Only emptiness means absent; junk must not be quietly reinterpreted.
+		let data = "1,2,junk";
+		let settings = Settings::default().with_sigma_pos(Some(2));
+		assert!(parse_line(data, &settings).is_err());
 	}
 
 	#[test]
@@ -298,11 +313,13 @@ mod tests
 		let data = "1,2";
 		let settings = Settings::default().with_frame_number_pos(None).with_sigma_pos(None).with_uncertainty_pos(None);
 		let localisation = parse_line(data, &settings).unwrap();
+		// The frame number still has a real default of 0; it is only the two quantities that
+		// feed filters and measurements that had to stop being defaulted.
 		assert_eq!(localisation.frame_number(), 0);
 		assert_eq!(localisation.x(), 1.0);
 		assert_eq!(localisation.y(), 2.0);
-		assert_eq!(localisation.sigma(), 20.0);
-		assert_eq!(localisation.uncertainty(), 20.0);
+		assert!(!localisation.has_measured_psf_sigma());
+		assert!(!localisation.has_measured_uncertainty());
 	}
 
 	#[test]

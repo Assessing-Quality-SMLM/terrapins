@@ -385,6 +385,228 @@ and scaling, both of which can cause issues if errors occur. It can be
 useful to see what inputs exactly were used to generate the map
 particulary if you feel the error map is not representative.
 
+# Known issues (`oneclick` branch)
+
+Notes recorded while investigating a one-click path from a raw image stack to a
+full assessment (raw stack -> HAWK -> fitter -> `assessment localisation`). They
+are on this branch because that work surfaced them, but (2) and (3) are
+pre-existing and affect `main` too.
+
+## 1. A fitter with no uncertainty estimate scores an automatic fail
+
+The localisation workflow reads `uncertainty` (or `uncertainty_xy`) out of the
+localisation table and uses it for two different things:
+
+- **as the render blur width.** Every localisation is drawn as a patch whose
+  sigma *is* its uncertainty - `native/rust/smlm-renderer/src/render_styles/single_point_patch_renderer.rs:74`
+  and `integral_renderer.rs:71`.
+- **as the mean localisation precision.** `native/rust/smlm-qa/src/tools/renderer.rs:12`
+  takes a plain unweighted mean of the column, which feeds the limiting
+  precision score at `native/rust/smlm-qa/src/assessment/limiting_resolution.rs:53`
+  (`2 * precision / max(bias, frc)`).
+
+A moment-based fitter produces no residual and so no goodness of fit, and
+writes the column as a placeholder zero. That gives a mean precision of zero, a
+limiting precision score of zero, and an automatic `Fail`. The
+"Localisation precision is assumed to be 20nm" fallback in
+`limiting_resolution.rs:75` does **not** rescue this: it triggers only on
+`None`, and a column of zeros parses as `Some(0.0)`. The reconstruction is
+affected independently, since a patch of sigma zero is degenerate.
+
+So the failure is silent and total rather than a missing report line, and it
+would be reported as a property of the *data* rather than of the fitter.
+
+**Resolved on the Rust side.** Zero, negative and non-finite uncertainties are now treated as
+"no measurement here" rather than as data:
+
+- `native/rust/smlm-locs/src/lib.rs` gains `is_measured_uncertainty` and
+  `UncertainLocalisation::has_measured_uncertainty`, so one definition is shared.
+- `determine_localisation_precision` returns `Option<f64>`, averaging only the localisations
+  that carry a measurement and returning `None` when none do. Placeholder rows no longer drag
+  a real mean down either.
+- With `None`, the mean precision is simply left unset, so the limiting-resolution assessment
+  takes its existing fallback and the report says "Localisation precision is assumed to be
+  20nm." The Localisation report item is omitted with a message explaining that the fitter
+  reports no uncertainty, rather than scoring zero and failing the data for the fitter's
+  limitation. Each report item's error is collected independently, so nothing else is lost.
+- Both render styles blur by `patch_utils::blur_sigma_nm`, which substitutes a 20 nm fallback -
+  matching what the CSV reader already uses when a file has no uncertainty column at all. This
+  matters more than it looks: `blur_2d` with sigma zero evaluates `exp(-d^2/0)/0`, which is
+  `0/0` at every pixel, so one placeholder localisation turned the whole reconstruction into
+  NaN.
+
+Note the naming trap in this area: a localisation has two quantities that get called sigma, the
+fitted peak width (`psf_sigma`) and the uncertainty. Only the uncertainty is used downstream -
+it is the render blur width and the precision score. The peak width feeds one optional import
+filter (`smlm-locs/src/filters/mod.rs`) and nothing else. The render styles previously read
+`let sigma_nm = localisation.uncertainty();`, which is correct but reads like a mistake; it is
+now commented.
+
+Still open: producing a real estimate for fitters that have none. Fastfitting now predicts one
+from the photon budget (Thompson 2002, calibrated against simulated ground truth), which needs a
+camera gain it takes as a new setting. When that gain is absent it writes NaN, which this change
+handles as absent.
+
+A second, deeper instance of the same defect - a missing value replaced by a plausible number at
+parse time - is covered in issue 2 below. That one was discarding entire files.
+
+## 2. Missing values were replaced by plausible defaults, and import filters then discarded whole files
+
+**EVALUATION AND TESTING OUTSTANDING - parked for the team.** The code change is made and unit
+tested, but what it alters is which localisations survive import, so it should be checked against
+real files before it is relied on. The suggested checks are at the end of this section.
+
+### What was wrong
+
+A localisation carries two quantities that both get called sigma: the fitted peak width
+(`psf_sigma`) and the localisation uncertainty. Only the uncertainty is used downstream - it is
+the render blur width and the mean localisation precision. The peak width feeds one thing, the
+import filter.
+
+Both were given a default of 20.0 when a file did not carry them
+(`smlm-locs/src/constants.rs`), which made "absent" indistinguishable from "measured as 20 nm".
+Meanwhile every localisation file is imported through two filters that are on by default
+(`smlm-qa/src/settings/localisation_data.rs`):
+
+| filter | default range | applies to |
+|---|---|---|
+| psf sigma | (20, 2000) exclusive | all localisation files |
+| psf sigma | (60, 200) exclusive | HAWK localisation files, set in `assessment/src/main.rs` |
+
+The tighter range on the HAWK path is deliberate and should not be widened without understanding
+why it is there: HAWK is prone to picking up fixed pattern noise, which presents as detections at
+PSF widths that no real emitter could produce. Filtering to a realistic width range is what keeps
+that noise out of the HAWKMAN input. It is a genuine quality cut, not a leftover default - unlike
+the (20, 2000) range, whose lower bound the old missing-value default sat exactly on.
+| uncertainty | (0, 1000) exclusive | all localisation files |
+
+A default sigma of 20.0 fails `20 < value` exactly. So **a CSV parsed without a sigma column had
+every one of its localisations discarded**, silently, with no error - an empty table and an
+unexplained empty report. The same held for any fitter writing the conventional placeholder zero
+into the uncertainty column: `0 < 0` is false, so **every localisation was discarded**. Both were
+confirmed by test before the fix, returning 0 of 2 and 0 of 1 localisations respectively.
+
+Note the second case is not hypothetical for the one-click work: it is exactly what a moment
+fitter's output looks like, so this was the first thing that would have broken.
+
+### What changed
+
+- `constants::MISSING` (NaN) replaces `DEFAULT_PSF_SIGMA` and `DEFAULT_UNCERTAINTY`. A quantity
+  the file did not carry stays absent instead of becoming a number.
+- `is_measured_psf_sigma` joins `is_measured_uncertainty`, with matching
+  `has_measured_*` methods on the traits, so there is one definition of "is this real".
+- **Filters keep what they cannot judge.** `Bounds::admits` passes a localisation whose value is
+  absent, on the grounds that a filter exists to judge a quantity and cannot judge one that is
+  not there. A genuine measurement outside the range is still dropped - absence and a bad
+  measurement are now different things.
+- Parsers treat an empty field as absent rather than failing the line, in both the ThunderSTORM
+  and CSV readers. Anything else unparseable is still an error, so a corrupt file is not
+  reinterpreted as a file of missing values.
+- `LocalisationData::to_localisations` returns an error naming both filters when it would
+  otherwise return an empty table, so "everything was filtered out" can never again be silent.
+
+Note `AllocatedLocalisation` derives `PartialEq` and NaN is not equal to itself, so a
+localisation with an absent quantity no longer compares equal to a copy of itself. This only
+affects tests; nothing in the production path compares localisations. Check the fields, or
+`has_measured_*`, rather than the whole struct.
+
+### Still open, deliberately
+
+The filter bounds are **exclusive** (`min < value && value < max`), so a measured value sitting
+exactly on a bound is dropped. With absence now handled separately this is only reachable for a
+genuine measurement and exact boundary hits are rare in floating point data, so the practical
+impact is small - but whether the bounds should be inclusive is a decision about what the filter
+is *for*, not a bug fix. It is left as-is and pinned by
+`characterisation_measured_value_on_the_filter_boundary_is_dropped`, which should be inverted
+rather than deleted if the policy changes.
+
+The (20, 2000) nm general range has not been reviewed. It is very wide, and the fact that the old
+missing-value default of 20.0 sat exactly on its lower bound suggests the two numbers were not
+chosen together. The (60, 200) nm HAWK range is deliberate - see above.
+
+### Suggested testing
+
+The unit tests cover the decision table - see `psf_sigma_filter_decision_table` and
+`uncertainty_filter_decision_table` in `smlm-locs/src/filters/mod.rs`, which are written as
+explicit tables of case and expected outcome so the policy can be reviewed by reading them. What
+they cannot tell you is whether the policy is right for real data. Worth doing:
+
+1. **Count localisations before and after, on files you know.** Run a dataset that worked before
+   this change and confirm the count is unchanged. Any *increase* is localisations that were
+   previously being discarded - inspect a few and decide whether they should have been.
+2. **A file with no sigma column.** Previously yielded nothing at all. Confirm it now imports,
+   renders, and produces a report, and that the report does not claim a 20 nm precision.
+3. **A file with a placeholder zero uncertainty**, which is what a moment fitter writes. Confirm
+   it imports, renders with the fallback blur width, and that the limiting-precision report says
+   the precision was assumed rather than scoring zero.
+4. **The HAWK path specifically**, since it carries the tighter (60, 200) nm filter. That filter
+   is doing real work - it is what keeps HAWK's fixed pattern noise out of HAWKMAN - so the thing
+   to confirm is that it is still removing the noise and not much else. Compare HAWK and raw
+   localisation counts for the same dataset and check the discrepancy is of the size you expect
+   for your optics; the range assumes a particular PSF, so data at a different wavelength or NA
+   may need it adjusted rather than removed.
+5. **Deliberately break a file** - a corrupt sigma field, a file of only out-of-range widths -
+   and confirm you get the new error naming the filters rather than an empty report.
+
+## 3. HAWK stream frames are recomputed on every access
+
+`imagej/.../models/hawk/PStream.java` is a `VirtualStack`: `getProcessor(n)`
+regenerates its frame from the raw stack on every call and nothing is cached.
+Two consequences:
+
+- with `NegativeValuesPolicy.SEPARATE`, the positive and negative halves of one
+  level/offset are two separate slices that each recompute the *same*
+  difference, so the arithmetic is done twice.
+- each output frame at level `l` reads `2^(l+1)` raw slices. Summed over three
+  levels that is ~14 raw slice reads per output position, or ~28 per raw frame
+  once the positive/negative duplication is counted.
+
+At the dataset sizes currently expected this is not the limiting factor and is
+deliberately left alone. The concern for one-click is the **combination** not
+yet measured: the HAWK stream is roughly `2 * n_levels` times the length of the
+raw stack, and fitting it means a full pass over all of it. If the raw stack is
+itself a disk-backed virtual stack, every one of those recomputed reads goes to
+disk, and paging is expected to dominate everything else. A multi-threaded
+fitter makes this worse rather than better - `ij.VirtualStack.getProcessor` is
+not safe under concurrent access, so the raw stack cannot simply be read from
+several threads at once.
+
+Not worth optimising before a working end-to-end version exists, but measure it
+early: it determines whether the HAWK stream can stay in memory or has to be
+materialised to disk between the HAWK and fitting stages.
+
+## 4. `PStream.getProcessor` indexes transposed, and is only correct on square frames
+
+`imagej/.../models/hawk/PStream.java:186-197`. The accumulation loop indexes
+`fp.setf(c, r, ...)` - column as x, row as y, which is correct. The sign
+handling loop immediately below indexes `fp.getf(r, c)` and `fp.setf(r, c, ...)`,
+with the arguments the other way round.
+
+`FloatProcessor.getf(x, y)` is `pixels[y * width + x]` with no bounds check
+(verified against the bytecode of `ij` 1.54k). On a square frame the second loop
+therefore visits every pixel exactly once, just in transposed order, and the
+result is correct - which is why this has not shown up. On a non-square frame it
+does not:
+
+| frame (w x h) | result |
+|---|---|
+| 8 x 8 | correct |
+| 8 x 16 (tall) | 56 pixels never visited, 56 visited twice, 56 negative values survive the positive/negative split |
+| 16 x 8 (wide) | `ArrayIndexOutOfBoundsException: Index 128 out of bounds for length 128` |
+
+The tall case is the dangerous one: no exception, and the frames that come out
+are wrong in a way that looks plausible. Note also that applying the negative
+split twice to the same pixel zeroes it (`max(0, -max(0, -v)) == 0` for `v < 0`),
+so the doubly-visited pixels lose data rather than merely being processed twice.
+
+This is a straightforward argument-order slip rather than an origin convention
+difference: a bottom-left versus top-left origin would show up as a flip in one
+axis (`h - 1 - r`), not as an exchange of the two arguments, and the same method
+uses both orders in adjacent loops.
+
+Fix is to swap the arguments in the second loop. Worth a regression test on a
+deliberately non-square frame, since no current test would catch it.
+
 # How to get the plugin
 
 Latest ImageJ plugin can be found

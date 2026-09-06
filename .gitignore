@@ -23,6 +23,8 @@ rust_jni/target/*
 rust_ffi/Cargo.lock
 rust_ffi/target/*
 
+native/rust/target/
+
 assessment_artifacts/*
 frc_artifacts/*
 hawkman_and_squirrel_artifacts/*

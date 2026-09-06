@@ -25,7 +25,14 @@ fn error_f(name: &str) -> String
 
 fn generate_localisation_precision_assessment<T>(results: &Results<T>, assessment_settngs: &AssessmentSettings) -> Result<ReportItem, String>
 {
-	let mean_precision = results.mean_precision().ok_or_else(|| format!("Mean precision not calculated"))?;
+	// Absent rather than zero: no localisation in the table carried a usable uncertainty, which
+	// is the normal case for a fitter that produces no per-fit residual. Reported as a missing
+	// item explaining why, not as a precision of zero - the limiting resolution assessment
+	// separately falls back to its stated assumption and says so.
+	let mean_precision = results.mean_precision().ok_or_else(||
+		format!("Localisation precision unavailable: no localisation carried a measured \
+		         uncertainty. The fitter that produced this table reports none, or its \
+		         uncertainty column is a placeholder."))?;
 	let mut assessment = Assessment::pass_with("Localisation", "Mean precision of localisations.");
 	assessment.set_score(assessment_settngs.pass_threshold() * mean_precision);
 	Ok((assessment, assessment_settngs.clone()))
