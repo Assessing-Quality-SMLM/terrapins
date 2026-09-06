@@ -92,6 +92,19 @@
     		<artifactId>forms_rt</artifactId>
     		<version>7.0.3</version>
 		</dependency>
+		<!--
+		  The fast moment fitter, so a raw image stack can be localised in-process rather than
+		  the user having to export, localise elsewhere and come back with a table.
+
+		  Built from the sibling Fastfitting repository and installed to the local Maven
+		  repository (mvn install there first). It will be vendored into this repository, the
+		  way native/rust was - see native/PROVENANCE.md - once the one-click path settles.
+		-->
+		<dependency>
+			<groupId>smlm</groupId>
+			<artifactId>fast-fitter</artifactId>
+			<version>0.1.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
