@@ -2,6 +2,7 @@ package com.coxphysics.terrapins.views.TERRAPINS;
 
 import com.coxphysics.terrapins.models.utils.ActionableListener;
 import com.coxphysics.terrapins.view_models.TERRAPINS.TERRAPINSVM;
+import com.coxphysics.terrapins.views.oneclick.OneClickView;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -74,6 +75,7 @@ public class TERRAPINSTabView extends JFrame {
     private PathSelectorView working_directory_view_;
     private JScrollPane scroll_pane_;
     private PreProcessingView pre_processing_view_;
+    private OneClickView one_click_view_;
 
     private boolean cancelled_ = true;
 
@@ -87,7 +89,44 @@ public class TERRAPINSTabView extends JFrame {
         add(root_);
         localistations_run_btn_.addActionListener(ActionableListener.from(this, TERRAPINSTabView::run_localisations));
         images_run_btn_.addActionListener(ActionableListener.from(this, TERRAPINSTabView::run_images));
+        promote_one_click();
         this.addWindowListener(new CloseListener(this));
+    }
+
+    /**
+     * Makes one-click the front door and moves the existing workflows behind "Advanced".
+     *
+     * Done here rather than in {@code $$$setupUI$$$} on purpose. That method is regenerated
+     * wholesale whenever someone opens the .form in the GUI designer and saves it, so anything
+     * written into it by hand is one careless save away from being lost. Restructuring afterwards
+     * survives regeneration: the designer keeps owning the panels it built, and this owns only
+     * their arrangement.
+     *
+     * The tabs the designer produced are, in order: Pre-Processing, Localisation Workflow, Images
+     * Workflow, Advanced. All four are still reachable - nothing is removed - but the two that
+     * require a localisation table the user had to produce elsewhere are no longer the first
+     * thing a new user meets.
+     */
+    private void promote_one_click()
+    {
+        JTabbedPane advanced = new JTabbedPane();
+        // Moving a tab removes it, so index 0 repeatedly rather than counting up.
+        while (tab_pane_.getTabCount() > 0)
+        {
+            String title = tab_pane_.getTitleAt(0);
+            Component page = tab_pane_.getComponentAt(0);
+            tab_pane_.removeTabAt(0);
+            advanced.addTab(title, page);
+        }
+
+        one_click_view_ = new OneClickView();
+        JPanel one_click_panel = new JPanel(new BorderLayout());
+        one_click_panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        one_click_panel.add(one_click_view_, BorderLayout.NORTH);
+
+        tab_pane_.addTab("One Click", one_click_panel);
+        tab_pane_.addTab("Advanced", advanced);
+        tab_pane_.setSelectedIndex(0);
     }
 
     public static TERRAPINSTabView from(TERRAPINSVM view_model) {
@@ -98,6 +137,7 @@ public class TERRAPINSTabView extends JFrame {
 
     private void set_view_model(TERRAPINSVM view_model) {
         view_model_ = view_model;
+        one_click_view_.set_view_model(view_model_.one_click_vm());
         localisations_squirrel_inputs_view_.set_view_model(view_model_.localisation_squirrel_inputs_vm());
         localisation_equipment_view_.set_view_model(view_model_.localisation_equipment_settings_vm());
         localisations_ctrl_.set_view_model(view_model_.localisation_vm());
