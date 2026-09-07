@@ -14,6 +14,12 @@ import java.nio.file.Path
  * Implementations write a file the assessment can read directly - see [ParseMethodName] - rather
  * than returning localisations in memory, because the assessment is a separate executable that
  * takes file paths, and a table large enough to matter should not be marshalled twice.
+ *
+ * The bundled moment fitter is a scaffold, not the intended fitter: an improved one is in testing
+ * that corrects systematic bias at the cost of a slightly slower fit. When it lands it replaces
+ * the moment fitter here, and `PrecisionEstimator`'s calibration constants do **not** come with
+ * it - they measure how far that particular fitter falls short of the Thompson bound, which is
+ * the thing the replacement changes. See imagej/PROVENANCE.md.
  */
 interface Fitter
 {
