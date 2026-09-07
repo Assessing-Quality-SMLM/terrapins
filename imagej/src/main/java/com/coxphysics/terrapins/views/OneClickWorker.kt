@@ -9,6 +9,7 @@ import com.coxphysics.terrapins.models.oneclick.Fitter
 import com.coxphysics.terrapins.models.oneclick.FitterChoice
 import com.coxphysics.terrapins.models.oneclick.OneClick
 import com.coxphysics.terrapins.models.oneclick.OneClickSettings
+import com.coxphysics.terrapins.models.oneclick.ThunderStormFitter
 import com.coxphysics.terrapins.views.utils.Utils
 import javax.swing.SwingWorker
 
@@ -48,6 +49,9 @@ class OneClickWorker private constructor(
         {
             FitterChoice.FAST -> FastFitterAdapter.from(
                 settings_.equipment(), settings_.photons_per_adu(), settings_.emccd(), this)
+            FitterChoice.THUNDERSTORM -> ThunderStormFitter.from(
+                settings_.equipment(), settings_.thunderstorm(), settings_.photons_per_adu(),
+                settings_.emccd(), this)
         }
     }
 
@@ -60,6 +64,12 @@ class OneClickWorker private constructor(
             // The view disables Run in this state; this is the belt to that braces.
             log(settings_.error_string() ?: "Nothing to run")
             return null
+        }
+
+        // Said once, before the run, because both steps change what the assessment is an
+        // assessment of rather than merely how it was computed.
+        settings_.thunderstorm().post_processing_note()?.let {
+            if (settings_.fitter() == FitterChoice.THUNDERSTORM) log(it)
         }
 
         val prepared = OneClick.with(fitter(), this)

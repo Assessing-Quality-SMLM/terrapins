@@ -11,6 +11,9 @@ enum class FitterChoice
 {
     /** The built-in fast moment fitter. Runs in this process. */
     FAST,
+
+    /** ThunderSTORM, driven through the commands it registers with ImageJ. */
+    THUNDERSTORM,
 }
 
 /**
@@ -34,6 +37,7 @@ class OneClickSettings private constructor(private val core_settings_: CoreSetti
     private var hawk_levels_ = DEFAULT_HAWK_LEVELS
     private var photons_per_adu_ = Double.NaN
     private var emccd_ = false
+    private val thunderstorm_ = ThunderStormSettings.default()
 
     companion object
     {
@@ -69,6 +73,8 @@ class OneClickSettings private constructor(private val core_settings_: CoreSetti
     {
         equipment_ = value
     }
+
+    fun thunderstorm(): ThunderStormSettings = thunderstorm_
 
     fun fitter(): FitterChoice = fitter_
 
@@ -128,6 +134,11 @@ class OneClickSettings private constructor(private val core_settings_: CoreSetti
         if (hawk_levels_ < 1)
         {
             return "HAWK needs at least one level"
+        }
+        if (fitter_ == FitterChoice.THUNDERSTORM && !ThunderStormFitter.is_available())
+        {
+            // Said now rather than after HAWK has run and the raw stack has been localised.
+            return "ThunderSTORM is not installed - install it, or choose the fast moment fitter"
         }
         if (working_directory() == null)
         {

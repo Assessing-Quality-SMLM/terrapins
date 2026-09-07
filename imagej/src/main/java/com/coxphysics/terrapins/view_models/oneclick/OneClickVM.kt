@@ -3,6 +3,7 @@ package com.coxphysics.terrapins.view_models.oneclick
 import com.coxphysics.terrapins.models.log.IJLog
 import com.coxphysics.terrapins.models.oneclick.FitterChoice
 import com.coxphysics.terrapins.models.oneclick.OneClickSettings
+import com.coxphysics.terrapins.models.oneclick.ThunderStormFitter
 import com.coxphysics.terrapins.view_models.TERRAPINS.ImageSelectorVM
 import com.coxphysics.terrapins.views.OneClickWorker
 import java.awt.Color
@@ -96,12 +97,38 @@ class OneClickVM private constructor(private val settings_: OneClickSettings)
         settings_.set_emccd(value)
     }
 
-    fun fitter_names(): Array<String> = arrayOf("Fast moment fitter")
+    fun fitter_names(): Array<String> = arrayOf("Fast moment fitter", thunderstorm_label())
+
+    private fun thunderstorm_label(): String
+    {
+        // The absence is stated in the menu itself, so choosing it is not the way you find out.
+        return if (ThunderStormFitter.is_available()) "ThunderSTORM"
+               else "ThunderSTORM (not installed)"
+    }
 
     fun set_fitter_index(index: Int)
     {
-        settings_.set_fitter(if (index == 0) FitterChoice.FAST else FitterChoice.FAST)
+        settings_.set_fitter(if (index == 1) FitterChoice.THUNDERSTORM else FitterChoice.FAST)
     }
+
+    fun is_thunderstorm(): Boolean = settings_.fitter() == FitterChoice.THUNDERSTORM
+
+    fun correct_drift(): Boolean = settings_.thunderstorm().correct_drift()
+
+    fun set_correct_drift(value: Boolean)
+    {
+        settings_.thunderstorm().set_correct_drift(value)
+    }
+
+    fun merge(): Boolean = settings_.thunderstorm().merge()
+
+    fun set_merge(value: Boolean)
+    {
+        settings_.thunderstorm().set_merge(value)
+    }
+
+    /** What the two post-processing options will do to the report, or null when neither is on. */
+    fun post_processing_note(): String? = settings_.thunderstorm().post_processing_note()
 
     /** What the user should be told about the run they are about to start, or null when ready. */
     fun error_string(): String? = settings_.error_string()

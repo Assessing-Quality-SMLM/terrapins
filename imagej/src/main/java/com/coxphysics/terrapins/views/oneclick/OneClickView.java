@@ -31,6 +31,8 @@ public class OneClickView extends JPanel
     private final JTextField hawk_levels_field_ = new JTextField();
     private final JTextField gain_field_ = new JTextField();
     private final JCheckBox emccd_box_ = new JCheckBox("EMCCD camera");
+    private final JCheckBox drift_box_ = new JCheckBox("Correct drift (ThunderSTORM)");
+    private final JCheckBox merge_box_ = new JCheckBox("Merge repeated localisations (ThunderSTORM)");
     private final JLabel status_label_ = new JLabel(" ");
     private final JButton run_btn_ = new JButton("Run");
 
@@ -80,6 +82,8 @@ public class OneClickView extends JPanel
         add_row("Camera gain (photons/ADU, optional):", gain_field_, row++,
                 "Only used to predict localisation precision; it cannot move a localisation.");
         add_component(emccd_box_, row++);
+        add_component(drift_box_, row++);
+        add_component(merge_box_, row++);
 
         status_label_.setForeground(Color.GRAY);
         add_component(status_label_, row++);
@@ -149,6 +153,8 @@ public class OneClickView extends JPanel
                 ActionableListener.from(this, OneClickView::reload_image_list));
         fitter_box_.addActionListener(ActionableListener.from(this, OneClickView::on_fitter_changed));
         emccd_box_.addActionListener(ActionableListener.from(this, OneClickView::on_emccd_changed));
+        drift_box_.addActionListener(ActionableListener.from(this, OneClickView::on_drift_changed));
+        merge_box_.addActionListener(ActionableListener.from(this, OneClickView::on_merge_changed));
         run_btn_.addActionListener(ActionableListener.from(this, OneClickView::run));
 
         pixel_size_field_.getDocument().addDocumentListener(
@@ -186,6 +192,8 @@ public class OneClickView extends JPanel
             gain_field_.setText(view_model_.has_photons_per_adu()
                     ? Double.toString(view_model_.photons_per_adu()) : "");
             emccd_box_.setSelected(view_model_.emccd());
+            drift_box_.setSelected(view_model_.correct_drift());
+            merge_box_.setSelected(view_model_.merge());
         }
         finally
         {
@@ -253,6 +261,26 @@ public class OneClickView extends JPanel
         refresh_status();
     }
 
+    private void on_drift_changed()
+    {
+        if (loading_ || view_model_ == null)
+        {
+            return;
+        }
+        view_model_.set_correct_drift(drift_box_.isSelected());
+        refresh_status();
+    }
+
+    private void on_merge_changed()
+    {
+        if (loading_ || view_model_ == null)
+        {
+            return;
+        }
+        view_model_.set_merge(merge_box_.isSelected());
+        refresh_status();
+    }
+
     private void on_emccd_changed()
     {
         if (loading_ || view_model_ == null)
@@ -307,10 +335,25 @@ public class OneClickView extends JPanel
         {
             return;
         }
+        // The two post-processing options only exist for ThunderSTORM, so they are shown as
+        // unavailable rather than silently ignored when the moment fitter is selected.
+        boolean thunderstorm = view_model_.is_thunderstorm();
+        drift_box_.setEnabled(thunderstorm);
+        merge_box_.setEnabled(thunderstorm);
+
         String error = view_model_.error_string();
         boolean runnable = error == null;
         run_btn_.setEnabled(runnable);
-        status_label_.setText(runnable ? view_model_.precision_note() : error);
+
+        String message = error;
+        if (runnable)
+        {
+            // What post-processing will do to the report matters more than the precision note,
+            // because it changes what the assessment is an assessment of.
+            String post = view_model_.post_processing_note();
+            message = (thunderstorm && post != null) ? post : view_model_.precision_note();
+        }
+        status_label_.setText(message);
         status_label_.setForeground(runnable ? Color.GRAY : Color.RED);
     }
 
