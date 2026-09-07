@@ -1,0 +1,6 @@
+com.coxphysics.terrapins.vendored.thunderstorm.estimators.ui.IntSymmetricGaussianEstimatorUI
+com.coxphysics.terrapins.vendored.thunderstorm.estimators.ui.SymmetricGaussianEstimatorUI
+com.coxphysics.terrapins.vendored.thunderstorm.estimators.ui.EllipticGaussianEstimatorUI
+com.coxphysics.terrapins.vendored.thunderstorm.estimators.ui.RadialSymmetryEstimatorUI
+com.coxphysics.terrapins.vendored.thunderstorm.estimators.ui.CenterOfMassEstimatorUI
+com.coxphysics.terrapins.vendored.thunderstorm.estimators.EmptyEstimator

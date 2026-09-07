@@ -1,0 +1,2 @@
+com.coxphysics.terrapins.vendored.thunderstorm.detectors.NonMaxSuppressionDetector
+com.coxphysics.terrapins.vendored.thunderstorm.detectors.CentroidOfConnectedComponentsDetector

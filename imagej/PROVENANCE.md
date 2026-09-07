@@ -63,3 +63,96 @@ said to be largest, it would be wrong in the optimistic direction.
 them again: it fits the two coefficients per patch regime against simulated ground truth. Whether
 that model still fits is itself a question - `ratioIsStableAcrossConditions` is the test that
 answers it, and it failed twice for the current fitter before the model was right.
+
+
+## com.coxphysics.terrapins.vendored.thunderstorm
+
+ThunderSTORM, under `src/main/java/com/coxphysics/terrapins/vendored/thunderstorm/`.
+
+Taken from a local working copy of [zitmen/thunderstorm](https://github.com/zitmen/thunderstorm)
+at `e85c565`, **plus uncommitted changes on top of it** - the fixes for modern JDKs and headless
+operation that are the reason for forking at all.
+
+That is not a reproducible provenance, and it should be fixed before release. The checkout it came
+from still has upstream as its remote, so those fixes have nowhere to be pushed. Forking under
+`Assessing-Quality-SMLM`, committing them, and replacing the line above with a real hash is the
+outstanding job.
+
+What was uncommitted at the time of copying, so that it can at least be recognised:
+
+- `AnalysisPlugIn`, `BiplaneAnalysisPlugIn`, `ResultsTableWindow` - waiting for the rendering
+  queue to drain before returning to a caller, so a macro cannot save a half-rendered image.
+- `ResultsDriftCorrection` - applying the correction before attempting to plot it, so drift
+  correction works headlessly instead of aborting on `HeadlessException` and silently leaving the
+  table uncorrected.
+- `GenericTableWindow`, `PostProcessingModule` - `exitWhenQuitting(false)` and lazy panel
+  construction, mitigating an `ij.ImageJ` teardown race that could kill the host process.
+- `HelpButton` - catching `Throwable` from the embedded HTML viewer, which fails on any JDK past 8.
+- `MLEFitterLM`, `LevenbergMarquardtMLE` and their benchmark - a multi-start heuristic for the
+  gradient-based MLE optimiser, which otherwise converges to an inferior local optimum on a
+  meaningful fraction of low-photon fits.
+- Several estimator UI and calibration files, and `pom.xml` (kotlin 1.9.24, surefire 3.2.5,
+  commons-math3 bumped 3.2 to 3.6.1 so it matches the version this module already uses).
+
+Bundled rather than asked of the user. Several ThunderSTORM builds are in circulation, some with
+the Java-version and headless problems this fork exists to fix, and requiring a separate download
+costs a substantial share of users - which is the whole thing the one-click path is trying not to
+do.
+
+### The package is renamed, and that is the point
+
+Every class moved from `cz.cuni.lf1.lge.ThunderSTORM` into
+`com.coxphysics.terrapins.vendored.thunderstorm`.
+
+ImageJ puts every jar in `plugins/` on one classloader, built from `File.list()` with no sort,
+and resolves each class name to whichever jar it reaches first. A user with ThunderSTORM already
+installed would otherwise have two copies of the same 480 class names on that classloader, and
+which one ran would depend on filesystem ordering - silently, and differently on different
+machines. Worse, this fork adds classes the stock build does not have, so the two could mix:
+new code linked against old.
+
+Renaming removes the question. Both copies can be installed and neither can shadow the other.
+
+Four things a package rename does not do on its own, each handled here:
+
+- **Service files.** `ModuleLoader` finds filters, detectors, estimators and post-processing
+  modules through `ServiceLoader`, which reads `META-INF/services/<interface>`. Relocation
+  renames neither those filenames nor their contents, and the failure is a
+  `RuntimeException("No modules of type ... loaded.")` at run time. Both are rewritten.
+- **Preferences.** About forty keys are string literals like `"thunderstorm.camera"`, untouched
+  by any rename, so both copies would read and write the same ImageJ preferences - a one-click run
+  would quietly overwrite a user's own camera setup. All are now under `terrapins.thunderstorm.`.
+- **The version resource.** `ThunderSTORM.VERSION` loads `thunderstorm.properties` from the
+  classpath root, which would collide with a stock install's copy of the same name. Renamed to
+  `terrapins-thunderstorm.properties`.
+- **Help pages.** `Help.getResourcePath` derives a path from the class name, so the pages had to
+  move with the package or every dialog would log a missing help file.
+
+### Menu commands
+
+`plugins.config` registers only what the one-click path drives, under names of this build's own -
+"Run analysis (TERRAPINS)" and so on. A separately installed ThunderSTORM keeps the usual names,
+so `IJ.run` is never ambiguous. The rest of its menu is deliberately not exposed; anyone wanting
+the whole application installs it separately and gets it unshadowed.
+
+### Not vendored
+
+- `UpdaterPlugIn` - a bundled copy has no business updating itself, and it was the only user of
+  guava, rxjava, rxkotlin and retrofit, about 3 MB of jar.
+- The TSF and Proto exporters and their generated protobuf classes, removed from the
+  `IImportExport` services list. Nothing here writes those formats and they cost protobuf.
+- `swingbox`, an embedded HTML help viewer loaded by reflection that already fails on any JDK
+  past 8 and is caught. `HelpButton` still degrades to "help unavailable" exactly as before.
+
+### Still shared with a stock install
+
+`MacroAwareUI` publishes into `cz.cuni.lf1.lge.ThunderSTORM.util.MacroUI` - inside
+ThunderSTORM's namespace despite being a separate artifact - so the vendored sources keep their
+imports of that one package, and its classes are still under the original name in the jar. The
+same applies to `thunderstorm-algorithms`. Both are small leaf libraries pinned to a commit, so
+two copies would be the same code; the collision that mattered was the 480 classes of
+ThunderSTORM itself, and that one is gone. Relocating these two as well needs shading rather than
+a source rename, and is the obvious next step if it ever bites.
+
+Both come from jitpack, which is a new external repository in this build and worth watching in
+CI.

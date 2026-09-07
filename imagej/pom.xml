@@ -92,7 +92,74 @@
     		<artifactId>forms_rt</artifactId>
     		<version>7.0.3</version>
 		</dependency>
+		<!--
+		  ThunderSTORM's own dependencies. Its sources are vendored into this module under
+		  com.coxphysics.terrapins.vendored.thunderstorm - see imagej/PROVENANCE.md - so these
+		  are its transitive needs rather than the fitter itself.
+
+		  Trimmed against what upstream declares. Dropped: guava, rxjava, rxkotlin, retrofit and
+		  its converters, which only the "Check for updates" plugin used - a bundled copy has no
+		  business updating itself, so that one source file is not vendored; swingbox, loaded by
+		  reflection for an embedded HTML help viewer that already fails on any JDK past 8 and is
+		  caught; and protobuf, needed only by the TSF and Proto exporters, which are not vendored
+		  and are removed from the ImportExport services list. Together those are about 5 MB of
+		  jar for functionality this build does not use.
+		-->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-primitives</groupId>
+			<artifactId>commons-primitives</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.yaml</groupId>
+			<artifactId>snakeyaml</artifactId>
+			<version>1.13</version>
+		</dependency>
+		<dependency>
+			<groupId>net.java.balloontip</groupId>
+			<artifactId>balloontip</artifactId>
+			<version>1.2.4.1</version>
+		</dependency>
+		<!--
+		  Two small libraries ThunderSTORM depends on that are not on Maven Central. Note
+		  MacroAwareUI publishes into cz.cuni.lf1.lge.ThunderSTORM.util.MacroUI - inside
+		  ThunderSTORM's own namespace despite being a separate artifact - which is why the
+		  vendored sources keep their imports of that one package unrenamed.
+		-->
+		<dependency>
+			<groupId>org.bitbucket.pepa_borkovec</groupId>
+			<artifactId>MacroAwareUI</artifactId>
+			<version>889b2b553e96e8493bf6a103acfe2197eb0733ca</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.zitmen</groupId>
+			<artifactId>thunderstorm-algorithms</artifactId>
+			<version>257978741c</version>
+		</dependency>
 	</dependencies>
+
+	<repositories>
+		<!-- Only for the two artifacts above; everything else resolves from Central/SciJava. -->
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 	<build>
 		<plugins>
 			<plugin>

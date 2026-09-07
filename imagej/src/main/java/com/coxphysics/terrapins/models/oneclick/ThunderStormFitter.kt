@@ -15,16 +15,15 @@ import java.nio.file.Path
  * ThunderSTORM fits a PSF model and so reports a real per-localisation uncertainty, where the
  * moment fitter predicts one from the photon budget.
  *
- * **It is driven by macro command, not by calling its classes.** That is not a workaround; the
- * macro interface is ThunderSTORM's supported entry point, the one its own recorder emits, and it
- * is the only one that works without compiling against it. Two consequences worth knowing:
+ * **It is driven by macro command, not by calling its classes.** That is ThunderSTORM's supported
+ * entry point, the one its own recorder emits, and driving it any other way would mean
+ * reproducing the `PlugInFilterRunner` dance its analysis plugin expects.
  *
- * - Nothing here imports a ThunderSTORM class, so TERRAPINS builds and runs whether or not
- *   ThunderSTORM is installed. [is_available] reports which, and the one-click tab uses that to
- *   say so before a run rather than failing partway through one.
- * - The commands are global, so this drives whichever ThunderSTORM ImageJ has registered. When a
- *   private copy is eventually bundled it must be reached differently - see
- *   imagej/PROVENANCE.md - and that is a change inside this class, not to the [Fitter] seam.
+ * The commands are this build's own - "Run analysis (TERRAPINS)" and so on - registered against
+ * the vendored, relocated copy. A separately installed ThunderSTORM registers the usual names
+ * against its own classes, so the two cannot be confused: ImageJ puts every plugin jar on one
+ * classloader in filesystem order, and had both copies claimed "Run analysis" which one ran would
+ * have come down to that ordering.
  *
  * ThunderSTORM keeps its results in one global table, so a run resets it first. Anything a user
  * had open there is replaced, which is worth knowing but is also what running an analysis does
@@ -41,13 +40,23 @@ class ThunderStormFitter private constructor(
 {
     companion object
     {
-        /** A class present in every ThunderSTORM build, used only to test for its presence. */
-        private const val PROBE_CLASS = "cz.cuni.lf1.lge.ThunderSTORM.AnalysisPlugIn"
+        /**
+         * The vendored analysis plugin, used to test that this build carries its own copy.
+         *
+         * Deliberately the relocated name. Probing for the original would find a separately
+         * installed ThunderSTORM and report a copy this code cannot reach - the commands below
+         * only ever run ours.
+         */
+        private const val PROBE_CLASS =
+            "com.coxphysics.terrapins.vendored.thunderstorm.AnalysisPlugIn"
 
-        const val RUN_ANALYSIS = "Run analysis"
-        const val CAMERA_SETUP = "Camera setup"
-        const val EXPORT_RESULTS = "Export results"
-        const val SHOW_RESULTS_TABLE = "Show results table"
+        // The vendored copy's own command names, registered in this plugin's plugins.config. A
+        // separately installed ThunderSTORM registers "Run analysis" and the rest under their
+        // usual names; these cannot collide with those, so which copy runs is never in doubt.
+        const val RUN_ANALYSIS = "Run analysis (TERRAPINS)"
+        const val CAMERA_SETUP = "Camera setup (TERRAPINS)"
+        const val EXPORT_RESULTS = "Export results (TERRAPINS)"
+        const val SHOW_RESULTS_TABLE = "Show results table (TERRAPINS)"
         const val CSV_FORMAT = "CSV (comma separated)"
 
         @JvmStatic
@@ -67,7 +76,7 @@ class ThunderStormFitter private constructor(
             return ThunderStormFitter(equipment, settings, photons_per_adu, emccd, runner, log)
         }
 
-        /** Whether ThunderSTORM is on the classpath at all. */
+        /** Whether this build carries its vendored ThunderSTORM. */
         @JvmStatic
         fun is_available(): Boolean
         {
@@ -169,8 +178,10 @@ class ThunderStormFitter private constructor(
     {
         if (!is_available())
         {
-            log_.log("ThunderSTORM is not installed, so it cannot be used to localise. "
-                    + "Install it, or choose the fast moment fitter.")
+            // Should not happen in a normal build - it means the vendored sources were
+            // excluded - so say that rather than telling the user to install something.
+            log_.log("This build does not contain ThunderSTORM, which should not happen. "
+                    + "Use the fast moment fitter, and report the build as broken.")
             return null
         }
         if (!has_gain())

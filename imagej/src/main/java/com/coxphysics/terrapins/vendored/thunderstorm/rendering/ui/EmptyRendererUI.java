@@ -1,0 +1,57 @@
+package com.coxphysics.terrapins.vendored.thunderstorm.rendering.ui;
+
+import com.coxphysics.terrapins.vendored.thunderstorm.rendering.IncrementalRenderingMethod;
+import javax.swing.JPanel;
+
+public class EmptyRendererUI extends AbstractRenderingUI {
+    
+    public EmptyRendererUI() {
+        super();
+        parameters.loadPrefs();
+    }
+
+    @Override
+    public String getName() {
+        return "No Renderer";
+    }
+
+    @Override
+    public JPanel getOptionsPanel() {
+        return null;
+    }
+
+    @Override
+    public void readParameters() {
+    }
+
+    @Override
+    public void setSize(double width, double height) {
+    }
+
+    @Override
+    public void recordOptions() {
+    }
+
+    @Override
+    public void readMacroOptions(String options) {
+    }
+
+    @Override
+    public int getRepaintFrequency() {
+        return 0;
+    }
+
+    @Override
+    public IncrementalRenderingMethod getImplementation() {
+        return null;
+    }
+
+    @Override
+    public void resetToDefaults() {
+    }
+
+    @Override
+    protected IncrementalRenderingMethod getMethod() {
+        return null;
+    }
+}

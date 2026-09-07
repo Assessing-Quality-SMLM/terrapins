@@ -173,30 +173,92 @@ class ThunderStormFitterTests
     }
 
     @Test
-    fun a_missing_thunderstorm_is_reported_rather_than_attempted()
+    fun this_build_carries_its_own_thunderstorm()
     {
-        // TERRAPINS builds and runs without ThunderSTORM on the classpath, so this is the normal
-        // state here, not an error condition.
-        assertFalse(ThunderStormFitter.is_available(),
-            "ThunderSTORM is not a dependency of this module")
-
-        val log = ListLog<String>()
-        val runner = RecordingMacroRunner()
-        val f = ThunderStormFitter.with_runner(
-            equipment(), ThunderStormSettings.default(), 2.0, false, runner, log)
-
-        val result = f.localise(ij.ImagePlus("x", ij.process.FloatProcessor(4, 4)),
-            java.nio.file.Paths.get("/tmp/never-written.csv"))
-
-        assertEquals(null, result)
-        assertTrue(runner.calls().isEmpty(), "nothing should be run when it is not installed")
-        assertTrue(log.log().any { it.contains("not installed") }, log.log().toString())
+        // Vendored, so it is always present - a user does not have to install anything, which is
+        // the whole reason for bundling it.
+        assertTrue(ThunderStormFitter.is_available())
     }
 
     @Test
-    fun the_settings_refuse_a_run_that_would_fail_partway_through()
+    fun the_commands_are_this_builds_own_not_the_usual_ones()
     {
-        // Discovered before HAWK has run and the raw stack has been localised, rather than after.
+        // A separately installed ThunderSTORM registers "Run analysis" and friends. If this copy
+        // claimed the same names, which one ImageJ ran would come down to jar ordering.
+        for (command in listOf(ThunderStormFitter.RUN_ANALYSIS, ThunderStormFitter.CAMERA_SETUP,
+                               ThunderStormFitter.EXPORT_RESULTS,
+                               ThunderStormFitter.SHOW_RESULTS_TABLE))
+        {
+            assertTrue(command.contains("TERRAPINS"), "$command could collide with a stock install")
+        }
+    }
+
+    /** A table where one already exists, so the run reaches the end and counts rows. */
+    private fun exported_table(rows: Int): java.nio.file.Path
+    {
+        val path = java.nio.file.Files.createTempFile("ts_export", ".csv")
+        val text = StringBuilder("\"frame\",\"x [nm]\",\"y [nm]\"\n")
+        repeat(rows) { text.append("1,100,200\n") }
+        java.nio.file.Files.write(path, text.toString().toByteArray())
+        path.toFile().deleteOnExit()
+        return path
+    }
+
+    @Test
+    fun a_plain_run_sets_the_camera_clears_the_table_analyses_and_exports_in_that_order()
+    {
+        val (f, runner) = fitter()
+        val out = exported_table(3)
+
+        val count = f.localise(ij.ImagePlus("x", ij.process.FloatProcessor(4, 4)), out)
+
+        assertEquals(3, count, "the count comes from the exported file, not the results table")
+        assertEquals(
+            listOf(ThunderStormFitter.CAMERA_SETUP, ThunderStormFitter.SHOW_RESULTS_TABLE,
+                   ThunderStormFitter.RUN_ANALYSIS, ThunderStormFitter.EXPORT_RESULTS),
+            runner.commands())
+        // The table is global and additive, so a stale one would be exported along with this run.
+        assertEquals("action=reset", runner.options_for(ThunderStormFitter.SHOW_RESULTS_TABLE))
+    }
+
+    @Test
+    fun post_processing_runs_between_the_analysis_and_the_export()
+    {
+        // Order matters: correcting or merging after the export would change nothing, and doing
+        // either before the analysis would operate on an empty table.
+        val settings = ThunderStormSettings.default()
+        settings.set_correct_drift(true)
+        settings.set_merge(true)
+        val (f, runner) = fitter(settings = settings)
+
+        f.localise(ij.ImagePlus("x", ij.process.FloatProcessor(4, 4)), exported_table(2))
+
+        val table_calls = runner.calls().filter { it.first == ThunderStormFitter.SHOW_RESULTS_TABLE }
+        assertEquals(listOf("action=reset", "drift", "merge"),
+            table_calls.map { if (it.second.startsWith("action=reset")) "action=reset"
+                              else if (it.second.contains("action=drift")) "drift" else "merge" })
+        assertTrue(runner.commands().indexOf(ThunderStormFitter.RUN_ANALYSIS)
+                   < runner.commands().lastIndexOf(ThunderStormFitter.SHOW_RESULTS_TABLE))
+        assertTrue(runner.commands().lastIndexOf(ThunderStormFitter.SHOW_RESULTS_TABLE)
+                   < runner.commands().indexOf(ThunderStormFitter.EXPORT_RESULTS))
+    }
+
+    @Test
+    fun neither_step_is_run_when_neither_is_asked_for()
+    {
+        val (f, runner) = fitter()
+        f.localise(ij.ImagePlus("x", ij.process.FloatProcessor(4, 4)), exported_table(1))
+        val table_options = runner.calls()
+            .filter { it.first == ThunderStormFitter.SHOW_RESULTS_TABLE }
+            .map { it.second }
+        assertEquals(listOf("action=reset"), table_options,
+            "only the reset - no drift correction, no merging")
+    }
+
+    @Test
+    fun the_settings_allow_thunderstorm_because_it_is_bundled()
+    {
+        // Before it was vendored this had to be refused; now there is nothing to install.
         val settings = OneClickSettings.default()
         settings.set_image(ij.ImagePlus("s", ij.ImageStack(8, 8).also {
             it.addSlice(ij.process.FloatProcessor(8, 8))
@@ -204,10 +266,8 @@ class ThunderStormFitterTests
         }))
         settings.equipment().set_camera_pixel_size_nm(100.0)
         settings.equipment().set_instrument_psf_fwhm_nm(250.0)
-        assertTrue(settings.is_runnable(), "the moment fitter needs nothing installed")
 
         settings.set_fitter(FitterChoice.THUNDERSTORM)
-        assertFalse(settings.is_runnable())
-        assertTrue(settings.error_string()!!.contains("not installed"), settings.error_string()!!)
+        assertTrue(settings.is_runnable(), settings.error_string() ?: "")
     }
 }
