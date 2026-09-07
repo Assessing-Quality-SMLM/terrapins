@@ -116,8 +116,20 @@ class OneClick private constructor(
         {
             settings.set_hawk_localisation_file(
                 localisation_file(LocalisationTable.hawk_in(working_directory)))
-            // Must match the stream that was actually built, not what was asked for.
-            settings.hawkman_settings().set_n_levels(effective_hawk_levels_)
+            // HAWKMAN's level count is deliberately left at its default and is NOT the HAWK
+            // level count. The two are unrelated despite the shared word:
+            //
+            //   HAWK levels    - depth of the temporal decomposition, so how many difference
+            //                    scales the stream contains. Three by default, and bounded by
+            //                    the number of frames.
+            //   HAWKMAN levels - how many blur scales the bias analysis walks looking for the
+            //                    one at which the two reconstructions agree. Twenty by default,
+            //                    and nothing to do with the stream.
+            //
+            // Setting the second from the first restricted HAWKMAN to three blur levels, far too
+            // coarse a ladder to find the crossing point, so the bias score never approached one
+            // and every level scored zero - a blank bias report from a run that had otherwise
+            // worked.
         }
         return Result(settings, n_raw, n_hawk, effective_hawk_levels_)
     }

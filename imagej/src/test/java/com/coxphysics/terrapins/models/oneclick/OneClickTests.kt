@@ -1,5 +1,6 @@
 package com.coxphysics.terrapins.models.oneclick
 
+import com.coxphysics.terrapins.models.assessment.DEFAULT_N_LEVELS
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import com.coxphysics.terrapins.models.log.ListLog
 import ij.ImagePlus
@@ -224,6 +225,28 @@ class OneClickTests
     }
 
     @Test
+    fun the_hawkman_blur_levels_are_not_the_hawk_decomposition_levels()
+    {
+        // Two unrelated quantities that share a word. HAWK levels set the depth of the temporal
+        // decomposition; HAWKMAN levels set how many blur scales the bias analysis walks looking
+        // for the one where the two reconstructions agree.
+        //
+        // Driving the second from the first left HAWKMAN with a three-rung ladder instead of
+        // twenty, far too coarse to find the crossing point, so every level scored zero and the
+        // bias report came out blank from a run that had otherwise worked.
+        val log = ListLog<String>()
+        val fitter = FastFitterAdapter.from(equipment(), 2.0, false, log)
+        val working = working_directory("levels")
+
+        val result = OneClick.with(fitter, log)
+            .prepare(synthetic_stack(24, 128), equipment(), working, 3)!!
+
+        assertEquals(3, result.hawk_levels(), "the stream was built with three levels")
+        assertEquals(DEFAULT_N_LEVELS, result.settings().hawkman_settings().n_levels(),
+            "HAWKMAN must keep its own default blur ladder, not inherit the HAWK level count")
+    }
+
+    @Test
     fun a_stack_too_short_for_the_requested_levels_uses_fewer_and_says_so()
     {
         // HAWK does not reject a level it has too few frames for - PStream's inner loop simply
@@ -240,8 +263,8 @@ class OneClickTests
         assertNotNull(result)
         assertTrue(result.has_hawk(), "4 frames still support a 2 level decomposition")
         assertEquals(2, result.hawk_levels())
-        assertEquals(2, result.settings().hawkman_settings().n_levels(),
-            "the assessment must be told the levels the stream really has")
+        assertEquals(DEFAULT_N_LEVELS, result.settings().hawkman_settings().n_levels(),
+            "reducing the HAWK depth must not touch HAWKMAN's blur ladder")
         assertTrue(log.log().any { it.contains("only support") },
             "silently using fewer levels than asked for would misreport the bias scale")
     }
