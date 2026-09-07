@@ -165,13 +165,20 @@ class ThunderStormFitter private constructor(
             "dist=${settings_.merge_distance_nm()} framespermolecule=0"
     }
 
+    /**
+     * Export options.
+     *
+     * No columns are named, deliberately. The export dialog names each column parameter after the
+     * literal table header, so they are things like "x [nm]" and "uncertainty_xy [nm]" - not
+     * expressible as macro option keys, which cannot contain spaces or brackets. Naming none is
+     * how a macro asks for all of them, which is what this wants anyway: the assessment picks the
+     * columns it needs out of the file by name, and an extra column costs nothing.
+     */
     fun export_options(output: Path): String
     {
         // Square brackets are how a macro option carries a value containing spaces, which both
         // the format name and any ordinary file path will.
-        return "filepath=[$output] fileformat=[$CSV_FORMAT] " +
-            "id=false frame=true x=true y=true sigma=true intensity=true offset=true " +
-            "bkgstd=true uncertainty=true detections=false saveprotocol=true"
+        return "filepath=[$output] fileformat=[$CSV_FORMAT] floatprecision=5"
     }
 
     override fun localise(image: ImagePlus, output: Path): Int?

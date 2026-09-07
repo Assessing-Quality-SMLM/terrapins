@@ -105,15 +105,18 @@ class ThunderStormFitterTests
     }
 
     @Test
-    fun the_export_asks_for_the_columns_the_assessment_reads()
+    fun the_export_names_no_columns_because_none_of_them_can_be_named()
     {
-        val (f, _) = fitter()
-        val options = f.export_options(java.nio.file.Paths.get("/tmp/some dir/locs.csv"))
-        // The assessment's ThunderSTORM reader requires all of these by name.
-        for (column in listOf("frame=true", "x=true", "y=true", "sigma=true", "intensity=true",
-                              "uncertainty=true"))
+        // The export dialog names each column parameter after the literal table header - "x [nm]",
+        // "uncertainty_xy [nm]" and so on - which cannot be macro option keys, since those take
+        // neither spaces nor brackets. Naming a column that does not match leaves every column
+        // deselected, and the "export everything then" fallback used to die on a Swing component
+        // that macro mode never builds.
+        val options = fitter().first.export_options(java.nio.file.Paths.get("/tmp/some dir/locs.csv"))
+        for (guess in listOf("x=", "y=", "sigma=", "intensity=", "uncertainty=", "frame=", "id="))
         {
-            assertTrue(options.contains(column), "$column missing from $options")
+            assertFalse(options.contains(guess),
+                "$guess cannot match a real column parameter and would deselect everything: $options")
         }
         assertTrue(options.contains("fileformat=[CSV (comma separated)]"), options)
         // A path with a space in it has to survive as one macro value.

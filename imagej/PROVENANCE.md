@@ -135,6 +135,24 @@ Four things a package rename does not do on its own, each handled here:
 so `IJ.run` is never ambiguous. The rest of its menu is deliberately not exposed; anyone wanting
 the whole application installs it separately and gets it unshadowed.
 
+### Local fixes on top of the fork
+
+Changes made here rather than upstream, listed so they are not mistaken for imported code and are
+not lost if a newer version is taken.
+
+- **`ImportExportPlugIn.runExport`** - exporting from a macro without naming columns died with
+  `NullPointerException: No component was registered for this parameter`. The branch that means
+  "nothing was named, so export everything" recorded that by calling `setValue` on each column
+  parameter, which writes through to the parameter's Swing component - and macro mode never
+  builds one, because it skips showing the dialog. It cannot be avoided from the calling side
+  either: the column parameters are named after the literal table headers, so they are things
+  like `x [nm]` and `uncertainty_xy [nm]`, which are not expressible as macro option keys.
+  Exporting everything is the only thing a macro can ask for. The decision is now held in a local
+  rather than pushed back through the UI layer.
+
+  This is the same family as the fixes the fork already carries - work that assumes a dialog
+  exists, failing when driven headlessly or from a macro - and is worth taking upstream with them.
+
 ### Not vendored
 
 - `UpdaterPlugIn` - a bundled copy has no business updating itself, and it was the only user of

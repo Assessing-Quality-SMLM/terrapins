@@ -142,24 +142,34 @@ public class ImportExportPlugIn implements PlugIn {
 
         // eliminate the need to list all columns when running from macro
         // - if nothing is mentioned, assume user wants to export everything
+        //
+        // LOCAL FIX (see imagej/PROVENANCE.md). This used to record that decision by calling
+        // exportColumns[i].setValue(true), which pushes the value into the parameter's Swing
+        // component - and in macro mode there is no component, because the dialog is never
+        // shown. Every export driven from a macro without column options therefore died with
+        // "No component was registered for this parameter".
+        //
+        // It cannot be worked around from the calling side either: these parameters are named
+        // after the literal column headers, so they are things like "x [nm]" and
+        // "uncertainty_xy [nm]", which cannot be written as macro option keys at all. Exporting
+        // everything is the only behaviour a macro can ask for, and it is what this branch was
+        // always trying to provide.
+        //
+        // So the decision is held in a local instead of being written back through the UI layer.
+        boolean exportAll = false;
         if (MacroParser.isRanFromMacro()) {
-            boolean all = true;
+            exportAll = true;
             for (int i = 0; i < dialog.exportColumns.length; i++) {
                 if (dialog.exportColumns[i].getValue()) {
-                    all = false;
+                    exportAll = false;
                     break;
-                }
-            }
-            if (all) {
-                for (int i = 0; i < dialog.exportColumns.length; i++) {
-                    dialog.exportColumns[i].setValue(true);
                 }
             }
         }
 
         List<String> columns = new ArrayList<String>();
         for(int i = 0; i < colNames.length; i++) {
-            if(dialog.exportColumns[i].getValue()) {
+            if(exportAll || dialog.exportColumns[i].getValue()) {
                 columns.add(colNames[i]);
             }
         }
