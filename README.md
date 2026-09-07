@@ -548,7 +548,44 @@ they cannot tell you is whether the policy is right for real data. Worth doing:
 5. **Deliberately break a file** - a corrupt sigma field, a file of only out-of-range widths -
    and confirm you get the new error naming the filters rather than an empty report.
 
-## 3. HAWK stream frames are recomputed on every access
+## 3. ThunderSTORM leaves a results table on screen
+
+**Open, and a UI decision rather than a bug.** A one-click run with ThunderSTORM ends with its
+results table window left open. It should not appear at all: the one-click path is meant to look
+like one operation, and a table belonging to a component the user did not choose to run is
+confusing whether or not it is correct.
+
+It is not one stray call. ThunderSTORM shows the table at three points on the path this drives,
+each of them reasonable for its own dialog-driven use:
+
+- `AnalysisPlugIn:304` - `rt.forceShow()` at the end of a run, once fitting completes.
+- `AnalysisPlugIn:100` - `IJResultsTable.getResultsTable().show()` on the `showResultsTable`
+  command.
+- `results/TableHandlerPlugin:43` - `resultsTable.showPreview()` in the `action=reset` branch,
+  which the fitter calls before every run to clear the global table.
+
+So `ThunderStormFitter` triggers it twice per localisation - once resetting, once analysing - and
+does so twice per one-click run, for the raw stack and the HAWK stream.
+
+Worth deciding before it is fixed:
+
+1. **Where the suppression belongs.** Disposing the window afterwards from `ThunderStormFitter` is
+   the smallest change and needs nothing from the vendored code, but it is a flicker rather than
+   an absence: the table appears and then vanishes. Suppressing it at the source needs the
+   vendored copy to know it is running headlessly, which is a larger and more honest change - and
+   the same idea as the fixes the fork already carries.
+2. **Whether the user should be able to get it back.** The table is genuinely useful for anyone
+   who wants to inspect or filter localisations by hand, so hiding it always may not be right. The
+   fitter already writes the same data to a CSV in the working directory, which is the
+   reproducible route.
+3. **What ImageJ's own results table should do**, since the two are easily confused when both are
+   on screen.
+
+Note also that suppressing the window is not merely cosmetic: `ResultsTableWindow` construction is
+what the fork's `exitWhenQuitting(false)` mitigation exists for, and not building it at all avoids
+that race rather than working around it.
+
+## 4. HAWK stream frames are recomputed on every access
 
 `imagej/.../models/hawk/PStream.java` is a `VirtualStack`: `getProcessor(n)`
 regenerates its frame from the raw stack on every call and nothing is cached.
@@ -575,7 +612,7 @@ Not worth optimising before a working end-to-end version exists, but measure it
 early: it determines whether the HAWK stream can stay in memory or has to be
 materialised to disk between the HAWK and fitting stages.
 
-## 4. `PStream.getProcessor` indexes transposed, and is only correct on square frames
+## 5. `PStream.getProcessor` indexes transposed, and is only correct on square frames
 
 `imagej/.../models/hawk/PStream.java:186-197`. The accumulation loop indexes
 `fp.setf(c, r, ...)` - column as x, row as y, which is correct. The sign
