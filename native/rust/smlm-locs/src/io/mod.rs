@@ -72,6 +72,19 @@ pub fn parse_u32(value: &str) -> Result<u32, String>
 		 .map(|f| f.round() as u32)
 }
 
+/// Parses an optional numeric field, where an empty field means the quantity is absent.
+///
+/// Only *empty* counts as absent. Anything else that fails to parse is still an error, so a
+/// corrupt file is not quietly reinterpreted as a file full of missing values.
+pub fn parse_optional_f64(value: &str) -> Result<f64, String>
+{
+	if value.trim().is_empty()
+	{
+		return Ok(crate::constants::MISSING)
+	}
+	parse_f64(value)
+}
+
 pub fn parse_f64(value: &str) -> Result<f64, String>
 {
 	value.trim().parse::<f64>().map_err(|e| format!("cannot parse {value} as f64 - {e}"))

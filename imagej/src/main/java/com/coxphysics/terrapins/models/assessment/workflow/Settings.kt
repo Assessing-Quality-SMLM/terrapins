@@ -6,6 +6,7 @@ import com.coxphysics.terrapins.models.assessment.localisation.AssessmentSetting
 import com.coxphysics.terrapins.models.equipment.EquipmentSettings
 import com.coxphysics.terrapins.models.ij_wrapping.WindowManager
 import com.coxphysics.terrapins.models.macros.MacroOptions
+import com.coxphysics.terrapins.models.oneclick.OneClickSettings
 import com.coxphysics.terrapins.plugins.WORKFLOW_SETTINGS_USE_LOCALISATIONS
 import ij.plugin.frame.Recorder
 import java.nio.file.Path
@@ -17,6 +18,7 @@ class Settings private constructor(
 )
 {
     private var hawk_settings_ = HawkSettings.default()
+    private var one_click_settings_ = OneClickSettings.from(core_settings_)
     private var use_localisations_ = true
     private var localisation_settings_ = AssessmentSettings.from(core_settings_)
     private var images_settings_ = ImagesSettings.from(core_settings_)
@@ -91,6 +93,15 @@ class Settings private constructor(
     fun hawk_settings() : HawkSettings
     {
         return hawk_settings_
+    }
+
+    /**
+     * The one-click path's inputs. Shares [core_settings_], so the working directory set on the
+     * advanced tab is the one a one-click run writes to.
+     */
+    fun one_click_settings() : OneClickSettings
+    {
+        return one_click_settings_
     }
 
     fun localisation_settings(): AssessmentSettings

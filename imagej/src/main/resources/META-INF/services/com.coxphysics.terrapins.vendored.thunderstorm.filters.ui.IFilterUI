@@ -1,0 +1,8 @@
+com.coxphysics.terrapins.vendored.thunderstorm.filters.ui.CompoundWaveletFilterUI
+com.coxphysics.terrapins.vendored.thunderstorm.filters.ui.BoxFilterUI
+com.coxphysics.terrapins.vendored.thunderstorm.filters.ui.DifferenceOfBoxFiltersUI
+com.coxphysics.terrapins.vendored.thunderstorm.filters.ui.GaussianFilterUI
+com.coxphysics.terrapins.vendored.thunderstorm.filters.ui.LoweredGaussianFilterUI
+com.coxphysics.terrapins.vendored.thunderstorm.filters.ui.DifferenceOfGaussiansFilterUI
+com.coxphysics.terrapins.vendored.thunderstorm.filters.ui.MedianFilterUI
+com.coxphysics.terrapins.vendored.thunderstorm.filters.EmptyFilter

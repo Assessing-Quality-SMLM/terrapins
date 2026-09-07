@@ -71,7 +71,10 @@ impl<F: PatchFactory> SinglePointPatchRenderer<F>
 	    // println!("col: {col}");
 	    let row = properties.get_row(localisation.y());
 	    // println!("row: {row}");
-	    let sigma_nm = localisation.uncertainty();
+	    // The localisation's uncertainty, not its fitted peak width - both get called sigma
+	    // around here and only this one is rendered with. Placeholders fall back; see
+	    // patch_utils::blur_sigma_nm.
+	    let sigma_nm = patch_utils::blur_sigma_nm(&localisation);
 	    // println!("sigma (nm): {sigma_nm}");
 	    let patch_size = self.factory.get_patch(sigma_nm, &properties)?;
 	    // println!("sigma_patch: {:?}", patch_size);

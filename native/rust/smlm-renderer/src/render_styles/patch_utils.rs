@@ -62,3 +62,60 @@ mod tests
 		assert_eq!(end, 4);
 	}
 }
+/// Fallback Gaussian width in nanometres for a localisation whose uncertainty is not a
+/// measurement.
+///
+/// Matches `locs::constants::DEFAULT_UNCERTAINTY`, which the CSV reader already substitutes when
+/// a file has no uncertainty column at all, so a ThunderSTORM-format file whose column is a
+/// placeholder now renders the same as the equivalent CSV with the column omitted.
+pub const FALLBACK_UNCERTAINTY_NM: f64 = 20.0;
+
+/// The Gaussian width to blur one localisation by, in nanometres.
+///
+/// This is its *uncertainty*, not its fitted peak width - the two are both called sigma in
+/// places and only the uncertainty is used for rendering.
+///
+/// A placeholder is substituted rather than rendered. Zero is the value a fitter with no
+/// uncertainty writes into the column, and blurring by it is not merely inaccurate: `blur_2d`
+/// evaluates `exp(-d^2 / 0) / 0`, which is `0/0` at every pixel of the patch, so a single such
+/// localisation turns the entire reconstruction into NaN. Falling back keeps the image usable;
+/// the fact that the values are not measurements is reported separately, through the mean
+/// localisation precision being absent.
+pub fn blur_sigma_nm<L: locs::UncertainLocalisation>(localisation: &L) -> f64
+{
+    if localisation.has_measured_uncertainty()
+    {
+        localisation.uncertainty()
+    }
+    else
+    {
+        FALLBACK_UNCERTAINTY_NM
+    }
+}
+
+#[cfg(test)]
+mod blur_sigma_tests
+{
+    use super::*;
+    use locs::AllocatedLocalisation;
+
+    fn with_uncertainty(uncertainty: f64) -> AllocatedLocalisation
+    {
+        AllocatedLocalisation::new(1, 0.0, 0.0, 100.0, 1000.0, uncertainty)
+    }
+
+    #[test]
+    fn a_measured_uncertainty_is_used()
+    {
+        assert_eq!(blur_sigma_nm(&with_uncertainty(12.5)), 12.5);
+    }
+
+    #[test]
+    fn placeholders_fall_back()
+    {
+        for value in [0.0, -1.0, f64::NAN, f64::INFINITY]
+        {
+            assert_eq!(blur_sigma_nm(&with_uncertainty(value)), FALLBACK_UNCERTAINTY_NM);
+        }
+    }
+}

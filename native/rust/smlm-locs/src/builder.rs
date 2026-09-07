@@ -49,7 +49,7 @@ impl Builder
 
 	fn sigma(&self) -> f64
 	{
-		self.sigma.unwrap_or(constants::DEFAULT_PSF_SIGMA)
+		self.sigma.unwrap_or(constants::MISSING)
 	}
 
 	pub fn with_sigma(mut self, value: f64) -> Self
@@ -71,7 +71,7 @@ impl Builder
 
 	fn uncertainty(&self) -> f64
 	{
-		self.uncertainty.unwrap_or(constants::DEFAULT_UNCERTAINTY)
+		self.uncertainty.unwrap_or(constants::MISSING)
 	}
 
 	pub fn with_uncertainty(mut self, value: f64) -> Self
@@ -92,33 +92,65 @@ mod tests
 {
 	use super::*;
 
+	use crate::{FitLocalisation, UncertainLocalisation};
+
+	// AllocatedLocalisation derives PartialEq, and MISSING is NaN, so a built localisation with
+	// an absent quantity is not equal even to itself. These check the fields instead.
+
 	#[test]
 	fn missing_everything() 
 	{
-		assert_eq!(Builder::new(1.0, 2.0).build(), AllocatedLocalisation::new(0, 1.0, 2.0, 20.0, 0.0, 20.0))
+		let l = Builder::new(1.0, 2.0).build();
+		assert_eq!(l.frame_number(), 0);
+		assert_eq!(l.x(), 1.0);
+		assert_eq!(l.y(), 2.0);
+		assert_eq!(l.intensity(), 0.0);
+		assert!(!l.has_measured_psf_sigma(), "an unset sigma must not become a plausible number");
+		assert!(!l.has_measured_uncertainty(), "an unset uncertainty must not become a plausible number");
 	}
 
 	#[test]
 	fn missing_can_set_sigma() 
 	{
-		assert_eq!(Builder::new(1.0, 2.0).with_sigma(3.0).build(), AllocatedLocalisation::new(0, 1.0, 2.0, 3.0, 0.0, 20.0))
+		let l = Builder::new(1.0, 2.0).with_sigma(3.0).build();
+		assert_eq!(l.psf_sigma(), 3.0);
+		assert!(l.has_measured_psf_sigma());
+		assert!(!l.has_measured_uncertainty());
 	}
 
 	#[test]
 	fn missing_can_set_intensity() 
 	{
-		assert_eq!(Builder::new(1.0, 2.0).with_intensity(4.0).build(), AllocatedLocalisation::new(0, 1.0, 2.0, 20.0, 4.0, 20.0))
+		let l = Builder::new(1.0, 2.0).with_intensity(4.0).build();
+		assert_eq!(l.intensity(), 4.0);
+		assert!(!l.has_measured_psf_sigma());
+		assert!(!l.has_measured_uncertainty());
 	}
 
 	#[test]
 	fn missing_can_set_uncertainty() 
 	{
-		assert_eq!(Builder::new(1.0, 2.0).with_uncertainty(5.0).build(), AllocatedLocalisation::new(0, 1.0, 2.0, 20.0, 0.0, 5.0))
+		let l = Builder::new(1.0, 2.0).with_uncertainty(5.0).build();
+		assert_eq!(l.uncertainty(), 5.0);
+		assert!(l.has_measured_uncertainty());
+		assert!(!l.has_measured_psf_sigma());
 	}
 
 	#[test]
 	fn missing_can_set_frame_number() 
 	{
-		assert_eq!(Builder::new(1.0, 2.0).with_frame_number(10).build(), AllocatedLocalisation::new(10, 1.0, 2.0, 20.0, 0.0, 20.0))
+		let l = Builder::new(1.0, 2.0).with_frame_number(10).build();
+		assert_eq!(l.frame_number(), 10);
+		assert!(!l.has_measured_psf_sigma());
+		assert!(!l.has_measured_uncertainty());
+	}
+
+	#[test]
+	fn a_set_value_is_still_equatable()
+	{
+		// Everything present, so the derived PartialEq still works as before.
+		let l = Builder::new(1.0, 2.0).with_frame_number(7).with_sigma(3.0)
+			.with_intensity(4.0).with_uncertainty(5.0).build();
+		assert_eq!(l, AllocatedLocalisation::new(7, 1.0, 2.0, 3.0, 4.0, 5.0));
 	}
 }

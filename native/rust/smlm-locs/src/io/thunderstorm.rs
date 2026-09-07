@@ -1,4 +1,4 @@
-use super::{parse_u32, parse_f64, Parser, ParserFactory};
+use super::{parse_u32, parse_f64, parse_optional_f64, Parser, ParserFactory};
 
 use crate::{AllocatedLocalisation};
 
@@ -95,9 +95,11 @@ fn parse_line(line: &str, header: &Header) -> Result<AllocatedLocalisation, Stri
 	let frame_number = parse_u32(splits[header.frame_number_idx()])?;
 	let x = parse(header.x_idx())?;
 	let y = parse(header.y_idx())?;
-	let sigma = parse(header.sigma_idx())?;
+	// Both of these are quantities a fitter may not produce, and an empty field is how a writer
+	// says so. Reading them strictly rejected the whole line, losing a perfectly good position.
+	let sigma = parse_optional_f64(splits[header.sigma_idx()])?;
 	let intensity = parse(header.intensity_idx())?;
-	let uncertainty = parse(header.uncertainty_idx())?;
+	let uncertainty = parse_optional_f64(splits[header.uncertainty_idx()])?;
 	Ok(AllocatedLocalisation::new(frame_number, x, y, sigma, intensity, uncertainty))
 }
 

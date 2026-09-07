@@ -4,6 +4,7 @@ import com.coxphysics.terrapins.models.PathWrapper
 import com.coxphysics.terrapins.models.assessment.workflow.Settings
 import com.coxphysics.terrapins.models.log.IJLog
 import com.coxphysics.terrapins.models.to_nullable_path
+import com.coxphysics.terrapins.view_models.oneclick.OneClickVM
 import com.coxphysics.terrapins.views.AssessmentWorker
 import java.awt.Color
 import javax.swing.JTextField
@@ -13,6 +14,7 @@ class TERRAPINSVM private constructor(private val settings_: Settings)
 {
     private val joint_last_path_ = PathWrapper.empty()
 
+    private val one_click_vm_: OneClickVM = OneClickVM.from(settings_.one_click_settings())
     private val pre_processing_vm_: PreProcessingVM = PreProcessingVM.from(settings_, joint_last_path_)
     private val localisations_equipment_settings_vm_: AuxiallySettingsVM = AuxiallySettingsVM.from(settings_.localisation_settings().equipment(), settings_.localisation_settings().hawkman_settings())
     private val localisation_vm_ : LocalisationVM = LocalisationVM.from(settings_.localisation_settings(), joint_last_path_)
@@ -60,6 +62,11 @@ class TERRAPINSVM private constructor(private val settings_: Settings)
     private fun default_background_colour(): Color = JTextField().background
 
     private fun error_colour(): Color = Color.RED
+
+    fun one_click_vm(): OneClickVM
+    {
+        return one_click_vm_
+    }
 
     fun pre_processing_vm(): PreProcessingVM
     {

@@ -18,3 +18,8 @@ target_include_directories("squirrel" PRIVATE "../lib/include")
 target_link_libraries("squirrel" PRIVATE "hawkman_lib")
 target_compile_features("squirrel" PRIVATE cxx_std_23)
 set_target_properties("squirrel" PROPERTIES CXX_EXTENSIONS OFF)
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+	target_link_options("hawkman" PRIVATE -static-libstdc++ -static-libgcc)
+	target_link_options("squirrel" PRIVATE -static-libstdc++ -static-libgcc)
+endif()
