@@ -59,6 +59,18 @@ class ThunderStormFitter private constructor(
         const val SHOW_RESULTS_TABLE = "Show results table (TERRAPINS)"
         const val CSV_FORMAT = "CSV (comma separated)"
 
+        // Module names exactly as the modules report them. ThunderSTORM resolves these by string
+        // and throws "Module not found" for anything else, which aborts the analysis and leaves
+        // an empty results table - so a wrong name here surfaces much later as "produced no
+        // localisations". ThunderStormModuleNamesTests checks each against the module itself.
+        const val FILTER = "Wavelet filter (B-Spline)"
+        const val DETECTOR = "Maximum filter"
+        const val ESTIMATOR = "PSF: Integrated Gaussian"
+        const val RENDERER = "No Renderer"
+
+        /** One of the estimator's accepted fitting methods, likewise matched by string. */
+        const val FIT_METHOD = "Weighted Least squares"
+
         @JvmStatic
         fun from(equipment: EquipmentSettings, settings: ThunderStormSettings,
                  photons_per_adu: Double, emccd: Boolean, log: Log<String>): ThunderStormFitter
@@ -137,11 +149,10 @@ class ThunderStormFitter private constructor(
     fun analysis_options(): String
     {
         val sigma_px = sigma_px()
-        return "filter=[Wavelet filter (B-Spline)] scale=2.0 order=3 " +
-            "detector=[Local maximum] connectivity=8-neighbourhood threshold=std(Wave.F1) " +
-            "estimator=[PSF: Integrated Gaussian] sigma=%.3f fitradius=3 method=[Weighted Least squares] "
-                .format(sigma_px) +
-            "renderer=[No Renderer]"
+        return "filter=[$FILTER] scale=2.0 order=3 " +
+            "detector=[$DETECTOR] radius=3 threshold=std(Wave.F1) " +
+            "estimator=[$ESTIMATOR] sigma=%.3f fitradius=3 method=[$FIT_METHOD] ".format(sigma_px) +
+            "renderer=[$RENDERER]"
     }
 
     /** Expected PSF sigma in pixels, which is what ThunderSTORM's estimator wants. */
