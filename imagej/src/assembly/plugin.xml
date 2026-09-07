@@ -6,17 +6,21 @@
     Replaces the stock jar-with-dependencies descriptor for one reason: that one lets a
     dependency's plugins.config overwrite ours.
 
-    ImageJ reads a single plugins.config from the root of each jar to build its menus. Both this
-    plugin and the bundled fast fitter ship one, they land at the same path, and whichever the
-    assembly unpacks last wins. It was the fitter's - so the built jar advertised the Fast SMLM
-    entries and none of TERRAPINS' own, and the Workflow, Results Viewer and HAWK Stream commands
-    simply did not appear. Silently, since a menu that is absent raises nothing.
+    ImageJ reads a single plugins.config from the root of each jar to build its menus. When a
+    dependency ships one it lands at the same path as ours, and whichever the assembly unpacks
+    last wins. That happened: the fast fitter was briefly a dependency, its file won, and the
+    built jar advertised the Fast SMLM entries and none of TERRAPINS' own - the Workflow, Results
+    Viewer and HAWK Stream commands simply did not appear. Silently, since an absent menu raises
+    nothing and the build was perfectly happy.
+
+    The fitter is now compiled from vendored sources (imagej/PROVENANCE.md) rather than resolved
+    as an artifact, so no current dependency ships a plugins.config and the exclusion protects
+    rather than repairs. Keep it. ThunderSTORM ships one too, and when it is bundled its entries
+    must not be registered from inside this jar at all - a relocated copy appearing as a second
+    ThunderSTORM in the menus would be worse than the original fault.
 
     So dependencies are unpacked with plugins.config excluded, and this module's own copy is the
     only one in the jar. It carries the fitter's entries too - see src/main/resources.
-
-    Anything else added to the bundle that ships a root-level plugins.config needs the same
-    treatment, and is worth checking for: the failure is invisible until someone looks for a menu.
   -->
   <id>jar-with-dependencies</id>
   <formats>
