@@ -346,15 +346,26 @@ public class OneClickView extends JPanel
         run_btn_.setEnabled(runnable);
 
         String message = error;
+        boolean warning = false;
         if (runnable)
         {
-            // What post-processing will do to the report matters more than the precision note,
-            // because it changes what the assessment is an assessment of.
+            // Order of precedence: a run that will not finish matters more than what the report
+            // will mean, which matters more than the precision caveat.
+            String space = view_model_.space_warning();
             String post = view_model_.post_processing_note();
-            message = (thunderstorm && post != null) ? post : view_model_.precision_note();
+            if (space != null)
+            {
+                message = space;
+                warning = true;
+            }
+            else
+            {
+                message = (thunderstorm && post != null) ? post : view_model_.precision_note();
+            }
         }
         status_label_.setText(message);
-        status_label_.setForeground(runnable ? Color.GRAY : Color.RED);
+        status_label_.setForeground(
+                !runnable ? Color.RED : (warning ? new Color(160, 90, 0) : Color.GRAY));
     }
 
     private void run()

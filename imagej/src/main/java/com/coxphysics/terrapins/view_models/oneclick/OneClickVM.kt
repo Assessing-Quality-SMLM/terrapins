@@ -127,6 +127,9 @@ class OneClickVM private constructor(private val settings_: OneClickSettings)
         settings_.thunderstorm().set_merge(value)
     }
 
+    /** What this run is expected to write, when that looks like a problem. */
+    fun space_warning(): String? = settings_.space_warning()
+
     /** What the two post-processing options will do to the report, or null when neither is on. */
     fun post_processing_note(): String? = settings_.thunderstorm().post_processing_note()
 

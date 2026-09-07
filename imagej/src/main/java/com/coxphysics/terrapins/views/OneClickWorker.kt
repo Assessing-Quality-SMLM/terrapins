@@ -72,6 +72,10 @@ class OneClickWorker private constructor(
             if (settings_.fitter() == FitterChoice.THUNDERSTORM) log(it)
         }
 
+        // Said before the expensive part rather than discovered by it: the assessment writes its
+        // gigabytes at the very end, so running out of room wastes the whole run.
+        settings_.space_warning()?.let { log(it) }
+
         val prepared = OneClick.with(fitter(), this)
             .prepare(image, settings_.equipment(), working_directory, settings_.hawk_levels())
         if (prepared == null)
@@ -90,6 +94,11 @@ class OneClickWorker private constructor(
         if (results == null)
         {
             log("The assessment produced no results - see the log above for which stage failed")
+            // The commonest late failure, and the one whose message is easiest to miss among the
+            // assessment's own output.
+            settings_.space_warning()?.let {
+                log("Disk space is the likeliest cause: $it")
+            }
         }
         display_results(results)
         return null

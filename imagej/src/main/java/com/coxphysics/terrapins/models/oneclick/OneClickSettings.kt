@@ -115,6 +115,20 @@ class OneClickSettings private constructor(private val core_settings_: CoreSetti
         emccd_ = value
     }
 
+    /**
+     * A warning about disk space, or null when there is plainly enough.
+     *
+     * Separate from [error_string] deliberately: this does not stop a run. The estimate is rough
+     * and the user may know better, so it says what it expects rather than refusing.
+     */
+    fun space_warning(): String?
+    {
+        val image = image() ?: return null
+        val directory = working_directory() ?: return null
+        return DiskSpace.warning(image, equipment_.magnification(),
+            com.coxphysics.terrapins.models.assessment.DEFAULT_N_LEVELS, directory)
+    }
+
     /** Why the settings are not runnable yet, or null when they are. */
     fun error_string(): String?
     {
